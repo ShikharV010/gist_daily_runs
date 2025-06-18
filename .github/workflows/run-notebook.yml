@@ -2,12 +2,15 @@ name: Run PagePerformance Notebook Daily
 
 on:
   schedule:
-    - cron: '30 3 * * *'  # 9:00 AM IST
+    - cron: '30 3 * * *'  # 9:00 AM IST (cron uses UTC time)
   workflow_dispatch:
 
 jobs:
   run-notebook:
     runs-on: ubuntu-latest
+
+    env:
+      FORCE_REFRESH: true  # This line forces GitHub to refresh the workflow cache
 
     steps:
       - name: Checkout Repository
@@ -16,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.10  # <-- This was likely the error before (was 3.1)
+          python-version: 3.10
 
       - name: Install dependencies
         run: |
