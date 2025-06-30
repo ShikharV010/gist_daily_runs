@@ -2,7 +2,7 @@ name: Run Sales Dialer Daily at 10 AM IST
 
 on:
   schedule:
-    # 4:30 UTC = 10:00 AM IST
+    # 04:30 UTC = 10:00 AM IST
     - cron: '30 4 * * *'
   workflow_dispatch:
 
@@ -12,10 +12,10 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
 
@@ -33,7 +33,7 @@ jobs:
             --ExecutePreprocessor.kernel_name=python3
 
       - name: Upload Executed Notebook
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: executed-notebook
           path: output.ipynb
