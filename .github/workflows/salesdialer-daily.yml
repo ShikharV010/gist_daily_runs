@@ -1,0 +1,29 @@
+name: Run Sales Dialer API Call Daily at 10:00 AM IST
+
+on:
+  schedule:
+    # 04:30 UTC is 10:00 IST daily (UTC+5:30)
+    - cron: '30 4 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert
+          python -m ipykernel install --user --name=python3
+
+      - name: Execute Sales Dialer Notebook
+        run: |
+          jupyter nbconvert --to notebook --execute SalesDialerAPICall.ipynb --output output.ipynb
