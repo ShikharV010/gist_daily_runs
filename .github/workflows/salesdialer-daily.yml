@@ -1,8 +1,8 @@
-name: Run Sales Dialer Daily at 10 AM IST
+name: Run SalesDialierAPICall Every Day 9 AM IST
 
 on:
   schedule:
-    - cron: '30 4 * * *'  # 10:00 AM IST
+    - cron: '30 3 * * *'  # 9:00 AM IST = 3:30 AM UTC
   workflow_dispatch:
 
 jobs:
@@ -11,30 +11,18 @@ jobs:
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v4
         with:
           python-version: '3.10'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: |
           pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert
           python -m ipykernel install --user --name=python3
 
-      - name: Execute Sales Dialer Notebook
+      - name: Execute notebook
         run: |
-          jupyter nbconvert --to notebook \
-            --execute SalesDialerAPICall.ipynb \
-            --output executed_output.ipynb \
-            --ExecutePreprocessor.timeout=600 \
-            --ExecutePreprocessor.kernel_name=python3 \
-            --debug || true
-
-      - name: Upload Executed Notebook (Even on Error)
-        uses: actions/upload-artifact@v4
-        with:
-          name: executed-output-debug
-          path: executed_output.ipynb
-
+          jupyter nbconvert --to notebook --execute SalesDialierAPICall.ipynb --output output.ipynb
