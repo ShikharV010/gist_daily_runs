@@ -20,7 +20,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert
+          pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert requests
           python -m ipykernel install --user --name=python3
 
       - name: Execute notebook
