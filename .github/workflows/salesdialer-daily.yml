@@ -1,8 +1,8 @@
-name: Run SalesDialierAPICall Every Day 3:30 AM IST
+name: Run SalesDialierAPICall Every Day 3:15 AM IST
 
 on:
   schedule:
-    - cron: '0 22 * * *'  # 3:30 AM IST = 10:00 PM UTC (previous day)
+    - cron: '45 21 * * *'  # 3:15 AM IST = 9:45 PM UTC (previous day)
   workflow_dispatch:
 
 jobs:
