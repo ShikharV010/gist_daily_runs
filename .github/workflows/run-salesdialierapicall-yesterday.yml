@@ -1,4 +1,4 @@
-name: Run SalesDialierAPICall Every Day 00:15 AM IST
+name: Run SalesDialierAPICall Every Day 00:15 AM IST (Yesterday)
 
 on:
   schedule:
