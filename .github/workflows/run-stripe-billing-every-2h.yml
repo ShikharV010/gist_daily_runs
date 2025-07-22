@@ -5,7 +5,7 @@ on:
     paths:
       - 'API_stripe_cutomer_billing.ipynb'
   schedule:
-    # At minute 0 every 2nd hour (UTC) → 05:30, 07:30, 09:30… IST
+    # Every 2 hours (UTC)
     - cron: '0 */2 * * *'
   workflow_dispatch:
 
@@ -35,14 +35,13 @@ jobs:
 
       - name: Execute notebook
         run: |
-          TS=$(date -u +'%Y%m%dT%H%M%SZ')
           papermill \
             API_stripe_cutomer_billing.ipynb \
-            API_stripe_cutomer_billing_out_${TS}.ipynb \
+            API_stripe_cutomer_billing.ipynb \
             --log-output
 
-      - name: Upload executed notebooks
+      - name: Upload executed notebook
         uses: actions/upload-artifact@v4
         with:
-          name: stripe-billing-notebooks
-          path: API_stripe_cutomer_billing_out_*.ipynb
+          name: stripe-billing-notebook
+          path: API_stripe_cutomer_billing.ipynb
