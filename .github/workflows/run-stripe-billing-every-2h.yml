@@ -1,0 +1,48 @@
+name: Run Stripe Customer Billing Every 2h
+
+on:
+  # minute 5 of every even hour (UTC) → 05:35, 07:35, 09:35 … IST
+  schedule:
+    - cron: '5 */2 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-notebook:
+    runs-on: ubuntu-latest
+
+    env:
+      STRIPE_KEY_DELF:    ${{ secrets.STRIPE_KEY_DELF }}
+      STRIPE_KEY_REGENTS: ${{ secrets.STRIPE_KEY_REGENTS }}
+      PG_HOST:            ${{ secrets.PG_HOST }}
+      PG_DB:              ${{ secrets.PG_DB }}
+      PG_USER:            ${{ secrets.PG_USER }}
+      PG_PASSWORD:        ${{ secrets.PG_PASSWORD }}
+      PG_PORT:            ${{ secrets.PG_PORT }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Python dependencies
+        run: |
+          pip install --quiet \
+            papermill nbconvert stripe psycopg2-binary pandas numpy sqlalchemy
+
+      - name: Run api_stripe_cutomer_billing notebook
+        run: |
+          TS=$(date -u +'%Y%m%dT%H%M%SZ')
+          papermill \
+            notebooks/api_stripe_cutomer_billing.ipynb \
+            notebooks/api_stripe_cutomer_billing_out_${TS}.ipynb \
+            --log-output
+
+      - name: Upload executed notebook artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: stripe-billing-notebook
+          path: notebooks/api_stripe_cutomer_billing_out_*.ipynb
