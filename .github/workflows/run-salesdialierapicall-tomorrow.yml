@@ -1,0 +1,46 @@
+name: "Run SalesDialierAPICall Tomorrow Every Day 03:15 AM IST"
+
+on:
+  schedule:
+    # 03:15 IST = 03:15 − 05:30 = 21:45 UTC (previous day)
+    - cron: '45 21 * * *'
+  workflow_dispatch:
+
+jobs:
+  run-notebook-tomorrow:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert \
+                      requests papermill nbformat
+
+      - name: Execute “tomorrow” notebook & log all cell output
+        run: |
+          papermill \
+            SalesDialierAPICall_tomorrow.ipynb \
+            output.tomorrow.ipynb \
+            --log-output
+
+      - name: Print final cell output
+        run: |
+          python - << 'EOF'
+          import nbformat
+
+          nb = nbformat.read('output.tomorrow.ipynb', as_version=4)
+          last = nb.cells[-1]
+          for o in last.get('outputs', []):
+              text = o.get('text')
+              if text:
+                  print("➡ Final cell output:")
+                  print(text.strip())
+          EOF
