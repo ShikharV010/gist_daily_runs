@@ -5,7 +5,7 @@ on:
     paths:
       - 'API_stripe_cutomer_billing.ipynb'
   schedule:
-    - cron: '0 */2 * * *'   # every 2 h UTC
+    - cron: '0 */12 * * *'   # every 2 h UTC
   workflow_dispatch:
 
 jobs:
