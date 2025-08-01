@@ -1,9 +1,9 @@
-name: "Run JustCallAPICall Today Every Day 05:15 AM IST"
+name: "Run JustCallAPICall Today Every Day 05:25 AM IST"
 
 on:
   schedule:
-    # 05:15 IST = 23:45 UTC (previous day)
-    - cron: '45 23 * * *'
+    # 05:25 IST = 23:55 UTC (previous day)
+    - cron: '55 23 * * *'
   workflow_dispatch:
 
 jobs:
