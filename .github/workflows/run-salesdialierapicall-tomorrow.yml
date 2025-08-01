@@ -1,9 +1,9 @@
-name: "Run SalesDialierAPICall Tomorrow Every Day 05:15 AM IST"
+name: "Run SalesDialierAPICall Tomorrow Every Day 05:30 AM IST"
 
 on:
   schedule:
-    # 05:15 AM IST = 23:45 UTC (previous day)
-    - cron: '45 23 * * *'
+    # 05:30 AM IST = 00:00 UTC (same day)
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
           pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert \
                       requests papermill nbformat
 
-      - name: Execute “tomorrow” notebook & log all cell output
+      - name: Execute "tomorrow" notebook & log all cell output
         run: |
           papermill \
             SalesDialierAPICall_tomorrow.ipynb \
