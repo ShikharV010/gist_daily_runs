@@ -1,14 +1,13 @@
 name: Run Backlinks Vendor Import
 
 on:
-  workflow_dispatch: {}           # run on-demand from Actions tab
+  workflow_dispatch: {}
   schedule:
-    # Daily 10:00 IST  → 04:30 UTC
-    - cron: '30 4 * * *'
+    - cron: '*/3 * * * *'   # every 3 minutes (UTC)
 
 concurrency:
   group: backlinks-vendor-import
-  cancel-in-progress: false
+  cancel-in-progress: true   # cancel prior run if a new one starts
 
 jobs:
   run:
@@ -31,7 +30,7 @@ jobs:
 
       - name: Execute notebook with papermill
         env:
-          DB_URL: ${{ secrets.DB_URL }}   # add this in Settings → Secrets → Actions
+          DB_URL: ${{ secrets.POSTGRES_DB_URL }}
         run: |
           mkdir -p artifacts
           papermill "gist_daily_runs/Backlinks_data_from_vendor_Manufacturing.ipynb" \
