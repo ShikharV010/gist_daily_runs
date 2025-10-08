@@ -1,28 +1,22 @@
-name: Run Page Performance Every Thursday 8 PM IST
-
+name: Run Page Performance Every Friday 8 PM IST
 on:
   schedule:
-    - cron: '14 14 * * 4'
+    - cron: '30 14 * * 5'
   workflow_dispatch:
-
 jobs:
   run-notebook:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v3
-
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-
       - name: Install dependencies
         run: |
           pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert
           python -m ipykernel install --user --name=python3
-
       - name: Execute notebook
         run: |
           jupyter nbconvert --to notebook --execute Page_Performance.ipynb --output output.ipynb
