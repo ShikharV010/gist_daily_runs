@@ -27,7 +27,7 @@ jobs:
       - name: Execute notebook & log all cell output
         run: |
           papermill \
-            JustCall_SMS_APICall.ipynb \
+            JustCall_SMSAPICall.ipynb \
             output_sms.ipynb \
             --log-output
 
