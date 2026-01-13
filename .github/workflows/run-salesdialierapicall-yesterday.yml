@@ -24,12 +24,38 @@ jobs:
           pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert \
                       requests papermill nbformat
 
-      - name: Execute notebook & log all cell output
+      - name: Execute notebook & log all cell output (with retries)
+        shell: bash
         run: |
-          papermill \
-            SalesDialierAPICall_yesterday.ipynb \
-            output.ipynb \
-            --log-output
+          set -e
+
+          max_retries=5
+          attempt=1
+
+          while [ $attempt -le $max_retries ]; do
+            echo "🚀 Running notebook (Attempt $attempt/$max_retries)..."
+
+            if papermill \
+              SalesDialierAPICall_yesterday.ipynb \
+              output.ipynb \
+              --log-output; then
+              echo "✅ Notebook execution succeeded on attempt $attempt"
+              break
+            else
+              echo "❌ Notebook execution failed on attempt $attempt"
+            fi
+
+            if [ $attempt -eq $max_retries ]; then
+              echo "🔥 All $max_retries attempts failed. Exiting."
+              exit 1
+            fi
+
+            sleep_time=$((attempt * 60))
+            echo "⏳ Retrying in $sleep_time seconds..."
+            sleep $sleep_time
+
+            attempt=$((attempt + 1))
+          done
 
       - name: Print final cell output
         run: |
