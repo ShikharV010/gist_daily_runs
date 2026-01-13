@@ -24,12 +24,13 @@ jobs:
           pip install pandas sqlalchemy psycopg2-binary ipykernel nbconvert \
                       requests papermill nbformat
 
-      - name: Execute notebook & log all cell output
+      - name: Execute notebook (retry up to 5 times) & log all cell output
         run: |
           papermill \
             SalesDialierAPICall_today.ipynb \
             output.ipynb \
-            --log-output
+            --log-output \
+            --retries 5
 
       - name: Print final cell output
         run: |
