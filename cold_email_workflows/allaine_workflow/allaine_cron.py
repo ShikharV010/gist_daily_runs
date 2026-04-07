@@ -329,10 +329,11 @@ def send_slack(run_dt, total_candidates, already_tagged, newly_tagged, removed=0
         log.warning("SLACK_BOT_TOKEN not set — skipping Slack notification")
         return
 
-    ist_offset = timedelta(hours=5, minutes=30)
-    ist_dt     = run_dt + ist_offset
-    date_str   = ist_dt.strftime('%d %b %Y')
-    time_str   = ist_dt.strftime('%I:%M %p IST')
+    ist_offset    = timedelta(hours=5, minutes=30)
+    ist_dt        = run_dt + ist_offset
+    date_str      = ist_dt.strftime('%d %b %Y')
+    time_str      = ist_dt.strftime('%I:%M %p IST')
+    current_total = already_tagged - removed + newly_tagged  # live count after this run
 
     if error:
         blocks = [
@@ -343,28 +344,26 @@ def send_slack(run_dt, total_candidates, already_tagged, newly_tagged, removed=0
         blocks = [
             {"type": "header", "text": {"type": "plain_text", "text": f"Allaine Cron — {date_str}"}},
             {"type": "section", "fields": [
-                {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
-                {"type": "mrkdwn", "text": f"*Candidates checked*\n{total_candidates}"},
-                {"type": "mrkdwn", "text": f"*Already tagged Allaine*\n{already_tagged}"},
-                {"type": "mrkdwn", "text": f"*Newly added*\n{newly_tagged}"},
-                {"type": "mrkdwn", "text": f"*Removed (replied)*\n{removed}"},
+                {"type": "mrkdwn", "text": f"*Triggered at*\n{time_str}"},
+                {"type": "mrkdwn", "text": f"*Total in Allaine*\n{current_total}"},
+                {"type": "mrkdwn", "text": f"*Added this run*\n{newly_tagged}"},
+                {"type": "mrkdwn", "text": f"*Removed this run*\n{removed}"},
             ]},
             {"type": "section", "text": {"type": "mrkdwn", "text": ":white_check_mark: No changes to Allaine's queue this run."}}
         ]
     else:
         summary_parts = []
         if newly_tagged > 0:
-            summary_parts.append(f":large_green_circle: *{newly_tagged} new lead(s) added*")
+            summary_parts.append(f":large_green_circle: *{newly_tagged} added*")
         if removed > 0:
-            summary_parts.append(f":large_yellow_circle: *{removed} lead(s) removed* (we already replied)")
+            summary_parts.append(f":large_yellow_circle: *{removed} removed* (we replied)")
         blocks = [
             {"type": "header", "text": {"type": "plain_text", "text": f"Allaine Cron — {date_str}"}},
             {"type": "section", "fields": [
-                {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
-                {"type": "mrkdwn", "text": f"*Candidates checked*\n{total_candidates}"},
-                {"type": "mrkdwn", "text": f"*Already tagged Allaine*\n{already_tagged}"},
-                {"type": "mrkdwn", "text": f"*Newly added*\n{newly_tagged}"},
-                {"type": "mrkdwn", "text": f"*Removed (replied)*\n{removed}"},
+                {"type": "mrkdwn", "text": f"*Triggered at*\n{time_str}"},
+                {"type": "mrkdwn", "text": f"*Total in Allaine*\n{current_total}"},
+                {"type": "mrkdwn", "text": f"*Added this run*\n:large_green_circle: {newly_tagged}"},
+                {"type": "mrkdwn", "text": f"*Removed this run*\n:large_yellow_circle: {removed}"},
             ]},
             {"type": "section", "text": {"type": "mrkdwn", "text": "  |  ".join(summary_parts)}}
         ]
@@ -434,13 +433,9 @@ def run():
     log.info(f"\nEvaluating {len(candidates)} leads...")
     qualified = []
     q_lock    = Lock()
-    done      = [0]
-    done_lock = Lock()
 
     def evaluate(lead):
         result = evaluate_lead(lead, sender_emails, booked_domains, now)
-        with done_lock:
-            done[0] += 1
         if result:
             with q_lock:
                 qualified.append(result)

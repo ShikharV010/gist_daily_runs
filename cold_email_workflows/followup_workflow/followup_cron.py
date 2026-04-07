@@ -12,7 +12,7 @@ Flow:
    a. our last reply was > 24h ago
    b. lead's email domain NOT in gist.gtm_inbound_demo_bookings (postgres, read-only)
    c. lead NOT already in Follow-Ups campaign (id=9)
-4. Tag qualifying leads  → 'followup_{dd}_{mmm}' (e.g. followup_07_apr)
+4. Tag qualifying leads as 'followup'
 5. Add to Follow-Ups campaign (id=9)
 6. Send Slack summary + append to runs log CSV
 
@@ -45,8 +45,9 @@ SEQ_HEADS = {'Authorization': f'Bearer {SEQ_TOKEN}', 'Content-Type': 'applicatio
 SLACK_TOKEN   = os.getenv('SLACK_BOT_TOKEN')
 SLACK_CHANNEL = os.getenv('SLACK_CHANNEL_ID', 'C0ARFBBN3TN')
 
-INTERESTED_TAG_ID    = 11   # 'Interested' tag
-FOLLOWUP_CAMPAIGN_ID = 9    # 'Follow-Ups' campaign
+INTERESTED_TAG_ID    = 11         # 'Interested' tag
+FOLLOWUP_CAMPAIGN_ID = 9          # 'Follow-Ups' campaign
+FOLLOWUP_TAG_NAME    = 'followup' # single static tag applied to all follow-up leads
 EVAL_WORKERS         = 15
 
 IST_OFFSET = timedelta(hours=5, minutes=30)
@@ -265,7 +266,7 @@ def append_to_runs_log(run_dt, total_interested, already_in_followup, newly_adde
 
 # ── Slack notification ─────────────────────────────────────────────────────────
 
-def send_slack(run_dt, total_interested, already_in_followup, newly_added, tag_name=None, error=None):
+def send_slack(run_dt, total_interested, already_in_followup, newly_added, error=None):
     if not SLACK_TOKEN:
         log.warning("SLACK_BOT_TOKEN not set — skipping Slack notification")
         return
@@ -299,7 +300,7 @@ def send_slack(run_dt, total_interested, already_in_followup, newly_added, tag_n
                 {"type": "mrkdwn", "text": f"*Already in Follow-Ups*\n{already_in_followup}"},
                 {"type": "mrkdwn", "text": f"*Newly added*\n:large_green_circle: {newly_added}"},
             ]},
-            {"type": "section", "text": {"type": "mrkdwn", "text": f":bell: *{newly_added} lead(s) moved to Follow-Ups.* Tag applied: `{tag_name}`"}}
+            {"type": "section", "text": {"type": "mrkdwn", "text": f":bell: *{newly_added} lead(s) moved to Follow-Ups and tagged `{FOLLOWUP_TAG_NAME}`.*"}}
         ]
 
     try:
@@ -323,11 +324,9 @@ def send_slack(run_dt, total_interested, already_in_followup, newly_added, tag_n
 def run():
     now         = datetime.now(timezone.utc)
     one_day_ago = now - timedelta(hours=24)
-    tag_name    = now.strftime('followup_%d_%b').lower()
 
     log.info("=" * 60)
     log.info(f"Follow-up cron started | {now.strftime('%Y-%m-%d %H:%M UTC')}")
-    log.info(f"Tag for today: {tag_name}")
     log.info("=" * 60)
 
     if not SEQ_TOKEN:
@@ -355,8 +354,6 @@ def run():
     # ── Evaluate each lead in parallel ────────────────────────────
     qualified = []
     q_lock    = Lock()
-    done      = [0]
-    d_lock    = Lock()
 
     def evaluate(lead):
         lead_id = str(lead['id'])
@@ -405,10 +402,8 @@ def run():
                 fut.result()
             except Exception as exc:
                 log.warning(f"  Error for lead {futs[fut]}: {exc}")
-            with d_lock:
-                done[0] += 1
-            if done[0] % 50 == 0:
-                log.info(f"  Evaluated {done[0]}/{total_interested} | qualified so far: {len(qualified)}")
+            if i % 50 == 0:
+                log.info(f"  Evaluated {i}/{total_interested} | qualified so far: {len(qualified)}")
 
     log.info(f"\nQualified for follow-up: {len(qualified)}")
     for q in qualified:
@@ -418,28 +413,28 @@ def run():
         log.info("Nothing to action today.")
         log.info("=" * 60)
         append_to_runs_log(now, total_interested, already_in_followup, 0)
-        send_slack(now, total_interested, already_in_followup, 0, tag_name)
+        send_slack(now, total_interested, already_in_followup, 0)
         return
 
     # ── Tag + add to Follow-Ups ────────────────────────────────────
     lead_ids = [q['lead_id'] for q in qualified]
 
-    log.info(f"\nFetching/creating tag '{tag_name}'...")
-    tag_id = get_or_create_tag(tag_name)
+    log.info(f"\nFetching/creating tag '{FOLLOWUP_TAG_NAME}'...")
+    tag_id = get_or_create_tag(FOLLOWUP_TAG_NAME)
 
-    log.info(f"Tagging {len(lead_ids)} leads with '{tag_name}'...")
+    log.info(f"Tagging {len(lead_ids)} leads as '{FOLLOWUP_TAG_NAME}'...")
     attach_tag(tag_id, lead_ids)
 
     log.info(f"Adding {len(lead_ids)} leads to Follow-Ups campaign ({FOLLOWUP_CAMPAIGN_ID})...")
     attach_to_campaign(lead_ids)
 
     log.info("\n" + "=" * 60)
-    log.info(f"Done. {len(qualified)} leads tagged '{tag_name}' → added to Follow-Ups.")
+    log.info(f"Done. {len(qualified)} leads tagged '{FOLLOWUP_TAG_NAME}' → added to Follow-Ups.")
     log.info("=" * 60)
 
-    append_to_leads_csv(qualified, tag_name, now)
+    append_to_leads_csv(qualified, FOLLOWUP_TAG_NAME, now)
     append_to_runs_log(now, total_interested, already_in_followup, len(qualified))
-    send_slack(now, total_interested, already_in_followup, len(qualified), tag_name)
+    send_slack(now, total_interested, already_in_followup, len(qualified))
 
 
 if __name__ == '__main__':
