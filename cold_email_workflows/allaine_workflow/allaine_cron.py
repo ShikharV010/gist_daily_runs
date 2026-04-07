@@ -27,14 +27,17 @@ from dotenv import load_dotenv
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 # ── Config ─────────────────────────────────────────────────────────────────────
-BASE     = os.getenv('SEQUENCER_BASE_URL', 'https://sequencer.gushwork.ai/api')
-TOKEN    = os.getenv('SEQUENCER_API_KEY')
-DB_URL   = os.getenv('DATABASE_URL')
-HEADERS  = {'Authorization': f'Bearer {TOKEN}', 'Content-Type': 'application/json'}
+BASE          = os.getenv('SEQUENCER_BASE_URL', 'https://sequencer.gushwork.ai/api')
+TOKEN         = os.getenv('SEQUENCER_API_KEY')
+DB_URL        = os.getenv('DATABASE_URL')
+SLACK_TOKEN   = os.getenv('SLACK_BOT_TOKEN')
+SLACK_CHANNEL = os.getenv('SLACK_CHANNEL_ID', 'C0ARFBBN3TN')
+HEADERS       = {'Authorization': f'Bearer {TOKEN}', 'Content-Type': 'application/json'}
 
 INTERESTED_TAG_ID   = 11
 ALLAINE_TAG_NAME    = 'Allaine'
 SENDER_CSV          = os.path.join(os.path.dirname(__file__), 'sender_emails.csv')
+RUNS_CSV            = os.path.join(os.path.dirname(__file__), 'allaine_runs_log.csv')
 SENDER_CSV_MAX_AGE  = 86400   # refresh if older than 24hrs (seconds)
 TEN_MINUTES         = timedelta(minutes=10)
 
@@ -237,6 +240,82 @@ def evaluate_lead(lead, sender_emails, booked_domains, now):
     }
 
 
+# ── CSV run log ───────────────────────────────────────────────────────────────
+
+def append_to_runs_log(run_dt, total_candidates, already_tagged, newly_tagged):
+    file_exists = os.path.exists(RUNS_CSV)
+    ist_offset  = timedelta(hours=5, minutes=30)
+    ist_dt      = run_dt + ist_offset
+    with open(RUNS_CSV, 'a', newline='') as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(['date', 'time_ist', 'total_candidates', 'already_tagged', 'newly_tagged'])
+        writer.writerow([
+            ist_dt.strftime('%Y-%m-%d'),
+            ist_dt.strftime('%H:%M'),
+            total_candidates,
+            already_tagged,
+            newly_tagged,
+        ])
+    log.info(f"  Appended run stats to {RUNS_CSV}")
+
+
+# ── Slack notification ─────────────────────────────────────────────────────────
+
+def send_slack(run_dt, total_candidates, already_tagged, newly_tagged, error=None):
+    if not SLACK_TOKEN:
+        log.warning("SLACK_BOT_TOKEN not set — skipping Slack notification")
+        return
+
+    ist_offset = timedelta(hours=5, minutes=30)
+    ist_dt     = run_dt + ist_offset
+    date_str   = ist_dt.strftime('%d %b %Y')
+    time_str   = ist_dt.strftime('%I:%M %p IST')
+
+    if error:
+        blocks = [
+            {"type": "header", "text": {"type": "plain_text", "text": f"Allaine Cron — {date_str}"}},
+            {"type": "section", "text": {"type": "mrkdwn", "text": f":red_circle: *Run failed* at {time_str}\n```{error}```"}}
+        ]
+    elif newly_tagged == 0:
+        blocks = [
+            {"type": "header", "text": {"type": "plain_text", "text": f"Allaine Cron — {date_str}"}},
+            {"type": "section", "fields": [
+                {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
+                {"type": "mrkdwn", "text": f"*Candidates checked*\n{total_candidates}"},
+                {"type": "mrkdwn", "text": f"*Already tagged Allaine*\n{already_tagged}"},
+                {"type": "mrkdwn", "text": f"*Newly tagged*\n{newly_tagged}"},
+            ]},
+            {"type": "section", "text": {"type": "mrkdwn", "text": ":white_check_mark: No new leads to action this run."}}
+        ]
+    else:
+        blocks = [
+            {"type": "header", "text": {"type": "plain_text", "text": f"Allaine Cron — {date_str}"}},
+            {"type": "section", "fields": [
+                {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
+                {"type": "mrkdwn", "text": f"*Candidates checked*\n{total_candidates}"},
+                {"type": "mrkdwn", "text": f"*Already tagged Allaine*\n{already_tagged}"},
+                {"type": "mrkdwn", "text": f"*Newly tagged*\n:large_green_circle: {newly_tagged}"},
+            ]},
+            {"type": "section", "text": {"type": "mrkdwn", "text": f":bell: *{newly_tagged} new lead(s) added to Allaine's queue.*"}}
+        ]
+
+    try:
+        r = requests.post(
+            "https://slack.com/api/chat.postMessage",
+            headers={"Authorization": f"Bearer {SLACK_TOKEN}", "Content-Type": "application/json"},
+            json={"channel": SLACK_CHANNEL, "blocks": blocks, "unfurl_links": False},
+            timeout=15,
+        )
+        resp = r.json()
+        if resp.get("ok"):
+            log.info("Slack notification sent.")
+        else:
+            log.warning(f"Slack API error: {resp.get('error')}")
+    except Exception as exc:
+        log.warning(f"Failed to send Slack notification: {exc}")
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def run():
@@ -256,11 +335,18 @@ def run():
     sender_emails  = load_sender_emails()
     booked_domains = get_booked_domains()
     allaine_tag_id = get_or_create_allaine_tag()
-    candidates     = get_candidate_leads(allaine_tag_id)
+
+    # Total Allaine-tagged leads before this run
+    all_allaine_before = fetch_all_pages('/leads', {'filters[tag_ids][]': allaine_tag_id})
+    already_tagged     = len(all_allaine_before)
+
+    candidates = get_candidate_leads(allaine_tag_id)
 
     if not candidates:
         log.info("No candidate leads found. Exiting.")
         log.info("=" * 60)
+        append_to_runs_log(now, 0, already_tagged, 0)
+        send_slack(now, 0, already_tagged, 0)
         return
 
     # ── Evaluate leads in parallel ─────────────────────────────────
@@ -295,6 +381,8 @@ def run():
     if not qualified:
         log.info("Nothing to tag.")
         log.info("=" * 60)
+        append_to_runs_log(now, len(candidates), already_tagged, 0)
+        send_slack(now, len(candidates), already_tagged, 0)
         return
 
     # ── Tag qualifying leads ───────────────────────────────────────
@@ -308,7 +396,14 @@ def run():
 
     log.info(f"\nDone. Tagged {len(qualified)} leads as '{ALLAINE_TAG_NAME}'.")
     log.info("=" * 60)
+    append_to_runs_log(now, len(candidates), already_tagged, len(qualified))
+    send_slack(now, len(candidates), already_tagged, len(qualified))
 
 
 if __name__ == '__main__':
-    run()
+    try:
+        run()
+    except Exception as exc:
+        log.error(f"Cron crashed: {exc}", exc_info=True)
+        send_slack(datetime.now(timezone.utc), 0, 0, 0, error=str(exc))
+        sys.exit(1)
