@@ -92,7 +92,7 @@ def detach_tag(tag_id, lead_ids):
     batch_size = 500
     for i in range(0, len(lead_ids), batch_size):
         batch = lead_ids[i:i + batch_size]
-        seq_post('/tags/detach-from-leads', {'tag_ids': [tag_id], 'lead_ids': batch})
+        seq_post('/tags/remove-from-leads', {'tag_ids': [tag_id], 'lead_ids': batch})
         log.info(f"  Detached tag from batch {i//batch_size + 1}: {len(batch)} leads")
         time.sleep(0.2)
 
