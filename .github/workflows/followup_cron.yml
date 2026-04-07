@@ -1,0 +1,32 @@
+name: Follow-Up Campaign Cron
+
+on:
+  schedule:
+    - cron: '30 14 * * *'   # 8PM IST = 14:30 UTC daily
+  workflow_dispatch:          # allow manual trigger from GitHub UI
+
+jobs:
+  followup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r cold_email_workflows/followup_workflow/requirements.txt
+
+      - name: Run followup cron
+        env:
+          SEQUENCER_API_KEY: ${{ secrets.SEQUENCER_API_KEY }}
+          SEQUENCER_BASE_URL: https://sequencer.gushwork.ai/api
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          cd cold_email_workflows/followup_workflow
+          python followup_cron.py

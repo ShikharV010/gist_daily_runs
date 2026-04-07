@@ -1,0 +1,42 @@
+name: Allaine SDR Lead Tagging
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # every 15 mins UTC
+  workflow_dispatch:           # allow manual trigger from GitHub UI
+
+jobs:
+  tag-leads:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install -r cold_email_workflows/allaine_workflow/requirements.txt
+
+      - name: Get today's date (for cache key)
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Cache sender emails CSV (refreshes daily)
+        uses: actions/cache@v4
+        with:
+          path: cold_email_workflows/allaine_workflow/sender_emails.csv
+          key: sender-emails-${{ steps.date.outputs.date }}
+
+      - name: Run allaine cron
+        env:
+          SEQUENCER_API_KEY: ${{ secrets.SEQUENCER_API_KEY }}
+          SEQUENCER_BASE_URL: https://sequencer.gushwork.ai/api
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          cd cold_email_workflows/allaine_workflow
+          python allaine_cron.py
