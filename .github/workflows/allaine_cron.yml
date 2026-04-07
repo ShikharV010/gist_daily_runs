@@ -37,6 +37,8 @@ jobs:
           SEQUENCER_API_KEY: ${{ secrets.SEQUENCER_API_KEY }}
           SEQUENCER_BASE_URL: https://sequencer.gushwork.ai/api
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID: C0ARFBBN3TN
         run: |
           cd cold_email_workflows/allaine_workflow
           python allaine_cron.py
