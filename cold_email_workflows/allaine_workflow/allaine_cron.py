@@ -84,6 +84,16 @@ def seq_post(path, payload, retries=3):
             time.sleep(2 ** attempt)
 
 
+def detach_tag(tag_id, lead_ids):
+    """Remove a tag from a batch of leads."""
+    batch_size = 500
+    for i in range(0, len(lead_ids), batch_size):
+        batch = lead_ids[i:i + batch_size]
+        seq_post('/tags/detach-from-leads', {'tag_ids': [tag_id], 'lead_ids': batch})
+        log.info(f"  Detached tag from batch {i//batch_size + 1}: {len(batch)} leads")
+        time.sleep(0.2)
+
+
 def fetch_all_pages(path, params=None):
     p = dict(params or {})
     p['per_page'] = 100
@@ -176,6 +186,55 @@ def get_booked_domains():
     return booked
 
 
+# ── Cleanup: remove Allaine tag where we already replied ──────────────────────
+
+def find_leads_to_remove(allaine_leads, sender_emails):
+    """Return lead_ids where the latest reply is folder=Sent (we replied)."""
+    to_remove = []
+    remove_lock = Lock()
+
+    def check_lead(lead):
+        lead_id = lead['id']
+        try:
+            data    = seq_get(f'/leads/{lead_id}/replies', {'per_page': 100})
+            replies = data.get('data', [])
+        except Exception as exc:
+            log.warning(f"  Reply fetch failed for lead {lead_id}: {exc}")
+            return
+
+        if not replies:
+            return
+
+        def parse_dt(r):
+            try:
+                return datetime.fromisoformat(r['date_received'].replace('Z', '+00:00'))
+            except Exception:
+                return datetime.min.replace(tzinfo=timezone.utc)
+
+        latest = sorted(replies, key=parse_dt)[-1]
+
+        # We replied if latest message is Sent OR from one of our sender emails
+        is_sent = latest.get('folder') == 'Sent'
+        from_email = (latest.get('from_email_address') or '').lower()
+        is_our_email = from_email in sender_emails
+
+        if is_sent or is_our_email:
+            with remove_lock:
+                to_remove.append(lead_id)
+
+    with ThreadPoolExecutor(max_workers=20) as ex:
+        futures = [ex.submit(check_lead, lead) for lead in allaine_leads]
+        for i, fut in enumerate(as_completed(futures), 1):
+            try:
+                fut.result()
+            except Exception as exc:
+                log.warning(f"  Cleanup check error: {exc}")
+            if i % 50 == 0:
+                log.info(f"  Cleanup progress: {i}/{len(allaine_leads)}")
+
+    return to_remove
+
+
 # ── Candidate leads ────────────────────────────────────────────────────────────
 
 def get_candidate_leads(allaine_tag_id):
@@ -244,27 +303,28 @@ def evaluate_lead(lead, sender_emails, booked_domains, now):
 
 # ── CSV run log ───────────────────────────────────────────────────────────────
 
-def append_to_runs_log(run_dt, total_candidates, already_tagged, newly_tagged):
+def append_to_runs_log(run_dt, total_candidates, already_tagged, newly_tagged, removed=0):
     file_exists = os.path.exists(RUNS_CSV)
     ist_offset  = timedelta(hours=5, minutes=30)
     ist_dt      = run_dt + ist_offset
     with open(RUNS_CSV, 'a', newline='') as f:
         writer = csv.writer(f)
         if not file_exists:
-            writer.writerow(['date', 'time_ist', 'total_candidates', 'already_tagged', 'newly_tagged'])
+            writer.writerow(['date', 'time_ist', 'total_candidates', 'already_tagged', 'newly_tagged', 'removed'])
         writer.writerow([
             ist_dt.strftime('%Y-%m-%d'),
             ist_dt.strftime('%H:%M'),
             total_candidates,
             already_tagged,
             newly_tagged,
+            removed,
         ])
     log.info(f"  Appended run stats to {RUNS_CSV}")
 
 
 # ── Slack notification ─────────────────────────────────────────────────────────
 
-def send_slack(run_dt, total_candidates, already_tagged, newly_tagged, error=None):
+def send_slack(run_dt, total_candidates, already_tagged, newly_tagged, removed=0, error=None):
     if not SLACK_TOKEN:
         log.warning("SLACK_BOT_TOKEN not set — skipping Slack notification")
         return
@@ -279,27 +339,34 @@ def send_slack(run_dt, total_candidates, already_tagged, newly_tagged, error=Non
             {"type": "header", "text": {"type": "plain_text", "text": f"Allaine Cron — {date_str}"}},
             {"type": "section", "text": {"type": "mrkdwn", "text": f":red_circle: *Run failed* at {time_str}\n```{error}```"}}
         ]
-    elif newly_tagged == 0:
+    elif newly_tagged == 0 and removed == 0:
         blocks = [
             {"type": "header", "text": {"type": "plain_text", "text": f"Allaine Cron — {date_str}"}},
             {"type": "section", "fields": [
                 {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
                 {"type": "mrkdwn", "text": f"*Candidates checked*\n{total_candidates}"},
                 {"type": "mrkdwn", "text": f"*Already tagged Allaine*\n{already_tagged}"},
-                {"type": "mrkdwn", "text": f"*Newly tagged*\n{newly_tagged}"},
+                {"type": "mrkdwn", "text": f"*Newly added*\n{newly_tagged}"},
+                {"type": "mrkdwn", "text": f"*Removed (replied)*\n{removed}"},
             ]},
-            {"type": "section", "text": {"type": "mrkdwn", "text": ":white_check_mark: No new leads to action this run."}}
+            {"type": "section", "text": {"type": "mrkdwn", "text": ":white_check_mark: No changes to Allaine's queue this run."}}
         ]
     else:
+        summary_parts = []
+        if newly_tagged > 0:
+            summary_parts.append(f":large_green_circle: *{newly_tagged} new lead(s) added*")
+        if removed > 0:
+            summary_parts.append(f":large_yellow_circle: *{removed} lead(s) removed* (we already replied)")
         blocks = [
             {"type": "header", "text": {"type": "plain_text", "text": f"Allaine Cron — {date_str}"}},
             {"type": "section", "fields": [
                 {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
                 {"type": "mrkdwn", "text": f"*Candidates checked*\n{total_candidates}"},
                 {"type": "mrkdwn", "text": f"*Already tagged Allaine*\n{already_tagged}"},
-                {"type": "mrkdwn", "text": f"*Newly tagged*\n:large_green_circle: {newly_tagged}"},
+                {"type": "mrkdwn", "text": f"*Newly added*\n{newly_tagged}"},
+                {"type": "mrkdwn", "text": f"*Removed (replied)*\n{removed}"},
             ]},
-            {"type": "section", "text": {"type": "mrkdwn", "text": f":bell: *{newly_tagged} new lead(s) added to Allaine's queue.*"}}
+            {"type": "section", "text": {"type": "mrkdwn", "text": "  |  ".join(summary_parts)}}
         ]
 
     try:
@@ -342,13 +409,25 @@ def run():
     all_allaine_before = fetch_all_pages('/leads', {'filters[tag_ids][]': allaine_tag_id})
     already_tagged     = len(all_allaine_before)
 
+    # ── Cleanup: remove tag from leads where we already replied ───
+    removed = 0
+    if all_allaine_before:
+        log.info(f"\nChecking {already_tagged} Allaine-tagged leads for cleanup...")
+        leads_to_remove = find_leads_to_remove(all_allaine_before, sender_emails)
+        removed = len(leads_to_remove)
+        if leads_to_remove:
+            log.info(f"  Removing Allaine tag from {removed} leads (we already replied)")
+            detach_tag(allaine_tag_id, leads_to_remove)
+        else:
+            log.info("  No leads to remove.")
+
     candidates = get_candidate_leads(allaine_tag_id)
 
     if not candidates:
         log.info("No candidate leads found. Exiting.")
         log.info("=" * 60)
-        append_to_runs_log(now, 0, already_tagged, 0)
-        send_slack(now, 0, already_tagged, 0)
+        append_to_runs_log(now, 0, already_tagged, 0, removed)
+        send_slack(now, 0, already_tagged, 0, removed)
         return
 
     # ── Evaluate leads in parallel ─────────────────────────────────
@@ -383,8 +462,8 @@ def run():
     if not qualified:
         log.info("Nothing to tag.")
         log.info("=" * 60)
-        append_to_runs_log(now, len(candidates), already_tagged, 0)
-        send_slack(now, len(candidates), already_tagged, 0)
+        append_to_runs_log(now, len(candidates), already_tagged, 0, removed)
+        send_slack(now, len(candidates), already_tagged, 0, removed)
         return
 
     # ── Tag qualifying leads ───────────────────────────────────────
@@ -396,10 +475,10 @@ def run():
         log.info(f"  Tagged batch {i//batch_size + 1}: {len(batch)} leads")
         time.sleep(0.2)
 
-    log.info(f"\nDone. Tagged {len(qualified)} leads as '{ALLAINE_TAG_NAME}'.")
+    log.info(f"\nDone. Tagged {len(qualified)} leads as '{ALLAINE_TAG_NAME}'. Removed {removed}.")
     log.info("=" * 60)
-    append_to_runs_log(now, len(candidates), already_tagged, len(qualified))
-    send_slack(now, len(candidates), already_tagged, len(qualified))
+    append_to_runs_log(now, len(candidates), already_tagged, len(qualified), removed)
+    send_slack(now, len(candidates), already_tagged, len(qualified), removed)
 
 
 if __name__ == '__main__':
@@ -407,5 +486,5 @@ if __name__ == '__main__':
         run()
     except Exception as exc:
         log.error(f"Cron crashed: {exc}", exc_info=True)
-        send_slack(datetime.now(timezone.utc), 0, 0, 0, error=str(exc))
+        send_slack(datetime.now(timezone.utc), 0, 0, 0, removed=0, error=str(exc))
         sys.exit(1)
