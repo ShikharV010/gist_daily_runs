@@ -267,13 +267,25 @@ def find_tag_based_removals(all_allaine_before, not_interested_tag_id, lto_tag_i
 
 # ── Candidate leads ────────────────────────────────────────────────────────────
 
-def get_candidate_leads(allaine_tag_id):
-    """Leads tagged Interested but not Allaine."""
-    leads = fetch_all_pages('/leads', {
+def get_candidate_leads(allaine_tag_id, not_interested_tag_id, lto_tag_id):
+    """Leads tagged Interested but not Allaine, Not Interested, or LTO."""
+    params = {
         'filters[tag_ids][]':          INTERESTED_TAG_ID,
         'filters[excluded_tag_ids][]': allaine_tag_id,
-    })
-    log.info(f"  Candidate leads (Interested, not Allaine): {len(leads)}")
+    }
+    leads = fetch_all_pages('/leads', params)
+
+    # Filter out NI and LTO tagged leads client-side if we have their IDs
+    excluded = set()
+    if not_interested_tag_id:
+        ni_leads = fetch_all_pages('/leads', {'filters[tag_ids][]': not_interested_tag_id})
+        excluded |= {l['id'] for l in ni_leads}
+    if lto_tag_id:
+        lto_leads = fetch_all_pages('/leads', {'filters[tag_ids][]': lto_tag_id})
+        excluded |= {l['id'] for l in lto_leads}
+
+    leads = [l for l in leads if l['id'] not in excluded]
+    log.info(f"  Candidate leads (Interested, not Allaine/NI/LTO): {len(leads)}")
     return leads
 
 
@@ -524,7 +536,7 @@ def run():
 
     removed = removed_replied + removed_ni + removed_lto
 
-    candidates = get_candidate_leads(allaine_tag_id)
+    candidates = get_candidate_leads(allaine_tag_id, not_interested_tag_id, lto_tag_id)
 
     if not candidates:
         log.info("No candidate leads found. Exiting.")
