@@ -1,14 +1,16 @@
 #!/usr/bin/env python3
 """
 Allaine SDR Lead Tagging Cron
-Schedule: every 15 mins
-Cron: */15 * * * *
+Schedule:
+  - Every 15 mins during 10AM–6PM EST (15:00–23:00 UTC)
+  - Every 3 hours outside business hours
 
 Logic:
 1. Fetch all leads tagged 'Interested' but not already tagged 'Allaine'
-2. For each lead, fetch their reply thread
+2. For each lead, fetch their reply thread (sorted newest first)
 3. If latest message is from prospect (folder=Inbox) AND >10 mins ago
    AND domain not in demo bookings → tag lead as 'Allaine'
+4. Send Slack summary + append to runs log CSV
 """
 
 import os
@@ -366,13 +368,13 @@ def run():
 
     with ThreadPoolExecutor(max_workers=20) as ex:
         futures = [ex.submit(evaluate, lead) for lead in candidates]
-        for fut in as_completed(futures):
+        for i, fut in enumerate(as_completed(futures), 1):
             try:
                 fut.result()
             except Exception as exc:
                 log.warning(f"  Evaluation error: {exc}")
-            if done[0] % 50 == 0:
-                log.info(f"  Progress: {done[0]}/{len(candidates)}")
+            if i % 50 == 0:
+                log.info(f"  Progress: {i}/{len(candidates)}")
 
     log.info(f"\nQualified for Allaine: {len(qualified)}")
     for q in qualified:

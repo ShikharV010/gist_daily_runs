@@ -5,21 +5,23 @@ Schedule: daily at 8PM IST (14:30 UTC) → cron: 30 14 * * *
 
 Flow:
 1. GET /leads?filters[tag_ids][]=11  → all 'Interested' leads (tag_id=11)
-2. GET /leads/{id}/replies           → full thread per lead (newest first)
-   - thread[0].folder == 'Sent'     → we sent last
-   - thread[0].folder == 'Inbox'    → prospect sent last → skip
+2. GET /leads/{id}/replies           → full thread per lead, sorted newest first
+   - latest.folder == 'Inbox'       → prospect sent last → skip
+   - latest.folder == 'Sent'        → we sent last → evaluate further
 3. 3 conditions to pass:
    a. our last reply was > 24h ago
    b. lead's email domain NOT in gist.gtm_inbound_demo_bookings (postgres, read-only)
    c. lead NOT already in Follow-Ups campaign (id=9)
 4. Tag qualifying leads  → 'followup_{dd}_{mmm}' (e.g. followup_07_apr)
 5. Add to Follow-Ups campaign (id=9)
+6. Send Slack summary + append to runs log CSV
 
 Run with: python3 -u followup_cron.py
 """
 
 import os
 import sys
+import csv
 import time
 import logging
 from datetime import datetime, timezone, timedelta
@@ -31,6 +33,7 @@ import psycopg2
 from dotenv import load_dotenv
 
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
+load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))  # fallback for GitHub Actions
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 SEQ_BASE  = os.getenv('SEQUENCER_BASE_URL', 'https://sequencer.gushwork.ai/api')
@@ -42,12 +45,20 @@ SEQ_HEADS = {'Authorization': f'Bearer {SEQ_TOKEN}', 'Content-Type': 'applicatio
 SLACK_TOKEN   = os.getenv('SLACK_BOT_TOKEN')
 SLACK_CHANNEL = os.getenv('SLACK_CHANNEL_ID', 'C0ARFBBN3TN')
 
-INTERESTED_TAG_ID      = 11   # 'Interested' tag
-FOLLOWUP_CAMPAIGN_ID   = 9    # 'Follow-Ups' campaign
-EVAL_WORKERS           = 15
+INTERESTED_TAG_ID    = 11   # 'Interested' tag
+FOLLOWUP_CAMPAIGN_ID = 9    # 'Follow-Ups' campaign
+EVAL_WORKERS         = 15
+
+IST_OFFSET = timedelta(hours=5, minutes=30)
+
+LEADS_CSV = os.path.join(os.path.dirname(__file__), 'followup_leads_log.csv')
+RUNS_CSV  = os.path.join(os.path.dirname(__file__), 'followup_runs_log.csv')
+
+LEADS_CSV_HEADERS = ['date_added', 'tag', 'name', 'email', 'domain', 'our_last_reply']
+RUNS_CSV_HEADERS  = ['date', 'time_ist', 'total_interested', 'already_in_followup', 'newly_added']
 
 
-# ── Logging (flushed in real time) ─────────────────────────────────────────────
+# ── Logging ────────────────────────────────────────────────────────────────────
 LOG_FILE = os.path.join(os.path.dirname(__file__), 'followup_cron.log')
 
 class FlushHandler(logging.StreamHandler):
@@ -96,14 +107,12 @@ def seq_post(path, payload, retries=3):
 
 
 def fetch_all_pages(path, extra_params=None):
-    """Paginate a small endpoint (campaigns, tags) fully."""
     params = dict(extra_params or {})
     params.update({'per_page': 100, 'page': 1})
     first   = seq_get(path, params)
     items   = list(first.get('data', []))
     last_pg = first.get('meta', {}).get('last_page', 1)
     lock    = Lock()
-
     if last_pg > 1:
         def fetch(pg):
             p = dict(params); p['page'] = pg
@@ -115,13 +124,9 @@ def fetch_all_pages(path, extra_params=None):
     return items
 
 
-# ── Step 1: Interested leads via tag filter ────────────────────────────────────
+# ── Step 1: Interested leads ───────────────────────────────────────────────────
 
 def get_interested_leads():
-    """
-    Returns list of lead dicts for all leads tagged 'Interested' (tag_id=11).
-    Uses GET /leads?filters[tag_ids][]=11
-    """
     leads, page = [], 1
     while True:
         d = seq_get('/leads', {
@@ -138,20 +143,25 @@ def get_interested_leads():
 
 # ── Step 2: Thread per lead ────────────────────────────────────────────────────
 
+def parse_dt(msg):
+    try:
+        return datetime.fromisoformat(msg['date_received'].replace('Z', '+00:00'))
+    except Exception:
+        return datetime.min.replace(tzinfo=timezone.utc)
+
+
 def get_lead_thread(lead_id):
-    """
-    Returns list of reply/message dicts for this lead, newest first.
-    Uses GET /leads/{id}/replies
-    """
+    """Returns reply list sorted newest first."""
     try:
         d = seq_get(f'/leads/{lead_id}/replies', {'per_page': 100, 'page': 1})
-        return d.get('data', [])
+        replies = d.get('data', [])
+        return sorted(replies, key=parse_dt, reverse=True)
     except Exception as exc:
         log.warning(f"  Thread fetch failed for lead {lead_id}: {exc}")
         return []
 
 
-# ── Step 3: Booked domains from postgres ──────────────────────────────────────
+# ── Step 3: Booked domains ─────────────────────────────────────────────────────
 
 def get_booked_domains(db_conn):
     booked = set()
@@ -163,7 +173,6 @@ def get_booked_domains(db_conn):
         """)
         for (d,) in cur.fetchall():
             if d: booked.add(d.strip())
-
         cur.execute("""
             SELECT DISTINCT lower(
                 regexp_replace(
@@ -179,7 +188,7 @@ def get_booked_domains(db_conn):
     return booked
 
 
-# ── Step 4: Leads already in Follow-Ups campaign ──────────────────────────────
+# ── Step 4: Leads already in Follow-Ups ───────────────────────────────────────
 
 def get_campaign_lead_ids():
     leads = fetch_all_pages(f'/campaigns/{FOLLOWUP_CAMPAIGN_ID}/leads')
@@ -214,79 +223,83 @@ def attach_to_campaign(lead_ids):
         time.sleep(0.2)
 
 
+# ── CSV logging ───────────────────────────────────────────────────────────────
+
+def append_to_leads_csv(qualified, tag_name, run_dt):
+    """Append individual qualifying leads to the cumulative lead log."""
+    date_str    = run_dt.strftime('%Y-%m-%d')
+    file_exists = os.path.isfile(LEADS_CSV)
+    with open(LEADS_CSV, 'a', newline='', encoding='utf-8') as f:
+        writer = csv.DictWriter(f, fieldnames=LEADS_CSV_HEADERS)
+        if not file_exists:
+            writer.writeheader()
+        for q in qualified:
+            writer.writerow({
+                'date_added':     date_str,
+                'tag':            tag_name,
+                'name':           q['name'],
+                'email':          q['email'],
+                'domain':         q['domain'],
+                'our_last_reply': q['our_last_reply'],
+            })
+    log.info(f"  Appended {len(qualified)} rows to {LEADS_CSV}")
+
+
+def append_to_runs_log(run_dt, total_interested, already_in_followup, newly_added):
+    """Append run-level stats to the runs log."""
+    ist_dt      = run_dt + IST_OFFSET
+    file_exists = os.path.isfile(RUNS_CSV)
+    with open(RUNS_CSV, 'a', newline='', encoding='utf-8') as f:
+        writer = csv.writer(f)
+        if not file_exists:
+            writer.writerow(RUNS_CSV_HEADERS)
+        writer.writerow([
+            ist_dt.strftime('%Y-%m-%d'),
+            ist_dt.strftime('%H:%M'),
+            total_interested,
+            already_in_followup,
+            newly_added,
+        ])
+    log.info(f"  Appended run stats to {RUNS_CSV}")
+
+
 # ── Slack notification ─────────────────────────────────────────────────────────
 
-def send_slack(qualified, total_checked, booked_skipped_count, run_dt, error=None):
-    """Send a formatted daily summary to the Slack channel."""
+def send_slack(run_dt, total_interested, already_in_followup, newly_added, tag_name=None, error=None):
     if not SLACK_TOKEN:
         log.warning("SLACK_BOT_TOKEN not set — skipping Slack notification")
         return
 
-    date_str = run_dt.strftime('%d %b %Y')
-    time_str = run_dt.strftime('%I:%M %p IST')
+    ist_dt   = run_dt + IST_OFFSET
+    date_str = ist_dt.strftime('%d %b %Y')
+    time_str = ist_dt.strftime('%I:%M %p IST')
 
     if error:
         blocks = [
-            {
-                "type": "header",
-                "text": {"type": "plain_text", "text": f"Follow-Up Cron — {date_str}"}
-            },
-            {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": f":red_circle: *Run failed* at {time_str}\n```{error}```"}
-            }
+            {"type": "header", "text": {"type": "plain_text", "text": f"Follow-Up Cron — {date_str}"}},
+            {"type": "section", "text": {"type": "mrkdwn", "text": f":red_circle: *Run failed* at {time_str}\n```{error}```"}}
         ]
-    elif not qualified:
+    elif newly_added == 0:
         blocks = [
-            {
-                "type": "header",
-                "text": {"type": "plain_text", "text": f"Follow-Up Cron — {date_str}"}
-            },
-            {
-                "type": "section",
-                "fields": [
-                    {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
-                    {"type": "mrkdwn", "text": f"*Interested leads checked*\n{total_checked}"},
-                ]
-            },
-            {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": ":white_check_mark: Nothing to action today — all prospects are either active, booked, or already in Follow-Ups."}
-            }
+            {"type": "header", "text": {"type": "plain_text", "text": f"Follow-Up Cron — {date_str}"}},
+            {"type": "section", "fields": [
+                {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
+                {"type": "mrkdwn", "text": f"*Interested leads checked*\n{total_interested}"},
+                {"type": "mrkdwn", "text": f"*Already in Follow-Ups*\n{already_in_followup}"},
+                {"type": "mrkdwn", "text": f"*Newly added*\n{newly_added}"},
+            ]},
+            {"type": "section", "text": {"type": "mrkdwn", "text": ":white_check_mark: Nothing to action today — all prospects are either active, booked, or already in Follow-Ups."}}
         ]
     else:
-        tag_name = run_dt.strftime('followup_%d_%b').lower()
-
-        # Build lead list — cap at 20 in Slack, show count for the rest
-        lead_lines = []
-        for q in qualified[:20]:
-            reply_date = q['our_last_reply'][:10]
-            lead_lines.append(f"• {q['name']}  |  {q['email']}  |  last reply: {reply_date}")
-        if len(qualified) > 20:
-            lead_lines.append(f"_...and {len(qualified) - 20} more_")
-
         blocks = [
-            {
-                "type": "header",
-                "text": {"type": "plain_text", "text": f"Follow-Up Cron — {date_str}"}
-            },
-            {
-                "type": "section",
-                "fields": [
-                    {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
-                    {"type": "mrkdwn", "text": f"*Interested leads checked*\n{total_checked}"},
-                    {"type": "mrkdwn", "text": f"*Moved to Follow-Ups*\n{len(qualified)}"},
-                    {"type": "mrkdwn", "text": f"*Tag applied*\n`{tag_name}`"},
-                ]
-            },
-            {"type": "divider"},
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": "*Leads added to Follow-Ups campaign:*\n" + "\n".join(lead_lines)
-                }
-            }
+            {"type": "header", "text": {"type": "plain_text", "text": f"Follow-Up Cron — {date_str}"}},
+            {"type": "section", "fields": [
+                {"type": "mrkdwn", "text": f"*Run time*\n{time_str}"},
+                {"type": "mrkdwn", "text": f"*Interested leads checked*\n{total_interested}"},
+                {"type": "mrkdwn", "text": f"*Already in Follow-Ups*\n{already_in_followup}"},
+                {"type": "mrkdwn", "text": f"*Newly added*\n:large_green_circle: {newly_added}"},
+            ]},
+            {"type": "section", "text": {"type": "mrkdwn", "text": f":bell: *{newly_added} lead(s) moved to Follow-Ups.* Tag applied: `{tag_name}`"}}
         ]
 
     try:
@@ -310,7 +323,7 @@ def send_slack(qualified, total_checked, booked_skipped_count, run_dt, error=Non
 def run():
     now         = datetime.now(timezone.utc)
     one_day_ago = now - timedelta(hours=24)
-    tag_name    = now.strftime('followup_%d_%b').lower()   # e.g. followup_07_apr
+    tag_name    = now.strftime('followup_%d_%b').lower()
 
     log.info("=" * 60)
     log.info(f"Follow-up cron started | {now.strftime('%Y-%m-%d %H:%M UTC')}")
@@ -330,15 +343,16 @@ def run():
     db_conn.close()
     log.info(f"  Booked domains: {len(booked_domains):,}")
 
-    # ── Fetch interested leads & campaign state ────────────────────
+    # ── Fetch data ─────────────────────────────────────────────────
     log.info("Fetching interested leads (tag_id=11)...")
-    interested_leads = get_interested_leads()
-    log.info(f"  Interested leads: {len(interested_leads):,}")
+    interested_leads  = get_interested_leads()
+    total_interested  = len(interested_leads)
+    log.info(f"  Interested leads: {total_interested:,}")
 
-    campaign_lead_ids = get_campaign_lead_ids()
+    campaign_lead_ids   = get_campaign_lead_ids()
+    already_in_followup = len(campaign_lead_ids)
 
     # ── Evaluate each lead in parallel ────────────────────────────
-    total     = len(interested_leads)
     qualified = []
     q_lock    = Lock()
     done      = [0]
@@ -349,27 +363,21 @@ def run():
         email   = (lead.get('email') or '').lower()
         domain  = email.split('@')[-1] if '@' in email else ''
 
-        # Get the full message thread (newest first)
+        # Fetch full thread, sorted newest first
         thread = get_lead_thread(lead_id)
         if not thread:
             return
 
         last_msg = thread[0]
 
-        # Who sent last?
+        # Prospect sent last → no follow-up needed
         if last_msg.get('folder') == 'Inbox':
-            return  # Prospect sent last — no action needed
-
-        # We sent last — check timestamp
-        try:
-            last_dt = datetime.fromisoformat(
-                last_msg['date_received'].replace('Z', '+00:00')
-            )
-        except Exception:
             return
 
+        # We sent last — check how long ago
+        last_dt = parse_dt(last_msg)
         if last_dt > one_day_ago:
-            return  # Our reply was < 1 day ago — too soon
+            return  # < 24h ago — too soon
 
         # Domain not booked?
         if domain and domain in booked_domains:
@@ -389,10 +397,10 @@ def run():
                 'our_last_reply': last_dt.strftime('%Y-%m-%d %H:%M UTC'),
             })
 
-    log.info(f"Evaluating {total:,} leads ({EVAL_WORKERS} workers)...")
+    log.info(f"Evaluating {total_interested:,} leads ({EVAL_WORKERS} workers)...")
     with ThreadPoolExecutor(max_workers=EVAL_WORKERS) as ex:
         futs = {ex.submit(evaluate, lead): lead['id'] for lead in interested_leads}
-        for fut in as_completed(futs):
+        for i, fut in enumerate(as_completed(futs), 1):
             try:
                 fut.result()
             except Exception as exc:
@@ -400,7 +408,7 @@ def run():
             with d_lock:
                 done[0] += 1
             if done[0] % 50 == 0:
-                log.info(f"  Evaluated {done[0]}/{total} | qualified so far: {len(qualified)}")
+                log.info(f"  Evaluated {done[0]}/{total_interested} | qualified so far: {len(qualified)}")
 
     log.info(f"\nQualified for follow-up: {len(qualified)}")
     for q in qualified:
@@ -409,7 +417,8 @@ def run():
     if not qualified:
         log.info("Nothing to action today.")
         log.info("=" * 60)
-        send_slack([], total, 0, now)
+        append_to_runs_log(now, total_interested, already_in_followup, 0)
+        send_slack(now, total_interested, already_in_followup, 0, tag_name)
         return
 
     # ── Tag + add to Follow-Ups ────────────────────────────────────
@@ -427,7 +436,10 @@ def run():
     log.info("\n" + "=" * 60)
     log.info(f"Done. {len(qualified)} leads tagged '{tag_name}' → added to Follow-Ups.")
     log.info("=" * 60)
-    send_slack(qualified, total, 0, now)
+
+    append_to_leads_csv(qualified, tag_name, now)
+    append_to_runs_log(now, total_interested, already_in_followup, len(qualified))
+    send_slack(now, total_interested, already_in_followup, len(qualified), tag_name)
 
 
 if __name__ == '__main__':
@@ -435,5 +447,5 @@ if __name__ == '__main__':
         run()
     except Exception as exc:
         log.error(f"Cron crashed: {exc}", exc_info=True)
-        send_slack([], 0, 0, datetime.now(timezone.utc), error=str(exc))
+        send_slack(datetime.now(timezone.utc), 0, 0, 0, error=str(exc))
         sys.exit(1)
