@@ -1,0 +1,40 @@
+name: Cold Email Insights - Refresh Metrics
+
+on:
+  schedule:
+    # Every 6 hours: 00:00, 06:00, 12:00, 18:00 UTC
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests psycopg2-binary
+
+      - name: Run ETL
+        env:
+          SEQUENCER_API_KEY: ${{ secrets.SEQUENCER_API_KEY }}
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          cd cold_email_workflows/cold_email_insights
+          python etl.py
+
+      - name: Commit and push metrics.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add cold_email_workflows/cold_email_insights/data/metrics.json
+          git diff --staged --quiet || git commit -m "chore: refresh cold email metrics [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+          git push
