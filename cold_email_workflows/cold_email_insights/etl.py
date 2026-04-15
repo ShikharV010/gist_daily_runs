@@ -20,6 +20,8 @@ OUT_DIR  = os.path.join(os.path.dirname(__file__), 'data')
 OUT_FILE = os.path.join(OUT_DIR, 'metrics.json')
 EST      = timezone(timedelta(hours=-4))
 
+INTERESTED_TAG_ID = 11   # Sequencer tag for "Interested" leads
+
 INDUSTRY_MAP = {
     2: 'Manufacturing', 5: 'Manufacturing', 6: 'Manufacturing',
     7: 'Manufacturing', 8: 'Manufacturing',
@@ -82,78 +84,101 @@ def fetch_campaigns():
     print(f'  {len(out)} campaigns', flush=True)
     return out
 
-# ── 2. Interested leads with dates (concurrent per-campaign, interested only) ──
+# ── 2. Interested leads via /leads tag filter (same approach as allaine_cron) ──
 CAMP_WORKERS = 8
+
+def _fetch_all_pages(path, params=None):
+    """
+    Fetch all pages of a paginated endpoint in parallel (page 1 sequential,
+    remaining pages concurrent with up to 20 workers) — mirrors allaine_cron.
+    """
+    p = dict(params or {})
+    p['per_page'] = 100
+    p['page']     = 1
+    r = requests.get(f'{BASE}/{path}', headers=HEADERS, params=p, timeout=30)
+    r.raise_for_status()
+    d         = r.json()
+    items     = list(d.get('data', []))
+    last_page = d.get('meta', {}).get('last_page', 1)
+    if last_page <= 1:
+        return items
+
+    lock = Lock()
+
+    def fetch_page(page):
+        pp = dict(p); pp['page'] = page
+        r2 = requests.get(f'{BASE}/{path}', headers=HEADERS, params=pp, timeout=30)
+        r2.raise_for_status()
+        return r2.json().get('data', [])
+
+    with ThreadPoolExecutor(max_workers=20) as ex:
+        futs = {ex.submit(fetch_page, pg): pg for pg in range(2, last_page + 1)}
+        for fut in as_completed(futs):
+            try:
+                with lock:
+                    items.extend(fut.result())
+            except Exception as e:
+                print(f'  WARN page fetch: {e}', flush=True)
+
+    return items
+
 
 def fetch_interested_leads(campaigns):
     """
-    Concurrent per-campaign: fetch only interested replies from each active campaign.
-    Pages limited to ceil(campaign.interested / 100) + 2 to avoid over-fetching.
+    Fetch all leads with the Interested tag (id=11) from /leads endpoint.
+    This mirrors allaine_cron: O(interested) not O(all_replies).
+    Then attribute each lead to a campaign via campaign_id field on the lead object.
     """
-    print('Fetching interested leads (concurrent, interested-only)...', flush=True)
-    active_camps = [c for c in campaigns if c['industry'] in ACTIVE and c.get('interested', 0) > 0]
-    print(f'  {len(active_camps)} campaigns have interested replies', flush=True)
+    print('Fetching interested leads (tag filter, global)...', flush=True)
 
-    lock    = Lock()
+    id_to_camp = {c['id']: c for c in campaigns}
+
+    raw_leads = _fetch_all_pages('leads', {'filters[tag_ids][]': INTERESTED_TAG_ID})
+    print(f'  {len(raw_leads)} leads with Interested tag', flush=True)
+
     results = []
-    done_ct = [0]
+    for lead in raw_leads:
+        email = (lead.get('email') or '').lower()
+        if not email:
+            continue
 
-    def fetch_campaign_interested(c):
-        cid      = c['id']
-        max_p    = max(2, (c['interested'] // 100) + 2)
-        params   = {'interested': 1, 'per_page': 100}
-        camp_leads = []
-        for page in range(1, max_p + 1):
-            params['page'] = page
-            for attempt in range(3):
-                try:
-                    r = requests.get(f'{BASE}/campaigns/{cid}/replies',
-                                     headers=HEADERS, params=params, timeout=30)
-                    if r.status_code == 200:
-                        d    = r.json()
-                        rows = d.get('data', [])
-                        for row in rows:
-                            if not row.get('interested'):
-                                continue
-                            camp_leads.append({
-                                'lead_id':      row.get('lead_id'),
-                                'email':        (row.get('from_email_address') or '').lower(),
-                                'campaign_id':  cid,
-                                'campaign_name': c['name'],
-                                'industry':     c['industry'],
-                                'date_received': row.get('date_received'),
-                                'date_est':     to_est(row.get('date_received')),
-                                'booked_demo':  False, 'is_showup': False,
-                                'show_status':  None,
-                                'demo_scheduled_date': None,
-                                'demo_created_at_date': None,
-                            })
-                        meta = d.get('meta', {})
-                        if meta.get('current_page', page) >= meta.get('last_page', page):
-                            break
-                        break  # success, move to next page
-                    elif r.status_code == 429:
-                        time.sleep(2 ** attempt)
-                    else:
-                        break
-                except Exception:
-                    time.sleep(2 ** attempt)
+        # campaign_id lives in lead_campaign_data[] — find the entry where interested=true
+        cid = None
+        for lcd in (lead.get('lead_campaign_data') or []):
+            if lcd.get('interested'):
+                cid = lcd.get('campaign_id')
+                break
+        # Fall back to first campaign_data entry if none marked interested
+        if cid is None:
+            lcd0 = (lead.get('lead_campaign_data') or [{}])[0]
+            cid  = lcd0.get('campaign_id')
 
-        with lock:
-            done_ct[0] += 1
-            results.extend(camp_leads)
-            print(f'  [{done_ct[0]}/{len(active_camps)}] {c["name"][:40]} → {len(camp_leads)} interested',
-                  flush=True)
+        ind  = INDUSTRY_MAP.get(cid, 'Other') if cid else 'Unknown'
+        camp = id_to_camp.get(cid, {})
 
-    with ThreadPoolExecutor(max_workers=CAMP_WORKERS) as ex:
-        futs = [ex.submit(fetch_campaign_interested, c) for c in active_camps]
-        for fut in as_completed(futs):
-            try:
-                fut.result()
-            except Exception as e:
-                print(f'  WARN campaign fetch error: {e}')
+        # Skip leads not in active industries
+        if ind not in ACTIVE:
+            continue
 
-    # Dedupe by email (keep latest date)
+        # Best available date proxy for "when they became interested"
+        # updated_at is set when lead status changes (reply / tag application)
+        date_val = (lead.get('interested_at') or lead.get('replied_at') or
+                    lead.get('updated_at')     or lead.get('created_at'))
+
+        results.append({
+            'lead_id':      lead.get('id'),
+            'email':        email,
+            'campaign_id':  cid,
+            'campaign_name': camp.get('name', ''),
+            'industry':     ind,
+            'date_est':     to_est(date_val),
+            'booked_demo':  False, 'is_showup': False,
+            'show_status':  None,
+            'demo_scheduled_date':  None,
+            'demo_created_at_date': None,
+        })
+
+    # Dedupe by email (keep latest date_est)
     by_email: dict = {}
     for l in results:
         e = l['email']
@@ -162,7 +187,7 @@ def fetch_interested_leads(campaigns):
         if e not in by_email or (l['date_est'] or '') > (by_email[e]['date_est'] or ''):
             by_email[e] = l
     deduped = list(by_email.values())
-    print(f'  {len(deduped)} unique interested leads', flush=True)
+    print(f'  {len(deduped)} unique interested leads in active industries', flush=True)
     return deduped
 
 # ── 3. Demo bookings from DB ──────────────────────────────────────────────────
@@ -212,94 +237,53 @@ def fetch_demo_bookings(interested_leads):
     print(f'  {len(out)} bookings', flush=True)
     return out
 
-# ── 4. Daily email stats via campaign analytics API ───────────────────────────
+# ── 4. Daily email stats from DB snapshots ────────────────────────────────────
 def fetch_daily_email_stats(campaigns):
     """
-    Fetch daily send stats from campaigns/{id}/analytics endpoint.
-    Falls back to DB cumulative snapshot approach if API returns nothing.
+    Daily send stats from gist.gtm_sequencer_campaign_stats (cumulative daily
+    snapshots). Delta = today − yesterday gives actual sends per day.
     """
-    print('Fetching daily email stats (campaign analytics API)...', flush=True)
+    print('Fetching daily email stats (DB snapshots)...', flush=True)
     active_camps = [c for c in campaigns if c['industry'] in ACTIVE]
+    active_ids   = [c['id'] for c in active_camps]
     id_to_ind    = {c['id']: c['industry'] for c in campaigns}
     daily        = []
-    lock         = Lock()
 
-    def fetch_analytics(c):
-        cid = c['id']
-        for attempt in range(3):
-            try:
-                r = requests.get(f'{BASE}/campaigns/{cid}/analytics',
-                                 headers=HEADERS, timeout=30)
-                if r.status_code == 200:
-                    return cid, r.json()
-                elif r.status_code == 429:
-                    time.sleep(2 ** attempt)
-                else:
-                    break
-            except Exception:
-                time.sleep(2 ** attempt)
-        return cid, {}
+    try:
+        conn = psycopg2.connect(DB_URL)
+        cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute("""
+            SELECT campaign_id::int AS cid, start_date,
+                   emails_sent::int,
+                   total_leads_contacted::int AS leads_contacted
+            FROM gist.gtm_sequencer_campaign_stats
+            WHERE campaign_id::int = ANY(%s)
+            ORDER BY campaign_id::int, start_date
+        """, (active_ids,))
+        db_rows = cur.fetchall()
+        conn.close()
 
-    with ThreadPoolExecutor(max_workers=CAMP_WORKERS) as ex:
-        futs = {ex.submit(fetch_analytics, c): c for c in active_camps}
-        for fut in as_completed(futs):
-            cid, data = fut.result()
-            ind = id_to_ind.get(cid, 'Other')
-            # Expected structure: {data: [{date, emails_sent, leads_contacted, ...}]}
-            # or {daily: [...]} — handle both
-            rows = (data.get('data') or data.get('daily') or
-                    data.get('analytics') or [])
-            if isinstance(rows, list):
-                with lock:
-                    for row in rows:
-                        d  = row.get('date') or row.get('start_date') or row.get('day')
-                        es = int(row.get('emails_sent') or row.get('sent') or 0)
-                        lc = int(row.get('leads_contacted') or row.get('contacted') or
-                                 row.get('unique_contacted') or 0)
-                        if d and (es or lc):
-                            daily.append({
-                                'date':         str(d)[:10],
-                                'campaign_id':  cid,
-                                'industry':     ind,
-                                'emails_delta': es,
-                                'leads_delta':  lc,
-                            })
+        by_camp: dict = defaultdict(list)
+        for r in db_rows:
+            by_camp[r['cid']].append(dict(r))
 
-    if not daily:
-        print('  Analytics API returned nothing — falling back to DB snapshots', flush=True)
-        active_ids = [c['id'] for c in active_camps]
-        try:
-            conn = psycopg2.connect(DB_URL)
-            cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-            cur.execute("""
-                SELECT campaign_id::int AS cid, start_date,
-                       emails_sent::int,
-                       total_leads_contacted::int AS leads_contacted
-                FROM gist.gtm_sequencer_campaign_stats
-                WHERE campaign_id::int = ANY(%s)
-                ORDER BY campaign_id::int, start_date
-            """, (active_ids,))
-            db_rows = cur.fetchall()
-            conn.close()
-            by_camp: dict = defaultdict(list)
-            for r in db_rows: by_camp[r['cid']].append(dict(r))
-            for cid, camp_rows in by_camp.items():
-                prev_e = prev_l = 0
-                for row in camp_rows:
-                    de = max(0, row['emails_sent']     - prev_e)
-                    dl = max(0, row['leads_contacted'] - prev_l)
-                    if de or dl:
-                        daily.append({
-                            'date':         str(row['start_date']),
-                            'campaign_id':  cid,
-                            'industry':     id_to_ind.get(cid, 'Other'),
-                            'emails_delta': de,
-                            'leads_delta':  dl,
-                        })
-                    prev_e = row['emails_sent']
-                    prev_l = row['leads_contacted']
-        except Exception as e:
-            print(f'  DB fallback error: {e}')
+        for cid, camp_rows in by_camp.items():
+            prev_e = prev_l = 0
+            for row in camp_rows:
+                de = max(0, row['emails_sent']     - prev_e)
+                dl = max(0, row['leads_contacted'] - prev_l)
+                if de or dl:
+                    daily.append({
+                        'date':         str(row['start_date']),
+                        'campaign_id':  cid,
+                        'industry':     id_to_ind.get(cid, 'Other'),
+                        'emails_delta': de,
+                        'leads_delta':  dl,
+                    })
+                prev_e = row['emails_sent']
+                prev_l = row['leads_contacted']
+    except Exception as e:
+        print(f'  DB error: {e}', flush=True)
 
     daily.sort(key=lambda x: x['date'])
     print(f'  {len(daily)} daily rows', flush=True)
