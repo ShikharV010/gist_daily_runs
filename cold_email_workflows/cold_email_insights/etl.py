@@ -264,8 +264,8 @@ def fetch_demo_bookings(interested_leads):
     for r in rows:
         email = (r['prospect_email'] or '').lower()
         src   = r.get('source') or ''
-        if 'allaine' in src.lower():   ind = 'IT & Consulting'
-        elif email in email_to_ind:    ind = email_to_ind[email]
+        if email in email_to_ind:       ind = email_to_ind[email]
+        elif 'allaine' in src.lower(): ind = 'IT & Consulting'
         else:                          ind = 'Manufacturing'
 
         status = r['show_status']
