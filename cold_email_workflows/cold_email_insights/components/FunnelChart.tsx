@@ -84,9 +84,10 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
             <Tooltip
               contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid #e5e7eb' }}
               labelFormatter={l => `Date: ${l}`}
-              formatter={(value: number, name: string) => {
-                if (name === 'Emails Sent') return [value >= 1000 ? `${(value / 1000).toFixed(1)}K` : value, name]
-                return [value, name]
+              formatter={(value, name) => {
+                const v = typeof value === 'number' ? value : 0
+                if (name === 'Emails Sent') return [v >= 1000 ? `${(v / 1000).toFixed(1)}K` : v, name]
+                return [v, name]
               }}
             />
             <Legend wrapperStyle={{ fontSize: 12 }} />
