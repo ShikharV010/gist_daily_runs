@@ -304,14 +304,14 @@ def fetch_daily_email_stats(campaigns):
         # MAX() per campaign per day: table has ~40 intra-day snapshots per row,
         # taking the last (max) value before diffing gives correct daily deltas.
         cur.execute("""
-            SELECT campaign_id::int AS cid, start_date,
+            SELECT campaign_id::int AS cid, end_date AS start_date,
                    MAX(emails_sent::int)             AS emails_sent,
                    MAX(total_leads_contacted::int)   AS leads_contacted,
                    MAX(bounced::int)                 AS bounced
             FROM gist.gtm_sequencer_campaign_stats
             WHERE campaign_id::int = ANY(%s)
-            GROUP BY campaign_id::int, start_date
-            ORDER BY campaign_id::int, start_date
+            GROUP BY campaign_id::int, end_date
+            ORDER BY campaign_id::int, end_date
         """, (active_ids,))
         db_rows = cur.fetchall()
         conn.close()
