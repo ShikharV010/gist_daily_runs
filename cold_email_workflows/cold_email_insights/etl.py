@@ -252,12 +252,16 @@ def fetch_daily_email_stats(campaigns):
     try:
         conn = psycopg2.connect(DB_URL)
         cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        # MAX() per campaign per day: table has ~40 intra-day snapshots per row,
+        # taking the last (max) value before diffing gives correct daily deltas.
         cur.execute("""
             SELECT campaign_id::int AS cid, start_date,
-                   emails_sent::int,
-                   total_leads_contacted::int AS leads_contacted
+                   MAX(emails_sent::int)             AS emails_sent,
+                   MAX(total_leads_contacted::int)   AS leads_contacted,
+                   MAX(bounced::int)                 AS bounced
             FROM gist.gtm_sequencer_campaign_stats
             WHERE campaign_id::int = ANY(%s)
+            GROUP BY campaign_id::int, start_date
             ORDER BY campaign_id::int, start_date
         """, (active_ids,))
         db_rows = cur.fetchall()
@@ -268,20 +272,23 @@ def fetch_daily_email_stats(campaigns):
             by_camp[r['cid']].append(dict(r))
 
         for cid, camp_rows in by_camp.items():
-            prev_e = prev_l = 0
+            prev_e = prev_l = prev_b = 0
             for row in camp_rows:
                 de = max(0, row['emails_sent']     - prev_e)
                 dl = max(0, row['leads_contacted'] - prev_l)
+                db_ = max(0, (row['bounced'] or 0) - prev_b)
                 if de or dl:
                     daily.append({
-                        'date':         str(row['start_date']),
-                        'campaign_id':  cid,
-                        'industry':     id_to_ind.get(cid, 'Other'),
-                        'emails_delta': de,
-                        'leads_delta':  dl,
+                        'date':          str(row['start_date']),
+                        'campaign_id':   cid,
+                        'industry':      id_to_ind.get(cid, 'Other'),
+                        'emails_delta':  de,
+                        'leads_delta':   dl,
+                        'bounced_delta': db_,
                     })
                 prev_e = row['emails_sent']
                 prev_l = row['leads_contacted']
+                prev_b = row['bounced'] or 0
     except Exception as e:
         print(f'  DB error: {e}', flush=True)
 
@@ -336,6 +343,7 @@ def build_campaign_stats(campaigns, leads, bookings):
             'total_leads':              c['total_leads'],
             'total_leads_contacted':    c['total_leads_contacted'],
             'replied':                  c['replied'],
+            'bounced':                  c['bounced'],
             'interested':               inte,
             'demos_booked':             nd,
             'showups':                  ns,
@@ -343,6 +351,7 @@ def build_campaign_stats(campaigns, leads, bookings):
             'noshow':                   max(np_d - ns, 0),
             'reply_rate_per_sent':      round(c['replied'] / sent * 100, 2),
             'reply_rate_per_contacted': round(c['replied'] / cont * 100, 2),
+            'bounce_rate':              round(c['bounced'] / cont * 100, 2),
             'int_rate_per_sent':        round(inte / sent * 100, 4),
             'int_rate_per_contacted':   round(inte / cont * 100, 4),
             'demos_per_sent':           round(nd   / sent * 100, 4),
@@ -424,6 +433,7 @@ if __name__ == '__main__':
     a_sent   = sum(c['emails_sent']           for c in camp_stats)
     a_cont   = sum(c['total_leads_contacted'] for c in camp_stats)
     a_rep    = sum(c['replied']               for c in camp_stats)
+    a_boun   = sum(c['bounced']               for c in camp_stats)
     a_int    = sum(c['interested']            for c in camp_stats)
     a_demos  = sum(c['demos_booked']          for c in camp_stats)
     a_shows  = sum(c['showups']               for c in camp_stats)
@@ -446,6 +456,8 @@ if __name__ == '__main__':
             'emails_sent':              a_sent,
             'leads_contacted':          a_cont,
             'replied':                  a_rep,
+            'bounced':                  a_boun,
+            'bounce_rate':              r(a_boun, a_cont),
             'interested':               a_int,
             'demos_booked':             a_demos,
             'showups':                  a_shows,

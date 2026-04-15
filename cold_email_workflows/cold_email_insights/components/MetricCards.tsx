@@ -70,65 +70,64 @@ export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }
         />
         {/* 4 */}
         <Card
+          title="Bounced"
+          main={fmt(m.bounced)}
+          sub={`${pctStr(m.bounce_rate)} of leads contacted`}
+          color="red"
+        />
+        {/* 5 */}
+        <Card
           title="Demos Booked"
           main={fmt(m.demos_booked)}
           color="purple"
         />
-        {/* 5 */}
+        {/* 6 */}
         <Card
           title="Show-ups"
           main={fmt(m.showups)}
           color="green"
         />
-        {/* 6 */}
+        {/* 7 */}
         <Card
           title="Pending Demos"
           main={fmt(m.pending_demos)}
           color="amber"
         />
-        {/* 7 — Demos Rate */}
+      </div>
+
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3 mt-3">
+        {/* 8 — Demos Rate */}
         <Card
           title="Demos Rate"
           main={pctStr(m.demos_per_contacted)}
           sub={`per lead: ${pctStr(m.demos_per_contacted)}  per email: ${pctStr(m.demos_per_sent)}`}
           color="purple"
         />
-      </div>
-
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-3 mt-3">
-        {/* 8 — Show-up Rate (per email & per lead) */}
+        {/* 9 — Show-up Rate */}
         <Card
           title="Show-up Rate"
           main={pctStr(m.showups_per_contacted)}
           sub={`per lead: ${pctStr(m.showups_per_contacted)}  per email: ${pctStr(m.showups_per_sent)}`}
           color="green"
         />
-        {/* 9 — Actual Show Rate */}
+        {/* 10 — Actual Show Rate */}
         <Card
           title="Actual Show Rate"
           main={pctStr(m.show_rate)}
           sub={`${m.showups} showed / ${m.completed_demos} completed`}
           color="green"
         />
-        {/* 10 — Reply Rate */}
+        {/* 11 — Reply Rate */}
         <Card
           title="Reply Rate"
           main={pctStr(m.reply_rate_per_contacted)}
           sub={`per lead: ${pctStr(m.reply_rate_per_contacted)}  per email: ${pctStr(m.reply_rate_per_sent)}`}
-          sub2="(total replies, not date-filtered)"
           color="blue"
         />
-        {/* 11 — Interested Replies */}
+        {/* 12 — Interested Replies */}
         <Card
           title="Interested Replies"
           main={fmt(m.interested)}
-          color="blue"
-        />
-        {/* 12 — Interested Rate */}
-        <Card
-          title="Interested Rate"
-          main={pctStr(m.int_rate_per_contacted, 4)}
-          sub={`per lead: ${pctStr(m.int_rate_per_contacted, 4)}  per email: ${pctStr(m.int_rate_per_sent, 4)}`}
           color="blue"
         />
         {/* 13 — Demos / Interested */}

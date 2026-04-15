@@ -36,7 +36,7 @@ export function computeMetrics(
   const demoBookings    = data.demo_bookings      || []
   const campaigns       = (data.campaigns || []).filter(c => matchInd(c.industry))
 
-  // Emails & leads contacted: daily_email_stats deltas; fallback to campaign totals
+  // Emails, leads contacted, bounced: daily_email_stats deltas; fallback to campaign totals
   const emailRows = dailyEmailStats.filter(r =>
     matchInd(r.industry) && ((!from && !to) || inDateRange(r.date)),
   )
@@ -46,6 +46,9 @@ export function computeMetrics(
   const leads_contacted = emailRows.length > 0
     ? emailRows.reduce((s, r) => s + r.leads_delta, 0)
     : campaigns.reduce((s, c) => s + c.total_leads_contacted, 0)
+  const bounced = emailRows.length > 0
+    ? emailRows.reduce((s, r) => s + (r.bounced_delta ?? 0), 0)
+    : campaigns.reduce((s, c) => s + (c.bounced ?? 0), 0)
 
   // Interested: individual leads with date; fallback to campaign totals
   const intLeads = interestedLeads.filter(l =>
@@ -93,6 +96,8 @@ export function computeMetrics(
     emails_sent,
     leads_contacted,
     replied,
+    bounced,
+    bounce_rate:              pct(bounced, Math.max(leads_contacted, 1)),
     interested,
     demos_booked,
     showups,
@@ -206,6 +211,8 @@ export function computeCampaignStats(
       total_leads:              c.total_leads,
       leads_contacted:          leads_cont,
       replied:                  c.replied,
+      bounced:                  c.bounced ?? 0,
+      bounce_rate:              pct(c.bounced ?? 0, Math.max(leads_cont, 1)),
       interested,
       demos_booked:             demosBooked,
       showups,

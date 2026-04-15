@@ -9,6 +9,8 @@ export interface CampaignStat {
   total_leads: number
   total_leads_contacted: number
   replied: number
+  bounced: number
+  bounce_rate: number
   interested: number
   demos_booked: number
   showups: number
@@ -60,6 +62,7 @@ export interface DailyEmailStat {
   industry: string
   emails_delta: number
   leads_delta: number
+  bounced_delta: number
 }
 
 export interface TimeSeriesDay {
@@ -152,6 +155,8 @@ export interface ComputedMetrics {
   emails_sent: number
   leads_contacted: number
   replied: number
+  bounced: number
+  bounce_rate: number
   interested: number
   demos_booked: number
   showups: number

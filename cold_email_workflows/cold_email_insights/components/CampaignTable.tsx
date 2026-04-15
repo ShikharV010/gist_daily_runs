@@ -55,6 +55,8 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
               <TH>Leads Contacted</TH>
               <TH>Replied</TH>
               <TH>Reply Rate (lead)</TH>
+              <TH>Bounced</TH>
+              <TH>Bounce %</TH>
               <TH>Interested</TH>
               <TH>Int. Rate (lead)</TH>
               <TH>Demos</TH>
@@ -84,6 +86,8 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
                 <TD>{fmt(c.leads_contacted)}</TD>
                 <TD>{fmt(c.replied)}</TD>
                 <TD>{pct(c.reply_rate_per_contacted)}</TD>
+                <TD className={c.bounced > 0 ? 'text-red-600' : ''}>{fmt(c.bounced)}</TD>
+                <TD className={c.bounce_rate > 8 ? 'text-red-600 font-semibold' : ''}>{pct(c.bounce_rate)}</TD>
                 <TD className="font-medium">{fmt(c.interested)}</TD>
                 <TD>{pct(c.int_rate_per_contacted, 4)}</TD>
                 <TD className="font-medium">{c.demos_booked}</TD>

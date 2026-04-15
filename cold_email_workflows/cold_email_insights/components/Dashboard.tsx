@@ -57,13 +57,15 @@ function IndustryTab({
         dateRange={dateRange}
       />
       <CampaignTable campaigns={campStats} />
-      <ShowupTable
-        showupData={showupData}
-        industry={industry}
-        dateRange={dateRange}
-        intentFilter={intentFilter}
-        setIntentFilter={setIntentFilter}
-      />
+      {industry !== 'All' && (
+        <ShowupTable
+          showupData={showupData}
+          industry={industry}
+          dateRange={dateRange}
+          intentFilter={intentFilter}
+          setIntentFilter={setIntentFilter}
+        />
+      )}
     </div>
   )
 }

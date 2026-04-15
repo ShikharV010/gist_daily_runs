@@ -76,6 +76,8 @@ export default function CompareTab({
     { label: 'Leads Contacted',  getValue: m => fmt(m.leads_contacted) },
     { label: 'Replied (total)',  getValue: m => fmt(m.replied) },
     { label: 'Reply Rate (per lead)', getValue: m => pct(m.reply_rate_per_contacted) },
+    { label: 'Bounced',          getValue: m => fmt(m.bounced) },
+    { label: 'Bounce Rate (per lead)', getValue: m => pct(m.bounce_rate) },
     { label: 'Interested',       getValue: m => fmt(m.interested) },
     { label: 'Interested Rate (per lead)', getValue: m => pct(m.int_rate_per_contacted, 4) },
 
