@@ -190,6 +190,55 @@ def fetch_interested_leads(campaigns):
     print(f'  {len(deduped)} unique interested leads in active industries', flush=True)
     return deduped
 
+
+def enrich_interested_dates(leads):
+    """
+    Fetch the first Inbox reply date per lead so the time series shows when
+    prospects actually replied, not when the Allaine cron last updated them.
+    Uses 20 concurrent workers — adds ~30s for ~600 leads.
+    """
+    print(f'Enriching {len(leads)} leads with actual reply dates (20 workers)...', flush=True)
+    lock = Lock()
+    done_ct = [0]
+
+    def get_first_inbox_date(lead):
+        lid = lead.get('lead_id')
+        if not lid:
+            return
+        for attempt in range(3):
+            try:
+                r = requests.get(f'{BASE}/leads/{lid}/replies',
+                                 headers=HEADERS, params={'per_page': 100}, timeout=30)
+                if r.status_code == 200:
+                    replies = r.json().get('data', [])
+                    inbox = [rp for rp in replies if rp.get('folder') == 'Inbox']
+                    if inbox:
+                        inbox.sort(key=lambda x: x.get('date_received', ''))
+                        lead['date_est'] = to_est(inbox[0].get('date_received'))
+                    return
+                elif r.status_code == 429:
+                    time.sleep(2 ** attempt)
+                else:
+                    return
+            except Exception:
+                time.sleep(2 ** attempt)
+
+    with ThreadPoolExecutor(max_workers=20) as ex:
+        futs = [ex.submit(get_first_inbox_date, l) for l in leads]
+        for fut in as_completed(futs):
+            try:
+                fut.result()
+            except Exception:
+                pass
+            with lock:
+                done_ct[0] += 1
+                if done_ct[0] % 100 == 0:
+                    print(f'  [{done_ct[0]}/{len(leads)}] reply dates fetched', flush=True)
+
+    print(f'  Done', flush=True)
+    return leads
+
+
 # ── 3. Demo bookings from DB ──────────────────────────────────────────────────
 def fetch_demo_bookings(interested_leads):
     print('Fetching demo bookings...', flush=True)
@@ -423,6 +472,7 @@ if __name__ == '__main__':
 
     campaigns     = fetch_campaigns()
     int_leads     = fetch_interested_leads(campaigns)
+    int_leads     = enrich_interested_dates(int_leads)
     bookings      = fetch_demo_bookings(int_leads)
     daily_email   = fetch_daily_email_stats(campaigns)
     int_leads     = enrich_leads(int_leads, bookings)
