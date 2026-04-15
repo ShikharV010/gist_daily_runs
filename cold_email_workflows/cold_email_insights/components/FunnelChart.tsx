@@ -25,23 +25,21 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
       .map(row => {
         if (industry === 'All') {
           return {
-            date:      row.date,
-            Sent:      row.emails_delta,
+            date:       row.date,
             Interested: row.interested,
-            Demos:     row.demos,
+            Demos:      row.demos,
             'Show-ups': row.showups,
           }
         }
         const ind = row.by_industry?.[industry] || {}
         return {
-          date:      row.date,
-          Sent:      (ind as { emails_delta?: number }).emails_delta ?? 0,
+          date:       row.date,
           Interested: (ind as { interested?: number }).interested ?? 0,
-          Demos:     (ind as { demos?: number }).demos ?? 0,
+          Demos:      (ind as { demos?: number }).demos ?? 0,
           'Show-ups': (ind as { showups?: number }).showups ?? 0,
         }
       })
-      .filter(r => r.Sent > 0 || r.Interested > 0 || r.Demos > 0 || r['Show-ups'] > 0)
+      .filter(r => r.Interested > 0 || r.Demos > 0 || r['Show-ups'] > 0)
   }, [timeSeries, industry, dateRange])
 
   if (chartData.length === 0) {
@@ -67,16 +65,9 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
             <XAxis
               dataKey="date"
               tick={{ fontSize: 11, fill: '#9ca3af' }}
-              tickFormatter={d => d.slice(5)} // MM-DD
+              tickFormatter={d => d.slice(5)}
             />
             <YAxis
-              yAxisId="left"
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
-              tickFormatter={v => v >= 1000 ? `${(v / 1000).toFixed(0)}K` : String(v)}
-            />
-            <YAxis
-              yAxisId="right"
-              orientation="right"
               tick={{ fontSize: 11, fill: '#9ca3af' }}
             />
             <Tooltip
@@ -85,16 +76,6 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
             />
             <Legend wrapperStyle={{ fontSize: 12 }} />
             <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="Sent"
-              stroke="#93c5fd"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-            />
-            <Line
-              yAxisId="right"
               type="monotone"
               dataKey="Interested"
               stroke="#60a5fa"
@@ -103,7 +84,6 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
               activeDot={{ r: 4 }}
             />
             <Line
-              yAxisId="right"
               type="monotone"
               dataKey="Demos"
               stroke="#a78bfa"
@@ -112,7 +92,6 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
               activeDot={{ r: 4 }}
             />
             <Line
-              yAxisId="right"
               type="monotone"
               dataKey="Show-ups"
               stroke="#34d399"
@@ -123,9 +102,6 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
           </LineChart>
         </ResponsiveContainer>
       </div>
-      <p className="text-xs text-gray-400 mt-2">
-        Sent on left axis · Interested / Demos / Show-ups on right axis
-      </p>
     </div>
   )
 }
