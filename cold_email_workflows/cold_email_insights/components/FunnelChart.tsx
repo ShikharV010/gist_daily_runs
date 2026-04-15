@@ -16,7 +16,7 @@ interface Props {
 export default function FunnelChart({ timeSeries, industry, dateRange }: Props) {
   const chartData = useMemo(() => {
     const { from, to } = dateRange
-    return timeSeries
+    return (timeSeries || [])
       .filter(row => {
         if (from && row.date < from) return false
         if (to   && row.date > to)   return false
