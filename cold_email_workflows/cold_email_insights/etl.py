@@ -1,371 +1,381 @@
+#!/usr/bin/env python3
 """
-Cold Email Insights ETL
-Pulls data from Sequencer API + PostgreSQL → writes data/metrics.json
+Cold Email Insights ETL  v2.0
+Sequencer API + PostgreSQL → data/metrics.json
 
 Run: python etl.py
-Output: data/metrics.json (read by the Next.js dashboard)
 """
-
 import requests, json, os, time, psycopg2, psycopg2.extras
 from collections import defaultdict
-from concurrent.futures import ThreadPoolExecutor, as_completed
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 
-# ── Config ─────────────────────────────────────────────────────────────────
-BASE    = 'https://sequencer.gushwork.ai/api'
-_api_key = os.getenv('SEQUENCER_API_KEY', '2|ACD0nLa4smQjXagVUXu7oDxHV8xKtcxyqsebZyyb59448700')
-HEADERS = {
-    'Authorization': f'Bearer {_api_key}',
-    'Content-Type': 'application/json'
-}
-DB_URL  = os.getenv('DATABASE_URL', 'postgresql://airbyte_user:airbyte_user_password@gw-rds-analytics.celzx4qnlkfp.us-east-1.rds.amazonaws.com:5432/gw_prod')
-OUT_DIR = os.path.join(os.path.dirname(__file__), 'data')
+# ── Config ────────────────────────────────────────────────────────────────────
+BASE     = 'https://sequencer.gushwork.ai/api'
+SEQ_KEY  = os.getenv('SEQUENCER_API_KEY', '2|ACD0nLa4smQjXagVUXu7oDxHV8xKtcxyqsebZyyb59448700')
+DB_URL   = os.getenv('DATABASE_URL', 'postgresql://airbyte_user:airbyte_user_password@gw-rds-analytics.celzx4qnlkfp.us-east-1.rds.amazonaws.com:5432/gw_prod')
+HEADERS  = {'Authorization': f'Bearer {SEQ_KEY}', 'Content-Type': 'application/json'}
+OUT_DIR  = os.path.join(os.path.dirname(__file__), 'data')
 OUT_FILE = os.path.join(OUT_DIR, 'metrics.json')
+EST      = timezone(timedelta(hours=-4))
 
 INDUSTRY_MAP = {
-    # Campaign IDs → industry label
-    6: 'Manufacturing', 7: 'Manufacturing', 8: 'Manufacturing',
-    29: 'IT & Consulting', 30: 'IT & Consulting', 31: 'IT & Consulting', 32: 'IT & Consulting',
-    34: 'Truck Transportation', 35: 'Truck Transportation', 36: 'Truck Transportation', 37: 'Truck Transportation',
+    2: 'Manufacturing', 5: 'Manufacturing', 6: 'Manufacturing',
+    7: 'Manufacturing', 8: 'Manufacturing',
+    29: 'IT & Consulting', 30: 'IT & Consulting',
+    31: 'IT & Consulting', 32: 'IT & Consulting',
+    34: 'Truck Transportation', 35: 'Truck Transportation',
+    36: 'Truck Transportation', 37: 'Truck Transportation',
     9: 'Follow-ups',
     39: 'Meta/Other', 40: 'Meta/Other', 41: 'Meta/Other',
 }
+ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation'}
 
-# ── Helpers ─────────────────────────────────────────────────────────────────
-def get(path, params=None, retries=3):
-    for i in range(retries):
-        try:
-            r = requests.get(f'{BASE}/{path}', headers=HEADERS, params=params, timeout=20)
-            if r.status_code == 200:
-                return r.json().get('data', [])
-            if r.status_code == 429:
-                time.sleep(2 ** i)
-                continue
-        except Exception:
-            if i < retries - 1:
-                time.sleep(2 ** i)
-    return []
+# ── Helpers ───────────────────────────────────────────────────────────────────
+def to_est(val):
+    if not val: return None
+    if isinstance(val, str):
+        try: val = datetime.fromisoformat(val.replace('Z', '+00:00'))
+        except: return None
+    if not val.tzinfo: val = val.replace(tzinfo=timezone.utc)
+    return val.astimezone(EST).strftime('%Y-%m-%d')
 
-def get_paginated(path, params=None, max_pages=50):
-    params = dict(params or {})
-    params['per_page'] = 100
-    results = []
+def api_pages(path, params=None, max_pages=200):
+    params = dict(params or {}); params['per_page'] = 100
+    out = []
     for page in range(1, max_pages + 1):
         params['page'] = page
-        r = requests.get(f'{BASE}/{path}', headers=HEADERS, params=params, timeout=30)
-        if r.status_code != 200:
+        try:
+            r = requests.get(f'{BASE}/{path}', headers=HEADERS,
+                             params=params, timeout=30)
+            if r.status_code != 200: break
+            d = r.json(); data = d.get('data', [])
+            if not data: break
+            out.extend(data)
+            meta = d.get('meta', {})
+            if meta.get('current_page', page) >= meta.get('last_page', page): break
+        except Exception as e:
+            print(f'  WARN {path}: {e}')
             break
-        d = r.json()
-        data = d.get('data', [])
-        if not data:
-            break
-        results.extend(data)
-        meta = d.get('meta', {})
-        if meta.get('current_page', page) >= meta.get('last_page', page):
-            break
-    return results
-
-# ── Step 1: Get campaigns ────────────────────────────────────────────────────
-def fetch_campaigns():
-    print("Fetching campaigns...", flush=True)
-    camps = get_paginated('campaigns')
-    out = []
-    for c in camps:
-        cid = c['id']
-        out.append({
-            'id': cid,
-            'name': c['name'],
-            'status': c.get('status'),
-            'industry': INDUSTRY_MAP.get(cid, 'Other'),
-            'emails_sent': c.get('emails_sent', 0),
-            'replied': c.get('replied', 0),
-            'interested': c.get('interested', 0),
-            'bounced': c.get('bounced', 0),
-            'total_leads_contacted': c.get('total_leads_contacted', 0),
-            'total_leads': c.get('total_leads', 0),
-        })
-    print(f"  {len(out)} campaigns", flush=True)
     return out
 
-# ── Step 2: Build sequence step map per campaign ─────────────────────────────
-def fetch_step_maps(campaigns):
-    """Returns {campaign_id: {step_id: {order, variant, is_hook_a, is_hook_b}}}"""
-    print("Fetching sequence steps...", flush=True)
-    step_maps = {}
-    for c in campaigns:
+# ── 1. Campaigns ──────────────────────────────────────────────────────────────
+def fetch_campaigns():
+    print('Fetching campaigns...', flush=True)
+    raw = api_pages('campaigns')
+    out = []
+    for c in raw:
         cid = c['id']
-        steps = get(f'campaigns/{cid}/sequence-steps')
-        if not isinstance(steps, list):
-            continue
-        step_map = {}
-        # Find step 1 primary and variant
-        primary_step1_id = None
-        for s in steps:
-            if s.get('order') == 1 and not s.get('variant'):
-                primary_step1_id = s['id']
-                break
-        for s in steps:
-            sid = s['id']
-            order = s.get('order')
-            is_variant = s.get('variant', False)
-            variant_from = s.get('variant_from_step')
-            # Determine step number for variants (inherit from parent)
-            if is_variant and variant_from:
-                parent_order = next((x.get('order') for x in steps if x['id'] == variant_from), None)
-                order = parent_order
-            step_map[sid] = {
-                'step_number': order,
-                'is_variant': is_variant,
-                'variant_from': variant_from,
-                'is_hook_a': sid == primary_step1_id,
-                'is_hook_b': is_variant and variant_from == primary_step1_id,
-            }
-        step_maps[cid] = step_map
-    print(f"  Done for {len(step_maps)} campaigns", flush=True)
-    return step_maps
+        out.append({
+            'id':                    cid,
+            'name':                  c['name'],
+            'industry':              INDUSTRY_MAP.get(cid, 'Other'),
+            'status':                c.get('status', ''),
+            'emails_sent':           int(c.get('emails_sent') or 0),
+            'total_leads':           int(c.get('total_leads') or 0),
+            'total_leads_contacted': int(c.get('total_leads_contacted') or 0),
+            'replied':               int(c.get('replied') or 0),
+            'interested':            int(c.get('interested') or 0),
+            'bounced':               int(c.get('bounced') or 0),
+        })
+    print(f'  {len(out)} campaigns', flush=True)
+    return out
 
-# ── Step 3: Get all interested replies across campaigns ──────────────────────
+# ── 2. Interested leads with dates ────────────────────────────────────────────
 def fetch_interested_leads(campaigns):
-    print("Fetching interested replies...", flush=True)
-    all_replies = []
+    print('Fetching interested leads...', flush=True)
+    leads = []
     for c in campaigns:
-        cid = c['id']
-        interested = c.get('interested', 0) or 0
-        if int(interested) == 0:
+        if c['industry'] not in ACTIVE or not c['interested']:
             continue
-        print(f"  Camp {cid} ({c['name'][:40]}): {interested} interested", flush=True)
-        replies = get_paginated(f'campaigns/{cid}/replies', {'interested': 'true'})
+        replies = api_pages(f'campaigns/{c["id"]}/replies', {'interested': 'true'})
         for r in replies:
-            if r.get('interested'):
-                all_replies.append({
-                    'reply_id': r['id'],
-                    'lead_id': r['lead_id'],
-                    'campaign_id': cid,
-                    'campaign_name': c['name'],
-                    'industry': c['industry'],
-                    'scheduled_email_id': r.get('scheduled_email_id'),
-                    'date_received': r.get('date_received'),
-                    'from_email': r.get('from_email_address'),
+            if not r.get('interested'): continue
+            leads.append({
+                'lead_id':      r['lead_id'],
+                'email':        (r.get('from_email_address') or '').lower(),
+                'campaign_id':  c['id'],
+                'campaign_name': c['name'],
+                'industry':     c['industry'],
+                'date_received': r.get('date_received'),
+                'date_est':     to_est(r.get('date_received')),
+                'booked_demo':  False, 'is_showup': False,
+                'show_status':  None,
+                'demo_scheduled_date': None,
+                'demo_created_at_date': None,
+            })
+    print(f'  {len(leads)} interested leads', flush=True)
+    return leads
+
+# ── 3. Demo bookings from DB ──────────────────────────────────────────────────
+def fetch_demo_bookings(interested_leads):
+    print('Fetching demo bookings...', flush=True)
+    email_to_ind = {l['email']: l['industry'] for l in interested_leads if l['email']}
+
+    conn = psycopg2.connect(DB_URL)
+    cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute("""
+        SELECT prospect_company, prospect_email, prospect_website,
+               ae_name, demo_scheduled_date,
+               created_at::date AS created_at_date,
+               show_status, source
+        FROM gist.gtm_inbound_demo_bookings
+        WHERE source ILIKE '%%gushwork%%email%%'
+          AND is_latest = true
+        ORDER BY demo_scheduled_date DESC
+    """)
+    rows = cur.fetchall()
+    conn.close()
+
+    today_d = datetime.now(EST).date()
+    out = []
+    for r in rows:
+        email = (r['prospect_email'] or '').lower()
+        src   = r.get('source') or ''
+        if 'allaine' in src.lower():   ind = 'IT & Consulting'
+        elif email in email_to_ind:    ind = email_to_ind[email]
+        else:                          ind = 'Manufacturing'
+
+        status = r['show_status']
+        demo_d = r['demo_scheduled_date']
+        status_adj = 'N' if (status == 'P' and demo_d and demo_d < today_d) else status
+
+        out.append({
+            'company':             r['prospect_company'] or '',
+            'email':               email,
+            'website':             r['prospect_website'] or '',
+            'ae_name':             r['ae_name'] or '',
+            'demo_scheduled_date': str(demo_d) if demo_d else None,
+            'created_at_date':     str(r['created_at_date']) if r['created_at_date'] else None,
+            'show_status':         status,
+            'show_status_adj':     status_adj,
+            'industry':            ind,
+        })
+    print(f'  {len(out)} bookings', flush=True)
+    return out
+
+# ── 4. Daily email deltas from DB ─────────────────────────────────────────────
+def fetch_daily_email_stats(campaigns):
+    print('Fetching daily email stats from DB...', flush=True)
+    active_ids = [c['id'] for c in campaigns if c['industry'] in ACTIVE]
+    id_to_ind  = {c['id']: c['industry'] for c in campaigns}
+
+    conn = psycopg2.connect(DB_URL)
+    cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+    cur.execute("""
+        SELECT campaign_id::int AS cid, start_date,
+               emails_sent::int,
+               total_leads_contacted::int AS leads_contacted
+        FROM gist.gtm_sequencer_campaign_stats
+        WHERE campaign_id::int = ANY(%s)
+        ORDER BY campaign_id::int, start_date
+    """, (active_ids,))
+    rows = cur.fetchall()
+    conn.close()
+
+    by_camp = defaultdict(list)
+    for r in rows: by_camp[r['cid']].append(dict(r))
+
+    daily = []
+    for cid, camp_rows in by_camp.items():
+        prev_e = prev_l = 0
+        for row in camp_rows:
+            de = max(0, row['emails_sent']     - prev_e)
+            dl = max(0, row['leads_contacted'] - prev_l)
+            if de or dl:
+                daily.append({
+                    'date':          str(row['start_date']),
+                    'campaign_id':   cid,
+                    'industry':      id_to_ind.get(cid, 'Other'),
+                    'emails_delta':  de,
+                    'leads_delta':   dl,
                 })
-    print(f"  Total interested replies: {len(all_replies)}", flush=True)
-    return all_replies
+            prev_e = row['emails_sent']
+            prev_l = row['leads_contacted']
 
-# ── Step 4: Get hook attribution for each interested lead ────────────────────
-def fetch_hook_for_lead(lead_id, step_maps, campaign_id):
-    """Returns {'hook': 'A'|'B'|'unknown', 'step_replied_to': int}"""
-    emails = get(f'leads/{lead_id}/scheduled-emails')
-    if not isinstance(emails, list):
-        return {'hook': 'unknown', 'step_replied_to': None}
-    step_map = step_maps.get(campaign_id, {})
-    hook = 'unknown'
-    for e in emails:
-        sid = e.get('sequence_step_id')
-        if sid in step_map:
-            info = step_map[sid]
-            if info['is_hook_a']:
-                hook = 'A'
-                break
-            elif info['is_hook_b']:
-                hook = 'B'
-                break
-    return {'hook': hook}
+    daily.sort(key=lambda x: x['date'])
+    print(f'  {len(daily)} daily rows', flush=True)
+    return daily
 
-def enrich_with_hooks(interested_replies, step_maps):
-    print(f"Enriching {len(interested_replies)} leads with hook attribution...", flush=True)
-    # Dedupe leads (a lead may be interested in multiple campaigns)
-    lead_camp_pairs = list({(r['lead_id'], r['campaign_id']) for r in interested_replies})
+# ── 5. Enrich leads with booking data ─────────────────────────────────────────
+def enrich_leads(leads, bookings):
+    by_email = {b['email']: b for b in bookings if b['email']}
+    for l in leads:
+        b = by_email.get(l['email'])
+        if b:
+            l['booked_demo']          = True
+            l['show_status']          = b['show_status_adj']
+            l['is_showup']            = b['show_status_adj'] == 'Y'
+            l['demo_scheduled_date']  = b['demo_scheduled_date']
+            l['demo_created_at_date'] = b['created_at_date']
+    return leads
 
-    def work(pair):
-        lead_id, camp_id = pair
-        return (lead_id, camp_id), fetch_hook_for_lead(lead_id, step_maps, camp_id)
+# ── 6. Per-campaign aggregates ────────────────────────────────────────────────
+def build_campaign_stats(campaigns, leads, bookings):
+    today_s = datetime.now(EST).strftime('%Y-%m-%d')
+    leads_by_camp = defaultdict(list)
+    for l in leads: leads_by_camp[l['campaign_id']].append(l)
+    camp_emails = {cid: {l['email'] for l in ls} for cid, ls in leads_by_camp.items()}
 
-    hook_map = {}
-    with ThreadPoolExecutor(max_workers=15) as ex:
-        futs = {ex.submit(work, p): p for p in lead_camp_pairs}
-        done = 0
-        for fut in as_completed(futs):
-            key, result = fut.result()
-            hook_map[key] = result
-            done += 1
-            if done % 50 == 0:
-                print(f"  Hook attribution: {done}/{len(lead_camp_pairs)}", flush=True)
-
-    for r in interested_replies:
-        info = hook_map.get((r['lead_id'], r['campaign_id']), {'hook': 'unknown'})
-        r['hook'] = info['hook']
-
-    print("  Hook attribution done", flush=True)
-    return interested_replies
-
-# ── Step 5: Get demo bookings from PostgreSQL ─────────────────────────────────
-def fetch_demo_bookings():
-    print("Fetching demo bookings from PostgreSQL...", flush=True)
-    try:
-        conn = psycopg2.connect(DB_URL)
-        cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-        cur.execute("""
-            SELECT
-                prospect_email,
-                show_status,
-                source,
-                source_categories,
-                created_at
-            FROM gist.gtm_inbound_demo_bookings
-            WHERE is_latest = true
-        """)
-        rows = cur.fetchall()
-        conn.close()
-        bookings = {(r['prospect_email'] or '').lower(): dict(r) for r in rows if r['prospect_email']}
-        print(f"  {len(bookings)} demo bookings", flush=True)
-        return bookings
-    except Exception as e:
-        print(f"  WARN: DB error — {e}", flush=True)
-        return {}
-
-# ── Step 6: Aggregate metrics ─────────────────────────────────────────────────
-def aggregate_metrics(campaigns, interested_replies, demo_bookings):
-    print("Aggregating metrics...", flush=True)
-
-    # Mark demo bookings
-    for r in interested_replies:
-        email = (r.get('from_email') or '').lower()
-        booking = demo_bookings.get(email)
-        r['booked_demo'] = booking is not None
-        r['demo_status'] = booking.get('show_status') if booking else None
-        r['source_bucket'] = booking.get('source_categories') if booking else None
-
-    # ── Campaign metrics ──────────────────────────────────────────────────────
-    camp_interested = defaultdict(list)
-    for r in interested_replies:
-        camp_interested[r['campaign_id']].append(r)
-
-    campaign_metrics = []
+    out = []
     for c in campaigns:
-        cid = c['id']
-        interested_list = camp_interested.get(cid, [])
-        demos = [r for r in interested_list if r['booked_demo']]
-        hook_a = [r for r in interested_list if r['hook'] == 'A']
-        hook_b = [r for r in interested_list if r['hook'] == 'B']
-        total_contacted = c.get('total_leads_contacted') or 0
-        campaign_metrics.append({
-            'id': cid,
-            'name': c['name'],
-            'industry': c['industry'],
+        if c['industry'] not in ACTIVE: continue
+        cid    = c['id']
+        ls     = leads_by_camp.get(cid, [])
+        emails = camp_emails.get(cid, set())
+        demos  = [l for l in ls if l['booked_demo']]
+        shows  = [l for l in ls if l['is_showup']]
+        pend   = sum(1 for b in bookings
+                     if b['show_status'] == 'P'
+                     and (b['demo_scheduled_date'] or '') >= today_s
+                     and b['email'] in emails)
+
+        sent  = max(c['emails_sent'], 1)
+        cont  = max(c['total_leads_contacted'], 1)
+        inte  = len(ls)
+        nd    = len(demos)
+        ns    = len(shows)
+        np_d  = max(nd - pend, 0)
+
+        out.append({
+            'id': cid, 'name': c['name'], 'industry': c['industry'],
             'status': c['status'],
-            'emails_sent': c['emails_sent'],
-            'total_leads_contacted': total_contacted,
-            'total_leads': c['total_leads'],
-            'replied': c['replied'],
-            'interested': c['interested'],
-            'bounced': c['bounced'],
-            'reply_rate': round(c['replied'] / total_contacted * 100, 2) if total_contacted else 0,
-            'interested_rate': round((c['interested'] or 0) / total_contacted * 100, 2) if total_contacted else 0,
-            'interested_count_enriched': len(interested_list),
-            'demos_booked': len(demos),
-            'demo_rate': round(len(demos) / len(interested_list) * 100, 2) if interested_list else 0,
-            'hook_a_interested': len(hook_a),
-            'hook_b_interested': len(hook_b),
+            'emails_sent':              c['emails_sent'],
+            'total_leads':              c['total_leads'],
+            'total_leads_contacted':    c['total_leads_contacted'],
+            'replied':                  c['replied'],
+            'interested':               inte,
+            'demos_booked':             nd,
+            'showups':                  ns,
+            'pending_demos':            pend,
+            'noshow':                   max(np_d - ns, 0),
+            'reply_rate_per_sent':      round(c['replied'] / sent * 100, 2),
+            'reply_rate_per_contacted': round(c['replied'] / cont * 100, 2),
+            'int_rate_per_sent':        round(inte / sent * 100, 4),
+            'int_rate_per_contacted':   round(inte / cont * 100, 4),
+            'demos_per_sent':           round(nd   / sent * 100, 4),
+            'demos_per_contacted':      round(nd   / cont * 100, 4),
+            'showups_per_sent':         round(ns   / sent * 100, 4),
+            'showups_per_contacted':    round(ns   / cont * 100, 4),
+            'show_rate':                round(ns / np_d * 100, 1) if np_d else 0,
+            'demos_per_interested':     round(nd / inte * 100, 1) if inte else 0,
+            'showups_per_interested':   round(ns / inte * 100, 1) if inte else 0,
         })
+    return out
 
-    # ── Hook metrics ─────────────────────────────────────────────────────────
-    hook_a_leads = [r for r in interested_replies if r['hook'] == 'A']
-    hook_b_leads = [r for r in interested_replies if r['hook'] == 'B']
-
-    hook_metrics = [
-        {
-            'hook': 'A',
-            'label': 'One-page breakdown',
-            'interested': len(hook_a_leads),
-            'demos': len([r for r in hook_a_leads if r['booked_demo']]),
-            'demo_rate': round(len([r for r in hook_a_leads if r['booked_demo']]) / len(hook_a_leads) * 100, 2) if hook_a_leads else 0,
-        },
-        {
-            'hook': 'B',
-            'label': '4-5 pages build',
-            'interested': len(hook_b_leads),
-            'demos': len([r for r in hook_b_leads if r['booked_demo']]),
-            'demo_rate': round(len([r for r in hook_b_leads if r['booked_demo']]) / len(hook_b_leads) * 100, 2) if hook_b_leads else 0,
-        },
-    ]
-
-    # ── Industry metrics ──────────────────────────────────────────────────────
-    industry_camps = defaultdict(list)
-    for c in campaign_metrics:
-        industry_camps[c['industry']].append(c)
-
-    industry_metrics = []
-    for industry, camps in industry_camps.items():
-        total_contacted = sum(c['total_leads_contacted'] for c in camps)
-        total_replied = sum(c['replied'] for c in camps)
-        total_interested = sum(c['interested'] or 0 for c in camps)
-        total_demos = sum(c['demos_booked'] for c in camps)
-        total_sent = sum(c['emails_sent'] for c in camps)
-        industry_metrics.append({
-            'industry': industry,
-            'campaigns': len(camps),
-            'emails_sent': total_sent,
-            'total_leads_contacted': total_contacted,
-            'replied': total_replied,
-            'interested': total_interested,
-            'demos_booked': total_demos,
-            'reply_rate': round(total_replied / total_contacted * 100, 2) if total_contacted else 0,
-            'interested_rate': round(total_interested / total_contacted * 100, 2) if total_contacted else 0,
-            'demo_rate_from_interested': round(total_demos / total_interested * 100, 2) if total_interested else 0,
+# ── 7. Time series ────────────────────────────────────────────────────────────
+def build_time_series(leads, bookings, daily_email):
+    daily = defaultdict(lambda: {
+        'date': '', 'emails_delta': 0, 'leads_delta': 0,
+        'interested': 0, 'demos': 0, 'showups': 0,
+        'by_industry': defaultdict(lambda: {
+            'emails_delta': 0, 'leads_delta': 0,
+            'interested': 0, 'demos': 0, 'showups': 0
         })
+    })
 
-    # ── Interested leads detail ───────────────────────────────────────────────
-    leads_detail = []
-    for r in interested_replies:
-        leads_detail.append({
-            'lead_id': r['lead_id'],
-            'email': r.get('from_email'),
-            'campaign_id': r['campaign_id'],
-            'campaign_name': r['campaign_name'],
-            'industry': r['industry'],
-            'hook': r['hook'],
-            'booked_demo': r['booked_demo'],
-            'demo_status': r.get('demo_status'),
-            'date_received': r.get('date_received'),
+    for row in daily_email:
+        d = row['date']; ind = row['industry']
+        daily[d]['date'] = d
+        daily[d]['emails_delta'] += row['emails_delta']
+        daily[d]['leads_delta']  += row['leads_delta']
+        daily[d]['by_industry'][ind]['emails_delta'] += row['emails_delta']
+        daily[d]['by_industry'][ind]['leads_delta']  += row['leads_delta']
+
+    for l in leads:
+        d = l.get('date_est')
+        if not d: continue
+        ind = l['industry']
+        daily[d]['date'] = d
+        daily[d]['interested'] += 1
+        daily[d]['by_industry'][ind]['interested'] += 1
+
+    # Demos/show-ups keyed by demo_scheduled_date (per user's date filter spec)
+    for b in bookings:
+        d = b.get('demo_scheduled_date'); ind = b['industry']
+        if not d: continue
+        if d not in daily:
+            daily[d]['date'] = d
+        daily[d]['demos'] += 1
+        daily[d]['by_industry'][ind]['demos'] += 1
+        if b['show_status_adj'] == 'Y':
+            daily[d]['showups'] += 1
+            daily[d]['by_industry'][ind]['showups'] += 1
+
+    result = []
+    for d in sorted(daily.keys()):
+        row = daily[d]
+        result.append({
+            'date':          d,
+            'emails_delta':  row['emails_delta'],
+            'leads_delta':   row['leads_delta'],
+            'interested':    row['interested'],
+            'demos':         row['demos'],
+            'showups':       row['showups'],
+            'by_industry':   {k: dict(v) for k, v in row['by_industry'].items()},
         })
-
-    return {
-        'generated_at': datetime.utcnow().isoformat() + 'Z',
-        'campaigns': campaign_metrics,
-        'hooks': hook_metrics,
-        'industries': industry_metrics,
-        'interested_leads': leads_detail,
-        'totals': {
-            'total_emails_sent': sum(c['emails_sent'] for c in campaign_metrics),
-            'total_leads_contacted': sum(c['total_leads_contacted'] for c in campaign_metrics),
-            'total_interested': sum(c['interested'] or 0 for c in campaign_metrics),
-            'total_demos': sum(c['demos_booked'] for c in campaign_metrics),
-            'total_reply_rate': round(
-                sum(c['replied'] for c in campaign_metrics) /
-                max(sum(c['total_leads_contacted'] for c in campaign_metrics), 1) * 100, 2),
-        }
-    }
+    return result
 
 # ── MAIN ──────────────────────────────────────────────────────────────────────
 if __name__ == '__main__':
     os.makedirs(OUT_DIR, exist_ok=True)
 
-    campaigns = fetch_campaigns()
-    step_maps = fetch_step_maps(campaigns)
+    campaigns     = fetch_campaigns()
+    int_leads     = fetch_interested_leads(campaigns)
+    bookings      = fetch_demo_bookings(int_leads)
+    daily_email   = fetch_daily_email_stats(campaigns)
+    int_leads     = enrich_leads(int_leads, bookings)
+    camp_stats    = build_campaign_stats(campaigns, int_leads, bookings)
+    time_series   = build_time_series(int_leads, bookings, daily_email)
 
-    # Enrich campaigns with industry
-    for c in campaigns:
-        c['industry'] = INDUSTRY_MAP.get(c['id'], 'Other')
+    today_s  = datetime.now(EST).strftime('%Y-%m-%d')
+    a_sent   = sum(c['emails_sent']           for c in camp_stats)
+    a_cont   = sum(c['total_leads_contacted'] for c in camp_stats)
+    a_rep    = sum(c['replied']               for c in camp_stats)
+    a_int    = sum(c['interested']            for c in camp_stats)
+    a_demos  = sum(c['demos_booked']          for c in camp_stats)
+    a_shows  = sum(c['showups']               for c in camp_stats)
+    a_pend   = sum(1 for b in bookings
+                   if b['show_status'] == 'P'
+                   and (b['demo_scheduled_date'] or '') >= today_s)
+    np_d     = max(a_demos - a_pend, 0)
 
-    interested_replies = fetch_interested_leads(campaigns)
-    interested_replies = enrich_with_hooks(interested_replies, step_maps)
-    demo_bookings = fetch_demo_bookings()
+    def r(n, d, digits=2):
+        return round(n / max(d, 1) * 100, digits)
 
-    metrics = aggregate_metrics(campaigns, interested_replies, demo_bookings)
+    metrics = {
+        'generated_at':      datetime.utcnow().isoformat() + 'Z',
+        'campaigns':         camp_stats,
+        'interested_leads':  int_leads,
+        'demo_bookings':     bookings,
+        'daily_email_stats': daily_email,
+        'time_series':       {'daily': time_series},
+        'totals': {
+            'emails_sent':              a_sent,
+            'leads_contacted':          a_cont,
+            'replied':                  a_rep,
+            'interested':               a_int,
+            'demos_booked':             a_demos,
+            'showups':                  a_shows,
+            'pending_demos':            a_pend,
+            'noshow':                   max(np_d - a_shows, 0),
+            'reply_rate_per_sent':      r(a_rep,   a_sent),
+            'reply_rate_per_contacted': r(a_rep,   a_cont),
+            'int_rate_per_sent':        r(a_int,   a_sent,  4),
+            'int_rate_per_contacted':   r(a_int,   a_cont,  4),
+            'demos_per_sent':           r(a_demos, a_sent,  4),
+            'demos_per_contacted':      r(a_demos, a_cont,  4),
+            'showups_per_sent':         r(a_shows, a_sent,  4),
+            'showups_per_contacted':    r(a_shows, a_cont,  4),
+            'show_rate':                r(a_shows, np_d) if np_d else 0,
+            'demos_per_interested':     r(a_demos, a_int),
+            'showups_per_interested':   r(a_shows, a_int),
+        },
+    }
 
     with open(OUT_FILE, 'w') as f:
-        json.dump(metrics, f, indent=2)
+        json.dump(metrics, f, indent=2, default=str)
 
-    print(f"\n✓ Written to {OUT_FILE}", flush=True)
-    print(f"  Campaigns: {len(metrics['campaigns'])}", flush=True)
-    print(f"  Total interested: {metrics['totals']['total_interested']}", flush=True)
-    print(f"  Total demos: {metrics['totals']['total_demos']}", flush=True)
+    t = metrics['totals']
+    print(f'\n✓ {OUT_FILE}')
+    print(f'  Sent {t["emails_sent"]:,}  Contacted {t["leads_contacted"]:,}')
+    print(f'  Interested {t["interested"]}  Demos {t["demos_booked"]}  Shows {t["showups"]}  Pending {t["pending_demos"]}')

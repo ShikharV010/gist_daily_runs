@@ -2,14 +2,14 @@ name: Cold Email Insights - Refresh Metrics
 
 on:
   schedule:
-    # Every 6 hours: 00:00, 06:00, 12:00, 18:00 UTC
-    - cron: '0 */6 * * *'
+    # 10:00 AM IST = 04:30 AM UTC
+    - cron: '30 4 * * *'
   workflow_dispatch:
 
 jobs:
   refresh:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
       - name: Checkout repo
@@ -21,9 +21,9 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install requests psycopg2-binary
+        run: pip install requests psycopg2-binary anthropic
 
-      - name: Run ETL
+      - name: Run metrics ETL
         env:
           SEQUENCER_API_KEY: ${{ secrets.SEQUENCER_API_KEY }}
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
@@ -31,10 +31,19 @@ jobs:
           cd cold_email_workflows/cold_email_insights
           python etl.py
 
-      - name: Commit and push metrics.json
+      - name: Run show-up analysis
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          cd cold_email_workflows/cold_email_insights
+          python analyze_showups_etl.py
+
+      - name: Commit and push data files
         run: |
           git config user.name  "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add cold_email_workflows/cold_email_insights/data/metrics.json
-          git diff --staged --quiet || git commit -m "chore: refresh cold email metrics [$(date -u '+%Y-%m-%d %H:%M UTC')]"
+          git add cold_email_workflows/cold_email_insights/data/showup_analysis.json
+          git diff --staged --quiet || git commit -m "chore: refresh cold email metrics + show-up analysis [$(date -u '+%Y-%m-%d %H:%M UTC')]"
           git push
