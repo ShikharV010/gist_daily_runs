@@ -3,6 +3,14 @@ import type {
   DateRange, Industry, InterestedLead,
 } from './types'
 
+// 'All' means active industries only — never Meta/Other or Follow-ups
+const ACTIVE_INDUSTRIES = ['Manufacturing', 'IT & Consulting', 'Truck Transportation']
+
+function byIndustry(industry: Industry, ind: string): boolean {
+  if (industry === 'All') return ACTIVE_INDUSTRIES.includes(ind)
+  return ind === industry
+}
+
 // ── computeMetrics ────────────────────────────────────────────────────────────
 
 export function computeMetrics(
@@ -20,50 +28,60 @@ export function computeMetrics(
     return true
   }
 
-  const byIndustry = (ind: string) =>
-    industry === 'All' || ind === industry
+  const matchInd = (ind: string) => byIndustry(industry, ind)
 
   // Guard: new-format fields may be absent if metrics.json is from old ETL
-  const dailyEmailStats  = data.daily_email_stats  || []
-  const interestedLeads  = data.interested_leads   || []
-  const demoBookings     = data.demo_bookings       || []
+  const dailyEmailStats = data.daily_email_stats || []
+  const interestedLeads = data.interested_leads  || []
+  const demoBookings    = data.demo_bookings      || []
+  const campaigns       = (data.campaigns || []).filter(c => matchInd(c.industry))
 
-  // Emails & leads contacted: sum daily_email_stats deltas in date range
+  // Emails & leads contacted: daily_email_stats deltas; fallback to campaign totals
   const emailRows = dailyEmailStats.filter(r =>
-    byIndustry(r.industry) && ((!from && !to) || inDateRange(r.date)),
+    matchInd(r.industry) && ((!from && !to) || inDateRange(r.date)),
   )
-  const emails_sent     = emailRows.reduce((s, r) => s + r.emails_delta, 0)
-  const leads_contacted = emailRows.reduce((s, r) => s + r.leads_delta, 0)
+  const emails_sent = emailRows.length > 0
+    ? emailRows.reduce((s, r) => s + r.emails_delta, 0)
+    : campaigns.reduce((s, c) => s + c.emails_sent, 0)
+  const leads_contacted = emailRows.length > 0
+    ? emailRows.reduce((s, r) => s + r.leads_delta, 0)
+    : campaigns.reduce((s, c) => s + c.total_leads_contacted, 0)
 
-  // Interested: filter by date_est
+  // Interested: individual leads with date; fallback to campaign totals
   const intLeads = interestedLeads.filter(l =>
-    byIndustry(l.industry) && ((!from && !to) || inDateRange(l.date_est)),
+    matchInd(l.industry) && ((!from && !to) || inDateRange(l.date_est)),
   )
-  const interested = intLeads.length
+  const interested = intLeads.length > 0
+    ? intLeads.length
+    : campaigns.reduce((s, c) => s + c.interested, 0)
 
-  // Replied: campaign totals only (not date-filterable)
-  const replied = (data.campaigns || [])
-    .filter(c => byIndustry(c.industry))
-    .reduce((s, c) => s + c.replied, 0)
+  // Replied: campaign totals (not date-filterable)
+  const replied = campaigns.reduce((s, c) => s + c.replied, 0)
 
-  // Demos booked: filter by created_at_date
+  // Demos booked: demo_bookings filtered by created_at_date; fallback to campaign totals
   const demosBookedList = demoBookings.filter(b =>
-    byIndustry(b.industry) && ((!from && !to) || inDateRange(b.created_at_date)),
+    matchInd(b.industry) && ((!from && !to) || inDateRange(b.created_at_date)),
   )
-  const demos_booked = demosBookedList.length
+  const demos_booked = demosBookedList.length > 0
+    ? demosBookedList.length
+    : campaigns.reduce((s, c) => s + (c.demos_booked || 0), 0)
 
-  // Pending: current-state upcoming demos (no date filter)
-  const pending_demos = demoBookings.filter(b =>
-    byIndustry(b.industry) &&
-    b.show_status === 'P' &&
-    b.demo_scheduled_date && b.demo_scheduled_date >= today,
-  ).length
+  // Pending: current-state upcoming demos
+  const pending_demos = demoBookings.length > 0
+    ? demoBookings.filter(b =>
+        matchInd(b.industry) &&
+        b.show_status === 'P' &&
+        b.demo_scheduled_date && b.demo_scheduled_date >= today,
+      ).length
+    : campaigns.reduce((s, c) => s + (c.pending_demos || 0), 0)
 
-  // Show-ups: filter by demo_scheduled_date
+  // Show-ups: demo_bookings filtered by demo_scheduled_date; fallback to campaign totals
   const showupList = demoBookings.filter(b =>
-    byIndustry(b.industry) && ((!from && !to) || inDateRange(b.demo_scheduled_date)),
+    matchInd(b.industry) && ((!from && !to) || inDateRange(b.demo_scheduled_date)),
   )
-  const showups         = showupList.filter(b => b.show_status_adj === 'Y').length
+  const showups = showupList.length > 0
+    ? showupList.filter(b => b.show_status_adj === 'Y').length
+    : campaigns.reduce((s, c) => s + (c.showups || 0), 0)
   const completed_demos = showupList.filter(b => b.show_status_adj !== 'P').length
   const noshow          = Math.max(0, completed_demos - showups)
 
@@ -71,7 +89,7 @@ export function computeMetrics(
     d > 0 ? parseFloat((n / d * 100).toFixed(digits)) : 0
 
   return {
-    campaigns:                data.campaigns.filter(c => byIndustry(c.industry)).length,
+    campaigns:                campaigns.length,
     emails_sent,
     leads_contacted,
     replied,
@@ -112,9 +130,7 @@ export function computeCampaignStats(
     return true
   }
 
-  const campaigns = (data.campaigns || []).filter(
-    c => industry === 'All' || c.industry === industry,
-  )
+  const campaigns = (data.campaigns || []).filter(c => byIndustry(industry, c.industry))
 
   // Guard: new-format fields
   const interestedLeads = data.interested_leads || []
@@ -124,7 +140,7 @@ export function computeCampaignStats(
   // Index raw data by campaign_id
   const leadsByCamp: Record<number, InterestedLead[]> = {}
   for (const l of interestedLeads) {
-    if (industry !== 'All' && l.industry !== industry) continue
+    if (!byIndustry(industry, l.industry)) continue
     if (!leadsByCamp[l.campaign_id]) leadsByCamp[l.campaign_id] = []
     leadsByCamp[l.campaign_id].push(l)
   }
@@ -132,7 +148,7 @@ export function computeCampaignStats(
   // Email stats by campaign
   const emailsByCamp: Record<number, { emails: number; leads: number }> = {}
   for (const r of dailyEmailStats) {
-    if (industry !== 'All' && r.industry !== industry) continue
+    if (!byIndustry(industry, r.industry)) continue
     if (from && r.date < from) continue
     if (to   && r.date > to)   continue
     if (!emailsByCamp[r.campaign_id]) emailsByCamp[r.campaign_id] = { emails: 0, leads: 0 }
@@ -140,7 +156,7 @@ export function computeCampaignStats(
     emailsByCamp[r.campaign_id].leads  += r.leads_delta
   }
 
-  // email → campaign_id map (from all interested leads)
+  // email → campaign email set
   const emailSetByCamp: Record<number, Set<string>> = {}
   for (const [cid, leads] of Object.entries(leadsByCamp)) {
     emailSetByCamp[Number(cid)] = new Set(leads.map(l => l.email))
@@ -151,24 +167,30 @@ export function computeCampaignStats(
     const leads = (leadsByCamp[cid] || []).filter(l =>
       (!from && !to) || inDateRange(l.date_est),
     )
-    const esrow = emailsByCamp[cid] || { emails: 0, leads: 0 }
+    const esrow      = emailsByCamp[cid] || { emails: 0, leads: 0 }
+    const campEmails = emailSetByCamp[cid] || new Set<string>()
 
-    const campEmails   = emailSetByCamp[cid] || new Set<string>()
-    const campBookings = demoBookings.filter(b => campEmails.has(b.email))
+    // Demos/show-ups: from demo_bookings if available, else from campaign totals
+    let demosBooked = 0, showups = 0, completed = 0, pending = 0
+    if (demoBookings.length > 0) {
+      const campBookings = demoBookings.filter(b => campEmails.has(b.email))
+      demosBooked = campBookings.filter(b => (!from && !to) || inDateRange(b.created_at_date)).length
+      const showupList = campBookings.filter(b => (!from && !to) || inDateRange(b.demo_scheduled_date))
+      showups   = showupList.filter(b => b.show_status_adj === 'Y').length
+      completed = showupList.filter(b => b.show_status_adj !== 'P').length
+      pending   = campBookings.filter(
+        b => b.show_status === 'P' && b.demo_scheduled_date && b.demo_scheduled_date >= today,
+      ).length
+    } else {
+      demosBooked = c.demos_booked || 0
+      showups     = c.showups      || 0
+      pending     = c.pending_demos || 0
+      completed   = Math.max(0, demosBooked - pending)
+    }
 
-    const demosBooked = campBookings.filter(b =>
-      (!from && !to) || inDateRange(b.created_at_date),
-    ).length
-    const showupList  = campBookings.filter(b =>
-      (!from && !to) || inDateRange(b.demo_scheduled_date),
-    )
-    const showups     = showupList.filter(b => b.show_status_adj === 'Y').length
-    const completed   = showupList.filter(b => b.show_status_adj !== 'P').length
-    const pending     = campBookings.filter(
-      b => b.show_status === 'P' && b.demo_scheduled_date && b.demo_scheduled_date >= today,
-    ).length
+    // interested: from individual leads if available, else from campaign stat
+    const interested = leads.length > 0 ? leads.length : c.interested
 
-    const interested = leads.length
     const emails_sent = esrow.emails || c.emails_sent
     const leads_cont  = esrow.leads  || c.total_leads_contacted
 

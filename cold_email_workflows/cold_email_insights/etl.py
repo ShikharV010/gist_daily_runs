@@ -7,6 +7,8 @@ Run: python etl.py
 """
 import requests, json, os, time, psycopg2, psycopg2.extras
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from threading import Lock
 from datetime import datetime, timezone, timedelta
 
 # ── Config ────────────────────────────────────────────────────────────────────
@@ -80,31 +82,88 @@ def fetch_campaigns():
     print(f'  {len(out)} campaigns', flush=True)
     return out
 
-# ── 2. Interested leads with dates ────────────────────────────────────────────
+# ── 2. Interested leads with dates (concurrent per-campaign, interested only) ──
+CAMP_WORKERS = 8
+
 def fetch_interested_leads(campaigns):
-    print('Fetching interested leads...', flush=True)
-    leads = []
-    for c in campaigns:
-        if c['industry'] not in ACTIVE or not c['interested']:
+    """
+    Concurrent per-campaign: fetch only interested replies from each active campaign.
+    Pages limited to ceil(campaign.interested / 100) + 2 to avoid over-fetching.
+    """
+    print('Fetching interested leads (concurrent, interested-only)...', flush=True)
+    active_camps = [c for c in campaigns if c['industry'] in ACTIVE and c.get('interested', 0) > 0]
+    print(f'  {len(active_camps)} campaigns have interested replies', flush=True)
+
+    lock    = Lock()
+    results = []
+    done_ct = [0]
+
+    def fetch_campaign_interested(c):
+        cid      = c['id']
+        max_p    = max(2, (c['interested'] // 100) + 2)
+        params   = {'interested': 1, 'per_page': 100}
+        camp_leads = []
+        for page in range(1, max_p + 1):
+            params['page'] = page
+            for attempt in range(3):
+                try:
+                    r = requests.get(f'{BASE}/campaigns/{cid}/replies',
+                                     headers=HEADERS, params=params, timeout=30)
+                    if r.status_code == 200:
+                        d    = r.json()
+                        rows = d.get('data', [])
+                        for row in rows:
+                            if not row.get('interested'):
+                                continue
+                            camp_leads.append({
+                                'lead_id':      row.get('lead_id'),
+                                'email':        (row.get('from_email_address') or '').lower(),
+                                'campaign_id':  cid,
+                                'campaign_name': c['name'],
+                                'industry':     c['industry'],
+                                'date_received': row.get('date_received'),
+                                'date_est':     to_est(row.get('date_received')),
+                                'booked_demo':  False, 'is_showup': False,
+                                'show_status':  None,
+                                'demo_scheduled_date': None,
+                                'demo_created_at_date': None,
+                            })
+                        meta = d.get('meta', {})
+                        if meta.get('current_page', page) >= meta.get('last_page', page):
+                            break
+                        break  # success, move to next page
+                    elif r.status_code == 429:
+                        time.sleep(2 ** attempt)
+                    else:
+                        break
+                except Exception:
+                    time.sleep(2 ** attempt)
+
+        with lock:
+            done_ct[0] += 1
+            results.extend(camp_leads)
+            print(f'  [{done_ct[0]}/{len(active_camps)}] {c["name"][:40]} → {len(camp_leads)} interested',
+                  flush=True)
+
+    with ThreadPoolExecutor(max_workers=CAMP_WORKERS) as ex:
+        futs = [ex.submit(fetch_campaign_interested, c) for c in active_camps]
+        for fut in as_completed(futs):
+            try:
+                fut.result()
+            except Exception as e:
+                print(f'  WARN campaign fetch error: {e}')
+
+    # Dedupe by email (keep latest date)
+    by_email: dict = {}
+    for l in results:
+        e = l['email']
+        if not e:
             continue
-        replies = api_pages(f'campaigns/{c["id"]}/replies', {'interested': 'true'})
-        for r in replies:
-            if not r.get('interested'): continue
-            leads.append({
-                'lead_id':      r['lead_id'],
-                'email':        (r.get('from_email_address') or '').lower(),
-                'campaign_id':  c['id'],
-                'campaign_name': c['name'],
-                'industry':     c['industry'],
-                'date_received': r.get('date_received'),
-                'date_est':     to_est(r.get('date_received')),
-                'booked_demo':  False, 'is_showup': False,
-                'show_status':  None,
-                'demo_scheduled_date': None,
-                'demo_created_at_date': None,
-            })
-    print(f'  {len(leads)} interested leads', flush=True)
-    return leads
+        if e not in by_email or (l['date_est'] or '') > (by_email[e]['date_est'] or ''):
+            by_email[e] = l
+    deduped = list(by_email.values())
+    print(f'  {len(deduped)} unique interested leads', flush=True)
+    return deduped
 
 # ── 3. Demo bookings from DB ──────────────────────────────────────────────────
 def fetch_demo_bookings(interested_leads):
@@ -153,44 +212,94 @@ def fetch_demo_bookings(interested_leads):
     print(f'  {len(out)} bookings', flush=True)
     return out
 
-# ── 4. Daily email deltas from DB ─────────────────────────────────────────────
+# ── 4. Daily email stats via campaign analytics API ───────────────────────────
 def fetch_daily_email_stats(campaigns):
-    print('Fetching daily email stats from DB...', flush=True)
-    active_ids = [c['id'] for c in campaigns if c['industry'] in ACTIVE]
-    id_to_ind  = {c['id']: c['industry'] for c in campaigns}
+    """
+    Fetch daily send stats from campaigns/{id}/analytics endpoint.
+    Falls back to DB cumulative snapshot approach if API returns nothing.
+    """
+    print('Fetching daily email stats (campaign analytics API)...', flush=True)
+    active_camps = [c for c in campaigns if c['industry'] in ACTIVE]
+    id_to_ind    = {c['id']: c['industry'] for c in campaigns}
+    daily        = []
+    lock         = Lock()
 
-    conn = psycopg2.connect(DB_URL)
-    cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
-    cur.execute("""
-        SELECT campaign_id::int AS cid, start_date,
-               emails_sent::int,
-               total_leads_contacted::int AS leads_contacted
-        FROM gist.gtm_sequencer_campaign_stats
-        WHERE campaign_id::int = ANY(%s)
-        ORDER BY campaign_id::int, start_date
-    """, (active_ids,))
-    rows = cur.fetchall()
-    conn.close()
+    def fetch_analytics(c):
+        cid = c['id']
+        for attempt in range(3):
+            try:
+                r = requests.get(f'{BASE}/campaigns/{cid}/analytics',
+                                 headers=HEADERS, timeout=30)
+                if r.status_code == 200:
+                    return cid, r.json()
+                elif r.status_code == 429:
+                    time.sleep(2 ** attempt)
+                else:
+                    break
+            except Exception:
+                time.sleep(2 ** attempt)
+        return cid, {}
 
-    by_camp = defaultdict(list)
-    for r in rows: by_camp[r['cid']].append(dict(r))
+    with ThreadPoolExecutor(max_workers=CAMP_WORKERS) as ex:
+        futs = {ex.submit(fetch_analytics, c): c for c in active_camps}
+        for fut in as_completed(futs):
+            cid, data = fut.result()
+            ind = id_to_ind.get(cid, 'Other')
+            # Expected structure: {data: [{date, emails_sent, leads_contacted, ...}]}
+            # or {daily: [...]} — handle both
+            rows = (data.get('data') or data.get('daily') or
+                    data.get('analytics') or [])
+            if isinstance(rows, list):
+                with lock:
+                    for row in rows:
+                        d  = row.get('date') or row.get('start_date') or row.get('day')
+                        es = int(row.get('emails_sent') or row.get('sent') or 0)
+                        lc = int(row.get('leads_contacted') or row.get('contacted') or
+                                 row.get('unique_contacted') or 0)
+                        if d and (es or lc):
+                            daily.append({
+                                'date':         str(d)[:10],
+                                'campaign_id':  cid,
+                                'industry':     ind,
+                                'emails_delta': es,
+                                'leads_delta':  lc,
+                            })
 
-    daily = []
-    for cid, camp_rows in by_camp.items():
-        prev_e = prev_l = 0
-        for row in camp_rows:
-            de = max(0, row['emails_sent']     - prev_e)
-            dl = max(0, row['leads_contacted'] - prev_l)
-            if de or dl:
-                daily.append({
-                    'date':          str(row['start_date']),
-                    'campaign_id':   cid,
-                    'industry':      id_to_ind.get(cid, 'Other'),
-                    'emails_delta':  de,
-                    'leads_delta':   dl,
-                })
-            prev_e = row['emails_sent']
-            prev_l = row['leads_contacted']
+    if not daily:
+        print('  Analytics API returned nothing — falling back to DB snapshots', flush=True)
+        active_ids = [c['id'] for c in active_camps]
+        try:
+            conn = psycopg2.connect(DB_URL)
+            cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+            cur.execute("""
+                SELECT campaign_id::int AS cid, start_date,
+                       emails_sent::int,
+                       total_leads_contacted::int AS leads_contacted
+                FROM gist.gtm_sequencer_campaign_stats
+                WHERE campaign_id::int = ANY(%s)
+                ORDER BY campaign_id::int, start_date
+            """, (active_ids,))
+            db_rows = cur.fetchall()
+            conn.close()
+            by_camp: dict = defaultdict(list)
+            for r in db_rows: by_camp[r['cid']].append(dict(r))
+            for cid, camp_rows in by_camp.items():
+                prev_e = prev_l = 0
+                for row in camp_rows:
+                    de = max(0, row['emails_sent']     - prev_e)
+                    dl = max(0, row['leads_contacted'] - prev_l)
+                    if de or dl:
+                        daily.append({
+                            'date':         str(row['start_date']),
+                            'campaign_id':  cid,
+                            'industry':     id_to_ind.get(cid, 'Other'),
+                            'emails_delta': de,
+                            'leads_delta':  dl,
+                        })
+                    prev_e = row['emails_sent']
+                    prev_l = row['leads_contacted']
+        except Exception as e:
+            print(f'  DB fallback error: {e}')
 
     daily.sort(key=lambda x: x['date'])
     print(f'  {len(daily)} daily rows', flush=True)
