@@ -54,18 +54,18 @@ export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }
     <div>
       <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Summary</h2>
 
-      {/* Row 1 — Email funnel counts + rates */}
-      <RowLabel>Email Funnel</RowLabel>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+      {/* Row 1 — Email Funnel */}
+      <RowLabel>Email</RowLabel>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         <Card
           title="Emails Sent"
           main={fmt(m.emails_sent)}
+          sub={`from ${m.campaigns} campaigns`}
           color="blue"
         />
         <Card
           title="Leads Contacted"
           main={fmt(m.leads_contacted)}
-          sub={`from ${m.campaigns} campaigns`}
           color="blue"
         />
         <Card
@@ -75,15 +75,21 @@ export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }
           color="blue"
         />
         <Card
-          title="Interested"
+          title="Interested Replies"
           main={fmt(m.interested)}
-          sub={`Interest Rate: ${pctStr(m.int_rate_per_contacted, 4)} / lead`}
+          sub={`Int. Rate: ${pctStr(m.int_rate_per_contacted, 4)} / lead`}
           color="blue"
         />
         <Card
           title="Bounced"
           main={fmt(m.bounced)}
-          sub={`Bounce Rate: ${pctStr(m.bounce_rate)} / lead`}
+          sub={`${fmt(m.bounced)} / ${fmt(m.leads_contacted)} contacted`}
+          color="red"
+        />
+        <Card
+          title="Bounce %"
+          main={pctStr(m.bounce_rate)}
+          sub={`${fmt(m.bounced)} bounced / ${fmt(m.leads_contacted)} leads`}
           color="red"
         />
       </div>
@@ -102,8 +108,14 @@ export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }
           color="amber"
         />
         <Card
-          title="Demos / Lead"
-          main={pctStr(m.demos_per_contacted)}
+          title="Demos / Emails Sent"
+          main={pctStr(m.demos_per_sent, 4)}
+          sub={`${fmt(m.demos_booked)} demos / ${fmt(m.emails_sent)} sent`}
+          color="purple"
+        />
+        <Card
+          title="Demos / Leads Contacted"
+          main={pctStr(m.demos_per_contacted, 4)}
           sub={`${fmt(m.demos_booked)} demos / ${fmt(m.leads_contacted)} leads`}
           color="purple"
         />
@@ -113,19 +125,13 @@ export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }
           sub={`${fmt(m.demos_booked)} demos / ${fmt(m.interested)} interested`}
           color="purple"
         />
-        <Card
-          title="Interested Replies"
-          main={fmt(m.interested)}
-          sub={`out of ${fmt(m.leads_contacted)} contacted`}
-          color="blue"
-        />
       </div>
 
       {/* Row 3 — Show-ups */}
       <RowLabel>Show-ups</RowLabel>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
         <Card
-          title="Show-ups"
+          title="Total Show-ups"
           main={fmt(m.showups)}
           color="green"
         />
@@ -135,21 +141,21 @@ export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }
           color="gray"
         />
         <Card
-          title="Show-ups / Lead"
-          main={pctStr(m.showups_per_contacted)}
+          title="Show-ups / Emails Sent"
+          main={pctStr(m.showups_per_sent, 4)}
+          sub={`${fmt(m.showups)} show-ups / ${fmt(m.emails_sent)} sent`}
+          color="green"
+        />
+        <Card
+          title="Show-ups / Leads Contacted"
+          main={pctStr(m.showups_per_contacted, 4)}
           sub={`${fmt(m.showups)} show-ups / ${fmt(m.leads_contacted)} leads`}
           color="green"
         />
         <Card
-          title="Show-ups / Interested"
-          main={pctStr(m.showups_per_interested)}
-          sub={`${fmt(m.showups)} show-ups / ${fmt(m.interested)} interested`}
-          color="green"
-        />
-        <Card
-          title="Actual Show Rate"
+          title="Show-ups / Demos"
           main={pctStr(m.show_rate)}
-          sub={`${m.showups} showed / ${m.completed_demos} completed`}
+          sub={`${m.showups} showed / ${m.completed_demos} completed demos`}
           color="green"
         />
       </div>

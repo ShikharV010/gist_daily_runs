@@ -38,6 +38,7 @@ export default function DemosTable({
   const [sortKey, setSortKey] = useState<SortKey>('demo_scheduled_date')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [statusFilter, setStatusFilter] = useState<string>('all')
+  const [collapsed, setCollapsed] = useState(false)
 
   const filtered = useMemo(() => {
     return demoBookings.filter(d => {
@@ -87,25 +88,35 @@ export default function DemosTable({
             <span className="text-red-600 font-medium">{counts.N} no-shows</span>
           </p>
         </div>
-        {/* Status filter */}
-        <div className="flex gap-1">
-          {(['all', 'Y', 'N', 'P'] as const).map(s => (
-            <button
-              key={s}
-              onClick={() => setStatusFilter(s)}
-              className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
-                statusFilter === s
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-              }`}
-            >
-              {s === 'all' ? 'All' : STATUS_BADGE[s]?.label ?? s}
-            </button>
-          ))}
+        {/* Controls */}
+        <div className="flex items-center gap-2">
+          {/* Status filter */}
+          <div className="flex gap-1">
+            {(['all', 'Y', 'N', 'P'] as const).map(s => (
+              <button
+                key={s}
+                onClick={() => setStatusFilter(s)}
+                className={`px-3 py-1 text-xs rounded-full font-medium transition-colors ${
+                  statusFilter === s
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {s === 'all' ? 'All' : STATUS_BADGE[s]?.label ?? s}
+              </button>
+            ))}
+          </div>
+          {/* Collapse toggle */}
+          <button
+            onClick={() => setCollapsed(c => !c)}
+            className="ml-2 px-3 py-1 text-xs rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            {collapsed ? 'Expand ▼' : 'Collapse ▲'}
+          </button>
         </div>
       </div>
 
-      <div className="overflow-x-auto">
+      {!collapsed && <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr>
@@ -177,7 +188,7 @@ export default function DemosTable({
             )}
           </tbody>
         </table>
-      </div>
+      </div>}
     </div>
   )
 }

@@ -54,19 +54,13 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
               <TH>Emails Sent</TH>
               <TH>Leads Contacted</TH>
               <TH>Replied</TH>
-              <TH>Reply Rate (lead)</TH>
+              <TH>Reply Rate</TH>
               <TH>Bounced</TH>
               <TH>Bounce %</TH>
               <TH>Interested</TH>
-              <TH>Int. Rate (lead)</TH>
+              <TH>Int. Rate</TH>
               <TH>Demos</TH>
               <TH>Demos / Interested</TH>
-              <TH>Demos / Lead</TH>
-              <TH>Show-ups</TH>
-              <TH>Show-ups / Interested</TH>
-              <TH>Pending</TH>
-              <TH>No-shows</TH>
-              <TH>Show Rate</TH>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -92,14 +86,6 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
                 <TD>{pct(c.int_rate_per_contacted, 4)}</TD>
                 <TD className="font-medium">{c.demos_booked}</TD>
                 <TD>{pct(c.demos_per_interested)}</TD>
-                <TD>{pct(c.demos_per_contacted, 4)}</TD>
-                <TD className={`font-medium ${c.showups > 0 ? 'text-green-700' : ''}`}>
-                  {c.showups}
-                </TD>
-                <TD>{pct(c.showups_per_interested)}</TD>
-                <TD className={c.pending_demos > 0 ? 'text-amber-600' : ''}>{c.pending_demos}</TD>
-                <TD className={c.noshow > 0 ? 'text-red-500' : ''}>{c.noshow}</TD>
-                <TD className="font-semibold">{pct(c.show_rate)}</TD>
               </tr>
             ))}
           </tbody>

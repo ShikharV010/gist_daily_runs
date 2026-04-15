@@ -55,6 +55,7 @@ export default function ShowupTable({
   setIntentFilter,
 }: Props) {
   const [expandedRow, setExpandedRow] = useState<string | null>(null)
+  const [collapsed, setCollapsed] = useState(false)
 
   const rows = useMemo(() => {
     const { from, to } = dateRange
@@ -117,7 +118,7 @@ export default function ShowupTable({
           </h2>
           <p className="text-xs text-gray-400 mt-0.5">{rows.length} records · scored by deal intent</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <span className="text-xs text-gray-500">Intent:</span>
           {INTENT_LABELS.map(lbl => (
             <button
@@ -132,14 +133,20 @@ export default function ShowupTable({
               {lbl}
             </button>
           ))}
+          <button
+            onClick={() => setCollapsed(c => !c)}
+            className="ml-2 px-3 py-1 text-xs rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+          >
+            {collapsed ? 'Expand ▼' : 'Collapse ▲'}
+          </button>
         </div>
       </div>
 
-      {rows.length === 0 ? (
+      {!collapsed && rows.length === 0 ? (
         <p className="text-gray-400 text-sm text-center py-10">
           No show-ups match the selected filters.
         </p>
-      ) : (
+      ) : !collapsed ? (
         <div className="overflow-x-auto">
           <table className="w-full min-w-max border-collapse">
             <thead className="bg-gray-50">
@@ -173,7 +180,7 @@ export default function ShowupTable({
                     onClick={() => setExpandedRow(isExpanded ? null : company)}
                   >
                     {/* Company */}
-                    <td className="px-3 py-2 text-sm font-semibold text-gray-900 whitespace-nowrap max-w-[180px] truncate">
+                    <td className="px-3 py-2 text-sm font-semibold text-gray-900 whitespace-nowrap min-w-[160px] max-w-[220px] truncate">
                       {company}
                     </td>
                     {/* Website */}
@@ -201,7 +208,7 @@ export default function ShowupTable({
                       {meta.prospect_email}
                     </td>
                     {/* Designation */}
-                    <td className="px-3 py-2 text-xs text-gray-600 whitespace-nowrap max-w-[140px] truncate">
+                    <td className="px-3 py-2 text-xs text-gray-600 whitespace-nowrap min-w-[160px] max-w-[200px] truncate">
                       {r.prospect_designation || '—'}
                     </td>
                     {/* DM */}
@@ -223,7 +230,7 @@ export default function ShowupTable({
                       <YesNo val={r.next_steps_discussed} />
                     </td>
                     {/* Next Steps Details */}
-                    <td className="px-3 py-2 min-w-[200px] max-w-[260px]">
+                    <td className="px-3 py-2 min-w-[260px] max-w-[340px]">
                       <Bullets items={r.next_steps_details} />
                     </td>
                     {/* Next Call Date */}
@@ -231,7 +238,7 @@ export default function ShowupTable({
                       {r.next_call_date || <span className="text-gray-300">—</span>}
                     </td>
                     {/* Pain Points */}
-                    <td className="px-3 py-2 min-w-[200px] max-w-[260px]">
+                    <td className="px-3 py-2 min-w-[260px] max-w-[340px]">
                       <Bullets
                         items={r.pain_points?.map(p =>
                           `[${p.severity}] ${p.pain_point}`,
@@ -239,15 +246,15 @@ export default function ShowupTable({
                       />
                     </td>
                     {/* Buying Signals */}
-                    <td className="px-3 py-2 min-w-[200px] max-w-[260px]">
+                    <td className="px-3 py-2 min-w-[260px] max-w-[340px]">
                       <Bullets items={r.buying_signals} />
                     </td>
                     {/* Negative Signals */}
-                    <td className="px-3 py-2 min-w-[200px] max-w-[260px]">
+                    <td className="px-3 py-2 min-w-[260px] max-w-[340px]">
                       <Bullets items={r.negative_signals} />
                     </td>
                     {/* Key Insights */}
-                    <td className="px-3 py-2 min-w-[200px] max-w-[260px]">
+                    <td className="px-3 py-2 min-w-[260px] max-w-[340px]">
                       <Bullets items={r.key_insights} />
                     </td>
                     {/* Pain Points Addressed */}
@@ -281,7 +288,7 @@ export default function ShowupTable({
             </tbody>
           </table>
         </div>
-      )}
+      ) : null}
     </div>
   )
 }
