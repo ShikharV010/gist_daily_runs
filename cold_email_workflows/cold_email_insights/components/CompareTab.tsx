@@ -2,7 +2,7 @@
 
 import { useMemo } from 'react'
 import type { MetricsData, ShowupAnalysis, Industry } from './types'
-import { computeMetrics } from './Dashboard'
+import { computeMetrics } from './metrics'
 
 const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation']
 const EMPTY_RANGE = { from: '', to: '' }
