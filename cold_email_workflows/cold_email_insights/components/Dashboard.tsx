@@ -10,6 +10,7 @@ import MetricCards from './MetricCards'
 import FunnelChart from './FunnelChart'
 import CampaignTable from './CampaignTable'
 import ShowupTable from './ShowupTable'
+import DemosTable from './DemosTable'
 import CompareTab from './CompareTab'
 
 // ── Tab config ────────────────────────────────────────────────────────────────
@@ -57,6 +58,11 @@ function IndustryTab({
         dateRange={dateRange}
       />
       <CampaignTable campaigns={campStats} />
+      <DemosTable
+        demoBookings={data.demo_bookings}
+        industry={industry}
+        dateRange={dateRange}
+      />
       {industry !== 'All' && (
         <ShowupTable
           showupData={showupData}
