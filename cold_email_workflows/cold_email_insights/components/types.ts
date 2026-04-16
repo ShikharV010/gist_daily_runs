@@ -189,6 +189,6 @@ export interface DateRange {
   to: string
 }
 
-export type Industry = 'All' | 'Manufacturing' | 'IT & Consulting' | 'Truck Transportation'
+export type Industry = 'All' | 'Manufacturing' | 'IT & Consulting' | 'Truck Transportation' | 'BCS'
 export type IntentLabel = 'Hot' | 'Warm' | 'Cold' | 'Dead'
-export type Tab = 'overview' | 'manufacturing' | 'it-consulting' | 'truck' | 'compare'
+export type Tab = 'overview' | 'manufacturing' | 'it-consulting' | 'truck' | 'bcs' | 'compare'

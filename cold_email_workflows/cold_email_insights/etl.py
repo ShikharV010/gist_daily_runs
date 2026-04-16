@@ -31,6 +31,7 @@ INDUSTRY_MAP = {
     36: 'Truck Transportation', 37: 'Truck Transportation',
     9: 'Follow-ups',
     39: 'Meta/Other', 40: 'Meta/Other', 41: 'Meta/Other',
+    42: 'BCS', 43: 'BCS', 44: 'BCS', 45: 'BCS',
 }
 ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation'}
 

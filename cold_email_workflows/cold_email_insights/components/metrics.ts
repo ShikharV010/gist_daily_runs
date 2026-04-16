@@ -4,7 +4,7 @@ import type {
 } from './types'
 
 // 'All' means active industries only — never Meta/Other or Follow-ups
-const ACTIVE_INDUSTRIES = ['Manufacturing', 'IT & Consulting', 'Truck Transportation']
+const ACTIVE_INDUSTRIES = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS']
 
 function byIndustry(industry: Industry, ind: string): boolean {
   if (industry === 'All') return ACTIVE_INDUSTRIES.includes(ind)
