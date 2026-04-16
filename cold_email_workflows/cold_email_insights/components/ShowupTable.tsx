@@ -73,6 +73,7 @@ export default function ShowupTable({
             'Manufacturing':      ['manufacturing', 'mfg'],
             'IT & Consulting':    ['it', 'consulting', 'technology'],
             'Truck Transportation': ['truck', 'transport'],
+            'BCS':                ['bcs', 'business consulting', 'business services'],
           }
           const keywords = matchMap[industry]
           const indLower = ind.toLowerCase()
