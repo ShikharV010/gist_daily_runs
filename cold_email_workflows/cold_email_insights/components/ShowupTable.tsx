@@ -56,9 +56,13 @@ export default function ShowupTable({
 }: Props) {
   const [expandedRow, setExpandedRow] = useState<string | null>(null)
   const [collapsed, setCollapsed] = useState(false)
+  const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState<'intent' | 'date'>('intent')
 
   const rows = useMemo(() => {
     const { from, to } = dateRange
+    const q = search.trim().toLowerCase()
+
     return Object.values(showupData)
       .filter((r: ShowupRecord) => {
         if ('error' in r) return false
@@ -78,12 +82,11 @@ export default function ShowupTable({
           const keywords = matchMap[industry]
           const indLower = ind.toLowerCase()
           if (!keywords.some(k => indLower.includes(k))) {
-            // Also check meta.industry directly
             if (meta.industry !== industry) return false
           }
         }
 
-        // Date filter (demo_date = demo_scheduled_date)
+        // Date filter
         const d = meta.demo_date
         if (from && d && d < from) return false
         if (to   && d && d > to)   return false
@@ -92,14 +95,27 @@ export default function ShowupTable({
         const label = r.deal_closing_intent_label || ''
         if (!intentFilter.includes(label as IntentLabel)) return false
 
+        // Search filter (company, AE, website)
+        if (q) {
+          const company  = (r.company || meta.prospect_company || '').toLowerCase()
+          const ae       = (meta.ae_name || '').toLowerCase()
+          const website  = (meta.prospect_website || '').toLowerCase()
+          if (!company.includes(q) && !ae.includes(q) && !website.includes(q)) return false
+        }
+
         return true
       })
       .sort((a, b) => {
+        if (sortBy === 'date') {
+          const da = a._meta?.demo_date || ''
+          const db = b._meta?.demo_date || ''
+          return db.localeCompare(da)
+        }
         const sa = a.deal_closing_intent_score ?? 0
         const sb = b.deal_closing_intent_score ?? 0
         return sb - sa
       }) as ShowupRecord[]
-  }, [showupData, industry, dateRange, intentFilter])
+  }, [showupData, industry, dateRange, intentFilter, search, sortBy])
 
   const toggleIntent = (label: IntentLabel) => {
     setIntentFilter(
@@ -112,34 +128,73 @@ export default function ShowupTable({
   return (
     <div className="bg-white rounded-xl border border-gray-200">
       {/* Header + filters */}
-      <div className="px-6 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
-        <div>
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
-            Show-up Analysis
-          </h2>
-          <p className="text-xs text-gray-400 mt-0.5">{rows.length} records · scored by deal intent</p>
-        </div>
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-gray-500">Intent:</span>
-          {INTENT_LABELS.map(lbl => (
+      <div className="px-6 py-4 border-b border-gray-100 flex flex-col gap-3">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+              Show-up Analysis
+            </h2>
+            <p className="text-xs text-gray-400 mt-0.5">{rows.length} records · scored by deal intent</p>
+          </div>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-xs text-gray-500">Intent:</span>
+            {INTENT_LABELS.map(lbl => (
+              <button
+                key={lbl}
+                onClick={() => toggleIntent(lbl)}
+                className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                  intentFilter.includes(lbl)
+                    ? INTENT_BADGE[lbl] + ' border-transparent'
+                    : 'bg-white border-gray-300 text-gray-400'
+                }`}
+              >
+                {lbl}
+              </button>
+            ))}
             <button
-              key={lbl}
-              onClick={() => toggleIntent(lbl)}
+              onClick={() => setCollapsed(c => !c)}
+              className="ml-2 px-3 py-1 text-xs rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
+            >
+              {collapsed ? 'Expand ▼' : 'Collapse ▲'}
+            </button>
+          </div>
+        </div>
+        {/* Search + sort row */}
+        <div className="flex items-center gap-3 flex-wrap">
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search company, AE, or website…"
+            className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 min-w-[260px]"
+          />
+          <div className="flex items-center gap-1">
+            <span className="text-xs text-gray-500">Sort:</span>
+            <button
+              onClick={() => setSortBy('intent')}
               className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
-                intentFilter.includes(lbl)
-                  ? INTENT_BADGE[lbl] + ' border-transparent'
-                  : 'bg-white border-gray-300 text-gray-400'
+                sortBy === 'intent' ? 'bg-blue-600 text-white border-transparent' : 'bg-white border-gray-300 text-gray-500 hover:border-gray-400'
               }`}
             >
-              {lbl}
+              Intent
             </button>
-          ))}
-          <button
-            onClick={() => setCollapsed(c => !c)}
-            className="ml-2 px-3 py-1 text-xs rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
-          >
-            {collapsed ? 'Expand ▼' : 'Collapse ▲'}
-          </button>
+            <button
+              onClick={() => setSortBy('date')}
+              className={`px-3 py-1 rounded-full text-xs font-medium border transition-colors ${
+                sortBy === 'date' ? 'bg-blue-600 text-white border-transparent' : 'bg-white border-gray-300 text-gray-500 hover:border-gray-400'
+              }`}
+            >
+              Date
+            </button>
+          </div>
+          {search && (
+            <button
+              onClick={() => setSearch('')}
+              className="text-xs text-gray-400 hover:text-gray-600"
+            >
+              Clear
+            </button>
+          )}
         </div>
       </div>
 

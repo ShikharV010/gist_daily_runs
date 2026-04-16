@@ -14,10 +14,13 @@ interface Props {
 }
 
 export default function FunnelChart({ timeSeries, industry, dateRange }: Props) {
+  const today = new Date().toISOString().slice(0, 10)
+
   const chartData = useMemo(() => {
     const { from, to } = dateRange
     return (timeSeries || [])
       .filter(row => {
+        if (row.date > today) return false          // never show future dates
         if (from && row.date < from) return false
         if (to   && row.date > to)   return false
         return true
@@ -25,24 +28,22 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
       .map(row => {
         if (industry === 'All') {
           return {
-            date:         row.date,
+            date:          row.date,
             'Emails Sent': row.emails_delta,
-            Interested:   row.interested,
-            Demos:        row.demos,
-            'Show-ups':   row.showups,
+            Interested:    row.interested,
+            Demos:         row.demos,
           }
         }
         const ind = row.by_industry?.[industry] || {}
         return {
-          date:         row.date,
+          date:          row.date,
           'Emails Sent': (ind as { emails_delta?: number }).emails_delta ?? 0,
-          Interested:   (ind as { interested?: number }).interested ?? 0,
-          Demos:        (ind as { demos?: number }).demos ?? 0,
-          'Show-ups':   (ind as { showups?: number }).showups ?? 0,
+          Interested:    (ind as { interested?: number }).interested ?? 0,
+          Demos:         (ind as { demos?: number }).demos ?? 0,
         }
       })
-      .filter(r => r['Emails Sent'] > 0 || r.Interested > 0 || r.Demos > 0 || r['Show-ups'] > 0)
-  }, [timeSeries, industry, dateRange])
+      .filter(r => r['Emails Sent'] > 0 || r.Interested > 0 || r.Demos > 0)
+  }, [timeSeries, industry, dateRange, today])
 
   if (chartData.length === 0) {
     return (
@@ -69,7 +70,7 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
               tick={{ fontSize: 11, fill: '#9ca3af' }}
               tickFormatter={d => d.slice(5)}
             />
-            {/* Left axis: Interested / Demos / Show-ups */}
+            {/* Left axis: Interested / Demos */}
             <YAxis
               yAxisId="left"
               tick={{ fontSize: 11, fill: '#9ca3af' }}
@@ -112,15 +113,6 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
               type="monotone"
               dataKey="Demos"
               stroke="#a78bfa"
-              strokeWidth={2}
-              dot={false}
-              activeDot={{ r: 4 }}
-            />
-            <Line
-              yAxisId="left"
-              type="monotone"
-              dataKey="Show-ups"
-              stroke="#34d399"
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 4 }}

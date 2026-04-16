@@ -441,9 +441,9 @@ def build_time_series(leads, bookings, daily_email):
         daily[d]['interested'] += 1
         daily[d]['by_industry'][ind]['interested'] += 1
 
-    # Demos/show-ups keyed by demo_scheduled_date (per user's date filter spec)
+    # Demos/show-ups keyed by created_at_date (when booking was made, not when meeting is)
     for b in bookings:
-        d = b.get('demo_scheduled_date'); ind = b['industry']
+        d = b.get('created_at_date'); ind = b['industry']
         if not d: continue
         if d not in daily:
             daily[d]['date'] = d
