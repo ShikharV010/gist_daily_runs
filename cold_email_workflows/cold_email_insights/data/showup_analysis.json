@@ -8299,5 +8299,650 @@
       "total_duration_min": 37,
       "analyzed_at": "2026-04-17T06:21:39.501341Z"
     }
+  },
+  "Acquaint SoftTech": {
+    "company": "Acquaint SoftTech",
+    "prospect_name": "Ahmed Ginani",
+    "prospect_designation": "Unknown (not stated in transcript)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Ahmed explicitly said he has a boss who makes final decisions.",
+    "company_industry": "IT Services & Consulting / Software Outsourcing & Staff Augmentation",
+    "pain_points": [
+      {
+        "pain_point": "Inconsistent website lead generation",
+        "severity": "high",
+        "direct_quote": "we get inquiries approximately four to five a month. But that is not consistent.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed how landing pages and AI search visibility drive consistent inbound leads."
+      },
+      {
+        "pain_point": "No visibility on AI search platforms",
+        "severity": "high",
+        "direct_quote": "I'm not sure how we are performing on AI.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained AI-native CMS and LLM ranking strategy with page creation."
+      },
+      {
+        "pain_point": "Over-reliance on Upwork for leads",
+        "severity": "medium",
+        "direct_quote": "our major lead channel is upwork. We have our BDs who do bidding on upwork.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as inbound lead diversification away from Upwork dependency."
+      },
+      {
+        "pain_point": "Unclear ROI guarantees from vendors",
+        "severity": "high",
+        "direct_quote": "He doesn't consider the answer. Like after three months. We will see.",
+        "addressed_in_call": false,
+        "how_addressed": "AE deferred \u2014 promised to follow up with guarantee details via email."
+      },
+      {
+        "pain_point": "Keyword cannibalization risk with new pages",
+        "severity": "medium",
+        "direct_quote": "Already your existing service page.",
+        "addressed_in_call": false,
+        "how_addressed": "AE acknowledged the concern but deferred to product team for a specific answer."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "What makes Gushwork unique vs other vendors",
+        "how_handled": "AE cited AI-native CMS, speed of 100-400 pages in 30 days, LLM optimization.",
+        "resolved": true
+      },
+      {
+        "objection": "No KPI guarantee if results not met",
+        "how_handled": "AE said they re-strategize and publish more pages; boss wants hard commitments.",
+        "resolved": false
+      },
+      {
+        "objection": "Keyword cannibalization with existing service pages",
+        "how_handled": "AE acknowledged it as valid concern; deferred to product team for answer.",
+        "resolved": false
+      },
+      {
+        "objection": "Pages hosted on separate CMS, not native site",
+        "how_handled": "AE clarified pages live under prospect's own domain via linked AI CMS.",
+        "resolved": true
+      },
+      {
+        "objection": "Asking for pricing discount",
+        "how_handled": "AE mentioned 25% discount on 6-month upfront; promised email with exact pricing.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Responded to cold email due to 'free trial results' offer.",
+      "Actively engaged with live landing page demo on screen.",
+      "Asked specific KPI question: leads from which month.",
+      "Asked for pricing unprompted mid-call.",
+      "Requested discount on pricing plans.",
+      "Brought a colleague to the call for input.",
+      "Committed to presenting proposal to decision maker."
+    ],
+    "negative_signals": [
+      "Not the final decision maker; boss approval required.",
+      "Boss is very strict about KPI guarantees from vendors.",
+      "Skeptical: compared Gushwork to other vendors making similar promises.",
+      "Keyword cannibalization concern left unresolved.",
+      "No specific follow-up call date was set.",
+      "AE deferred two critical questions without scheduling next call."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to email final pricing (monthly and 6-month upfront).",
+      "AE to answer keyword cannibalization question after product team consult.",
+      "AE to provide lead guarantee or SLA details for boss.",
+      "Ahmed to present proposal to decision-maker boss."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Pricing sheet: month-on-month and 6-month upfront with 25% discount.",
+      "Keyword cannibalization resolution for existing service pages.",
+      "Lead guarantee or SLA commitment document for boss approval."
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect engaged actively and asked detailed pricing questions.",
+      "Free trial offer was the hook; genuine interest in results.",
+      "Boss approval needed \u2014 adds a gatekeeping layer to closing.",
+      "Unresolved KPI guarantee is a hard blocker for boss sign-off.",
+      "Competitor-like skepticism expressed but not a deal-breaker yet.",
+      "Two unresolved follow-up items must be nailed in next touchpoint."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE did solid discovery on lead channels and revenue focus.",
+      "Live demo with sample landing page was effective and relevant.",
+      "AE correctly pivoted focus to hiring after learning it's top revenue.",
+      "Two key objections deferred without scheduling a follow-up call.",
+      "No next call date set \u2014 a significant missed closing step.",
+      "AE couldn't demonstrate live AI ranking proof for a similar client.",
+      "Pricing discussion happened but lacked structured proposal delivery.",
+      "Some transcript segments were in mixed language, reducing clarity."
+    ],
+    "key_insights": [
+      "Decision maker (boss) not in call; KPI guarantee is his key concern.",
+      "Hiring/staff augmentation is top revenue priority, not dev services.",
+      "US is primary target market \u2014 content strategy should reflect this.",
+      "Prospect already does in-house SEO; AI search gap is the key hook.",
+      "Free pilot offer was the primary reason for responding to cold email.",
+      "Keyword cannibalization is a technically valid fear needing resolution.",
+      "Reference client CodeWave (custom software) is most relevant case study."
+    ],
+    "recommended_next_action": "Send a detailed follow-up email within 24 hours covering: (1) final pricing with 6-month discount, (2) clear keyword cannibalization resolution plan, (3) a written lead guarantee/SLA with specific numbers and remediation terms \u2014 then immediately propose a second call to present this to Ahmed AND his boss together.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Inconsistent leads: AI landing pages drive consistent inbound inquiries.",
+      "AI search invisibility: AI-native CMS helps rank on ChatGPT, Perplexity, etc.",
+      "Upwork dependency: Gushwork adds a scalable inbound channel alongside Upwork.",
+      "KPI guarantee: NOT fully addressed \u2014 deferred, must be resolved in follow-up.",
+      "Keyword cannibalization: NOT fully addressed \u2014 deferred to product team."
+    ],
+    "_meta": {
+      "prospect_email": "ahmed@acquaintsoft.com",
+      "prospect_company": "Acquaint SoftTech",
+      "prospect_website": "https://acquaintsoft.com/",
+      "demo_date": "2026-04-17",
+      "ae_name": "Abhinav Chaturvedi",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "069cee365ed92be3732470cd8a2a7349"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=3cc45410-c6e5-48b4-afa4-dd7f04b80780&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 28,
+      "analyzed_at": "2026-04-18T05:57:54.316999Z"
+    }
+  },
+  "Impact Risk Advisor": {
+    "company": "Impact Risk Advisor",
+    "prospect_name": "Louis Van Der Westhuizen",
+    "prospect_designation": "Founder at Impact Risk Advisor",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Louis is the Founder and sole decision-maker for the company.",
+    "company_industry": "IT Compliance & Cybersecurity Consulting",
+    "pain_points": [
+      {
+        "pain_point": "Previous SEO vendor delivered zero quality leads",
+        "severity": "high",
+        "direct_quote": "I had SEO work before promising all this nonsense, right. So I'm very skeptical.",
+        "addressed_in_call": true,
+        "how_addressed": "AE differentiated Gushwork by focusing on lead quality and intent mapping, not traffic"
+      },
+      {
+        "pain_point": "Paid ads (Google, LinkedIn) yielded no ROI",
+        "severity": "high",
+        "direct_quote": "I had Google Ads, my budgets to load means nothing. Zero results.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned AEO+SEO as a different channel targeting buyer intent"
+      },
+      {
+        "pain_point": "Wrong traffic and spam contacts from prior SEO",
+        "severity": "high",
+        "direct_quote": "Your SEO helped improve traffic to my site. The wrong traffic.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed lead dashboard with spam filtering and intent-based lead scoring"
+      },
+      {
+        "pain_point": "Skepticism around 3-4 month timelines as unfulfilled promises",
+        "severity": "high",
+        "direct_quote": "I want to see results in three to four months. Otherwise you should say it could be one month to 10 years.",
+        "addressed_in_call": true,
+        "how_addressed": "AE shared specific content publishing timeline and committed to 4-8 leads by month three"
+      },
+      {
+        "pain_point": "Budget constraints as a small business owner",
+        "severity": "medium",
+        "direct_quote": "Little guys like me, we can't spend that kind of money.",
+        "addressed_in_call": false,
+        "how_addressed": "Pricing was not discussed in detail; deferred to next call"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Burned by previous SEO provider; deeply skeptical",
+        "how_handled": "AE acknowledged past failure, was transparent about SEO being core, explained differentiation via AEO and intent mapping",
+        "resolved": false
+      },
+      {
+        "objection": "Does not want traffic, only qualified leads",
+        "how_handled": "AE reframed offering around lead generation and showed live lead dashboard with real examples",
+        "resolved": true
+      },
+      {
+        "objection": "Skeptical of 3-4 month promise again",
+        "how_handled": "AE showed a phased content publishing timeline and promised 4-8 quality leads by month three",
+        "resolved": false
+      },
+      {
+        "objection": "Terms of service mention 12-month contract contrary to AE's claim",
+        "how_handled": "AE explained 12-month option is for discounted pricing; month-to-month is available",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Booked meeting proactively after outreach email",
+      "Spent time reviewing Gushwork website and FAQ beforehand",
+      "Asked how the platform works and requested details",
+      "Expressed openness to continue: 'maybe yes' to next call",
+      "Asked clarifying questions about lead definition and pages",
+      "Agreed to reschedule follow-up call on Monday",
+      "Did not dismiss SEO outright; acknowledged wrong execution"
+    ],
+    "negative_signals": [
+      "Explicitly said he is not buying anything today",
+      "Deep skepticism from prior failed SEO and lead gen services",
+      "Noticed Terms of Service 12-month clause; questioned AE's claims",
+      "Call ended abruptly due to scheduling conflict on both sides",
+      "No pricing discussion occurred; cost sensitivity flagged",
+      "Zero organic keywords currently on website; starting from scratch"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Reschedule follow-up call for Monday April 20 at 10:30am PT",
+      "AE to send calendar invite within 30 minutes after next call",
+      "AE to share customer references for Louis to speak with",
+      "AE to share full process PDF and timeline document",
+      "Louis to review materials and come prepared Monday"
+    ],
+    "next_call_date": "2026-04-20 at 10:30 AM Pacific Time",
+    "follow_up_materials_promised": [
+      "Process and timeline PDF document to be emailed",
+      "Customer reference contacts for Louis to verify claims",
+      "Calendar invite for Monday follow-up call"
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect is genuinely interested but heavily guarded from past failures",
+      "Agreed to follow-up call showing continued engagement willingness",
+      "Proactively reviewed website and FAQ before the meeting",
+      "Core need for qualified leads is strong and urgent",
+      "Trust gap is significant; needs references and proof before committing",
+      "Budget sensitivity unresolved; pricing not discussed yet",
+      "Terms of service discrepancy may create friction if unresolved"
+    ],
+    "call_quality_score": 5,
+    "call_quality_notes": [
+      "AE was transparent and avoided overselling; built initial rapport",
+      "AE acknowledged SEO skepticism directly rather than deflecting",
+      "Demo of live lead dashboard was a strong credibility moment",
+      "AE was disorganized and scattered at multiple points in call",
+      "Pricing was never discussed despite being a stated concern",
+      "Call ran out of time before completing full product walkthrough",
+      "Terms of service contradiction was not cleanly resolved",
+      "Competitor mention and exclusivity tactic felt slightly awkward",
+      "AE should have pre-qualified schedule better to avoid hard stop"
+    ],
+    "key_insights": [
+      "Prospect is founder-led; fast decision cycle if trust is established",
+      "Core objection is trust, not budget or product fit",
+      "IT compliance niche has clear buyer intent keywords to target",
+      "Nationwide scope increases content opportunity and lead volume potential",
+      "Website currently has zero SEO; high upside but longer ramp time",
+      "Customer references before Monday call could be a deal accelerator",
+      "Terms of service vs. month-to-month claim must be clarified in writing",
+      "Lead quality promise (4-8/month) must be documented to set expectations"
+    ],
+    "recommended_next_action": "Send Louis customer reference contacts and the process/timeline PDF today, then open Monday's call by resolving the Terms of Service concern in writing and presenting a customized compliance-industry content strategy with explicit lead volume commitments.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Differentiated Gushwork from prior SEO by focusing on lead quality over traffic",
+      "Showed live lead dashboard proving real form-fill leads are captured",
+      "Explained intent mapping to filter spam and low-quality contacts",
+      "Presented phased content publishing timeline to back the 3-4 month claim",
+      "Committed to 4-8 quality leads by end of third month as measurable goal",
+      "Offered month-to-month terms to reduce risk given prior bad experience",
+      "Offered customer references to rebuild trust before any purchase decision"
+    ],
+    "_meta": {
+      "prospect_email": "Louisv@impactriskadvisor.com",
+      "prospect_company": "Impact Risk Advisor",
+      "prospect_website": "impactriskadvisor.com",
+      "demo_date": "2026-04-17",
+      "ae_name": "Ajith Ponicherry",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "32d2b8ab482237876052756aa9b7ae58"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=4af37f5b-3d77-42fe-a48e-6bfe50e7571e&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 34,
+      "analyzed_at": "2026-04-18T05:57:55.089190Z"
+    }
+  },
+  "Sebco Laundry Systems Inc": {
+    "company": "Sebco Laundry Systems Inc",
+    "prospect_name": "Anna McDonald",
+    "prospect_designation": "Marketing Coordinator",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Anna was delegated by her VP to evaluate Gushwork; final approval sits with her manager.",
+    "company_industry": "Manufacturing / Commercial Laundry Equipment & Services",
+    "pain_points": [
+      {
+        "pain_point": "Low organic search visibility",
+        "severity": "high",
+        "direct_quote": "they are searching these terms...you're not visible as a business to them",
+        "addressed_in_call": true,
+        "how_addressed": "Showed live audit tool identifying unranked high-volume search queries"
+      },
+      {
+        "pain_point": "Outdated website limiting inbound leads",
+        "severity": "high",
+        "direct_quote": "it is quite outdated",
+        "addressed_in_call": true,
+        "how_addressed": "Explained subdirectory CMS hosting requires no changes to existing site"
+      },
+      {
+        "pain_point": "Heavy reliance on outbound cold outreach",
+        "severity": "medium",
+        "direct_quote": "cold emails and cold calls and word of mouth",
+        "addressed_in_call": true,
+        "how_addressed": "Positioned Gushwork as inbound organic inquiry engine to reduce outbound dependence"
+      },
+      {
+        "pain_point": "No AI search engine presence",
+        "severity": "medium",
+        "direct_quote": "there's a lot of research being done...we want to capture that demand as well",
+        "addressed_in_call": true,
+        "how_addressed": "Explained FAQ-optimized landing pages designed to surface on ChatGPT, Perplexity, Gemini"
+      },
+      {
+        "pain_point": "Limited lead qualification and tracking",
+        "severity": "low",
+        "direct_quote": "once it kind of comes in, I do pass it on",
+        "addressed_in_call": true,
+        "how_addressed": "Demonstrated lead vetting, journey tracking, and spam filtering in the dashboard"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Website too outdated for landing pages",
+        "how_handled": "Clarified pages hosted on Gushwork CMS subdirectory; no site changes needed",
+        "resolved": true
+      },
+      {
+        "objection": "Blogs might be better than landing pages",
+        "how_handled": "Explained landing pages target search clusters; blogs not part of current offer",
+        "resolved": true
+      },
+      {
+        "objection": "Needs manager approval before deciding",
+        "how_handled": "Scheduled follow-up call on April 27; offered to send recording and materials",
+        "resolved": false
+      },
+      {
+        "objection": "Unclear if AI-generated content is accurate",
+        "how_handled": "Explained human QA team reviews all AI output before publishing",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Anna said it 'would make my life easier'",
+      "Proactively asked about content asset bank contribution",
+      "Engaged deeply with landing page structure and examples",
+      "Confirmed search topics were exactly what prospects search",
+      "Expressed excitement to present to manager",
+      "Asked about Grow plan pricing unprompted",
+      "Agreed immediately to April 27 follow-up call",
+      "Said 'I'm definitely hoping it's yes'"
+    ],
+    "negative_signals": [
+      "Anna is not the decision maker; VP holds budget authority",
+      "Manager approval required; unknown timeline or priorities",
+      "Revenue per deal is highly variable; ROI hard to quantify",
+      "Only 10 inbound inquiries per week; small current funnel",
+      "Website is acknowledged as outdated; modernization may be prerequisite"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Anna to present Gushwork proposal to her manager",
+      "Follow-up call scheduled for April 27 at same time",
+      "Anna to provide yes/no/conditional feedback after manager meeting",
+      "Nitin to send call recording to Anna post-meeting"
+    ],
+    "next_call_date": "2026-04-27 (same time as original call)",
+    "follow_up_materials_promised": [
+      "Call recording shared with Anna via email",
+      "No additional collateral explicitly promised beyond recording"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Strong personal enthusiasm from Anna; she wants it approved",
+      "Decision blocked by unseen manager with unknown priorities",
+      "No budget objection raised; pricing acknowledged without pushback",
+      "Clear next step set with specific date and accountability ask",
+      "Single meeting so far; relationship only with gatekeeper not buyer",
+      "Promo deadline (month-end) adds mild urgency lever"
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE quickly identified Anna is not the decision maker",
+      "Demo was relevant and personalized to Sebco's industry",
+      "Live audit tool created strong visual proof of search gaps",
+      "AE used promo urgency effectively without being pushy",
+      "AE requested commitment and feedback loop at close",
+      "AE did not attempt to schedule a call with the actual DM",
+      "Revenue quantification attempt was weak; prospect couldn't give numbers",
+      "No case studies or ROI examples from similar B2B clients shared",
+      "Social media question deflected; missed upsell or referral opportunity"
+    ],
+    "key_insights": [
+      "Real buyer is Anna's manager or VP; must be engaged directly",
+      "Sebco gets ~10 website inquiries/week; low but improving baseline",
+      "45-year-old company; credibility asset to highlight in content pages",
+      "Revenue sharing model means each lease is long-term recurring revenue",
+      "Anna is enthusiastic internal champion; nurture her with enablement materials",
+      "Competitor gap clear: Yelp and Home Depot outrank Sebco on core terms",
+      "Content asset bank offer signals Anna wants to be actively involved",
+      "Month-end promo deadline aligns with Anna's stated decision timeline"
+    ],
+    "recommended_next_action": "Send Anna a one-page executive summary and ROI case study she can forward to her manager, and request a 15-minute joint call including the VP/manager before April 27 to eliminate single-threaded risk.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Search invisibility shown via live audit with real Sebco query data",
+      "Outdated website concern resolved with subdirectory CMS explanation",
+      "Outbound dependency addressed by positioning inbound organic engine",
+      "AI search gap covered with FAQ-optimized landing page strategy",
+      "Lead quality concern addressed via vetting team and spam filter demo"
+    ],
+    "_meta": {
+      "prospect_email": "annam@sebco.com",
+      "prospect_company": "Sebco Laundry Systems Inc",
+      "prospect_website": "https://www.sebco.com",
+      "demo_date": "2026-04-17",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "c9665907c5fa15011166243c856d4598"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=f0c3f98b-6287-4e81-8f08-5125279d944b&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 24,
+      "analyzed_at": "2026-04-18T05:57:56.893536Z"
+    }
+  },
+  "Gross Consulting, Inc.": {
+    "company": "Gross Consulting, Inc.",
+    "prospect_name": "Jaiden Gross",
+    "prospect_designation": "Company Owner",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Jaiden is the sole owner and operator who authorized payment on the call.",
+    "company_industry": "Business & Revenue Consulting / IT & Advisory Services",
+    "pain_points": [
+      {
+        "pain_point": "Slow lead generation speed / long ramp-up time",
+        "severity": "high",
+        "direct_quote": "I think it's just the speed, you know, like I know that it's going to take some time for this stuff to kind of get deployed",
+        "addressed_in_call": true,
+        "how_addressed": "AE cited Vantage getting leads in 30 days and explained indexation ramp-up timeline clearly."
+      },
+      {
+        "pain_point": "No dedicated sales team; owner handles all leads alone",
+        "severity": "medium",
+        "direct_quote": "No, it's actually just myself. I'm a workaholic.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned inbound organic leads as a hands-off, scalable channel requiring minimal owner effort."
+      },
+      {
+        "pain_point": "Wide service portfolio makes focused marketing difficult",
+        "severity": "medium",
+        "direct_quote": "It's really difficult to get people excited about that.",
+        "addressed_in_call": true,
+        "how_addressed": "AE aligned targeting strategy around core revenue consulting offer and GCI Advisors scorecard."
+      },
+      {
+        "pain_point": "No experience or proof of AI search engine lead generation",
+        "severity": "high",
+        "direct_quote": "I don't know anybody that's had success with AI searching queries, but it's still kind of like the wild west.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated live Vantage Branding case study ranking #1 on ChatGPT with 30-40 leads/month."
+      },
+      {
+        "pain_point": "Concern about AI-generated content quality and brand trust",
+        "severity": "medium",
+        "direct_quote": "EM dashes equals AI. I feel like my type of customer will notice that.",
+        "addressed_in_call": true,
+        "how_addressed": "AE cited Google's stance on quality content and mix of educational vs. service pages."
+      },
+      {
+        "pain_point": "Fear of non-exclusive content if competitors use same platform",
+        "severity": "medium",
+        "direct_quote": "How do I know that the content I'm getting is proprietary if the algorithm is designed to just put out content that satisfies Google?",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained internal non-compete clause preventing same-geography competitor targeting."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Too slow \u2014 other solutions (paid ads) deliver faster results",
+        "how_handled": "AE acknowledged trade-off; highlighted organic quality vs. ad conversion rates; introduced upcoming Meta AI ad product.",
+        "resolved": true
+      },
+      {
+        "objection": "No guarantee of qualified leads or ROI",
+        "how_handled": "AE cited lead filtration/spam verification dashboard and re-strategize process if leads don't convert.",
+        "resolved": true
+      },
+      {
+        "objection": "AI-written content looks generic and prospects will notice",
+        "how_handled": "AE stressed Google rewards quality not origin; explained educational content mix and onboarding brand voice input.",
+        "resolved": false
+      },
+      {
+        "objection": "Content won't be proprietary if competitors also use Gushwork",
+        "how_handled": "AE confirmed non-compete clause for same geography and same business type.",
+        "resolved": true
+      },
+      {
+        "objection": "Trust gap \u2014 first meeting with unknown vendor",
+        "how_handled": "AE used live Vantage case study and low $800 launch commitment to reduce perceived risk.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Stated 'I'm in a buying state for marketing right now.'",
+      "Proactively asked about pricing plans and differences.",
+      "Asked about Q2 promotions, signaling purchase intent.",
+      "Said '$800 is a no-brainer' and committed verbally.",
+      "Paid $800 via Stripe link during the call.",
+      "Immediately asked to schedule onboarding call same day.",
+      "Confirmed onboarding call for Monday 1pm Eastern.",
+      "Disclosed average ticket size of $5k\u2013$15k per client.",
+      "Agreed one closed client covers full annual investment.",
+      "Self-described as 'long-term builder' aligned with SEO strategy."
+    ],
+    "negative_signals": [
+      "Concern about slow 90-day ramp-up before leads arrive.",
+      "Skeptical about AI content quality and EM dash tells.",
+      "Comparing Gushwork to faster paid ads alternatives.",
+      "No prior success with AI search engine lead gen seen.",
+      "Only on Launch plan \u2014 conservative initial commitment."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Onboarding call scheduled Monday at 1pm Eastern.",
+      "Jaiden to provide temporary DNS access to Hostinger.",
+      "Jaiden to provide CMS credentials for feed section setup.",
+      "AE team to walk Jaiden through DNS setup on Monday.",
+      "Discuss targeting GCI Advisors vs. Gross Consulting domain.",
+      "Align content strategy around revenue consulting core offer.",
+      "Abhinav's team (Alphia) to send step-by-step onboarding guide.",
+      "$800 Launch plan payment completed via Stripe on call."
+    ],
+    "next_call_date": "2026-04-21, 1:00 PM Eastern",
+    "follow_up_materials_promised": [
+      "Stripe payment link \u2014 sent and completed during call.",
+      "Calendar invite for Monday 1pm onboarding call.",
+      "Step-by-step DNS/CMS access guide from Alphia (team)."
+    ],
+    "deal_closing_intent_score": 9,
+    "deal_closing_intent_label": "Hot",
+    "intent_reasoning": [
+      "Prospect verbally committed and paid $800 Stripe on call.",
+      "Onboarding call already scheduled for next business day.",
+      "Self-declared active 'buying state' for marketing investment.",
+      "Acknowledged $800 launch is low-risk relative to $15k ACV.",
+      "High urgency \u2014 exploring multiple growth channels simultaneously.",
+      "Single objection (speed) partially mitigated with case study proof."
+    ],
+    "call_quality_score": 8,
+    "call_quality_notes": [
+      "AE ran strong discovery: lead volume, team size, revenue model.",
+      "Live product demo with prospect's own website was compelling.",
+      "Vantage Branding case study used effectively as social proof.",
+      "AE smartly anchored ROI: one $12k client covers full year.",
+      "Pricing negotiation handled well: $1,200 grow to $1,000 offer.",
+      "AI content quality objection not fully resolved \u2014 needs follow-up.",
+      "AE occasionally talked over prospect; pacing could be smoother.",
+      "Timeline expectations set clearly: 45-day deploy, 90-day leads.",
+      "Non-compete clause addressed proactively and reassured prospect.",
+      "Call ended with closed payment and confirmed next step \u2014 excellent."
+    ],
+    "key_insights": [
+      "Prospect is a solo operator \u2014 values scalable, hands-off solutions.",
+      "Core offer is revenue consulting via GCI Advisors scorecard quiz.",
+      "AI content authenticity is a real ongoing concern to monitor.",
+      "Speed-to-lead is the #1 friction point \u2014 manage expectations proactively.",
+      "Prospect is tech-savvy but needs guided DNS/CMS onboarding support.",
+      "Target domain should be GCI Advisors IO, not Gross Consulting.",
+      "Prospect planning 50-domain cold email campaign \u2014 complementary synergy.",
+      "Nationwide US targeting preferred \u2014 no geographic restrictions needed.",
+      "High ACV ($5k\u2013$15k) means even 1 lead converts to strong ROI.",
+      "Prospect is early adopter mindset \u2014 wants to be first to trend."
+    ],
+    "recommended_next_action": "Send a pre-onboarding email before Monday confirming the GCI Advisors IO domain as primary target, attaching the DNS/CMS step-by-step guide, and including one short paragraph addressing how Gushwork handles brand voice customization to preemptively resolve the AI content quality concern.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Speed concern addressed via Vantage 30-day early lead example.",
+      "Solo operator workload addressed \u2014 positioned as fully hands-off service.",
+      "Wide portfolio issue resolved by focusing on revenue consulting offer.",
+      "AI search proof gap closed with live ChatGPT Vantage #1 ranking demo.",
+      "Non-compete clause directly addressed competitor content overlap fear.",
+      "AI content quality concern partially addressed \u2014 needs deeper follow-up.",
+      "Qualified lead guarantee addressed via spam filter and re-strategy process."
+    ],
+    "_meta": {
+      "prospect_email": "jaiden@grossconsultinginc.com",
+      "prospect_company": "Gross Consulting, Inc.",
+      "prospect_website": "http://www.grossconsultinginc.com",
+      "demo_date": "2026-04-17",
+      "ae_name": "Abhinav Chaturvedi",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "b0ba787177752bcf32dd60579941c9db"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=68638351-bf7a-45a8-b8d3-273c553190b3&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 58,
+      "analyzed_at": "2026-04-18T05:58:00.156438Z"
+    }
   }
 }
