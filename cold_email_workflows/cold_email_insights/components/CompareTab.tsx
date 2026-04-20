@@ -28,7 +28,7 @@ const TD = ({ children, highlight = false }: { children: React.ReactNode; highli
 )
 const Section = ({ label }: { label: string }) => (
   <tr className="bg-blue-50">
-    <td colSpan={4} className="px-4 py-2 text-xs font-bold text-blue-700 uppercase tracking-widest">
+    <td colSpan={INDUSTRIES.length + 1} className="px-4 py-2 text-xs font-bold text-blue-700 uppercase tracking-widest">
       {label}
     </td>
   </tr>

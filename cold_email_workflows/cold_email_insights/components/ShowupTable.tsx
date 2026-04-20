@@ -258,9 +258,9 @@ export default function ShowupTable({
                       {meta.industry || r.company_industry || '—'}
                     </td>
                     {/* Prospect name */}
-                    <td className="px-3 py-2 text-sm whitespace-nowrap">{r.prospect_name || '—'}</td>
+                    <td className="px-3 py-2 text-sm text-gray-800 whitespace-nowrap">{r.prospect_name || '—'}</td>
                     {/* Email */}
-                    <td className="px-3 py-2 text-xs text-gray-500 whitespace-nowrap">
+                    <td className="px-3 py-2 text-xs text-gray-700 whitespace-nowrap">
                       {meta.prospect_email}
                     </td>
                     {/* Designation */}
@@ -270,9 +270,9 @@ export default function ShowupTable({
                     {/* DM */}
                     <td className="px-3 py-2 text-center"><YesNo val={r.is_decision_maker} /></td>
                     {/* AE */}
-                    <td className="px-3 py-2 text-xs whitespace-nowrap">{meta.ae_name}</td>
+                    <td className="px-3 py-2 text-xs text-gray-700 whitespace-nowrap">{meta.ae_name}</td>
                     {/* Demo date */}
-                    <td className="px-3 py-2 text-xs whitespace-nowrap">{meta.demo_date}</td>
+                    <td className="px-3 py-2 text-xs text-gray-700 whitespace-nowrap">{meta.demo_date}</td>
                     {/* Intent */}
                     <td className="px-3 py-2 whitespace-nowrap">
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
