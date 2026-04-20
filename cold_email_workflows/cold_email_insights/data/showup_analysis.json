@@ -8944,5 +8944,336 @@
       "total_duration_min": 58,
       "analyzed_at": "2026-04-18T05:58:00.156438Z"
     }
+  },
+  "Impact Recruiting": {
+    "company": "Impact Recruiting",
+    "prospect_name": "Riss Zahir",
+    "prospect_designation": "Account Executive (Founder)",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Riss is the founder and sole decision-maker at Impact Recruiting.",
+    "company_industry": "IT & Consulting / Staffing & Recruiting",
+    "pain_points": [
+      {
+        "pain_point": "No website live yet",
+        "severity": "high",
+        "direct_quote": "I'm actually working on building my website right now as we speak.",
+        "addressed_in_call": true,
+        "how_addressed": "AE noted onboarding can start once website is ready with basic info."
+      },
+      {
+        "pain_point": "Zero inbound lead generation currently",
+        "severity": "high",
+        "direct_quote": "if the pricing is good",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated leads dashboard and end-to-end lead gen capability."
+      },
+      {
+        "pain_point": "Competitor outranking on SEO and AI search",
+        "severity": "medium",
+        "direct_quote": "They get 60 calls a day and she said about half of them are from AI.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained Google page-one ranking drives ChatGPT/Claude visibility."
+      },
+      {
+        "pain_point": "Budget constraints from multiple vendor purchases",
+        "severity": "medium",
+        "direct_quote": "I've been buying a lot of products and services, so I think let's give me some time to recoup.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Unfamiliar with SEO/AEO concepts",
+        "severity": "low",
+        "direct_quote": "SEO plus what? What does it stand for?",
+        "addressed_in_call": true,
+        "how_addressed": "AE clearly explained AEO and how LLMs reference Google-indexed content."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Website not ready yet",
+        "how_handled": "AE agreed to follow up in 30 days once site is live.",
+        "resolved": true
+      },
+      {
+        "objection": "Capital/budget not available right now",
+        "how_handled": "AE accepted timeline pushback and scheduled follow-up for May 14.",
+        "resolved": false
+      },
+      {
+        "objection": "No performance guarantee on leads",
+        "how_handled": "AE cited 300-400 customers and average traction by month 3-4.",
+        "resolved": false
+      },
+      {
+        "objection": "Thought it was a self-serve tool, not managed",
+        "how_handled": "AE clarified Gushwork is fully managed end-to-end.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Said 'I like the idea' multiple times during demo.",
+      "Asked detailed pricing and package questions unprompted.",
+      "Competitor success with AI search motivated purchase interest.",
+      "Requested contact info to reach AE between meetings.",
+      "Proactively set next meeting date for May 14.",
+      "Asked about CRM integration showing intent to operationalize.",
+      "Expressed desire to capture at least 10 AI-sourced calls daily."
+    ],
+    "negative_signals": [
+      "Website not live; onboarding blocked for ~30 days.",
+      "Stretched budget from buying multiple vendor services recently.",
+      "Pushed next call out a full month to May 14.",
+      "Did not recall Gushwork; booked multiple vendor demo calls.",
+      "No guarantee on leads left concern partially unresolved."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call scheduled for May 14 same time.",
+      "AE to send pitch deck with contact details via email.",
+      "Riss to finalize website within ~10-30 days.",
+      "Riss to accept calendar invite for May 14 meeting."
+    ],
+    "next_call_date": "2026-05-14",
+    "follow_up_materials_promised": [
+      "Pitch deck with Gushwork website link via email.",
+      "AE phone number included in follow-up email."
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Genuine enthusiasm expressed repeatedly throughout the call.",
+      "Competitor benchmark strongly motivates purchase desire.",
+      "Clear blocker: website not ready and budget temporarily tight.",
+      "Agreed to firm next-step date indicating continued interest.",
+      "Multiple vendor purchases suggest price sensitivity risk.",
+      "No pushback on product fit, only timing and budget."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE delivered clear product demo with relevant live example.",
+      "Good use of competitor analogy to validate product value.",
+      "AE did not probe deeply into budget or timeline urgency.",
+      "No discovery on current lead volume or revenue goals.",
+      "Missed opportunity to address guarantee objection more firmly.",
+      "AE accepted one-month delay without attempting earlier close.",
+      "Rapport was light; call felt somewhat transactional.",
+      "Prospect confusion at start suggests weak pre-call nurturing."
+    ],
+    "key_insights": [
+      "Website blocker is temporary; deal viable within 30 days.",
+      "Competitor doing 60 calls/day via SEO is strongest motivator.",
+      "Prospect is a founder; decisions are fast once budget clears.",
+      "Buying fatigue from multiple vendors is a real risk.",
+      "Launch package at $800/month aligns with prospect's price sensitivity.",
+      "CRM integration question signals operational seriousness.",
+      "No website means no onboarding; timing is the primary risk.",
+      "Prospect needs social proof or case study to reduce guarantee concern."
+    ],
+    "recommended_next_action": "Send follow-up email within 24 hours with deck, phone number, and a recruiting industry case study showing lead results by month 3 to reinforce confidence before May 14 call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Website readiness: onboarding deferred until site is live.",
+      "Lead gen gap: full demo of leads dashboard and CTA pages shown.",
+      "Competitor AI visibility: explained Google-to-LLM ranking pipeline.",
+      "AEO unfamiliarity: clearly defined and contextualized with examples.",
+      "Budget concern: not directly addressed; only timeline was accommodated."
+    ],
+    "_meta": {
+      "prospect_email": "riss@impactrecruiting.org",
+      "prospect_company": "Impact Recruiting",
+      "prospect_website": "N/A",
+      "demo_date": "2026-04-15",
+      "ae_name": "Arabind",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "2fe2c3a7ff7a3d5a6bf910f5007b3d0f"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=ccb61206-a8f0-4a48-ac36-44a766e3cb7c&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 38,
+      "analyzed_at": "2026-04-20T06:33:11.031830Z"
+    }
+  },
+  "Autology AI": {
+    "company": "Autology AI",
+    "prospect_name": "Eric Wabrick",
+    "prospect_designation": "Founder & CEO at Autology AI",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Eric is the sole Founder and CEO with full budget and strategic authority.",
+    "company_industry": "AI & Automation Consulting / Professional Services",
+    "pain_points": [
+      {
+        "pain_point": "No inbound leads from website",
+        "severity": "high",
+        "direct_quote": "I don't get much from the website, I'll tell you that",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork content pages and SEO/AEO strategy presented as solution"
+      },
+      {
+        "pain_point": "Zero SEO or digital presence investment",
+        "severity": "high",
+        "direct_quote": "No, not really. No. I had SEO in mind as I was building the website.",
+        "addressed_in_call": true,
+        "how_addressed": "Explained organic SEO and AEO compounding growth approach"
+      },
+      {
+        "pain_point": "Over-reliance on personal network for leads",
+        "severity": "high",
+        "direct_quote": "today it's mostly from my personal network",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned as channel to generate leads beyond network"
+      },
+      {
+        "pain_point": "Outdated website needing refresh",
+        "severity": "medium",
+        "direct_quote": "it's already feels like it's a little outdated and needs some refreshing",
+        "addressed_in_call": true,
+        "how_addressed": "Advised running website revamp and Gushwork in parallel, no conflict"
+      },
+      {
+        "pain_point": "Low ticket sizes limiting revenue growth",
+        "severity": "medium",
+        "direct_quote": "as a startup, I know my prices are low at this point",
+        "addressed_in_call": true,
+        "how_addressed": "Recommended raising ticket size as geography expands nationally"
+      },
+      {
+        "pain_point": "Uncertain about timing of Gushwork investment",
+        "severity": "medium",
+        "direct_quote": "does it make sense to kind of revisit this later?",
+        "addressed_in_call": true,
+        "how_addressed": "AE argued early-stage SEO/AEO investment is ideal timing"
+      },
+      {
+        "pain_point": "No CRM or lead management system",
+        "severity": "low",
+        "direct_quote": "No.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork leads dashboard offered as lightweight CRM alternative"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Should website be revamped before starting Gushwork?",
+        "how_handled": "Explained subdomain setup means website changes can run in parallel",
+        "resolved": true
+      },
+      {
+        "objection": "Is Gushwork premature for an early-stage startup?",
+        "how_handled": "Positioned early SEO/AEO investment as compounding long-term advantage",
+        "resolved": true
+      },
+      {
+        "objection": "Wants to see real customer data, not dummy dashboard",
+        "how_handled": "Promised Inventive AI Slack snippet and LinkedIn post as social proof",
+        "resolved": false
+      },
+      {
+        "objection": "Local 60-mile radius focus may limit lead volume",
+        "how_handled": "Recommended going nationwide or selecting 5-7 states to test volume",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Agreed to a follow-up call on Monday same time",
+      "Said pricing and service concept 'does align for sure'",
+      "Expressed genuine interest in AI search visibility opportunity",
+      "Asked detailed questions about dashboard access and domain",
+      "Watched Gushwork customer video on website before the call",
+      "Requested call recording for further review",
+      "Agreed to nationwide or multi-state lead targeting",
+      "Asked about backlinks showing product-level curiosity"
+    ],
+    "negative_signals": [
+      "Wants to review case studies before deciding anything",
+      "Did not commit during call, pushed decision to Monday",
+      "Ticket sizes very low; ROI math is tight currently",
+      "Early-stage company with limited budget certainty",
+      "No prior SEO spend signals conservative marketing mindset",
+      "Skeptical without seeing real customer dashboard data"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call scheduled for Monday April 14 at 4:30 PM",
+      "Eric will review case studies and pricing before Monday",
+      "Sukriti to send call recording after this meeting",
+      "Sukriti to send Inventive AI Slack snippet as proof",
+      "Sukriti to share 4-5 SaaS/automation relevant case studies",
+      "Sukriti to send pricing plan details via email"
+    ],
+    "next_call_date": "2026-04-13 at 4:30 PM (prospect timezone: ET)",
+    "follow_up_materials_promised": [
+      "Call recording from this demo session",
+      "Inventive AI Slack snippet on SEO and lead growth",
+      "LinkedIn post from Bind Be founder about ChatGPT leads",
+      "4-5 SaaS or automation-focused case studies",
+      "Pricing plan breakdown document",
+      "Sukriti's personal contact number"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect is clearly interested and engaged throughout the call",
+      "Agreed on geographic strategy and product focus (automations)",
+      "Pricing was shared and not rejected outright",
+      "Asked to review case studies before committing, not a hard no",
+      "Scheduled a follow-up call voluntarily for Monday",
+      "Low ticket size and budget sensitivity add conversion risk",
+      "Solo founder early-stage company may slow decision cycle"
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "Sukriti handled discovery well, uncovering key pain points",
+      "Good pivot from local-only to nationwide geographic strategy",
+      "ROI slide presented with conservative scenario, effective framing",
+      "Call started slightly disorganized; AE Mani was not on call",
+      "Sukriti had not read prior email thread before the call",
+      "Social proof examples shared but not shown live on screen",
+      "Pricing introduced smoothly after demo, good sequencing",
+      "No clear urgency or deadline created to close faster",
+      "Prospect asked good questions; AE addressed most effectively",
+      "Follow-up booked on call, strong close of meeting"
+    ],
+    "key_insights": [
+      "Primary revenue priority is automation builds, not workshops",
+      "No digital marketing history; SEO is completely greenfield",
+      "Leads today come entirely from offline personal network",
+      "Prospect already aware of AI search trend, pre-sold on concept",
+      "Ticket sizes ($1K-$3K automations) make ROI math tight at Launch plan",
+      "Open to expanding beyond Pittsburgh if leads are qualified",
+      "Watched Gushwork video content before call, shows research intent",
+      "No CRM makes Gushwork dashboard a genuine standalone value-add",
+      "Concerns are around proof and timing, not product fit",
+      "Gushwork avoids conflict of interest by not serving direct competitors"
+    ],
+    "recommended_next_action": "Send Monday follow-up email by EOD Friday with call recording, Inventive AI proof snippet, 3-4 automation-specific case studies, and a one-pager ROI calculator using Eric's $2,500 average automation ticket to make the Launch plan math undeniable before the Monday call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "No website inbound leads \u2014 addressed via content page strategy",
+      "Zero SEO history \u2014 addressed by positioning early investment as ideal",
+      "Personal network dependency \u2014 Gushwork framed as scalable alternative",
+      "Outdated website concern \u2014 parallel execution strategy recommended",
+      "Low ticket sizes \u2014 advised raising prices as geography expands",
+      "Investment timing concern \u2014 compounding growth logic used effectively",
+      "No CRM \u2014 Gushwork leads dashboard offered as built-in solution"
+    ],
+    "_meta": {
+      "prospect_email": "eric@autologyai.com",
+      "prospect_company": "Autology AI",
+      "prospect_website": "autologyai.com",
+      "demo_date": "2026-04-09",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "6b6114e4c2503e2d9bf73ab7a9e0cee8"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=bb2a3a47-e225-4a1f-ae11-a4160324c345&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 59,
+      "analyzed_at": "2026-04-20T06:33:23.322627Z"
+    }
   }
 }
