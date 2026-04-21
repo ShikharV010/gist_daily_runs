@@ -219,7 +219,8 @@ export default function ShowupTable({
                 ].map(h => (
                   <th
                     key={h}
-                    className="px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap"
+                    className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
+                    style={{ backgroundColor: '#0070FF', color: '#ffffff' }}
                   >
                     {h}
                   </th>

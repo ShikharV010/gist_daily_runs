@@ -44,7 +44,7 @@ function IndustryTab({
   intentFilter: IntentLabel[]
   setIntentFilter: (v: IntentLabel[]) => void
 }) {
-  const [chartCollapsed, setChartCollapsed] = useState(true)
+  const [chartCollapsed, setChartCollapsed] = useState(false)
   const metrics = useMemo(
     () => computeMetrics(industry, dateRange, data),
     [industry, dateRange, data],

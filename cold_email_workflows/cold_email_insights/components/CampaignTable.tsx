@@ -12,7 +12,8 @@ function fmt(n: number) {
 }
 
 const TH = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <th className={`px-3 py-2 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide whitespace-nowrap ${className}`}>
+  <th className={`px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap ${className}`}
+      style={{ backgroundColor: '#0070FF', color: '#ffffff' }}>
     {children}
   </th>
 )
@@ -47,9 +48,9 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
       </div>
       <div className="overflow-x-auto">
         <table className="w-full min-w-max border-collapse">
-          <thead className="bg-gray-50">
+          <thead>
             <tr>
-              <TH className="sticky left-0 bg-gray-50 z-10">Campaign</TH>
+              <TH className="sticky left-0 z-10">Campaign</TH>
               <TH>Status</TH>
               <TH>Emails Sent</TH>
               <TH>Leads Contacted</TH>

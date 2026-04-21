@@ -16,7 +16,8 @@ const TH = ({ children, onClick, sorted }: {
 }) => (
   <th
     onClick={onClick}
-    className={`px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide bg-gray-50 whitespace-nowrap ${onClick ? 'cursor-pointer select-none hover:bg-gray-100' : ''}`}
+    className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap ${onClick ? 'cursor-pointer select-none' : ''}`}
+    style={{ backgroundColor: '#0070FF', color: '#ffffff' }}
   >
     {children}
     {sorted === 'asc' && ' ↑'}
@@ -38,7 +39,7 @@ export default function DemosTable({
   const [sortKey, setSortKey] = useState<SortKey>('demo_scheduled_date')
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [statusFilter, setStatusFilter] = useState<string>('all')
-  const [collapsed, setCollapsed] = useState(false)
+  const [expanded, setExpanded] = useState(false)
   const [search, setSearch] = useState('')
 
   const filtered = useMemo(() => {
@@ -121,17 +122,17 @@ export default function DemosTable({
               </button>
             ))}
           </div>
-          {/* Collapse toggle */}
+          {/* Expand toggle */}
           <button
-            onClick={() => setCollapsed(c => !c)}
+            onClick={() => setExpanded(e => !e)}
             className="ml-2 px-3 py-1 text-xs rounded-full font-medium bg-gray-100 text-gray-600 hover:bg-gray-200 transition-colors"
           >
-            {collapsed ? 'Expand ▼' : 'Collapse ▲'}
+            {expanded ? 'Collapse ▲' : 'Expand ▼'}
           </button>
         </div>
       </div>
 
-      {!collapsed && <div className="overflow-x-auto">
+      <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr>
@@ -165,7 +166,7 @@ export default function DemosTable({
                 </td>
               </tr>
             ) : (
-              sorted.map((d, i) => {
+              (expanded ? sorted : sorted.slice(0, 5)).map((d, i) => {
                 const badge = STATUS_BADGE[d.show_status] ?? { label: d.show_status, cls: 'bg-gray-100 text-gray-600' }
                 return (
                   <tr key={i} className="hover:bg-gray-50">
@@ -203,7 +204,18 @@ export default function DemosTable({
             )}
           </tbody>
         </table>
-      </div>}
+        {!expanded && sorted.length > 5 && (
+          <div className="px-4 py-2 text-center border-t border-gray-100">
+            <button
+              onClick={() => setExpanded(true)}
+              className="text-xs font-medium hover:underline"
+              style={{ color: '#0070FF' }}
+            >
+              Show all {sorted.length} demos ▼
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }
