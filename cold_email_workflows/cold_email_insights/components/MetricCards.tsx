@@ -7,40 +7,24 @@ function fmt(n: number) {
   if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K'
   return n.toLocaleString()
 }
+function pctStr(n: number, digits = 2) { return n.toFixed(digits) + '%' }
 
-function pctStr(n: number, digits = 2) {
-  return n.toFixed(digits) + '%'
-}
+// Three shades of Gushwork blue (#0070FF), darkest → lightest
+const ROW_STYLE = {
+  1: { bg: '#dbeafe', border: '#93c5fd', text: '#1e3a8a' },
+  2: { bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8' },
+  3: { bg: '#f0f9ff', border: '#bae6fd', text: '#0369a1' },
+} as const
 
-interface CardProps {
-  title: string
-  main: string
-  sub?: string
-  color?: 'blue' | 'green' | 'amber' | 'red' | 'purple' | 'gray'
-}
-
-function Card({ title, main, sub, color = 'blue' }: CardProps) {
-  const accent =
-    color === 'green'  ? 'bg-green-50 border-green-200'
-    : color === 'amber' ? 'bg-amber-50 border-amber-200'
-    : color === 'red'   ? 'bg-red-50 border-red-200'
-    : color === 'purple' ? 'bg-purple-50 border-purple-200'
-    : color === 'gray'  ? 'bg-gray-50 border-gray-200'
-    : 'bg-blue-50 border-blue-200'
-
-  const textColor =
-    color === 'green'  ? 'text-green-700'
-    : color === 'amber' ? 'text-amber-700'
-    : color === 'red'   ? 'text-red-700'
-    : color === 'purple' ? 'text-purple-700'
-    : color === 'gray'  ? 'text-gray-600'
-    : 'text-blue-700'
-
+function Card({ title, main, sub, row }: {
+  title: string; main: string; sub?: string; row: 1 | 2 | 3
+}) {
+  const s = ROW_STYLE[row]
   return (
-    <div className={`rounded-xl border p-4 ${accent}`}>
-      <p className="text-xs font-medium text-gray-500 uppercase tracking-wide mb-2">{title}</p>
-      <p className={`text-2xl font-bold ${textColor}`}>{main}</p>
-      {sub && <p className="text-xs text-gray-500 mt-1">{sub}</p>}
+    <div className="rounded-xl border p-4" style={{ background: s.bg, borderColor: s.border }}>
+      <p className="text-xs font-medium uppercase tracking-wide mb-2" style={{ color: s.text, opacity: 0.75 }}>{title}</p>
+      <p className="text-2xl font-bold" style={{ color: s.text }}>{main}</p>
+      {sub && <p className="text-xs mt-1" style={{ color: s.text, opacity: 0.65 }}>{sub}</p>}
     </div>
   )
 }
@@ -54,110 +38,32 @@ export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }
     <div>
       <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Summary</h2>
 
-      {/* Row 1 — Email Funnel */}
       <RowLabel>Email</RowLabel>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <Card
-          title="Emails Sent"
-          main={fmt(m.emails_sent)}
-          sub={`from ${m.campaigns} campaigns`}
-          color="blue"
-        />
-        <Card
-          title="Leads Contacted"
-          main={fmt(m.leads_contacted)}
-          color="blue"
-        />
-        <Card
-          title="Replied"
-          main={fmt(m.replied)}
-          sub={`Reply Rate: ${pctStr(m.reply_rate_per_contacted)} / lead`}
-          color="blue"
-        />
-        <Card
-          title="Interested Replies"
-          main={fmt(m.interested)}
-          sub={`Int. Rate: ${pctStr(m.int_rate_per_contacted, 4)} / lead`}
-          color="blue"
-        />
-        <Card
-          title="Bounced"
-          main={fmt(m.bounced)}
-          sub={`${fmt(m.bounced)} / ${fmt(m.leads_contacted)} contacted`}
-          color="red"
-        />
-        <Card
-          title="Bounce %"
-          main={pctStr(m.bounce_rate)}
-          sub={`${fmt(m.bounced)} bounced / ${fmt(m.leads_contacted)} leads`}
-          color="red"
-        />
+        <Card title="Emails Sent"         main={fmt(m.emails_sent)}           sub={`from ${m.campaigns} campaigns`}                               row={1} />
+        <Card title="Leads Contacted"     main={fmt(m.leads_contacted)}                                                                           row={1} />
+        <Card title="Replied"             main={fmt(m.replied)}               sub={`Reply Rate: ${pctStr(m.reply_rate_per_contacted)} / lead`}    row={1} />
+        <Card title="Interested Replies"  main={fmt(m.interested)}            sub={`Int. Rate: ${pctStr(m.int_rate_per_contacted, 4)} / lead`}    row={1} />
+        <Card title="Bounced"             main={fmt(m.bounced)}               sub={`${fmt(m.bounced)} / ${fmt(m.leads_contacted)} contacted`}     row={1} />
+        <Card title="Bounce %"            main={pctStr(m.bounce_rate)}        sub={`${fmt(m.bounced)} bounced / ${fmt(m.leads_contacted)} leads`} row={1} />
       </div>
 
-      {/* Row 2 — Demos */}
       <RowLabel>Demos</RowLabel>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <Card
-          title="Demos Booked"
-          main={fmt(m.demos_booked)}
-          color="purple"
-        />
-        <Card
-          title="Pending Demos"
-          main={fmt(m.pending_demos)}
-          color="amber"
-        />
-        <Card
-          title="Demos / Emails Sent"
-          main={pctStr(m.demos_per_sent, 4)}
-          sub={`${fmt(m.demos_booked)} demos / ${fmt(m.emails_sent)} sent`}
-          color="purple"
-        />
-        <Card
-          title="Demos / Leads Contacted"
-          main={pctStr(m.demos_per_contacted, 4)}
-          sub={`${fmt(m.demos_booked)} demos / ${fmt(m.leads_contacted)} leads`}
-          color="purple"
-        />
-        <Card
-          title="Demos / Interested"
-          main={pctStr(m.demos_per_interested)}
-          sub={`${fmt(m.demos_booked)} demos / ${fmt(m.interested)} interested`}
-          color="purple"
-        />
+        <Card title="Demos Booked"             main={fmt(m.demos_booked)}                                                                                     row={2} />
+        <Card title="Pending Demos"            main={fmt(m.pending_demos)}                                                                                    row={2} />
+        <Card title="Demos / Emails Sent"      main={pctStr(m.demos_per_sent, 4)}      sub={`${fmt(m.demos_booked)} / ${fmt(m.emails_sent)} sent`}           row={2} />
+        <Card title="Demos / Leads Contacted"  main={pctStr(m.demos_per_contacted, 4)} sub={`${fmt(m.demos_booked)} / ${fmt(m.leads_contacted)} leads`}      row={2} />
+        <Card title="Demos / Interested"       main={pctStr(m.demos_per_interested)}   sub={`${fmt(m.demos_booked)} / ${fmt(m.interested)} interested`}      row={2} />
       </div>
 
-      {/* Row 3 — Show-ups */}
       <RowLabel>Show-ups</RowLabel>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
-        <Card
-          title="Total Show-ups"
-          main={fmt(m.showups)}
-          color="green"
-        />
-        <Card
-          title="No-shows"
-          main={fmt(m.noshow)}
-          color="gray"
-        />
-        <Card
-          title="Show-ups / Emails Sent"
-          main={pctStr(m.showups_per_sent, 4)}
-          sub={`${fmt(m.showups)} show-ups / ${fmt(m.emails_sent)} sent`}
-          color="green"
-        />
-        <Card
-          title="Show-ups / Leads Contacted"
-          main={pctStr(m.showups_per_contacted, 4)}
-          sub={`${fmt(m.showups)} show-ups / ${fmt(m.leads_contacted)} leads`}
-          color="green"
-        />
-        <Card
-          title="Show-ups / Demos"
-          main={pctStr(m.show_rate)}
-          sub={`${m.showups} showed / ${m.completed_demos} completed demos`}
-          color="green"
-        />
+        <Card title="Total Show-ups"             main={fmt(m.showups)}                                                                                            row={3} />
+        <Card title="No-shows"                   main={fmt(m.noshow)}                                                                                             row={3} />
+        <Card title="Show-ups / Emails Sent"     main={pctStr(m.showups_per_sent, 4)}      sub={`${fmt(m.showups)} / ${fmt(m.emails_sent)} sent`}               row={3} />
+        <Card title="Show-ups / Leads Contacted" main={pctStr(m.showups_per_contacted, 4)} sub={`${fmt(m.showups)} / ${fmt(m.leads_contacted)} leads`}          row={3} />
+        <Card title="Show-ups / Demos"           main={pctStr(m.show_rate)}                sub={`${m.showups} showed / ${m.completed_demos} completed demos`}   row={3} />
       </div>
     </div>
   )

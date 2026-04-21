@@ -131,83 +131,93 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+    <div className="min-h-screen dashboard-bg">
+      {/* Header — logo left | title center | date range right */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
-        <div className="max-w-[1800px] mx-auto flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <img src="/gushwork-logo.svg" alt="Gushwork" className="h-6 w-auto" />
-            <div className="w-px h-7 bg-gray-200" />
-            <div>
-              <h1 className="text-xl font-semibold text-gray-900">In-House Cold Email Insights</h1>
-              <p className="text-xs text-gray-400 mt-0.5">
-                Last updated: {new Date(data.generated_at).toLocaleString()}
-              </p>
-            </div>
+        <div className="max-w-[1800px] mx-auto grid grid-cols-3 items-center gap-4">
+          {/* Left: logo */}
+          <img src="/gushwork-logo.svg" alt="Gushwork" className="h-6 w-auto" />
+
+          {/* Center: title */}
+          <div className="text-center">
+            <h1 className="text-lg font-semibold text-gray-900">In-House Cold Email Insights</h1>
+            <p className="text-xs text-gray-400 mt-0.5">
+              Last updated: {new Date(data.generated_at).toLocaleString()}
+            </p>
           </div>
-          {activeTab !== 'compare' && (
-            <div className="flex items-center gap-3 text-sm">
-              <span className="text-gray-500">Date range:</span>
-              <input
-                type="date"
-                value={dateRange.from}
-                onChange={e => setDateRange(d => ({ ...d, from: e.target.value }))}
-                className="border border-gray-300 rounded px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
-              <span className="text-gray-400">–</span>
-              <input
-                type="date"
-                value={dateRange.to}
-                onChange={e => setDateRange(d => ({ ...d, to: e.target.value }))}
-                className="border border-gray-300 rounded px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
-              />
-              {(dateRange.from || dateRange.to) && (
-                <button
-                  onClick={() => setDateRange({ from: '', to: '' })}
-                  className="text-xs text-blue-600 hover:underline"
-                >
-                  Clear
-                </button>
-              )}
-            </div>
-          )}
+
+          {/* Right: date filter */}
+          <div className="flex items-center justify-end gap-3 text-sm">
+            {activeTab !== 'compare' && (
+              <>
+                <span className="text-gray-500">Date range:</span>
+                <input
+                  type="date"
+                  value={dateRange.from}
+                  onChange={e => setDateRange(d => ({ ...d, from: e.target.value }))}
+                  className="border border-gray-300 rounded px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+                <span className="text-gray-400">–</span>
+                <input
+                  type="date"
+                  value={dateRange.to}
+                  onChange={e => setDateRange(d => ({ ...d, to: e.target.value }))}
+                  className="border border-gray-300 rounded px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                />
+                {(dateRange.from || dateRange.to) && (
+                  <button
+                    onClick={() => setDateRange({ from: '', to: '' })}
+                    className="text-xs hover:underline"
+                    style={{ color: '#0070FF' }}
+                  >
+                    Clear
+                  </button>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </header>
 
-      {/* Tab bar */}
-      <nav className="bg-white border-b border-gray-200 px-6">
-        <div className="max-w-[1800px] mx-auto flex gap-1">
-          {TABS.map(tab => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-4 py-3 text-sm font-medium border-b-2 transition-colors ${
-                activeTab === tab.id
-                  ? 'border-blue-600 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-800 hover:border-gray-300'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
-      </nav>
+      {/* Body: sidebar + content */}
+      <div className="flex" style={{ minHeight: 'calc(100vh - 73px)' }}>
 
-      {/* Content */}
-      <main className="max-w-[1800px] mx-auto px-6 py-6">
-        {activeTab === 'compare' ? (
-          <CompareTab data={data} showupData={showupData} />
-        ) : (
-          <IndustryTab
-            industry={currentTab.industry}
-            dateRange={dateRange}
-            data={data}
-            showupData={showupData}
-            intentFilter={intentFilter}
-            setIntentFilter={setIntentFilter}
-          />
-        )}
-      </main>
+        {/* Vertical tab sidebar */}
+        <aside className="w-52 flex-shrink-0 bg-white border-r border-gray-200">
+          <nav className="flex flex-col gap-1 p-3">
+            {TABS.map(tab => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  activeTab === tab.id
+                    ? 'text-white'
+                    : 'text-gray-600 hover:bg-gray-100'
+                }`}
+                style={activeTab === tab.id ? { backgroundColor: '#0070FF' } : {}}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </nav>
+        </aside>
+
+        {/* Main content */}
+        <main className="flex-1 px-6 py-6 overflow-auto">
+          {activeTab === 'compare' ? (
+            <CompareTab data={data} showupData={showupData} />
+          ) : (
+            <IndustryTab
+              industry={currentTab.industry}
+              dateRange={dateRange}
+              data={data}
+              showupData={showupData}
+              intentFilter={intentFilter}
+              setIntentFilter={setIntentFilter}
+            />
+          )}
+        </main>
+      </div>
     </div>
   )
 }

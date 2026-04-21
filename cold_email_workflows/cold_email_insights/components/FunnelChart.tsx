@@ -67,19 +67,20 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
             <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
             <XAxis
               dataKey="date"
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
+              tick={{ fontSize: 11, fill: '#374151' }}
               tickFormatter={d => d.slice(5)}
+              interval={Math.max(0, Math.floor(chartData.length / 14) - 1)}
             />
             {/* Left axis: Interested / Demos */}
             <YAxis
               yAxisId="left"
-              tick={{ fontSize: 11, fill: '#9ca3af' }}
+              tick={{ fontSize: 11, fill: '#374151' }}
             />
             {/* Right axis: Emails Sent (much larger scale) */}
             <YAxis
               yAxisId="right"
               orientation="right"
-              tick={{ fontSize: 11, fill: '#d1d5db' }}
+              tick={{ fontSize: 11, fill: '#374151' }}
               tickFormatter={v => v >= 1000 ? `${(v / 1000).toFixed(0)}K` : String(v)}
             />
             <Tooltip
@@ -91,28 +92,28 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
                 return [v, name]
               }}
             />
-            <Legend wrapperStyle={{ fontSize: 12 }} />
+            <Legend wrapperStyle={{ fontSize: 12, color: '#111827' }} />
             <Bar
               yAxisId="right"
               dataKey="Emails Sent"
-              fill="#e0e7ff"
-              opacity={0.7}
+              fill="#93c5fd"
+              opacity={0.5}
               radius={[2, 2, 0, 0]}
             />
             <Line
               yAxisId="left"
-              type="monotone"
+              type="linear"
               dataKey="Interested"
-              stroke="#60a5fa"
+              stroke="#0070FF"
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 4 }}
             />
             <Line
               yAxisId="left"
-              type="monotone"
+              type="linear"
               dataKey="Demos"
-              stroke="#a78bfa"
+              stroke="#7c3aed"
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 4 }}
