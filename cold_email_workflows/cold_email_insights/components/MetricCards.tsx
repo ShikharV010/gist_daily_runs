@@ -9,11 +9,10 @@ function fmt(n: number) {
 }
 function pctStr(n: number, digits = 2) { return n.toFixed(digits) + '%' }
 
-// Three shades of Gushwork blue (#0070FF), darkest → lightest
 const ROW_STYLE = {
-  1: { bg: '#dbeafe', border: '#93c5fd', text: '#1e3a8a' },
-  2: { bg: '#eff6ff', border: '#bfdbfe', text: '#1d4ed8' },
-  3: { bg: '#f0f9ff', border: '#bae6fd', text: '#0369a1' },
+  1: { bg: '#dbeafe', border: '#93c5fd', text: '#1e40af' },  // blue
+  2: { bg: '#ede9fe', border: '#c4b5fd', text: '#5b21b6' },  // violet
+  3: { bg: '#d1fae5', border: '#6ee7b7', text: '#065f46' },  // emerald
 } as const
 
 function Card({ title, main, sub, row }: {
@@ -30,7 +29,7 @@ function Card({ title, main, sub, row }: {
 }
 
 const RowLabel = ({ children }: { children: React.ReactNode }) => (
-  <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mt-4 mb-2">{children}</p>
+  <p className="text-xs font-semibold text-gray-600 uppercase tracking-widest mt-4 mb-2">{children}</p>
 )
 
 export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }) {

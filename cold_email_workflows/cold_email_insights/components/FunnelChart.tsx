@@ -96,15 +96,15 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
             <Bar
               yAxisId="right"
               dataKey="Emails Sent"
-              fill="#93c5fd"
-              opacity={0.5}
+              fill="#0070FF"
+              opacity={0.25}
               radius={[2, 2, 0, 0]}
             />
             <Line
               yAxisId="left"
               type="linear"
               dataKey="Interested"
-              stroke="#0070FF"
+              stroke="#16a34a"
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 4 }}
@@ -113,7 +113,7 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
               yAxisId="left"
               type="linear"
               dataKey="Demos"
-              stroke="#7c3aed"
+              stroke="#9333ea"
               strokeWidth={2}
               dot={false}
               activeDot={{ r: 4 }}

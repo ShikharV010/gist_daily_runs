@@ -292,7 +292,7 @@ export default function ShowupTable({
                       <Bullets items={r.next_steps_details} />
                     </td>
                     {/* Next Call Date */}
-                    <td className="px-3 py-2 text-xs whitespace-nowrap">
+                    <td className="px-3 py-2 text-xs text-gray-700 whitespace-nowrap">
                       {r.next_call_date || <span className="text-gray-300">—</span>}
                     </td>
                     {/* Pain Points */}

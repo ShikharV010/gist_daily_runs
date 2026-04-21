@@ -183,7 +183,7 @@ export default function Dashboard() {
       <div className="flex" style={{ minHeight: 'calc(100vh - 73px)' }}>
 
         {/* Vertical tab sidebar */}
-        <aside className="w-52 flex-shrink-0 bg-white border-r border-gray-200">
+        <aside className="w-52 flex-shrink-0 border-r border-gray-200/60">
           <nav className="flex flex-col gap-1 p-3">
             {TABS.map(tab => (
               <button
