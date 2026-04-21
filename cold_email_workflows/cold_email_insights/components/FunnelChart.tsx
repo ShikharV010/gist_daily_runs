@@ -102,7 +102,7 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
             />
             <Line
               yAxisId="left"
-              type="linear"
+              type="monotone"
               dataKey="Interested"
               stroke="#16a34a"
               strokeWidth={2}
@@ -111,7 +111,7 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
             />
             <Line
               yAxisId="left"
-              type="linear"
+              type="monotone"
               dataKey="Demos"
               stroke="#9333ea"
               strokeWidth={2}

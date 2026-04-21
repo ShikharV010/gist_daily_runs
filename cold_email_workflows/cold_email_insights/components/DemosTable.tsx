@@ -39,17 +39,24 @@ export default function DemosTable({
   const [sortDir, setSortDir] = useState<'asc' | 'desc'>('desc')
   const [statusFilter, setStatusFilter] = useState<string>('all')
   const [collapsed, setCollapsed] = useState(false)
+  const [search, setSearch] = useState('')
 
   const filtered = useMemo(() => {
+    const q = search.trim().toLowerCase()
     return demoBookings.filter(d => {
       if (industry !== 'All' && d.industry !== industry) return false
       if (statusFilter !== 'all' && d.show_status !== statusFilter) return false
       const date = d.demo_scheduled_date || d.created_at_date || ''
       if (dateRange.from && date < dateRange.from) return false
       if (dateRange.to   && date > dateRange.to)   return false
+      if (q) {
+        const co = (d.company || '').toLowerCase()
+        const em = (d.email || '').toLowerCase()
+        if (!co.includes(q) && !em.includes(q)) return false
+      }
       return true
     })
-  }, [demoBookings, industry, statusFilter, dateRange])
+  }, [demoBookings, industry, statusFilter, dateRange, search])
 
   const sorted = useMemo(() => {
     return [...filtered].sort((a, b) => {
@@ -89,7 +96,15 @@ export default function DemosTable({
           </p>
         </div>
         {/* Controls */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
+          {/* Search */}
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search company or email…"
+            className="border border-gray-300 rounded-lg px-3 py-1 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 min-w-[200px]"
+          />
           {/* Status filter */}
           <div className="flex gap-1">
             {(['all', 'Y', 'N', 'P'] as const).map(s => (

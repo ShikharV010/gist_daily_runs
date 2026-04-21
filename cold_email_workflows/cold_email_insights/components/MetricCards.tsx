@@ -21,9 +21,9 @@ function Card({ title, main, sub, row }: {
   const s = ROW_STYLE[row]
   return (
     <div className="rounded-xl border p-4" style={{ background: s.bg, borderColor: s.border }}>
-      <p className="text-xs font-medium uppercase tracking-wide mb-2" style={{ color: s.text, opacity: 0.75 }}>{title}</p>
+      <p className="text-xs font-medium uppercase tracking-wide mb-2" style={{ color: '#111827' }}>{title}</p>
       <p className="text-2xl font-bold" style={{ color: s.text }}>{main}</p>
-      {sub && <p className="text-xs mt-1" style={{ color: s.text, opacity: 0.65 }}>{sub}</p>}
+      {sub && <p className="text-xs mt-1" style={{ color: '#6b7280' }}>{sub}</p>}
     </div>
   )
 }

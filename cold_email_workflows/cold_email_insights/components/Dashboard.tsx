@@ -44,6 +44,7 @@ function IndustryTab({
   intentFilter: IntentLabel[]
   setIntentFilter: (v: IntentLabel[]) => void
 }) {
+  const [chartCollapsed, setChartCollapsed] = useState(true)
   const metrics = useMemo(
     () => computeMetrics(industry, dateRange, data),
     [industry, dateRange, data],
@@ -56,11 +57,22 @@ function IndustryTab({
   return (
     <div className="space-y-8">
       <MetricCards metrics={metrics} />
-      <FunnelChart
-        timeSeries={data.time_series.daily}
-        industry={industry}
-        dateRange={dateRange}
-      />
+      <div>
+        <button
+          onClick={() => setChartCollapsed(c => !c)}
+          className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 hover:text-gray-700 transition-colors"
+        >
+          <span>Daily Funnel Trend</span>
+          <span>{chartCollapsed ? '▼ Show' : '▲ Hide'}</span>
+        </button>
+        {!chartCollapsed && (
+          <FunnelChart
+            timeSeries={data.time_series.daily}
+            industry={industry}
+            dateRange={dateRange}
+          />
+        )}
+      </div>
       {industry === 'All' ? (
         <OverviewCompare data={data} dateRange={dateRange} />
       ) : (
@@ -132,37 +144,35 @@ export default function Dashboard() {
 
   return (
     <div className="min-h-screen dashboard-bg">
-      {/* Header — logo left | title center | date range right */}
+      {/* Header — logo left | title center | last-updated + date range right */}
       <header className="bg-white border-b border-gray-200 px-6 py-4">
         <div className="max-w-[1800px] mx-auto grid grid-cols-3 items-center gap-4">
           {/* Left: logo */}
           <img src="/gushwork-logo.svg" alt="Gushwork" className="h-6 w-auto" />
 
-          {/* Center: title */}
-          <div className="text-center">
-            <h1 className="text-lg font-semibold text-gray-900">In-House Cold Email Insights</h1>
-            <p className="text-xs text-gray-400 mt-0.5">
+          {/* Center: title only */}
+          <h1 className="text-center text-lg font-bold text-gray-900">In-House Cold Email Insights</h1>
+
+          {/* Right: last updated + date filter */}
+          <div className="flex flex-col items-end gap-1.5 text-sm">
+            <p className="text-xs text-gray-400">
               Last updated: {new Date(data.generated_at).toLocaleString()}
             </p>
-          </div>
-
-          {/* Right: date filter */}
-          <div className="flex items-center justify-end gap-3 text-sm">
             {activeTab !== 'compare' && (
-              <>
-                <span className="text-gray-500">Date range:</span>
+              <div className="flex items-center gap-2">
+                <span className="text-gray-500 text-xs">Date range:</span>
                 <input
                   type="date"
                   value={dateRange.from}
                   onChange={e => setDateRange(d => ({ ...d, from: e.target.value }))}
-                  className="border border-gray-300 rounded px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="border border-gray-300 rounded px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
                 <span className="text-gray-400">–</span>
                 <input
                   type="date"
                   value={dateRange.to}
                   onChange={e => setDateRange(d => ({ ...d, to: e.target.value }))}
-                  className="border border-gray-300 rounded px-2 py-1 text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="border border-gray-300 rounded px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
                 {(dateRange.from || dateRange.to) && (
                   <button
@@ -173,7 +183,7 @@ export default function Dashboard() {
                     Clear
                   </button>
                 )}
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -183,7 +193,7 @@ export default function Dashboard() {
       <div className="flex" style={{ minHeight: 'calc(100vh - 73px)' }}>
 
         {/* Vertical tab sidebar */}
-        <aside className="w-52 flex-shrink-0 border-r border-gray-200/60">
+        <aside className="w-52 flex-shrink-0">
           <nav className="flex flex-col gap-1 p-3">
             {TABS.map(tab => (
               <button
