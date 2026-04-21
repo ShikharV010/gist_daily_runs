@@ -18,7 +18,7 @@ function fmt(n: number) {
 
 const TH = ({ children }: { children: React.ReactNode }) => (
   <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
-      style={{ backgroundColor: '#0070FF', color: '#000000' }}>
+      style={{ backgroundColor: '#0070FF', color: '#ffffff' }}>
     {children}
   </th>
 )
@@ -30,8 +30,8 @@ const TD = ({ children, highlight = false }: { children: React.ReactNode; highli
 const Section = ({ label }: { label: string }) => (
   <tr>
     <td colSpan={INDUSTRIES.length + 1}
-        className="px-4 pt-4 pb-1.5 text-xs font-extrabold uppercase tracking-widest border-t-2 border-gray-200 text-gray-800"
-        style={{ backgroundColor: '#f8fafc' }}>
+        className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-center border-t border-blue-100"
+        style={{ backgroundColor: '#dbeafe', color: '#1e40af' }}>
       {label}
     </td>
   </tr>

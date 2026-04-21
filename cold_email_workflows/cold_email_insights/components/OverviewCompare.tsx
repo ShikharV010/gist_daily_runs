@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import type { MetricsData, Industry, DateRange } from './types'
 import { computeMetrics } from './metrics'
 
-const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS']
+const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS']
 
 function fmt(n: number) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
@@ -14,7 +14,8 @@ function fmt(n: number) {
 function pct(n: number, digits = 2) { return n.toFixed(digits) + '%' }
 
 const TH = ({ children }: { children: React.ReactNode }) => (
-  <th className="px-4 py-3 text-left text-xs font-semibold text-gray-500 uppercase tracking-wide bg-gray-50 whitespace-nowrap">
+  <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
+      style={{ backgroundColor: '#0070FF', color: '#ffffff' }}>
     {children}
   </th>
 )
@@ -25,7 +26,9 @@ const TD = ({ children, className = '' }: { children: React.ReactNode; className
 )
 const Section = ({ label }: { label: string }) => (
   <tr>
-    <td colSpan={4} className="px-4 pt-4 pb-1 text-xs font-bold text-gray-400 uppercase tracking-widest bg-white border-t border-gray-100">
+    <td colSpan={INDUSTRIES.length + 1}
+        className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-center border-t border-blue-100"
+        style={{ backgroundColor: '#dbeafe', color: '#1e40af' }}>
       {label}
     </td>
   </tr>
