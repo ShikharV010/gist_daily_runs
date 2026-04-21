@@ -147,7 +147,7 @@ export default function Dashboard() {
       {/* Header — logo left | title center | last-updated + date range right */}
       <header className="sticky top-0 z-20 border-b px-6 py-4"
               style={{
-                backgroundColor: 'rgba(255,255,255,0.55)',
+                backgroundColor: 'rgba(255,255,255,0.42)',
                 backdropFilter: 'blur(16px)',
                 WebkitBackdropFilter: 'blur(16px)',
                 borderColor: 'rgba(229,231,235,0.5)',
