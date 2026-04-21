@@ -5,7 +5,7 @@ Sequencer API + PostgreSQL → data/metrics.json
 
 Run: python etl.py
 """
-import requests, json, os, time, psycopg2, psycopg2.extras
+import re, requests, json, os, time, psycopg2, psycopg2.extras
 from collections import defaultdict
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from threading import Lock
@@ -22,18 +22,29 @@ EST      = timezone(timedelta(hours=-4))
 
 INTERESTED_TAG_ID = 11   # Sequencer tag for "Interested" leads
 
-INDUSTRY_MAP = {
-    2: 'Manufacturing', 5: 'Manufacturing', 6: 'Manufacturing',
-    7: 'Manufacturing', 8: 'Manufacturing',
-    29: 'IT & Consulting', 30: 'IT & Consulting',
-    31: 'IT & Consulting', 32: 'IT & Consulting',
-    34: 'Truck Transportation', 35: 'Truck Transportation',
-    36: 'Truck Transportation', 37: 'Truck Transportation',
-    9: 'Follow-ups',
-    39: 'Meta/Other', 40: 'Meta/Other', 41: 'Meta/Other',
-    42: 'BCS', 43: 'BCS', 44: 'BCS', 45: 'BCS',
+# Normalise abbreviated or legacy campaign name prefixes → canonical industry label.
+_NAME_ALIASES: dict[str, str] = {
+    'MFG Outbound':      'Manufacturing',
+    'MFG Outbound 1':    'Manufacturing',
+    'Mfg':               'Manufacturing',
+    'Mfg (gush domain)': 'Manufacturing',
+    'IT And Consulting': 'IT & Consulting',
+    'Meta No Booking':   'Meta/Other',
 }
-ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS'}
+_ROUTING_RE = re.compile(
+    r'\s*[-|]\s*(?:Google|Microsoft|Apple|Outlook|Proofpoint|Mimecast|Yahoo|Custom|Batch)',
+    re.IGNORECASE,
+)
+_DATE_RE = re.compile(r'\s*\(\d{2}[_/]\d{2}\).*$')
+
+def extract_industry(name: str) -> str:
+    n = _DATE_RE.sub('', name).strip()
+    m = _ROUTING_RE.search(n)
+    if m:
+        n = n[:m.start()].strip()
+    return _NAME_ALIASES.get(n, n) or 'Other'
+
+ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS'}
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def to_est(val):
@@ -73,7 +84,7 @@ def fetch_campaigns():
         out.append({
             'id':                    cid,
             'name':                  c['name'],
-            'industry':              INDUSTRY_MAP.get(cid, 'Other'),
+            'industry':              extract_industry(c['name']),
             'status':                c.get('status', ''),
             'emails_sent':           int(c.get('emails_sent') or 0),
             'total_leads':           int(c.get('total_leads') or 0),
@@ -154,8 +165,8 @@ def fetch_interested_leads(campaigns):
             lcd0 = (lead.get('lead_campaign_data') or [{}])[0]
             cid  = lcd0.get('campaign_id')
 
-        ind  = INDUSTRY_MAP.get(cid, 'Other') if cid else 'Unknown'
         camp = id_to_camp.get(cid, {})
+        ind  = extract_industry(camp['name']) if camp.get('name') else 'Unknown'
 
         # Skip leads not in active industries
         if ind not in ACTIVE:

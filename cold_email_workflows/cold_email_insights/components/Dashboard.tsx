@@ -22,6 +22,8 @@ const TABS: { id: Tab; label: string; industry: Industry }[] = [
   { id: 'it-consulting', label: 'IT & Consulting',      industry: 'IT & Consulting' },
   { id: 'truck',         label: 'Truck Transportation', industry: 'Truck Transportation' },
   { id: 'bcs',           label: 'BCS',                  industry: 'BCS' },
+  { id: 'commercial',    label: 'Commercial',            industry: 'Commercial' },
+  { id: 'ewws',          label: 'EWWS',                  industry: 'EWWS' },
   { id: 'compare',       label: 'Compare',              industry: 'All' },
 ]
 
