@@ -25,8 +25,11 @@ body {
 }
 
 .dashboard-bg {
-  background-image: url('/grid-BG.jpg');
-  background-size: cover;
-  background-position: center top;
+  background-color: #ecedef;
+  background-image:
+    radial-gradient(ellipse 120% 100% at 50% 30%, transparent 20%, rgba(236, 237, 239, 0.88) 68%),
+    linear-gradient(rgba(0, 0, 0, 0.055) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.055) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
   background-attachment: fixed;
 }
