@@ -145,8 +145,13 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen dashboard-bg">
       {/* Header — logo left | title center | last-updated + date range right */}
-      <header className="sticky top-0 z-20 border-b border-gray-200/60 px-6 py-4 backdrop-blur-md"
-              style={{ backgroundColor: 'rgba(255,255,255,0.75)' }}>
+      <header className="sticky top-0 z-20 border-b px-6 py-4"
+              style={{
+                backgroundColor: 'rgba(255,255,255,0.72)',
+                backdropFilter: 'blur(14px)',
+                WebkitBackdropFilter: 'blur(14px)',
+                borderColor: 'rgba(229,231,235,0.6)',
+              }}>
         <div className="max-w-[1800px] mx-auto grid grid-cols-3 items-center gap-4">
           {/* Left: logo */}
           <img src="/gushwork-logo.svg" alt="Gushwork" className="h-6 w-auto" />
