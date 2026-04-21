@@ -25,11 +25,11 @@ body {
 }
 
 .dashboard-bg {
-  background-color: #f2f3f5;
+  background-color: #eef0f3;
   background-image:
-    radial-gradient(ellipse 120% 100% at 50% 30%, transparent 20%, rgba(242, 243, 245, 0.90) 68%),
-    linear-gradient(rgba(0, 0, 0, 0.042) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.042) 1px, transparent 1px);
+    radial-gradient(ellipse 120% 100% at 50% 30%, transparent 20%, rgba(238, 240, 243, 0.85) 72%),
+    linear-gradient(rgba(0, 112, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 112, 255, 0.08) 1px, transparent 1px);
   background-size: 100% 100%, 40px 40px, 40px 40px;
   background-attachment: fixed;
 }
