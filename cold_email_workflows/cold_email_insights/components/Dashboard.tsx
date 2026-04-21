@@ -145,7 +145,8 @@ export default function Dashboard() {
   return (
     <div className="min-h-screen dashboard-bg">
       {/* Header — logo left | title center | last-updated + date range right */}
-      <header className="bg-white border-b border-gray-200 px-6 py-4">
+      <header className="sticky top-0 z-20 border-b border-gray-200/60 px-6 py-4 backdrop-blur-md"
+              style={{ backgroundColor: 'rgba(255,255,255,0.75)' }}>
         <div className="max-w-[1800px] mx-auto grid grid-cols-3 items-center gap-4">
           {/* Left: logo */}
           <img src="/gushwork-logo.svg" alt="Gushwork" className="h-6 w-auto" />
@@ -190,10 +191,10 @@ export default function Dashboard() {
       </header>
 
       {/* Body: sidebar + content */}
-      <div className="flex" style={{ minHeight: 'calc(100vh - 73px)' }}>
+      <div className="flex h-[calc(100vh-73px)]">
 
-        {/* Vertical tab sidebar */}
-        <aside className="w-52 flex-shrink-0">
+        {/* Vertical tab sidebar — sticky, does not scroll with content */}
+        <aside className="w-52 flex-shrink-0 sticky top-[73px] h-full overflow-y-auto">
           <nav className="flex flex-col gap-1 p-3">
             {TABS.map(tab => (
               <button
@@ -212,8 +213,8 @@ export default function Dashboard() {
           </nav>
         </aside>
 
-        {/* Main content */}
-        <main className="flex-1 px-6 py-6 overflow-auto">
+        {/* Main content — independently scrollable */}
+        <main className="flex-1 px-6 py-6 overflow-y-auto">
           {activeTab === 'compare' ? (
             <CompareTab data={data} showupData={showupData} />
           ) : (
