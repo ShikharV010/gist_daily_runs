@@ -9,7 +9,7 @@ const vertGrotesk = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Cold Email Insights",
+  title: "In-House Cold Email Insights",
   description: "Gushwork cold email performance dashboard",
 };
 
