@@ -151,6 +151,8 @@ export default function Dashboard() {
                 backdropFilter: 'blur(24px) saturate(1.8)',
                 WebkitBackdropFilter: 'blur(24px) saturate(1.8)',
                 borderColor: 'rgba(229,231,235,0.5)',
+                borderBottomLeftRadius: '20px',
+                borderBottomRightRadius: '20px',
               }}>
         <div className="max-w-[1800px] mx-auto grid grid-cols-3 items-center gap-4">
           {/* Left: logo */}
