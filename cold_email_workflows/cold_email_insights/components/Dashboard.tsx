@@ -147,9 +147,9 @@ export default function Dashboard() {
       {/* Header — logo left | title center | last-updated + date range right */}
       <header className="sticky top-0 z-20 border-b px-6 py-4"
               style={{
-                backgroundColor: 'rgba(255,255,255,0.55)',
-                backdropFilter: 'blur(20px) saturate(1.8)',
-                WebkitBackdropFilter: 'blur(20px) saturate(1.8)',
+                backgroundColor: 'rgba(255,255,255,0.35)',
+                backdropFilter: 'blur(24px) saturate(1.8)',
+                WebkitBackdropFilter: 'blur(24px) saturate(1.8)',
                 borderColor: 'rgba(229,231,235,0.5)',
               }}>
         <div className="max-w-[1800px] mx-auto grid grid-cols-3 items-center gap-4">
