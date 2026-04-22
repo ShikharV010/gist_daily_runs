@@ -195,11 +195,11 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Body: sidebar + content */}
-      <div className="flex h-[calc(100vh-73px)]">
+      {/* Body: sidebar + content — document-level scroll so content passes under frosted header */}
+      <div className="flex items-start">
 
-        {/* Vertical tab sidebar — sticky, does not scroll with content */}
-        <aside className="w-52 flex-shrink-0 sticky top-[73px] h-full overflow-y-auto">
+        {/* Vertical tab sidebar — sticky below header */}
+        <aside className="w-52 flex-shrink-0 sticky top-[73px] self-start">
           <nav className="flex flex-col gap-1 p-3">
             {TABS.map(tab => (
               <button
@@ -219,7 +219,7 @@ export default function Dashboard() {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 px-6 py-6 overflow-y-auto">
+        <main className="flex-1 min-w-0 px-6 py-6">
           {activeTab === 'compare' ? (
             <CompareTab data={data} showupData={showupData} />
           ) : (

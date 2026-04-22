@@ -25,13 +25,11 @@ body {
 }
 
 .dashboard-bg {
-  background-color: #eef1f5;
+  background-color: #eef3fa;
   background-image:
-    radial-gradient(circle 600px at 15% 10%, rgba(0, 112, 255, 0.22), transparent 70%),
-    radial-gradient(circle 500px at 85% 5%, rgba(147, 51, 234, 0.18), transparent 70%),
-    radial-gradient(circle 400px at 60% 15%, rgba(16, 185, 129, 0.15), transparent 70%),
-    linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
-  background-size: 100% 100%, 100% 100%, 100% 100%, 40px 40px, 40px 40px;
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(0, 112, 255, 0.18), transparent 70%),
+    linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 40px 40px, 40px 40px;
   background-attachment: fixed;
 }
