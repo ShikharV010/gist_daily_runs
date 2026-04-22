@@ -10390,5 +10390,437 @@
       "total_duration_min": 39,
       "analyzed_at": "2026-04-21T06:21:45.107654Z"
     }
+  },
+  "Xos Trucks": {
+    "company": "Xos Trucks",
+    "prospect_name": "Jorge Mantilla",
+    "prospect_designation": "Unknown (likely Sales/Marketing role)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Jorge needs to justify ROI to the company before committing, implying budget approval sits elsewhere.",
+    "company_industry": "Electric Vehicle Manufacturing / Commercial Trucks",
+    "pain_points": [
+      {
+        "pain_point": "Zero inbound lead generation",
+        "severity": "high",
+        "direct_quote": "None. It's like we do all the outreach, 100%, there's nobody, there are no inbound links.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed how landing pages drive inbound from search and AI engines"
+      },
+      {
+        "pain_point": "No visibility on AI search engines",
+        "severity": "high",
+        "direct_quote": "I just wanted to make sure if we are on the right track on the website, if we're popping up when somebody's looking for some of the products that we offered.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated platform scanning AI tools and simulating buyer prompts"
+      },
+      {
+        "pain_point": "Previous agency investment failed",
+        "severity": "medium",
+        "direct_quote": "We tried before with some agency, didn't work. It was a little bit expensive.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Lacks data to justify inbound investment",
+        "severity": "high",
+        "direct_quote": "If there's actually evidence that supports that people are looking for it and we're not popping up there, then that's the reason why we're losing probably some revenue.",
+        "addressed_in_call": true,
+        "how_addressed": "AE promised to send Step Van search volume data for California"
+      },
+      {
+        "pain_point": "Purely outbound sales model is resource-heavy",
+        "severity": "medium",
+        "direct_quote": "This is a 1:1 basis. So we are right now it's like we sell around $80 million a year and this is, you know, person to person.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Needs data evidence before considering purchase",
+        "how_handled": "AE agreed to send California Step Van search volume data via email",
+        "resolved": false
+      },
+      {
+        "objection": "Previous agency experience was expensive and ineffective",
+        "how_handled": "AE did not directly address or differentiate from prior agency experience",
+        "resolved": false
+      },
+      {
+        "objection": "Core customer base (FedEx contractors) not digitally active",
+        "how_handled": "AE acknowledged but pivoted to other buyer segments who do search online",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Acknowledged losing revenue from lack of inbound visibility",
+      "Proactively mentioned Step Van as priority product for targeting",
+      "Requested geo-specific data (California) showing research intent",
+      "Sells $80M/year with zero inbound \u2014 clear growth opportunity awareness",
+      "Expressed openness: 'I'm open to hear you out and see if this is a fit'"
+    ],
+    "negative_signals": [
+      "Not confirmed as decision maker; needs internal justification",
+      "Previous agency failure creates skepticism and trust barrier",
+      "Said 'sounds really good' but deferred to data before committing",
+      "No urgency expressed; exploratory mindset only",
+      "Call ended without scheduling next meeting"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send California Step Van search volume data via email",
+      "Jorge to review data and respond with feedback or interest level"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Step Van keyword search volume data filtered for California",
+      "Data showing Xos Trucks' current AI and search engine visibility gaps"
+    ],
+    "deal_closing_intent_score": 4,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Clear pain acknowledged: zero inbound on $80M revenue business",
+      "Prospect is data-driven; buying gate is evidence, not interest",
+      "No budget, timeline, or stakeholder mentioned yet",
+      "Previous agency failure raises cautious evaluation standard",
+      "Engagement was genuine but firmly in early exploration phase"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE did solid discovery on inbound channels and outreach model",
+      "Demo was relevant but too generic; not tailored to Step Vans early",
+      "AE failed to address prior agency failure objection directly",
+      "No BANT qualification: budget, authority, timeline not explored",
+      "No next meeting scheduled; follow-up left open-ended via email",
+      "AE missed asking who else is involved in the buying decision",
+      "Prospect engagement was good; questions were relevant and specific"
+    ],
+    "key_insights": [
+      "Xos Trucks does $80M revenue with 100% outbound \u2014 massive inbound gap",
+      "Step Van (last-mile delivery) is highest-priority product to target",
+      "California is primary target state for initial SEO/AEO focus",
+      "Prospect is data-gated: proof of search demand unlocks next conversation",
+      "FedEx/UPS contractors are offline buyers; other segments are searchable",
+      "Decision likely requires internal sign-off beyond Jorge's authority",
+      "Trust must be rebuilt after a prior failed agency engagement"
+    ],
+    "recommended_next_action": "Send a concise email with California Step Van search volume data, include 2\u20133 competitor pages ranking for those queries, and propose a 20-minute follow-up call to walk Jorge through findings and identify the internal decision maker.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Zero inbound: shown how landing pages capture search and AI demand",
+      "AI visibility gap: demonstrated platform simulating buyer AI prompts",
+      "Data justification need: committed to sending Step Van California data",
+      "Offline customer segment objection: acknowledged and redirected to other segments"
+    ],
+    "_meta": {
+      "prospect_email": "jorge.mantilla@xostrucks.com",
+      "prospect_company": "Xos Trucks",
+      "prospect_website": "xostrucks.com",
+      "demo_date": "2026-04-21",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "cdceecca05397e6d06ac76fda7430f99"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=8561065b-3f70-483c-b926-4f9672fd3ab2&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 24,
+      "analyzed_at": "2026-04-22T06:20:23.894587Z"
+    }
+  },
+  "ShipLab": {
+    "company": "ShipLab",
+    "prospect_name": "Josh Pedro-Kriner",
+    "prospect_designation": "Brand Partnerships at ShipLab",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Josh explicitly said he needs to take the proposal to leadership for approval.",
+    "company_industry": "Logistics / Third-Party Fulfillment (3PL)",
+    "pain_points": [
+      {
+        "pain_point": "No consistent top-performing lead channel",
+        "severity": "medium",
+        "direct_quote": "There's no consistent lever.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned as a consistent inbound lead source via SEO."
+      },
+      {
+        "pain_point": "Low organic / non-branded website traffic",
+        "severity": "high",
+        "direct_quote": "Most of your traffic is coming from people who already know of your brand.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed Ahrefs data; explained non-branded SEO strategy."
+      },
+      {
+        "pain_point": "Blog content not driving search visibility",
+        "severity": "high",
+        "direct_quote": "Despite that, if the number of traffic is just at 115...",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained AI-generated or mis-targeted content fails Google ranking."
+      },
+      {
+        "pain_point": "Not visible in AI search engine citations",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained FAQ-rich landing pages improve AI platform visibility."
+      },
+      {
+        "pain_point": "Evaluating and consolidating lead gen tools",
+        "severity": "medium",
+        "direct_quote": "We're looking at shifting, maybe even shutting down some of the tools.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as a consolidation-friendly inbound channel."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Subscription model risk with no guaranteed leads",
+        "how_handled": "AE emphasized 70-80% lead quality and 25-40% close rate averages across 400+ clients.",
+        "resolved": false
+      },
+      {
+        "objection": "Currently pays brokers only per lead delivered",
+        "how_handled": "AE highlighted brand ownership and consistent inbound demand advantages.",
+        "resolved": false
+      },
+      {
+        "objection": "Needs leadership buy-in before committing",
+        "how_handled": "AE agreed to send recap, pricing, and demo pages for internal presentation.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Expressed interest in 'Grow' $1,200/month plan specifically.",
+      "Asked for pricing deck to share with leadership.",
+      "Acknowledged content strategy could consolidate current efforts.",
+      "Actively evaluating and replacing existing lead gen tools.",
+      "Said 'could definitely be beneficial' if numbers hold up.",
+      "Voluntarily confirmed next leadership meeting date (May 1)."
+    ],
+    "negative_signals": [
+      "Subscription model makes him uncomfortable vs. pay-per-lead.",
+      "Not the decision maker; leadership approval required.",
+      "Already has 3-4 lead channels; urgency is low.",
+      "Q4 slow season may delay urgency to act now.",
+      "No conversion data available; harder to build ROI case."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send recap email with pricing and demo pages.",
+      "Josh to present proposal at leadership meeting on May 1.",
+      "Follow-up call scheduled for first week of May."
+    ],
+    "next_call_date": "First week of May 2026 (after May 1 leadership meeting)",
+    "follow_up_materials_promised": [
+      "Call recap email with pricing breakdown.",
+      "Demo landing pages created for ShipLab.",
+      "AE direct line and calendar link in email signature."
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect showed genuine interest but has no decision authority.",
+      "Identified 'Grow' plan as likely fit if numbers proven.",
+      "Subscription model vs. pay-per-lead is a real blocker.",
+      "Actively replacing tools \u2014 window of opportunity exists.",
+      "Needs internal champion moment at May 1 leadership meeting."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE did solid discovery on lead sources and traffic.",
+      "Good use of Ahrefs data to illustrate organic gap.",
+      "Live tool demo added credibility and personalization.",
+      "AE interrupted Josh mid-sentence multiple times.",
+      "Scheduling confusion \u2014 original AE Arabind was absent.",
+      "Pricing revealed without deeper pain qualification first.",
+      "No ROI calculator or concrete case study shared.",
+      "Closing question was weak; no urgency created."
+    ],
+    "key_insights": [
+      "ShipLab is an 8-year-old 3PL near San Diego port.",
+      "Serves ~60 brands; ships nationwide from Vista, CA.",
+      "Gets 30-45 website leads/month; Q4 is slowest sales period.",
+      "Uses HubSpot CRM \u2014 easy integration opportunity for Gushwork.",
+      "Agency-run blog since 2022 with minimal SEO impact.",
+      "Key competitors: ShipBob; uses Shapiro as WMS tool.",
+      "Food fulfillment is a gray area \u2014 not a full fit.",
+      "Prospect open to new channels but cautious on commitment."
+    ],
+    "recommended_next_action": "Send a personalized recap email with pricing, ShipLab demo pages, and a one-page ROI summary showing estimated leads vs. subscription cost, timed to arrive before the May 1 leadership meeting so Josh has a ready-to-present document.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Showed Ahrefs data revealing only 115 monthly organic visitors.",
+      "Explained branded vs. non-branded traffic gap clearly.",
+      "Highlighted blog content not ranking due to wrong query targeting.",
+      "Demonstrated AI citation visibility strategy via FAQ landing pages.",
+      "Positioned Gushwork as channel to consolidate and replace weak tools."
+    ],
+    "_meta": {
+      "prospect_email": "josh@shiplabsd.com",
+      "prospect_company": "ShipLab",
+      "prospect_website": "www.shiplabsd.com",
+      "demo_date": "2026-04-21",
+      "ae_name": "Arabind",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "bb792290139865f6a6e9e4b9dcb7a9a4"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=ed1fddc1-2a4a-4c4e-9f5a-be13a4552996&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 41,
+      "analyzed_at": "2026-04-22T06:20:24.226651Z"
+    }
+  },
+  "Sats Terminal": {
+    "company": "Sats Terminal",
+    "prospect_name": "Arkadii Kaminskyi",
+    "prospect_designation": "Business Development Manager (\u041c\u0435\u043d\u0435\u0434\u0436\u0435\u0440 \u0437 \u0440\u043e\u0437\u0432\u0438\u0442\u043a\u0443 \u0431\u0456\u0437\u043d\u0435\u0441\u0443)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Arkadii explicitly said he needs to check with CEO, CTO, and tech team before approving.",
+    "company_industry": "Crypto / DeFi Lending & Bitcoin Finance",
+    "pain_points": [
+      {
+        "pain_point": "Low organic traffic and user acquisition",
+        "severity": "high",
+        "direct_quote": "our sales are more on cold outreach, but we are getting some on organic outreach",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated AI-generated landing pages targeting relevant search queries to boost organic discovery"
+      },
+      {
+        "pain_point": "Cold outreach yields very few users",
+        "severity": "high",
+        "direct_quote": "only 10%. Even less from cold outreach",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as a way to shift reliance from cold outreach to inbound intent capture"
+      },
+      {
+        "pain_point": "No mobile app yet limiting reach",
+        "severity": "medium",
+        "direct_quote": "Not currently, but you want to launch it in the next months",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "No-KYC model limits lead form flexibility",
+        "severity": "medium",
+        "direct_quote": "is it required to ask for a phone number or if we can only ask for email since we are no-KYC",
+        "addressed_in_call": true,
+        "how_addressed": "AE confirmed lead form fields are editable; phone number can be removed"
+      },
+      {
+        "pain_point": "Needs internal stakeholder buy-in for website changes",
+        "severity": "medium",
+        "direct_quote": "Do you have a pitch or some document I can share with tech guys so they can approve",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered to share sample landing pages and a recap to aid internal approval"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Needs proof of concept and ROI numbers",
+        "how_handled": "AE referenced case studies on website; mentioned 35-40 qualified leads for similar businesses",
+        "resolved": false
+      },
+      {
+        "objection": "Unclear how many clicks each page gets",
+        "how_handled": "AE reframed focus from clicks to intent capture; referenced visitor growth case studies",
+        "resolved": false
+      },
+      {
+        "objection": "Budget not yet confirmed",
+        "how_handled": "Arkadii said he will check budget with team; no pricing objection raised directly",
+        "resolved": false
+      },
+      {
+        "objection": "Phone number field conflicts with no-KYC policy",
+        "how_handled": "AE confirmed form is fully editable; phone number can be removed",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Said 'looks good' after viewing sample landing pages",
+      "Asked for shareable demo page link for team review",
+      "Requested pitch deck to get tech team approval",
+      "Agreed to follow-up meeting next week same day",
+      "Showed interest in proof-of-concept and case studies",
+      "Confirmed organic growth is a key company goal"
+    ],
+    "negative_signals": [
+      "Not a decision maker; needs CEO and CTO sign-off",
+      "Budget not confirmed; needs internal approval first",
+      "No urgency expressed; positioned as exploratory meeting",
+      "No specific timeline or launch deadline mentioned",
+      "Case studies not directly in crypto or DeFi vertical"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send meeting recap and sample landing pages",
+      "Arkadii to share materials with tech team for review",
+      "Arkadii to check budget with internal stakeholders",
+      "Follow-up call scheduled for next Tuesday, same time"
+    ],
+    "next_call_date": "2026-04-22, same time as original meeting (Tuesday)",
+    "follow_up_materials_promised": [
+      "Recap email summarizing the demo conversation",
+      "Five sample AI-generated landing pages for review",
+      "Calendar invite for follow-up call next Tuesday"
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect showed genuine interest and positive reactions",
+      "Multiple internal approvals needed before any decision",
+      "Budget confirmation still pending with leadership team",
+      "Requested shareable assets indicating internal championing",
+      "No direct objection to pricing or product fit raised",
+      "Crypto/DeFi niche may limit immediate case study relevance"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE did not capture prospect's core business goals deeply",
+      "Discovery questions were surface-level and brief overall",
+      "No BANT qualification on budget, authority, or timeline",
+      "Demo was product-led but lacked tailored crypto-specific examples",
+      "AE failed to identify CEO or CTO for next meeting",
+      "Good move sharing sample pages and offering follow-up materials",
+      "AE reframed clicks objection well with intent-capture narrative",
+      "Next meeting booked, which is a solid call closing action"
+    ],
+    "key_insights": [
+      "Sats Terminal targets Bitcoin holders needing stablecoin liquidity",
+      "Current growth is mostly cold outreach, not inbound organic",
+      "Goal: active users borrowing against 100 BTC in 30 days",
+      "No-KYC model is a product differentiator and compliance constraint",
+      "Arkadii is an internal champion, not the final decision maker",
+      "CEO and CTO must approve both technical and budget decisions",
+      "Crypto audience may respond better to community or search intent",
+      "Mobile app launch in coming months could be future upsell angle"
+    ],
+    "recommended_next_action": "Send recap and sample pages within 24 hours; include a one-pager with crypto-adjacent case studies and ROI metrics, and request a follow-up with CEO or CTO included in the next call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Low organic traffic addressed via AI landing page demo",
+      "Cold outreach over-reliance addressed by inbound intent strategy",
+      "No-KYC lead form concern resolved with editable field confirmation",
+      "Internal approval need addressed by offering shareable sample pages"
+    ],
+    "_meta": {
+      "prospect_email": "arkadii@satsterminal.com",
+      "prospect_company": "Sats Terminal",
+      "prospect_website": "satsterminal.com",
+      "demo_date": "2026-04-15",
+      "ae_name": "Arabind",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "70d8250e74e71fecb6914fe8ab5a4488"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=9419de88-f93e-48eb-9da6-62226ce4f520&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 19,
+      "analyzed_at": "2026-04-22T06:20:25.419697Z"
+    }
   }
 }
