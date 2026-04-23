@@ -10822,5 +10822,816 @@
       "total_duration_min": 19,
       "analyzed_at": "2026-04-22T06:20:25.419697Z"
     }
+  },
+  "American Graphic Systems": {
+    "company": "American Graphic Systems",
+    "prospect_name": "Marylynn Fleck",
+    "prospect_designation": "Senior Global Account Executive at The Vernon Company",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Marylynn explicitly needs boss approval before any purchase decision.",
+    "company_industry": "Construction / Commercial & Industrial Development",
+    "pain_points": [
+      {
+        "pain_point": "Near-zero online lead generation",
+        "severity": "high",
+        "direct_quote": "I couldn't even tell you the last time I got an inquiry online on the website.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed organic traffic data and AI visibility gap; demoed landing page solution."
+      },
+      {
+        "pain_point": "Extremely low website organic traffic",
+        "severity": "high",
+        "direct_quote": "Your organic traffic is just 22 and AI visibility is zero as of today.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated keyword gap analysis and proposed targeted landing pages."
+      },
+      {
+        "pain_point": "No AI search engine visibility",
+        "severity": "high",
+        "direct_quote": "AI visibility is zero as of today.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained ChatGPT and Grok citation strategy via FAQ-rich landing pages."
+      },
+      {
+        "pain_point": "Over-reliance on word-of-mouth referrals",
+        "severity": "medium",
+        "direct_quote": "We really thrive on word of mouth... I really don't get any inquiries online.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned online demand as an untapped complementary channel."
+      },
+      {
+        "pain_point": "Spam or junk leads from other tools",
+        "severity": "medium",
+        "direct_quote": "Sometimes I get those bot emails and it's hard to tell at first.",
+        "addressed_in_call": true,
+        "how_addressed": "AE highlighted Gushwork's human-vetted lead filtering and spam toggle feature."
+      },
+      {
+        "pain_point": "No dedicated marketing strategy or expertise",
+        "severity": "medium",
+        "direct_quote": "I wouldn't say that there's much marketing at all.",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered growth strategist onboarding and ongoing support structure."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Not the decision maker; boss must approve",
+        "how_handled": "AE accepted gracefully, offered to share recording and pricing link for boss review.",
+        "resolved": false
+      },
+      {
+        "objection": "Boss may be unavailable before Wednesday",
+        "how_handled": "AE booked a follow-up placeholder for next Wednesday at the same time.",
+        "resolved": false
+      },
+      {
+        "objection": "Low digital marketing knowledge and engagement",
+        "how_handled": "AE kept demo simple, visual, and jargon-light throughout the call.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Acknowledged website needs serious help unprompted.",
+      "Said 'right on the money' for build-to-suit topic.",
+      "Expressed genuine liking for lead vetting feature.",
+      "Proactively committed to showing boss same day.",
+      "Agreed to calendar follow-up call for next Wednesday.",
+      "Positive tone and no price resistance raised."
+    ],
+    "negative_signals": [
+      "Boss is the real decision maker; not present.",
+      "Boss leaving town; internal discussion may be delayed.",
+      "Company relies almost entirely on word-of-mouth today.",
+      "No prior investment in digital marketing whatsoever.",
+      "Only ~1 online inquiry per quarter; low urgency baseline.",
+      "Name confusion: listed as American Graphic Systems, not Vernon Development."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Marylynn to review demo with boss upon his return.",
+      "Follow-up call booked for next Wednesday, same time.",
+      "AE to send call recording via email to Marylynn.",
+      "AE to share pricing/plans page link in follow-up email."
+    ],
+    "next_call_date": "2026-04-29, same time as original call",
+    "follow_up_materials_promised": [
+      "Call recording shared via email.",
+      "Pricing plans page link sent to prospect.",
+      "Summary of what was discussed in the call."
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect showed genuine enthusiasm for the solution shown.",
+      "Acknowledged website needs help; no product objections raised.",
+      "Boss approval is the only stated blocker to moving forward.",
+      "Follow-up call accepted and booked, indicating continued interest.",
+      "Deal size (millions per project) justifies ROI easily.",
+      "Risk: boss not present and may deprioritize after travel."
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE did solid discovery on leads, volume, and revenue.",
+      "Live website audit was an effective engagement tactic.",
+      "Pain-to-solution flow was logical and easy to follow.",
+      "Demo was well-paced and resonated with prospect clearly.",
+      "AE called prospect 'Amanda' once\u2014wrong name, minor error.",
+      "Company name mismatch (American Graphic vs Vernon) not fully resolved.",
+      "AE could have better qualified boss's role and urgency.",
+      "No attempt to get boss on a follow-up call directly."
+    ],
+    "key_insights": [
+      "True company is Vernon Development, not American Graphic Systems.",
+      "Boss (unnamed) is the actual economic buyer and decision maker.",
+      "Build-to-suit industrial development is the top service priority.",
+      "South suburbs of Illinois is the primary target service region.",
+      "Revenue per project ranges from $2M+ upward significantly.",
+      "Prospect appreciated human-vetted leads due to past bot frustration.",
+      "Company has 60+ completed buildings; strong credibility to market."
+    ],
+    "recommended_next_action": "Send a concise follow-up email with the call recording, pricing link, and a one-page ROI summary tailored to Vernon Development's project size; attempt to include the boss directly on the Wednesday calendar invite.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Near-zero leads: showed traffic gap and proposed landing page fix.",
+      "Low organic traffic: live audit revealed only 34 brand keywords.",
+      "Zero AI visibility: explained ChatGPT/Grok citation strategy clearly.",
+      "Word-of-mouth dependency: positioned online as an additive channel.",
+      "Junk leads concern: demonstrated human vetting and spam filter toggle.",
+      "No marketing expertise: offered growth strategist onboarding support."
+    ],
+    "_meta": {
+      "prospect_email": "mfleck@vernoncc.com",
+      "prospect_company": "American Graphic Systems",
+      "prospect_website": "vernoncc.com",
+      "demo_date": "2026-04-22",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "efda7f9c8a96aff455c40e5918551816"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=057069b5-8805-42f1-a2ff-1131e1219c47&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 26,
+      "analyzed_at": "2026-04-23T06:24:24.859970Z"
+    }
+  },
+  "Funderial": {
+    "company": "Funderial",
+    "prospect_name": "Aghya Goel",
+    "prospect_designation": "Unknown (likely founder or senior executive)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Aghya must take proposal to finance team and website team for approval.",
+    "company_industry": "Financial Services / Alternative Small Business Lending",
+    "pain_points": [
+      {
+        "pain_point": "Over-reliance on partner channel for revenue",
+        "severity": "high",
+        "direct_quote": "A major chunk of our revenue, our deals, customers are coming from partners.",
+        "addressed_in_call": true,
+        "how_addressed": "AE validated partner model but positioned SEO as diversification channel."
+      },
+      {
+        "pain_point": "No organic digital lead generation channel",
+        "severity": "high",
+        "direct_quote": "None of my clients, none of my companies have tried this.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated landing page strategy and Google ranking approach."
+      },
+      {
+        "pain_point": "Dominated by large players in Google search",
+        "severity": "high",
+        "direct_quote": "The place is so saturated that you can never rank above a government website.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained niche long-tail keyword strategy targeting specific SMB verticals."
+      },
+      {
+        "pain_point": "No visibility on LLMs like ChatGPT or Perplexity",
+        "severity": "medium",
+        "direct_quote": "I just read the AI overview and I'm done.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed live example of client appearing in Google AI Overview section."
+      },
+      {
+        "pain_point": "Outdated website not reflecting current product focus",
+        "severity": "medium",
+        "direct_quote": "My website has a lot of old products that we have kind of discontinued.",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered onboarding call to align landing pages with current products."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "No internal data to validate AI search channel ROI",
+        "how_handled": "AE shared average lead timelines and pointed to case studies with numbers.",
+        "resolved": true
+      },
+      {
+        "objection": "Concerned about asset ownership if contract ends",
+        "how_handled": "AE confirmed all published pages are owned by the client permanently.",
+        "resolved": true
+      },
+      {
+        "objection": "Needs internal team buy-in before committing",
+        "how_handled": "AE offered to join a follow-up call with team members present.",
+        "resolved": false
+      },
+      {
+        "objection": "Budget sensitivity and preference for month-to-month",
+        "how_handled": "AE offered $100 discount on $800 plan for 6-month upfront payment.",
+        "resolved": false
+      },
+      {
+        "objection": "Unsure whether to start with Launch or Grow plan",
+        "how_handled": "AE explained page volume logic tied to service lines and target verticals.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Voluntarily scheduled call after engaging with cold email.",
+      "Asked detailed questions about pricing and discount terms.",
+      "Reviewed case studies live during the call for data.",
+      "Asked about exit clause showing serious evaluation mindset.",
+      "Complimented Gushwork's tight and professional sales process.",
+      "Confirmed follow-up meeting for April 29 during the call.",
+      "Said 'this looks good' and committed to taking it internally.",
+      "Asked which plan to propose to team: $800 or $1200."
+    ],
+    "negative_signals": [
+      "Multiple internal stakeholders needed before any decision.",
+      "Finance team prefers month-to-month over upfront payment.",
+      "Website team must be consulted before onboarding begins.",
+      "No urgency expressed; comfortable testing slowly first.",
+      "Competing evaluation of other advertising platforms ongoing."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Aghya to present proposal internally to finance and website team.",
+      "Follow-up call scheduled for April 29 at same time.",
+      "Aghya to email if questions arise before April 29.",
+      "Gushwork team invited to join call with Aghya's team."
+    ],
+    "next_call_date": "2026-04-29",
+    "follow_up_materials_promised": [
+      "Demo call recording to be sent via email.",
+      "Sales deck to be shared after the call.",
+      "Case studies and customer testimonials link to be attached.",
+      "Pricing details and discount offer to be confirmed in writing."
+    ],
+    "deal_closing_intent_score": 7,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect actively engaged and asked detailed pricing questions.",
+      "Reviewed case studies live and reacted positively to results.",
+      "Clear intent to take proposal internally within the week.",
+      "Multiple stakeholders needed slows but does not block progress.",
+      "Competing platforms being evaluated adds deal risk.",
+      "Strong interest in AI/LLM channel aligns with Gushwork's pitch."
+    ],
+    "call_quality_score": 8,
+    "call_quality_notes": [
+      "AE effectively ran live website analysis to engage prospect.",
+      "Good discovery on revenue channels and customer acquisition mix.",
+      "Live AI Overview demo was a key persuasion moment.",
+      "AE handled ownership and exit objection cleanly and confidently.",
+      "AE could have probed more on internal decision timeline.",
+      "Discount offered too quickly without exploring value further.",
+      "Follow-up call booked during call \u2014 strong close discipline.",
+      "AE did not identify Aghya's exact title or authority level."
+    ],
+    "key_insights": [
+      "Funderial heavily partner-dependent and actively seeking diversification.",
+      "Aghya is technically savvy and understands SEO and LLM basics.",
+      "Financial services space is crowded; niche verticals are the strategy.",
+      "Target verticals named: restaurants, food trucks, pharmacies, pizzerias.",
+      "Website needs cleanup before or during onboarding to reflect products.",
+      "Multiple internal gatekeepers: finance team and website team both involved.",
+      "Prospect framed this partly as personal learning on the AI channel.",
+      "Seed-round news ($9M) helped build Gushwork credibility during call."
+    ],
+    "recommended_next_action": "Send personalized follow-up email with deck, case studies, and a tailored 1-page proposal showing niche SMB vertical keyword strategy for Funderial at $800/month with upfront discount, and confirm the April 29 call includes finance stakeholder.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Partner dependency addressed by positioning SEO as diversification.",
+      "Zero organic leads addressed via landing page creation demo.",
+      "Google saturation addressed with long-tail niche keyword strategy.",
+      "LLM invisibility addressed with live AI Overview client example.",
+      "Outdated website addressed by offering onboarding-aligned page creation."
+    ],
+    "_meta": {
+      "prospect_email": "aghya@funderial.com",
+      "prospect_company": "Funderial",
+      "prospect_website": "www.funderial.com",
+      "demo_date": "2026-04-22",
+      "ae_name": "Arabind",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "e276f7b077501fffc9b5e0705a91dccb"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=11791870-7bbe-4c49-af9f-7d842eefe859&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 42,
+      "analyzed_at": "2026-04-23T06:24:27.162970Z"
+    }
+  },
+  "Aviation Brake Service, Inc": {
+    "company": "Aviation Brake Service, Inc",
+    "prospect_name": "Andres Posse",
+    "prospect_designation": "President & Chief Executive Officer",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Andres is the CEO and owner who makes final purchase decisions.",
+    "company_industry": "Aviation / MRO (Maintenance, Repair & Overhaul) Manufacturing",
+    "pain_points": [
+      {
+        "pain_point": "Near-zero website visibility and organic traffic",
+        "severity": "high",
+        "direct_quote": "We are invisible across all AI platforms and only had just one person visit our website in the last one month.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed third-party data and explained competitor content strategy causing the gap."
+      },
+      {
+        "pain_point": "No presence on Google or AI search results",
+        "severity": "high",
+        "direct_quote": "That's what we need to cover is ChatGPT and AI and Google, of course.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated competitors ranking for exact part-number queries and outlined content solution."
+      },
+      {
+        "pain_point": "Over-reliance on ILS and PartsBase as sole lead sources",
+        "severity": "medium",
+        "direct_quote": "We have our company listed there... they populate the ILS, basically, but not the Internet.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as a new reliable channel parallel to ILS and PartsBase."
+      },
+      {
+        "pain_point": "Competitors capturing demand that should reach Aviation Brake",
+        "severity": "high",
+        "direct_quote": "Rotable Repairs. They always show everything. There's always in the first.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed Rotable Repairs traffic (~600/month) vs Aviation Brake (1/month) as proof."
+      },
+      {
+        "pain_point": "No internal marketing team or digital marketing capability",
+        "severity": "medium",
+        "direct_quote": "We're a small company. It's only like 20 employees. Most of them are in a shop.",
+        "addressed_in_call": true,
+        "how_addressed": "AE clarified Gushwork handles all work; prospect just needs onboarding time and website access."
+      },
+      {
+        "pain_point": "Probable business decline due to weak digital presence",
+        "severity": "medium",
+        "direct_quote": "Yeah, probably. We have, you know, it's not the main cause.",
+        "addressed_in_call": true,
+        "how_addressed": "AE linked poor visibility to lost leads going to competitors; urgency framed around future growth."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Security and trust concerns about giving website access",
+        "how_handled": "AE acknowledged concern, offered IT team as middleman for access, offered transparency call with IT.",
+        "resolved": false
+      },
+      {
+        "objection": "Wants a one-time permanent solution, not ongoing retainer",
+        "how_handled": "AE explained no digital channel is permanently self-sustaining; compared to unpredictable cost of paid ads.",
+        "resolved": false
+      },
+      {
+        "objection": "Needs legal and IT review before proceeding",
+        "how_handled": "AE agreed to send everything in writing; offered to do a call with IT and attorney team.",
+        "resolved": false
+      },
+      {
+        "objection": "Cost and ROI uncertainty",
+        "how_handled": "AE walked through three pricing tiers and framed value around qualified lead delivery.",
+        "resolved": false
+      },
+      {
+        "objection": "Concerned leads stop if payment stops",
+        "how_handled": "AE conceded leads would eventually slow but explained content assets remain owned by prospect.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Prospect said 'I'm all for it' when solution was presented.",
+      "Prospect admitted need to cover Google and AI search segment.",
+      "Asked about cost unprompted, signaling active evaluation.",
+      "Agreed to receive proposal, share with IT and attorney.",
+      "Said 'we need to get our name out there' showing urgency.",
+      "Acknowledged business has likely dropped due to poor visibility.",
+      "Expressed interest in LinkedIn presence growth as well.",
+      "Agreed to review case studies and compare options."
+    ],
+    "negative_signals": [
+      "Prospect was driving during call, limiting focus and screen time.",
+      "Strongly resisted ongoing retainer model; wants one-time fix.",
+      "Raised hacking and scammer concerns; trust barrier is significant.",
+      "Requires attorney and IT approval before any commitment.",
+      "No urgency around a specific timeline or deadline.",
+      "Prospect unfamiliar with Gushwork; low brand trust established.",
+      "Said 'that's not gonna work' about continuous payment model."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send written proposal with full service details today.",
+      "AE to include case studies of existing Gushwork clients.",
+      "Prospect to review proposal with IT department and attorney.",
+      "Follow-up call to be scheduled via AE calendar link in email.",
+      "AE offered to do a separate call with prospect's IT team."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Written proposal summarizing full discussion and service scope.",
+      "Case studies from existing Gushwork clients.",
+      "AE calendar link and direct contact number in email signature.",
+      "Pricing breakdown for all three plans (Basic, Standard, Aggressive)."
+    ],
+    "deal_closing_intent_score": 4,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect verbally enthusiastic but has multiple unresolved blockers.",
+      "Retainer model is a fundamental mismatch with prospect's expectations.",
+      "Security and legal review adds significant delay and drop-off risk.",
+      "No next meeting set; deal depends entirely on follow-up email quality.",
+      "Genuine interest in digital growth but no urgency or deadline stated.",
+      "Competitor benchmark (Rotable Repairs) created impact and resonated well.",
+      "Prospect is open but skeptical; needs trust-building before commitment."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE did solid discovery on lead sources and competitor benchmarking.",
+      "Good use of real data (traffic, search volume) to create urgency.",
+      "AE failed to fully address the one-time vs retainer objection convincingly.",
+      "Security objection was acknowledged but not fully defused with evidence.",
+      "No case study or social proof shared during the call itself.",
+      "AE did not attempt to set a concrete next meeting date before ending.",
+      "Prospect was driving; AE could have rescheduled for better engagement.",
+      "Pricing was introduced before timeline objection was fully resolved.",
+      "Call ended with vague 'send me details' rather than a clear commitment."
+    ],
+    "key_insights": [
+      "Aviation Brake relies solely on ILS and PartsBase for leads today.",
+      "Rotable Repairs is the primary competitor to benchmark and displace.",
+      "Prospect has a 40-year-old business with zero prior SEO investment.",
+      "Security and trust are the #1 barrier to moving forward quickly.",
+      "Prospect fundamentally prefers a one-time solution over ongoing retainer.",
+      "LinkedIn presence was also flagged as a priority by the prospect.",
+      "No marketing staff; Gushwork must handle everything independently.",
+      "Aviation-specific part numbers are key search terms to target first.",
+      "Prospect is educated enough on the need; just needs trust and clarity.",
+      "Attorney and IT sign-off are mandatory gatekeepers before any deal."
+    ],
+    "recommended_next_action": "Send a polished proposal email today with a clear trust-building section (company background, data security policy, client references), include 2-3 aviation or manufacturing case studies, address the retainer vs one-time concern with a 'content asset ownership' framing, and end with a specific ask to schedule a 30-minute call with Andres, his IT lead, and attorney within the next 5 business days.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Zero website traffic shown via third-party tool with live data.",
+      "AI and Google invisibility demonstrated using competitor part-number search.",
+      "ILS dependency acknowledged; Gushwork positioned as complementary channel.",
+      "Rotable Repairs traffic gap (~600 vs 1 visitor) used as proof point.",
+      "No marketing team concern resolved by offering full-service ownership.",
+      "Business decline linked to digital gap; urgency built around competitor growth."
+    ],
+    "_meta": {
+      "prospect_email": "andres@aviationbrake.com",
+      "prospect_company": "Aviation Brake Service, Inc",
+      "prospect_website": "www.aviationbrake.com",
+      "demo_date": "2026-04-22",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "65b397f80d168699bec1ff4d98ad14fb"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=e60fd20d-5a41-44e8-a6db-5f407be617f0&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 37,
+      "analyzed_at": "2026-04-23T06:24:36.759064Z"
+    }
+  },
+  "Eisemann Consulting": {
+    "company": "Eisemann Consulting",
+    "prospect_name": "Julie Eisemann",
+    "prospect_designation": "Owner at Eisemann Consulting",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Julie is the sole owner and founder, making all business decisions independently.",
+    "company_industry": "IT Consulting / Business Process Automation",
+    "pain_points": [
+      {
+        "pain_point": "No inbound leads from website or digital presence",
+        "severity": "high",
+        "direct_quote": "as of now, most of my business, in fact all of it to date has been through referrals",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork demo showed AI-generated landing pages targeting long-tail search queries to drive inbound leads"
+      },
+      {
+        "pain_point": "Difficulty scaling beyond referral-based client acquisition",
+        "severity": "high",
+        "direct_quote": "I've gotta find much more, many more customers really to sell to",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned 100 landing pages covering broad intent queries as scalable top-of-funnel solution"
+      },
+      {
+        "pain_point": "Bootstrapped with limited budget and cash flow pressure",
+        "severity": "high",
+        "direct_quote": "I've been bootstrapping everything myself and so I'm looking at funding options",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered end-of-day discount from $800 to $700/month and framed ROI with one consulting deal paying for annual subscription"
+      },
+      {
+        "pain_point": "Multiple businesses with unclear marketing prioritization",
+        "severity": "medium",
+        "direct_quote": "I think really the most compelling one for me right now is probably my consulting business",
+        "addressed_in_call": true,
+        "how_addressed": "AE aligned focus on consulting business first; advised retail wholesale could come later"
+      },
+      {
+        "pain_point": "Tried to build similar solution internally and failed",
+        "severity": "medium",
+        "direct_quote": "I tried to see if this was something that I could build myself... I don't think I can",
+        "addressed_in_call": true,
+        "how_addressed": "Live demo of AI agent and CMS capabilities demonstrated proprietary technology not replicable in-house"
+      },
+      {
+        "pain_point": "No visibility into website visitor behavior or drop-offs",
+        "severity": "low",
+        "direct_quote": "Do y'all have something that tracks any of those items yet?",
+        "addressed_in_call": true,
+        "how_addressed": "AE acknowledged gap honestly; Gushwork focused on lead gen funnel entry, not behavioral analytics"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Multi-domain strategy concern \u2014 risk of Google penalty",
+        "how_handled": "AE explained Gushwork embeds pages in main domain using proprietary AI-native CMS, avoiding duplicate content risk",
+        "resolved": true
+      },
+      {
+        "objection": "Website platform compatibility \u2014 Base44 and Shopify constraints",
+        "how_handled": "AE asked for retail domain, reviewed live, confirmed B2B wholesale landing pages are feasible; D2C acknowledged as out of scope",
+        "resolved": true
+      },
+      {
+        "objection": "Volume pricing \u2014 cost for multiple companies",
+        "how_handled": "AE confirmed pricing discount scales with volume; offered immediate $700/month single-company discount",
+        "resolved": true
+      },
+      {
+        "objection": "Company maturity \u2014 only 2 years old, recently funded",
+        "how_handled": "AE shared $10M seed raise and upcoming Series A as credibility signals",
+        "resolved": true
+      },
+      {
+        "objection": "Timeline to see results \u2014 bootstrapped, needs income predictability",
+        "how_handled": "AE gave concrete timeline: pages live in 60 days, indexed by day 90, 4-8 leads/month minimum from month 3",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Explicitly said 'I like the idea of doing the Launch'",
+      "Asked directly: 'What do I need to do to move forward?'",
+      "Engaged enthusiastically: 'Oh freaking cool', 'That is freaking cool'",
+      "Inquired about multi-company pricing, signaling expansion intent",
+      "Accepted calendar invite on the spot for onboarding call",
+      "Stripe payment link sent; Julie acknowledged receiving calendar invite",
+      "Self-identified consulting business as 'obvious' fit for Gushwork",
+      "Expressed urgency tied to funding timeline and income planning"
+    ],
+    "negative_signals": [
+      "Business is very early-stage, founded late 2023, only ~5 clients",
+      "Bootstrapped with no confirmed budget allocation yet",
+      "Payment link not confirmed received before call ended",
+      "Multiple competing business priorities may dilute focus",
+      "Retail site (D2C) is not monetizable via Gushwork \u2014 reduces deal size",
+      "Connection issues at end of call; unclear if Stripe link was seen"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Onboarding call scheduled for Friday April 24 at 1:30 PM Central",
+      "Stripe payment link sent to julie@eisemannconsulting.com",
+      "Julie to confirm receipt of Stripe link and calendar invite",
+      "AE to resend Stripe link if not received by prospect",
+      "Focus scope agreed: consulting business only, Launch plan"
+    ],
+    "next_call_date": "2026-04-24T13:30:00-05:00",
+    "follow_up_materials_promised": [
+      "Stripe payment link for $700/month Launch plan",
+      "Calendar invite for onboarding call on April 24"
+    ],
+    "deal_closing_intent_score": 8,
+    "deal_closing_intent_label": "Hot",
+    "intent_reasoning": [
+      "Prospect verbally confirmed intent to proceed with Launch plan",
+      "Onboarding call scheduled during the demo call itself",
+      "Payment link sent; deal monetarily initiated",
+      "Strong emotional engagement and enthusiasm throughout demo",
+      "Self-identified highest-priority use case aligned with Gushwork core offering",
+      "One consulting client win more than covers full annual subscription cost",
+      "Minor risk: payment not confirmed received; follow-up needed immediately"
+    ],
+    "call_quality_score": 8,
+    "call_quality_notes": [
+      "AE ran a live demo tailored to prospect's actual website domain",
+      "AE identified specific long-tail keywords relevant to her business",
+      "AE proactively scoped retail site fit and set correct expectations",
+      "ROI framing was sharp: one client deal covers full annual cost",
+      "Concrete result timeline given: pages live in 60 days, leads by month 3",
+      "AE missed deeper discovery on budget approval process and runway",
+      "Technical scheduling error (software bug) slightly undermined confidence",
+      "No mention of case studies from similar consulting firm clients",
+      "AE could have explored app business as third future revenue stream"
+    ],
+    "key_insights": [
+      "Julie runs three separate businesses \u2014 consulting is highest priority",
+      "All current clients sourced via referral; zero organic/digital inbound",
+      "Consulting ticket size ~$5,500/month \u2014 strong ROI case for Gushwork",
+      "She is tech-savvy; attempted to build similar tool herself and failed",
+      "Retail (Floof Chonk) is D2C \u2014 out of scope for Gushwork currently",
+      "Wholesale B2B angle for retail is possible but lower priority now",
+      "She is bootstrapped and evaluating funding \u2014 price sensitivity is real",
+      "26 years of industry experience gives her strong referral credibility",
+      "LinkedIn traction building but not yet converting to business",
+      "She mentioned interest in selling or marketing her apps \u2014 future upsell"
+    ],
+    "recommended_next_action": "Send a personalized follow-up email within 24 hours confirming the Stripe payment link, reattaching it if undelivered, summarizing the ROI case (one $5,500/month client covers full annual cost), and sharing one consulting-industry case study to reinforce confidence before the April 24 onboarding call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "No inbound leads: live demo showed landing pages targeting buyer-intent queries",
+      "Scaling beyond referrals: 100 pages covering broad search surface area shown",
+      "Budget pressure: $100 discount applied; ROI framed as self-funding after one client",
+      "Business prioritization: AE narrowed focus to consulting, deferred retail scope",
+      "Failed DIY attempt: proprietary AI-native CMS shown as non-replicable advantage",
+      "Visitor drop-off tracking: gap honestly acknowledged; expectation correctly set"
+    ],
+    "_meta": {
+      "prospect_email": "julie@eisemannconsulting.com",
+      "prospect_company": "Eisemann Consulting",
+      "prospect_website": "eisemannconsulting.com",
+      "demo_date": "2026-04-22",
+      "ae_name": "Sukruti Ssinha",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "2074aef144b63f9d8a81919d67527c61"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=47dc9e7e-eeeb-4b24-b6e2-c938d3c71492&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 41,
+      "analyzed_at": "2026-04-23T06:24:42.595846Z"
+    }
+  },
+  "LegalEdge Software LP": {
+    "company": "LegalEdge Software LP",
+    "prospect_name": "William G. Alvis",
+    "prospect_designation": "President at LegalEdge Software",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "William holds President title and drives purchase decisions but involves others.",
+    "company_industry": "Legal Technology / Case Management Software",
+    "pain_points": [
+      {
+        "pain_point": "Lost Google search rankings after new website launch",
+        "severity": "high",
+        "direct_quote": "we used to end up on the first or second page of Google searches and now we don't, partly because we just built a new website",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained SEO technicalities and AI-native CMS to rebuild rankings"
+      },
+      {
+        "pain_point": "No active SEO strategy currently in place",
+        "severity": "high",
+        "direct_quote": "No, right now? No. We, we need to then.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's end-to-end SEO and AEO service proposed as solution"
+      },
+      {
+        "pain_point": "Over-reliance on referrals and trade shows for leads",
+        "severity": "medium",
+        "direct_quote": "a lot of it is referrals or it could be trade show exposure",
+        "addressed_in_call": true,
+        "how_addressed": "Landing pages with lead capture forms pitched as scalable inbound channel"
+      },
+      {
+        "pain_point": "Low organic website traffic; mostly branded searches only",
+        "severity": "medium",
+        "direct_quote": "it's predominantly branded traffic, people who are searching for your name on Google",
+        "addressed_in_call": true,
+        "how_addressed": "100-400 landing pages targeting high-intent non-branded queries proposed"
+      },
+      {
+        "pain_point": "Uncertainty about AI search visibility vs traditional SEO",
+        "severity": "medium",
+        "direct_quote": "questioning whether it was any different from normal SEO work and just beginning to grapple with it",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained AEO, AI crawlers, structured data and AI feed CMS differences"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "New website already has landing pages and relevant content",
+        "how_handled": "AE differentiated on technical SEO, clean HTML, meta structure, and AI-native CMS",
+        "resolved": false
+      },
+      {
+        "objection": "Needs to involve internal website expert before deciding",
+        "how_handled": "AE offered to run a separate demo with their website person",
+        "resolved": false
+      },
+      {
+        "objection": "Needs written materials to review and share internally",
+        "how_handled": "AE promised post-call recap, sample pages, and client testimonials via email",
+        "resolved": false
+      },
+      {
+        "objection": "Unclear how this differs from what they already built",
+        "how_handled": "AE explained AI-native CMS, auto-refresh every 20 days, structured data advantage",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "William explicitly said 'I'm definitely interested'",
+      "Proactively asked about pricing structure during demo",
+      "Asked for written materials to share with team",
+      "Acknowledged timely relevance of Gushwork's outreach email",
+      "Actively engaged with demo questions and confirmed ICP accuracy",
+      "Requested involvement of internal website expert for next step",
+      "Asked specific question about AI engine differentiation"
+    ],
+    "negative_signals": [
+      "Multiple stakeholders need to be looped in before deciding",
+      "Internal website expert holds significant influence on decisions",
+      "No budget or timeline discussed during the call",
+      "Company currently does zero SEO; slow to start adoption",
+      "Michael Adams largely silent; low engagement from second attendee",
+      "No next meeting scheduled before call ended"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send post-call recap email within 30 minutes",
+      "William to review materials and share with internal website expert",
+      "AE to schedule a follow-up demo with LegalEdge's website person",
+      "William to loop in additional stakeholders before deciding"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Call recap email summarizing the demo discussion",
+      "Call recording link from Sybill",
+      "Sample landing pages created live during the demo",
+      "Client testimonials from Gushwork",
+      "Marketing materials explaining full AEO/SEO process"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "William verbally confirmed interest and asked for next steps",
+      "Pricing question signals real purchase consideration",
+      "Multiple internal approvals needed slow down deal velocity",
+      "No budget, timeline, or urgency established on the call",
+      "Internal website expert could be a blocker or champion",
+      "Strong product-problem fit; pain points clearly resonate"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE ran a live, personalized demo for LegalEdge's domain \u2014 strong",
+      "Discovery was shallow; budget and timeline never explored",
+      "AE did not ask about purchase authority or decision process",
+      "Michael Adams was never engaged directly or meaningfully",
+      "AE left next meeting unscheduled; missed closing opportunity",
+      "AE explained product well but differentiation could be crisper",
+      "Good rapport built; William stayed engaged throughout call"
+    ],
+    "key_insights": [
+      "LegalEdge targets niche government legal buyers \u2014 city/county attorneys",
+      "New website one month old; Google has not re-indexed it yet",
+      "Email campaigns are current primary traffic driver, not organic search",
+      "Website expert is an influential gatekeeper in this deal",
+      "Prospect is early in AI SEO education; needs nurturing content",
+      "No CRM, SEO tools, or inbound lead strategy currently in place",
+      "Strong product-market fit; ICP queries matched LegalEdge use case perfectly"
+    ],
+    "recommended_next_action": "Send follow-up email within 30 minutes with recap, sample pages, testimonials, and a direct calendar link to schedule a technical demo with LegalEdge's website expert.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Lost rankings addressed via technical SEO and AI-native CMS pitch",
+      "No SEO strategy addressed by proposing full-service end-to-end solution",
+      "Referral dependency addressed with scalable inbound lead capture system",
+      "Low organic traffic addressed with 100-400 keyword-targeted landing pages",
+      "AI search confusion addressed by explaining AEO and structured data clearly"
+    ],
+    "_meta": {
+      "prospect_email": "walvis@legaledge.com",
+      "prospect_company": "LegalEdge Software LP",
+      "prospect_website": "legaledge.com",
+      "demo_date": "2026-04-22",
+      "ae_name": "Abhinav Chaturvedi",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "99ff804ea2a9d58a9a9b58f66a094e56"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=79f2902b-a08e-445f-b817-7b5e7610534f&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 27,
+      "analyzed_at": "2026-04-23T06:24:58.756645Z"
+    }
   }
 }
