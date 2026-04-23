@@ -107,10 +107,35 @@ def extract_prospect_info(participants_names):
             })
     return prospects, gushworkers
 
-def classify_industry(source, ae_email=''):
+EMAIL_TO_INDUSTRY: dict = {}
+try:
+    _metrics_path = os.path.join(OUT_DIR, 'metrics.json')
+    if os.path.exists(_metrics_path):
+        with open(_metrics_path) as _f:
+            _m = json.load(_f)
+        for _l in _m.get('interested_leads', []):
+            _e = (_l.get('email') or '').lower()
+            _i = _l.get('industry')
+            if _e and _i:
+                EMAIL_TO_INDUSTRY[_e] = _i
+        for _b in _m.get('demo_bookings', []):
+            _e = (_b.get('email') or '').lower()
+            _i = _b.get('industry')
+            if _e and _i and _e not in EMAIL_TO_INDUSTRY:
+                EMAIL_TO_INDUSTRY[_e] = _i
+        print(f"Loaded industry map for {len(EMAIL_TO_INDUSTRY)} emails from metrics.json")
+except Exception as _e:
+    print(f"WARN: could not load email→industry map: {_e}")
+
+def classify_industry(source, ae_email='', prospect_email=''):
+    # Prefer email → industry (derived from Sequencer campaign attribution)
+    e = (prospect_email or '').lower()
+    if e and e in EMAIL_TO_INDUSTRY:
+        return EMAIL_TO_INDUSTRY[e]
+    # Fallback: source-based heuristic
     src = (source or '').lower()
     if 'allaine' in src: return 'IT & Consulting'
-    return 'Manufacturing'  # truck can be added later via campaign ID lookup
+    return 'Manufacturing'
 
 # ── 5. Build Claude prompt ────────────────────────────────────────────────────
 def build_prompt(company, meta, meetings):
@@ -131,7 +156,7 @@ TRANSCRIPT:
 {transcript_text}
 """)
 
-    industry = classify_industry(meta.get('source', ''))
+    industry = classify_industry(meta.get('source', ''), '', meta.get('prospect_email', ''))
 
     return f"""You are a senior sales intelligence analyst. Analyze this demo call transcript for a B2B SaaS sales deal.
 
@@ -228,7 +253,7 @@ def analyze_company(company, meetings):
                 'prospect_website':   meta.get('prospect_website'),
                 'demo_date':          str(meta['demo_scheduled_date']),
                 'ae_name':            meta['ae_name'],
-                'industry':           classify_industry(meta.get('source', '')),
+                'industry':           classify_industry(meta.get('source', ''), '', meta.get('prospect_email', '')),
                 'meeting_ids':        [m['meeting_id'] for m in meetings],
                 'sybill_urls':        [m.get('sybill_url') for m in meetings],
                 'total_duration_min': round(sum((m.get('duration_seconds') or 0) for m in meetings) / 60),
