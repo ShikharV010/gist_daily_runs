@@ -1,42 +1,80 @@
-  name: Allaine SDR Lead Tagging
+name: Allaine SDR Lead Tagging
 
-  on:
-    workflow_dispatch:
+on:
+  schedule:
+    # Every 15 minutes
+    - cron: '*/15 * * * *'
+  workflow_dispatch:  # allow manual trigger from GitHub UI
 
-  jobs:
-    tag-leads:
-      runs-on: ubuntu-latest
-      timeout-minutes: 10
+jobs:
+  tag-leads:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
 
-      steps:
-        - name: Checkout repo
-          uses: actions/checkout@v4
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
 
-        - name: Set up Python
-          uses: actions/setup-python@v5
-          with:
-            python-version: '3.11'
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
 
-        - name: Install dependencies
-          run: pip install -r cold_email_workflows/allaine_workflow/requirements.txt
+      - name: Install dependencies
+        run: pip install -r cold_email_workflows/allaine_workflow/requirements.txt
 
-        - name: Get today's date (for cache key)
-          id: date
-          run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+      - name: Date (daily cache key for sender emails)
+        id: date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
 
-        - name: Cache sender emails CSV (refreshes daily)
-          uses: actions/cache@v4
-          with:
-            path: cold_email_workflows/allaine_workflow/sender_emails.csv
-            key: sender-emails-${{ steps.date.outputs.date }}
+      # Sender emails CSV refreshes daily — keyed by date.
+      - name: Cache sender emails
+        uses: actions/cache@v4
+        with:
+          path: cold_email_workflows/allaine_workflow/sender_emails.csv
+          key: sender-emails-${{ steps.date.outputs.date }}
 
-        - name: Run allaine cron
-          env:
-            SEQUENCER_API_KEY: ${{ secrets.SEQUENCER_API_KEY }}
-            SEQUENCER_BASE_URL: https://sequencer.gushwork.ai/api
-            DATABASE_URL: ${{ secrets.DATABASE_URL }}
-            SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-            SLACK_CHANNEL_ID: C0ARFBBN3TN
-          run: |
-            cd cold_email_workflows/allaine_workflow
-            python allaine_cron.py
+      # Phone-enrichment cache. Persist across runs so LeadMagic credits
+      # aren't re-burned. Key includes run_id so each run writes a new
+      # cache entry; restore-keys chain restores the most recent.
+      - name: Cache enriched phones
+        uses: actions/cache@v4
+        with:
+          path: cold_email_workflows/allaine_workflow/enriched_phones.csv
+          key: enriched-phones-${{ github.run_id }}
+          restore-keys: |
+            enriched-phones-
+
+      # Slack threshold state — critical to prevent duplicate notifications.
+      - name: Cache slack threshold state
+        uses: actions/cache@v4
+        with:
+          path: cold_email_workflows/allaine_workflow/slack_threshold_state.json
+          key: slack-threshold-${{ github.run_id }}
+          restore-keys: |
+            slack-threshold-
+
+      # Manual-review log for leads where both enrichment APIs failed.
+      - name: Cache no-phone log
+        uses: actions/cache@v4
+        with:
+          path: cold_email_workflows/allaine_workflow/leads_without_phone.csv
+          key: leads-no-phone-${{ github.run_id }}
+          restore-keys: |
+            leads-no-phone-
+
+      - name: Run allaine cron
+        env:
+          # Sequencer + DB + Slack (existing)
+          SEQUENCER_API_KEY:        ${{ secrets.SEQUENCER_API_KEY }}
+          SEQUENCER_BASE_URL:       https://sequencer.gushwork.ai/api
+          DATABASE_URL:             ${{ secrets.DATABASE_URL }}
+          SLACK_BOT_TOKEN:          ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID:         C0ARFBBN3TN
+          # New: JustCall + enrichment APIs
+          JUSTCALL_AUTHENTICATION:  ${{ secrets.JUSTCALL_AUTHENTICATION }}
+          LEADMAGIC_API_KEY:        ${{ secrets.LEADMAGIC_API_KEY }}
+          FULLENRICH_API_KEY:       ${{ secrets.FULLENRICH_API_KEY }}
+        run: |
+          cd cold_email_workflows/allaine_workflow
+          python allaine_cron.py
