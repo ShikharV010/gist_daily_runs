@@ -26,7 +26,17 @@ import requests
 import psycopg2
 from dotenv import load_dotenv
 
+# Env loading — tries master consolidated .env (local Mac) first, then project-
+# local fallbacks. In CI / GitHub Actions, none of these files exist and env
+# vars are supplied via secrets; load_dotenv silently no-ops missing files.
+load_dotenv('/Users/shikhar.vermagushwork.ai/Documents/claude/projects/.env')
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
+
+# Local modules (added 2026-04-23 — JustCall sync + threshold Slack)
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import justcall_sync
+import slack_thresholds
 
 # ── Config ─────────────────────────────────────────────────────────────────────
 BASE          = os.getenv('SEQUENCER_BASE_URL', 'https://sequencer.gushwork.ai/api')
@@ -456,6 +466,213 @@ def send_slack(run_dt, total_candidates, already_tagged, newly_tagged,
         log.warning(f"Failed to send Slack notification: {exc}")
 
 
+# ── JustCall sync helpers (2026-04-23) ────────────────────────────────────────
+
+def get_booked_lookup():
+    """
+    Fetch demo-bookings in 3 lookup sets: lowercase emails, lowercase companies,
+    lowercase bare domains (from prospect_website). Used to decide which
+    JustCall contacts to remove.
+    """
+    conn = psycopg2.connect(DB_URL)
+    conn.set_session(readonly=True, autocommit=True)
+    emails, companies, domains = set(), set(), set()
+    with conn.cursor() as cur:
+        cur.execute("""SELECT DISTINCT lower(prospect_email)
+                       FROM gist.gtm_inbound_demo_bookings
+                       WHERE prospect_email IS NOT NULL AND prospect_email <> ''""")
+        emails = {r[0].strip() for r in cur.fetchall() if r[0]}
+
+        cur.execute("""SELECT DISTINCT lower(prospect_company)
+                       FROM gist.gtm_inbound_demo_bookings
+                       WHERE prospect_company IS NOT NULL AND prospect_company <> ''""")
+        companies = {r[0].strip() for r in cur.fetchall() if r[0]}
+
+        cur.execute("""SELECT DISTINCT lower(
+                          regexp_replace(
+                            regexp_replace(prospect_website, '^https?://(www\\.)?', ''),
+                            '/.*$', ''))
+                       FROM gist.gtm_inbound_demo_bookings
+                       WHERE prospect_website IS NOT NULL AND prospect_website <> ''""")
+        domains = {r[0].strip() for r in cur.fetchall() if r[0]}
+    conn.close()
+    log.info(f"  Booked lookup: {len(emails)} emails, {len(companies)} companies, {len(domains)} website domains")
+    return emails, companies, domains
+
+
+def fetch_full_leads(lead_ids):
+    """Fetch full lead detail (incl. custom_variables) for each id, in parallel."""
+    def fetch(lid):
+        try:
+            r = seq_get(f'/leads/{lid}')
+            return lid, r.get('data', r)
+        except Exception as exc:
+            log.warning(f"  /leads/{lid} err: {exc}")
+            return lid, None
+    out = {}
+    with ThreadPoolExecutor(max_workers=15) as ex:
+        for fut in as_completed({ex.submit(fetch, lid): lid for lid in lead_ids}):
+            lid, data = fut.result()
+            if data: out[lid] = data
+    return out
+
+
+def flatten_lead(lead):
+    """Flatten Sequencer lead into a dict with easy field access."""
+    cv = {c['name']: (c.get('value') or '') for c in (lead.get('custom_variables') or [])}
+    return {
+        'lead_id':                lead.get('id'),
+        'first_name':             lead.get('first_name', '') or '',
+        'last_name':              lead.get('last_name', '') or '',
+        'full_name':              (cv.get('full_name')
+                                    or f"{lead.get('first_name','')} {lead.get('last_name','')}".strip()),
+        'name':                   cv.get('name') or cv.get('full_name') or '',
+        'email':                  (lead.get('email') or '').strip().lower(),
+        'title':                  lead.get('title', '') or '',
+        'company':                lead.get('company', '') or '',
+        'linkedin_url':           cv.get('linkedin_url', '') or '',
+        'website_url':            cv.get('website_url', '') or '',
+        'industry_sub_category':  cv.get('industry_sub_category', '') or '',
+        'company_linkedin':       cv.get('company_linkedin', '') or '',
+        'phone':                  lead.get('phone', '') or cv.get('phone', '') or '',
+    }
+
+
+def latest_inbox_reply_uuid(lead_id, sender_emails):
+    """Return the UUID of the latest prospect-reply (folder=Inbox, not our sender)."""
+    try:
+        data = seq_get(f'/leads/{lead_id}/replies', {'per_page': 100})
+        replies = data.get('data', [])
+    except Exception:
+        return None
+    if not replies: return None
+
+    def pdt(r):
+        try: return datetime.fromisoformat(r['date_received'].replace('Z', '+00:00'))
+        except Exception: return datetime.min.replace(tzinfo=timezone.utc)
+
+    inbox = [r for r in replies
+             if r.get('folder') == 'Inbox'
+             and (r.get('from_email_address', '').lower() not in sender_emails)]
+    if not inbox: return replies[-1].get('uuid')
+    return sorted(inbox, key=pdt)[-1].get('uuid')
+
+
+def sync_to_justcall(allaine_leads_full, sender_emails):
+    """
+    Push Allaine-tagged leads not yet in JC to the campaign.
+    `allaine_leads_full` is list of flattened lead dicts.
+    Returns (pushed, no_phone, already_present).
+    """
+    log.info("\n── JustCall sync: pushing new Allaine leads ──")
+    jc_contacts = justcall_sync.get_campaign_contacts()
+    jc_emails = {(c.get('email') or '').strip().lower() for c in jc_contacts if c.get('email')}
+    log.info(f"  JC current roster: {len(jc_contacts)} contacts ({len(jc_emails)} with email)")
+
+    new_leads = [l for l in allaine_leads_full
+                 if l['email'] and l['email'] not in jc_emails]
+    log.info(f"  New to push: {len(new_leads)} leads")
+    if not new_leads:
+        return 0, 0, len(allaine_leads_full)
+
+    # Enrich phones
+    phones = justcall_sync.enrich_phones(new_leads)
+
+    # Fetch reply UUIDs in parallel
+    reply_uuids = {}
+    def _ru(l): return l['lead_id'], latest_inbox_reply_uuid(l['lead_id'], sender_emails)
+    with ThreadPoolExecutor(max_workers=15) as ex:
+        for fut in as_completed({ex.submit(_ru, l): l for l in new_leads}):
+            lid, uuid = fut.result()
+            if uuid: reply_uuids[lid] = uuid
+
+    pushed, no_phone = 0, 0
+    for lead in new_leads:
+        phone = phones.get(lead['lead_id'], '')
+        if not phone:
+            no_phone += 1
+            continue
+        cid = justcall_sync.post_contact(lead, phone, reply_uuids.get(lead['lead_id']))
+        if cid:
+            pushed += 1
+        time.sleep(0.1)  # gentle pacing on JC API
+
+    log.info(f"  JC pushed: {pushed} | no_phone: {no_phone} | already_present: {len(allaine_leads_full) - len(new_leads)}")
+    return pushed, no_phone, len(allaine_leads_full) - len(new_leads)
+
+
+def sync_remove_booked_from_justcall(booked_emails, booked_companies, booked_domains):
+    """
+    Scan current JC contacts; DELETE any whose email/company/website matches
+    demo bookings.
+    """
+    log.info("\n── JustCall sync: removing demo-booked leads ──")
+    contacts = justcall_sync.get_campaign_contacts()
+    to_remove = []
+    for c in contacts:
+        email = (c.get('email') or '').strip().lower()
+        if email and email in booked_emails:
+            to_remove.append((c['id'], 'email'))
+            continue
+        # custom_fields: list of {key,label,value}
+        cf = {f.get('label', '').lower(): (f.get('value') or '').strip().lower()
+              for f in (c.get('custom_fields') or [])}
+        company = cf.get('company', '')
+        website = cf.get('website', '')
+        # Normalize website into bare domain
+        import re as _re
+        wdom = _re.sub(r'^https?://(www\d*\.)?', '', website).split('/')[0].strip()
+        if company and company in booked_companies:
+            to_remove.append((c['id'], 'company'))
+            continue
+        if wdom and wdom in booked_domains:
+            to_remove.append((c['id'], 'website'))
+
+    log.info(f"  JC contacts scanned: {len(contacts)} | to remove: {len(to_remove)}")
+    removed = 0
+    for cid, reason in to_remove:
+        if justcall_sync.delete_contact(cid):
+            removed += 1
+        time.sleep(0.1)
+    by_reason = {}
+    for _, reason in to_remove: by_reason[reason] = by_reason.get(reason, 0) + 1
+    log.info(f"  JC removed: {removed}/{len(to_remove)} (by reason: {by_reason})")
+    return removed
+
+
+def finalize_run(now, allaine_tag_id, sender_emails, current_count, added,
+                 removed_replied, removed_ni, removed_lto):
+    """
+    After existing Sequencer logic completes, do JustCall sync + threshold Slack.
+    Safe to call even when added=0 (handles demo-booking removal + backfill).
+    """
+    # Re-fetch current Allaine-tagged roster (after cleanup + new tags)
+    allaine_leads = fetch_all_pages('/leads', {'filters[tag_ids][]': allaine_tag_id})
+    log.info(f"\nCurrent Allaine-tagged roster: {len(allaine_leads)}")
+
+    # Full details for each (we need custom_variables)
+    full = fetch_full_leads([l['id'] for l in allaine_leads])
+    flattened = [flatten_lead(d) for d in full.values() if d]
+
+    # Push new leads to JustCall (dedup by email vs current JC roster)
+    try:
+        sync_to_justcall(flattened, sender_emails)
+    except Exception as exc:
+        log.error(f"  JC push failed: {exc}", exc_info=True)
+
+    # Remove JC contacts whose lead matches a demo booking
+    try:
+        booked_emails, booked_companies, booked_domains = get_booked_lookup()
+        sync_remove_booked_from_justcall(booked_emails, booked_companies, booked_domains)
+    except Exception as exc:
+        log.error(f"  JC remove failed: {exc}", exc_info=True)
+
+    # Threshold-based Slack (instead of every-run notifications)
+    ist_dt = now + timedelta(hours=5, minutes=30)
+    slack_thresholds.maybe_notify(current_count, added,
+                                  removed_replied, removed_ni, removed_lto, ist_dt)
+
+
 # ── Main ───────────────────────────────────────────────────────────────────────
 
 def run():
@@ -539,10 +756,12 @@ def run():
     candidates = get_candidate_leads(allaine_tag_id, not_interested_tag_id, lto_tag_id)
 
     if not candidates:
-        log.info("No candidate leads found. Exiting.")
-        log.info("=" * 60)
+        log.info("No candidate leads found.")
         append_to_runs_log(now, 0, already_tagged, 0, removed_replied, removed_ni, removed_lto)
-        send_slack(now, 0, already_tagged, 0, removed_replied, removed_ni, removed_lto)
+        current_count = already_tagged - removed
+        finalize_run(now, allaine_tag_id, sender_emails, current_count, 0,
+                     removed_replied, removed_ni, removed_lto)
+        log.info("=" * 60)
         return
 
     # ── Evaluate leads in parallel ─────────────────────────────────
@@ -572,9 +791,11 @@ def run():
 
     if not qualified:
         log.info("Nothing to tag.")
-        log.info("=" * 60)
         append_to_runs_log(now, len(candidates), already_tagged, 0, removed_replied, removed_ni, removed_lto)
-        send_slack(now, len(candidates), already_tagged, 0, removed_replied, removed_ni, removed_lto)
+        current_count = already_tagged - removed
+        finalize_run(now, allaine_tag_id, sender_emails, current_count, 0,
+                     removed_replied, removed_ni, removed_lto)
+        log.info("=" * 60)
         return
 
     # ── Tag qualifying leads ───────────────────────────────────────
@@ -592,9 +813,11 @@ def run():
 
     log.info(f"\nDone. Tagged {len(qualified)} leads as '{ALLAINE_TAG_NAME}'. "
              f"Removed {removed} (replied={removed_replied}, ni={removed_ni}, lto={removed_lto}).")
-    log.info("=" * 60)
     append_to_runs_log(now, len(candidates), already_tagged, len(qualified), removed_replied, removed_ni, removed_lto)
-    send_slack(now, len(candidates), already_tagged, len(qualified), removed_replied, removed_ni, removed_lto)
+    current_count = already_tagged - removed + len(qualified)
+    finalize_run(now, allaine_tag_id, sender_emails, current_count, len(qualified),
+                 removed_replied, removed_ni, removed_lto)
+    log.info("=" * 60)
 
 
 if __name__ == '__main__':

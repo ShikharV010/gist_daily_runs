@@ -10,6 +10,8 @@ import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 
+load_dotenv('/Users/shikhar.vermagushwork.ai/Documents/claude/projects/.env')
+load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 BASE    = os.getenv('SEQUENCER_BASE_URL', 'https://sequencer.gushwork.ai/api')

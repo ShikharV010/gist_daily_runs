@@ -32,6 +32,7 @@ import requests
 import psycopg2
 from dotenv import load_dotenv
 
+load_dotenv('/Users/shikhar.vermagushwork.ai/Documents/claude/projects/.env')
 load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))  # fallback for GitHub Actions
 

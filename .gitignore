@@ -1,0 +1,41 @@
+# Secrets
+.env
+.env.local
+*.env
+
+# Runtime state / logs (contains PII or transient state — keep local only)
+**/allaine_cron.log
+**/followup_cron.log
+**/*_runs_log.csv
+**/allaine_leads_log.csv
+**/followup_leads_log.csv
+**/sender_emails.csv
+**/enriched_phones.csv
+**/leads_without_phone.csv
+**/slack_threshold_state.json
+**/pending_*.json
+
+# Ad-hoc exports (personal data)
+justcall_calls_*.csv
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.venv/
+venv/
+
+# Node
+node_modules/
+.next/
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
