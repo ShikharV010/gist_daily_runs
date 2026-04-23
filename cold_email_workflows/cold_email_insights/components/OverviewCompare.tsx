@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import type { MetricsData, Industry, DateRange } from './types'
 import { computeMetrics } from './metrics'
 
-const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS']
+const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental']
 
 function fmt(n: number) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'

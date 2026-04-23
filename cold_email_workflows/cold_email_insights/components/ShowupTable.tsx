@@ -73,13 +73,16 @@ export default function ShowupTable({
         const ind = meta.industry || r.company_industry || ''
         if (industry !== 'All') {
           const matchMap: Record<Industry, string[]> = {
-            'All':                [],
-            'Manufacturing':      ['manufacturing', 'mfg'],
-            'IT & Consulting':    ['it', 'consulting', 'technology'],
+            'All':                  [],
+            'Manufacturing':        ['manufacturing', 'mfg'],
+            'IT & Consulting':      ['it', 'consulting', 'technology'],
             'Truck Transportation': ['truck', 'transport'],
-            'BCS':                ['bcs', 'business consulting', 'business services'],
-            'Commercial':         ['commercial', 'retail', 'real estate'],
-            'EWWS':               ['ewws', 'environment', 'water', 'waste', 'sustainability'],
+            'BCS':                  ['bcs', 'business consulting', 'business services'],
+            'Commercial':           ['commercial', 'retail', 'real estate'],
+            'EWWS':                 ['ewws', 'environment', 'water', 'waste', 'sustainability'],
+            'Advertising':          ['advertising', 'marketing', 'media'],
+            'Medical Equipment':    ['medical', 'healthcare', 'device', 'equipment'],
+            'Equipment Rental':     ['rental', 'equipment rental', 'leasing'],
           }
           const keywords = matchMap[industry]
           const indLower = ind.toLowerCase()

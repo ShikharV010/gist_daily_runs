@@ -17,14 +17,17 @@ import CompareTab from './CompareTab'
 // ── Tab config ────────────────────────────────────────────────────────────────
 
 const TABS: { id: Tab; label: string; industry: Industry }[] = [
-  { id: 'overview',      label: 'Overview',            industry: 'All' },
-  { id: 'manufacturing', label: 'Manufacturing',        industry: 'Manufacturing' },
-  { id: 'it-consulting', label: 'IT & Consulting',      industry: 'IT & Consulting' },
-  { id: 'truck',         label: 'Truck Transportation', industry: 'Truck Transportation' },
-  { id: 'bcs',           label: 'BCS',                  industry: 'BCS' },
-  { id: 'commercial',    label: 'Commercial',            industry: 'Commercial' },
-  { id: 'ewws',          label: 'EWWS',                  industry: 'EWWS' },
-  { id: 'compare',       label: 'Compare',              industry: 'All' },
+  { id: 'overview',           label: 'Overview',             industry: 'All' },
+  { id: 'manufacturing',      label: 'Manufacturing',        industry: 'Manufacturing' },
+  { id: 'it-consulting',      label: 'IT & Consulting',      industry: 'IT & Consulting' },
+  { id: 'truck',              label: 'Truck Transportation', industry: 'Truck Transportation' },
+  { id: 'bcs',                label: 'BCS',                  industry: 'BCS' },
+  { id: 'commercial',         label: 'Commercial',           industry: 'Commercial' },
+  { id: 'ewws',               label: 'EWWS',                 industry: 'EWWS' },
+  { id: 'advertising',        label: 'Advertising',          industry: 'Advertising' },
+  { id: 'medical-equipment',  label: 'Medical Equipment',    industry: 'Medical Equipment' },
+  { id: 'equipment-rental',   label: 'Equipment Rental',     industry: 'Equipment Rental' },
+  { id: 'compare',            label: 'Compare',              industry: 'All' },
 ]
 
 // ── Industry tab content ──────────────────────────────────────────────────────
