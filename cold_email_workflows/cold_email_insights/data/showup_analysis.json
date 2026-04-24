@@ -11633,5 +11633,298 @@
       "total_duration_min": 27,
       "analyzed_at": "2026-04-23T06:24:58.756645Z"
     }
+  },
+  "am party rentals": {
+    "company": "am party rentals",
+    "prospect_name": "Andrea Morales",
+    "prospect_designation": "Unknown / Not Stated",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Andrea explicitly said she needs to consult her team before proceeding.",
+    "company_industry": "Equipment Rental / Event & Party Rentals",
+    "pain_points": [
+      {
+        "pain_point": "Limited lead generation channels",
+        "severity": "medium",
+        "direct_quote": "we just are implementing a new way of like getting leads",
+        "addressed_in_call": true,
+        "how_addressed": "Mugil pitched multi-channel AI search visibility and content lead funnel"
+      },
+      {
+        "pain_point": "No visibility on AI search platforms",
+        "severity": "high",
+        "direct_quote": "my initial thought was that I was going to see how to basically get our inquiries through ChatGPT",
+        "addressed_in_call": true,
+        "how_addressed": "Demonstrated AI platform indexing via resource hub and FAQ strategy"
+      },
+      {
+        "pain_point": "Website not optimized for intent-based queries",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "Showed 100+ keyword opportunities and sample landing pages from website analysis"
+      },
+      {
+        "pain_point": "Friction in lead capture / booking process",
+        "severity": "low",
+        "direct_quote": "instead of them filling out a form, they're actually creating their own orders",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Demo search results showed irrelevant geography (Tampa, not California)",
+        "how_handled": "Mugil clarified demo uses national data; actual campaigns will be geo-targeted",
+        "resolved": true
+      },
+      {
+        "objection": "Unclear what Gushwork actually builds vs. existing website",
+        "how_handled": "Mugil explained resource hub model using Respect Manufacturing as live example",
+        "resolved": true
+      },
+      {
+        "objection": "Pricing uncertainty / needs team approval",
+        "how_handled": "Mugil offered to send pricing via email for team review",
+        "resolved": false
+      },
+      {
+        "objection": "Product framed as just a blog, underselling perceived value",
+        "how_handled": "Mugil reframed as bridge between buyers and website, not just a blog",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Expressed interest in exploring partnership with her team",
+      "Agreed to receive pricing deck and follow-up email",
+      "Called the idea good and relevant to website elevation goals",
+      "Engaged with demo, selected a specific landing page to preview",
+      "Did not reject pricing outright, only deferred to team"
+    ],
+    "negative_signals": [
+      "Needs team buy-in before any commitment or next meeting",
+      "Initial expectation misaligned \u2014 wanted ChatGPT inquiry routing",
+      "Hesitated on pricing, trailed off without completing thought",
+      "Declined to schedule follow-up call immediately",
+      "No defined growth targets or urgency around lead volume",
+      "Already has in-house marketing team covering SEO and social"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Mugil to send recap email with pitch deck and pricing",
+      "Mugil to include video testimonials from existing customers",
+      "Andrea to review materials and discuss with her team",
+      "Andrea to reach out to schedule next meeting if interested",
+      "Mugil to include calendar booking link in follow-up email"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Recap email summarizing call discussion",
+      "Pitch deck with Gushwork service overview",
+      "Pricing page / plan breakdown ($800/mo, 100/200/400 pages)",
+      "Video testimonials from existing Gushwork customers",
+      "Calendar invite link for prospect to self-book"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect deferred all decisions to an undefined internal team",
+      "No next meeting scheduled; timeline completely open-ended",
+      "Initial demo expectation was misaligned with Gushwork's offering",
+      "Pricing response was hesitant and incomplete",
+      "Interest exists but no urgency, budget signal, or champion clarity",
+      "In-house marketing team may reduce perceived need for Gushwork"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE ran a live website analysis demo \u2014 strong personalization attempt",
+      "Good objection handling on geography and product clarity questions",
+      "Failed to uncover prospect's role or confirm decision-making authority",
+      "No budget or timeline qualification attempted during the call",
+      "Pricing introduced reactively only after prospect asked, not proactively",
+      "Demo used irrelevant geography data, reducing initial credibility",
+      "AE did not identify or address the in-house marketing team dynamic",
+      "Closing attempt was soft; no clear next step with date secured",
+      "Good use of no-contract positioning to reduce commitment fear",
+      "Missing discovery on current lead quality, conversion rate, or spend"
+    ],
+    "key_insights": [
+      "Prospect has in-house marketing team \u2014 potential internal competition",
+      "Real need: AI search visibility, but expectation was ChatGPT lead capture",
+      "No decision-maker present; team approval is a real blocker",
+      "Company is in process change mode \u2014 new order flow being implemented",
+      "Current lead volume is ~10/day; no stated growth target identified",
+      "No contract policy is a strong differentiator to emphasize in follow-up",
+      "Outdoor tent rental and Bay Area wedding verticals are relevant niches",
+      "Resource hub model needs clearer differentiation from just a blog"
+    ],
+    "recommended_next_action": "Send a concise follow-up email within 24 hours including pricing, pitch deck, and video testimonials, with a specific case study from an event/service rental business; add a one-line ask for Andrea to share who else on her team should be looped in for the next conversation.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "AI visibility gap addressed via live multi-platform indexing demo",
+      "Lead channel diversification shown through resource hub content model",
+      "FAQ strategy explained to match exact ChatGPT and Gemini queries",
+      "Leads dashboard demo showed ROI attribution and spam filtering",
+      "No-contract flexibility addressed commitment hesitation proactively",
+      "Booking friction pain not addressed \u2014 opportunity missed in discovery"
+    ],
+    "_meta": {
+      "prospect_email": "andrea@ampartyrentals.com",
+      "prospect_company": "am party rentals",
+      "prospect_website": "www.ampartyrentals.com",
+      "demo_date": "2026-04-23",
+      "ae_name": "Mugil Vanjinath",
+      "industry": "Equipment Rental",
+      "meeting_ids": [
+        "17c03e11fc6f3f807787dc8a0cd5e96d"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=e0f2101f-3b68-4ad8-b315-49c386007ec8&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 25,
+      "analyzed_at": "2026-04-24T06:27:05.676670Z"
+    }
+  },
+  "Tailor": {
+    "company": "Tailor",
+    "prospect_name": "Jaxon Blackham",
+    "prospect_designation": "Unknown (likely sales/growth role)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Jaxon must consult the founder before any budget or vendor decisions.",
+    "company_industry": "Advertising Technology / AI-Powered Personalized Video",
+    "pain_points": [
+      {
+        "pain_point": "SEO performance declining",
+        "severity": "high",
+        "direct_quote": "Our SEO we kind of lost focus of it and it's been not performing as well recently.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed how Gushwork rebuilds SEO with reverse-engineered content pages."
+      },
+      {
+        "pain_point": "Over-reliance on outbound cold calling",
+        "severity": "high",
+        "direct_quote": "A lot more just on hey me reaching out and kind of focusing more on...",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's inbound lead gen model presented as scalable alternative."
+      },
+      {
+        "pain_point": "No visibility in AI search engines",
+        "severity": "medium",
+        "direct_quote": "I've looked a little bit into the AI search, which I do think is a massive need.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated AEO/GEO strategy and LLM citation via FAQ content."
+      },
+      {
+        "pain_point": "Limited SEO and AEO internal expertise",
+        "severity": "medium",
+        "direct_quote": "None of us are SEO or...we know the general idea, we're not great at executing it.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned as fully managed execution partner for SEO/AEO."
+      },
+      {
+        "pain_point": "Cash constrained due to active fundraising",
+        "severity": "high",
+        "direct_quote": "We're in the middle of doing a fundraising...we're a little bit cash lean.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Cannot make purchase decision today",
+        "how_handled": "AE acknowledged, booked follow-up call for next week.",
+        "resolved": false
+      },
+      {
+        "objection": "Budget is unavailable until fundraise closes",
+        "how_handled": "AE empathized (shared own fundraising experience), did not offer discount or deferral.",
+        "resolved": false
+      },
+      {
+        "objection": "Founder approval required for spend allocation",
+        "how_handled": "AE sent deck and sample pages to help Jaxon pitch internally.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Called it 'super fascinating' and 'awesome' multiple times.",
+      "Proactively asked about calendar booking CRM integration.",
+      "Accepted follow-up meeting invite immediately on call.",
+      "Plans to use sample pages to pitch founder internally.",
+      "Confirmed AI search is a 'massive need' and key reason for call.",
+      "Engaged deeply with competitor visibility data and page structure.",
+      "Reviewed pricing page before the call proactively."
+    ],
+    "negative_signals": [
+      "Company is actively fundraising; budget is not yet secured.",
+      "Founder controls spend decisions; Jaxon cannot commit alone.",
+      "No defined marketing budget or spend allocation confirmed.",
+      "Seed round not planned until next year; timeline is long.",
+      "Product focus is on new self-serve launch, not marketing spend."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Jaxon to discuss with founder on fundraise status.",
+      "Jaxon to align with founder on marketing spend allocation.",
+      "Follow-up call booked for same time next Thursday."
+    ],
+    "next_call_date": "2026-04-30 (same time as demo, Thursday)",
+    "follow_up_materials_promised": [
+      "Demo slide deck to be sent via email.",
+      "Sybill call recording link to be shared.",
+      "Links to sample landing pages for Tailor to review."
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Strong product enthusiasm expressed throughout the call.",
+      "Blocked by cash constraints and founder approval, not disinterest.",
+      "Proactively accepted next meeting and engaged with follow-up plan.",
+      "Will use materials to build internal business case for founder.",
+      "3-4 week timeline to close plausible if fundraise succeeds."
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE ran a structured and engaging live product demo effectively.",
+      "Good discovery on current lead gen channels and SEO gaps.",
+      "AE did not address or resolve the budget/cash constraint objection.",
+      "No pricing discussion or package recommendation was made.",
+      "Competitor visibility exercise created strong relevance and engagement.",
+      "AE could have asked more about founder's priorities and criteria.",
+      "Follow-up booked promptly; good closing instinct shown."
+    ],
+    "key_insights": [
+      "Deal gated by angel round fundraise closing in coming weeks.",
+      "Jaxon is a champion, not the economic decision maker.",
+      "Founder is equity-sensitive; ROI framing will be critical.",
+      "Tailor's SEO has declined; immediate pain point for GEO pitch.",
+      "Competitors like Sendspark and Idumo are known benchmarks.",
+      "Self-serve product launch is current internal priority over marketing.",
+      "Sample landing pages are the key internal sales tool now."
+    ],
+    "recommended_next_action": "Send Jaxon a concise one-pager with ROI projections and a recommended starter package, timed to support his internal pitch to the founder before Thursday's follow-up call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Declining SEO shown fixable via reverse-engineered content strategy.",
+      "Cold outbound dependence addressed with inbound lead gen model demo.",
+      "AI search invisibility addressed via AEO/GEO FAQ and LLM citation strategy.",
+      "Internal expertise gap addressed by positioning Gushwork as managed service.",
+      "Cash constraint was acknowledged but not strategically handled or resolved."
+    ],
+    "_meta": {
+      "prospect_email": "jaxon@tailor.video",
+      "prospect_company": "Tailor",
+      "prospect_website": "tailor.video",
+      "demo_date": "2026-04-23",
+      "ae_name": "Arabind",
+      "industry": "Advertising",
+      "meeting_ids": [
+        "728f90525c4c6d83767df02300ea3701"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=fc2a9925-c88e-4ce1-846f-e19a3a106cfa&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 30,
+      "analyzed_at": "2026-04-24T06:27:06.936945Z"
+    }
   }
 }
