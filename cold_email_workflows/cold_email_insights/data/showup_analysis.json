@@ -11926,5 +11926,175 @@
       "total_duration_min": 30,
       "analyzed_at": "2026-04-24T06:27:06.936945Z"
     }
+  },
+  "Free Agent Consulting, LLC": {
+    "company": "Free Agent Consulting, LLC",
+    "prospect_name": "Kerry Conlin",
+    "prospect_designation": "Sales, Marketing and Customer Experience",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Kerry explicitly stated Randy (owner) controls budget and purchasing decisions",
+    "company_industry": "IT Consulting / ERP Implementation & Sales (Acumatica)",
+    "pain_points": [
+      {
+        "pain_point": "Website generates zero organic traffic or inbound leads",
+        "severity": "high",
+        "direct_quote": "I don't think our website gets a lot of traction, to be quite honest.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed zero organic traffic data and demonstrated landing page strategy to fix it"
+      },
+      {
+        "pain_point": "No visibility on Google or AI search engines",
+        "severity": "high",
+        "direct_quote": "I don't think you're showing up here, unfortunately.",
+        "addressed_in_call": true,
+        "how_addressed": "AE walked through 100+ keyword gaps and competitor rankings across Google and AI engines"
+      },
+      {
+        "pain_point": "Relying solely on outbound and word-of-mouth referrals",
+        "severity": "high",
+        "direct_quote": "It's mostly through B2B referral mouth. Through networking and things like that.",
+        "addressed_in_call": true,
+        "how_addressed": "AE contrasted inbound SEO strategy vs. outbound ZoomInfo approach Kerry uses"
+      },
+      {
+        "pain_point": "ZoomInfo outbound yielding minimal results",
+        "severity": "medium",
+        "direct_quote": "I've gotten a couple people I've talked to, but nothing has come to fruition yet.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained intent-based inbound is more qualified than cold outbound prospecting"
+      },
+      {
+        "pain_point": "Owner not prioritizing website as a lead generation tool",
+        "severity": "high",
+        "direct_quote": "I can't get him to get the website used as a tool for us.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Kerry lacks authority to make purchasing decisions",
+        "severity": "high",
+        "direct_quote": "I don't have the purse strings. I don't make the choices.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Not the decision maker \u2014 owner Randy controls budget",
+        "how_handled": "AE asked to get Randy on a follow-up call directly",
+        "resolved": false
+      },
+      {
+        "objection": "Budget likely unavailable or too tight right now",
+        "how_handled": "Kerry flagged it openly; AE did not counter with ROI or pricing justification",
+        "resolved": false
+      },
+      {
+        "objection": "Owner on vacation and team focused on first Acumatica go-live",
+        "how_handled": "AE agreed to follow up in two weeks and booked placeholder calendar invite",
+        "resolved": false
+      },
+      {
+        "objection": "Website managed by owner's daughter, not Kerry",
+        "how_handled": "AE acknowledged it but did not resolve who would authorize website changes",
+        "resolved": false
+      },
+      {
+        "objection": "May only be considered for next year, not current budget cycle",
+        "how_handled": "AE did not push back or create urgency around current opportunity",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Kerry acknowledged website is not driving any business",
+      "Validated nearly every keyword as relevant to their services",
+      "Expressed genuine excitement about landing page examples shown",
+      "Understands SEO and SEM concepts \u2014 no education barrier",
+      "Agreed Gushwork approach is better than ZoomInfo outbound",
+      "Proactively suggested connecting AE with Randy the owner",
+      "Accepted calendar invite and committed to forwarding to Randy",
+      "Called the solution 'valid and good' unprompted"
+    ],
+    "negative_signals": [
+      "Kerry is not the decision maker \u2014 Randy owns the budget",
+      "Signaled Randy likely won't have budget right now",
+      "Positioned deal as 'maybe next year' without urgency",
+      "Owner on vacation and team focused on live client launch",
+      "Website controlled by owner's daughter \u2014 change authority unclear",
+      "No internal champion with purchasing power engaged yet",
+      "Kerry seemed resigned to Randy's inaction on website historically"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call booked for May 8, 2026 at 1:30 PM CST",
+      "Kerry to forward invite and brief Randy before the call",
+      "AE to present same demo directly to Randy the owner",
+      "Kerry to position this as a potential next-year initiative"
+    ],
+    "next_call_date": "2026-05-08T13:30:00 CST",
+    "follow_up_materials_promised": [
+      "Calendar invite sent and confirmed accepted by Kerry",
+      "No additional materials or proposal explicitly promised"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Kerry is not the decision maker \u2014 Randy must be engaged",
+      "Budget explicitly flagged as likely unavailable currently",
+      "Deal framed as 'maybe next year' by prospect herself",
+      "No urgency created; owner distracted by go-live project",
+      "Strong conceptual buy-in from Kerry but zero authority to sign",
+      "Two-week delay before any decision-maker is even contacted"
+    ],
+    "call_quality_score": 5,
+    "call_quality_notes": [
+      "AE did solid discovery and confirmed relevant keyword gaps",
+      "Live product demo was relevant and well-received by Kerry",
+      "AE failed to establish Kerry's authority level early enough",
+      "Pricing shared before decision maker was in the room",
+      "No ROI framing or business case built to support $800/month",
+      "No urgency or FOMO created around competitors ranking now",
+      "AE accepted vague 'reach out in two weeks' too passively",
+      "Should have pushed for Randy's direct contact info on call",
+      "Call ran 110 minutes \u2014 likely too long for an intro demo",
+      "Last few minutes of transcript appear to be accidental recording"
+    ],
+    "key_insights": [
+      "Real decision maker is Randy (owner) \u2014 never on this call",
+      "Kerry is an internal advocate but has zero budget authority",
+      "Company is Acumatica Gold Certified \u2014 a strong credibility asset",
+      "Website has zero organic traffic \u2014 product-market fit is strong",
+      "ZoomInfo contract shows willingness to invest in lead generation",
+      "First Acumatica go-live may signal growth and future budget",
+      "Kerry understands SEO/SEM \u2014 no need to re-educate on concepts",
+      "Owner's inaction on website is a cultural/organizational blocker"
+    ],
+    "recommended_next_action": "Before May 8 follow-up, email Kerry with a one-page ROI summary and competitor ranking report to forward to Randy directly, and request Randy's email to loop him in ahead of the call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Showed live data confirming zero organic website traffic",
+      "Demonstrated 100+ keyword gaps where competitors rank, they don't",
+      "Showed sample landing pages tailored to Acumatica services",
+      "Explained how inbound SEO outperforms cold outbound ZoomInfo",
+      "Highlighted importance of content signals for Google and AI engines",
+      "Did not address owner buy-in barrier or internal change management",
+      "Did not address budget concern with ROI data or case studies"
+    ],
+    "_meta": {
+      "prospect_email": "kconlin@freeagentconsult.com",
+      "prospect_company": "Free Agent Consulting, LLC",
+      "prospect_website": "freeagentconsult.com",
+      "demo_date": "2026-04-24",
+      "ae_name": "Arabind",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "bfc71cbff254d9d94c6a1d97b043a703"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=a4b7ed1a-b609-4cef-9c58-a5774ffa2e7e&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 110,
+      "analyzed_at": "2026-04-25T06:07:47.992792Z"
+    }
   }
 }
