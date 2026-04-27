@@ -12,6 +12,7 @@
 **/sender_emails.csv
 **/enriched_phones.csv
 **/leads_without_phone.csv
+**/no_show_without_phone.csv
 **/slack_threshold_state.json
 **/pending_*.json
 

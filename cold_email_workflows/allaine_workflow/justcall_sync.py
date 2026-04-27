@@ -38,6 +38,7 @@ CF_COMPANY   = 1136514
 CF_WEBSITE   = 1139671
 CF_INFO      = 1176311
 CF_INDUSTRY  = 1227957
+CF_DEMO_DATE = 1228683  # only present on Allaine - No Show campaign (3218289)
 
 PROJ_DIR     = os.path.dirname(__file__)
 PHONE_CACHE  = os.path.join(PROJ_DIR, 'enriched_phones.csv')
@@ -248,13 +249,13 @@ def _append_no_phone(lead, fe_status):
 
 
 # ── JustCall API ──────────────────────────────────────────────────────────────
-def get_campaign_contacts():
+def get_campaign_contacts(campaign_id=JC_CAMPAIGN):
     """Return list of contacts currently in JC campaign (full records)."""
     contacts, page = [], 0
     while True:
         r = requests.get(f'{JC_BASE}/sales_dialer/campaigns/contacts',
                          headers=_jc_headers(),
-                         params={'campaign_id': JC_CAMPAIGN, 'per_page': 50, 'page': page},
+                         params={'campaign_id': campaign_id, 'per_page': 50, 'page': page},
                          timeout=30)
         if r.status_code != 200:
             log.warning(f"    JC list {r.status_code}: {r.text[:200]}")
@@ -269,30 +270,35 @@ def get_campaign_contacts():
     return contacts
 
 
-def post_contact(lead, phone, reply_uuid):
+def post_contact(lead, phone, reply_uuid, campaign_id=JC_CAMPAIGN, extra_custom_fields=None):
     """
     Push a single contact to JC. `lead` is a dict with expected fields.
+    `extra_custom_fields`: list of {'id': str, 'value': str} to merge into the
+    base 5 custom fields (e.g., Demo Date for No Show campaign).
     Returns contact_id or None.
     """
     name = (lead.get('full_name') or f"{lead.get('first_name','')} {lead.get('last_name','')}".strip()
             or lead.get('email') or 'Unknown')
     info_url = f'https://sequencer.gushwork.ai/inbox/replies/{reply_uuid}' if reply_uuid else ''
+    custom_fields = [
+        {'id': str(CF_INFO),     'value': info_url},
+        {'id': str(CF_COMPANY),  'value': lead.get('company', '') or ''},
+        {'id': str(CF_LINKEDIN), 'value': lead.get('linkedin_url', '') or ''},
+        {'id': str(CF_WEBSITE),  'value': lead.get('website_url', '') or ''},
+        {'id': str(CF_INDUSTRY), 'value': lead.get('industry_sub_category', '') or ''},
+    ]
+    if extra_custom_fields:
+        custom_fields.extend(extra_custom_fields)
     body = {
-        'campaign_id': JC_CAMPAIGN,
-        'name':        name,
+        'campaign_id':  campaign_id,
+        'name':         name,
         'phone_number': _digits_only(phone),
         'email':        lead.get('email', '') or '',
         'occupation':   lead.get('title', '') or '',
-        'custom_fields': [
-            {'id': str(CF_INFO),     'value': info_url},
-            {'id': str(CF_COMPANY),  'value': lead.get('company', '') or ''},
-            {'id': str(CF_LINKEDIN), 'value': lead.get('linkedin_url', '') or ''},
-            {'id': str(CF_WEBSITE),  'value': lead.get('website_url', '') or ''},
-            {'id': str(CF_INDUSTRY), 'value': lead.get('industry_sub_category', '') or ''},
-        ],
+        'custom_fields': custom_fields,
     }
     if DRY_RUN:
-        log.info(f"    [DRY] POST /sales_dialer/campaigns/contact: name={name!r} email={body['email']!r} phone={phone!r}")
+        log.info(f"    [DRY] POST /sales_dialer/campaigns/contact camp={campaign_id}: name={name!r} email={body['email']!r} phone={phone!r}")
         return -1
     for attempt in range(3):
         try:
@@ -303,7 +309,7 @@ def post_contact(lead, phone, reply_uuid):
                 return d.get('id') or d.get('contact_id')
             if r.status_code == 429:
                 time.sleep(2 ** attempt); continue
-            log.warning(f"    JC add {r.status_code}: {r.text[:200]}")
+            log.warning(f"    JC add camp={campaign_id} {r.status_code}: {r.text[:200]}")
             return None
         except Exception as e:
             if attempt == 2: log.warning(f"    JC add err: {e}")
@@ -311,19 +317,19 @@ def post_contact(lead, phone, reply_uuid):
     return None
 
 
-def delete_contact(contact_id):
+def delete_contact(contact_id, campaign_id=JC_CAMPAIGN):
     """
-    Remove a single contact from the JC campaign. Returns True on success.
+    Remove a single contact from a JC campaign. Returns True on success.
     JustCall quirk: both ids as query params + non-empty body '{}'.
     """
     try:
         r = requests.delete(f'{JC_BASE}/sales_dialer/campaigns/contact',
                             headers=_jc_headers(),
-                            params={'campaign_id': JC_CAMPAIGN, 'contact_id': contact_id},
+                            params={'campaign_id': campaign_id, 'contact_id': contact_id},
                             data='{}', timeout=20)
         if r.status_code in (200, 204):
             return True
-        log.warning(f"    JC del {contact_id} {r.status_code}: {r.text[:200]}")
+        log.warning(f"    JC del {contact_id} camp={campaign_id} {r.status_code}: {r.text[:200]}")
     except Exception as e:
         log.warning(f"    JC del {contact_id} err: {e}")
     return False

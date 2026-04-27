@@ -26,16 +26,12 @@ import requests
 import psycopg2
 from dotenv import load_dotenv
 
-# Env loading — tries master consolidated .env (local Mac) first, then project-
-# local fallbacks. In CI / GitHub Actions, none of these files exist and env
-# vars are supplied via secrets; load_dotenv silently no-ops missing files.
 load_dotenv('/Users/shikhar.vermagushwork.ai/Documents/claude/projects/.env')
-load_dotenv(os.path.join(os.path.dirname(__file__), '..', '.env'))
-load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 # Local modules (added 2026-04-23 — JustCall sync + threshold Slack)
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import justcall_sync
+import no_show_sync
 import slack_thresholds
 
 # ── Config ─────────────────────────────────────────────────────────────────────
@@ -666,6 +662,9 @@ def finalize_run(now, allaine_tag_id, sender_emails, current_count, added,
         sync_remove_booked_from_justcall(booked_emails, booked_companies, booked_domains)
     except Exception as exc:
         log.error(f"  JC remove failed: {exc}", exc_info=True)
+
+    # No Show JC sync (separate campaign, separate data source)
+    no_show_sync.run(sender_emails)
 
     # Threshold-based Slack (instead of every-run notifications)
     ist_dt = now + timedelta(hours=5, minutes=30)

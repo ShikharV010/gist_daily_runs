@@ -55,13 +55,22 @@ jobs:
             slack-threshold-
 
       # Manual-review log for leads where both enrichment APIs failed.
-      - name: Cache no-phone log
+      - name: Cache no-phone log (cold email)
         uses: actions/cache@v4
         with:
           path: cold_email_workflows/allaine_workflow/leads_without_phone.csv
           key: leads-no-phone-${{ github.run_id }}
           restore-keys: |
             leads-no-phone-
+
+      # Manual-review log for No Show leads where enrichment failed.
+      - name: Cache no-phone log (no show)
+        uses: actions/cache@v4
+        with:
+          path: cold_email_workflows/allaine_workflow/no_show_without_phone.csv
+          key: no-show-no-phone-${{ github.run_id }}
+          restore-keys: |
+            no-show-no-phone-
 
       - name: Run allaine cron
         env:
