@@ -1,0 +1,33 @@
+name: Allaine Daily Calling Summary
+
+on:
+  schedule:
+    # 6:00 AM IST = 00:30 UTC, runs daily.
+    - cron: '30 0 * * *'
+  workflow_dispatch:  # manual trigger from GitHub UI
+
+jobs:
+  send-summary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests python-dotenv
+
+      - name: Run daily calling summary
+        env:
+          JUSTCALL_AUTHENTICATION: ${{ secrets.JUSTCALL_AUTHENTICATION }}
+          SLACK_BOT_TOKEN:         ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_CHANNEL_ID:        C0ARFBBN3TN
+        run: |
+          cd cold_email_workflows/allaine_workflow
+          python daily_calling_summary.py
