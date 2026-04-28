@@ -252,9 +252,41 @@ def enrich_interested_dates(leads):
 
 
 # ── 3. Demo bookings from DB ──────────────────────────────────────────────────
-def fetch_demo_bookings(interested_leads):
+def lookup_lead_attribution(email, campaigns_by_id):
+    """For unmatched booking emails, query Sequencer by email and derive both
+    industry and campaign_id from the lead's actual lead_campaign_data.
+    Returns (industry, campaign_id) or (None, None) on no match."""
+    try:
+        r = requests.get(
+            f'{BASE}/leads', headers=HEADERS,
+            params={'filters[email]': email, 'per_page': 5}, timeout=15,
+        )
+        if r.status_code != 200:
+            return (None, None)
+        leads = r.json().get('data') or []
+        for lead in leads:
+            # Prefer a campaign in ACTIVE
+            for lcd in (lead.get('lead_campaign_data') or []):
+                cid = lcd.get('campaign_id')
+                camp = campaigns_by_id.get(cid)
+                if camp and camp['industry'] in ACTIVE:
+                    return (camp['industry'], cid)
+            # Fall back to first campaign even if not active
+            for lcd in (lead.get('lead_campaign_data') or []):
+                cid = lcd.get('campaign_id')
+                camp = campaigns_by_id.get(cid)
+                if camp:
+                    return (camp['industry'], cid)
+    except Exception:
+        return (None, None)
+    return (None, None)
+
+
+def fetch_demo_bookings(interested_leads, campaigns):
     print('Fetching demo bookings...', flush=True)
     email_to_ind = {l['email']: l['industry'] for l in interested_leads if l['email']}
+    email_to_cid = {l['email']: l['campaign_id'] for l in interested_leads if l['email']}
+    campaigns_by_id = {c['id']: c for c in campaigns}
 
     conn = psycopg2.connect(DB_URL)
     cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
@@ -271,14 +303,41 @@ def fetch_demo_bookings(interested_leads):
     rows = cur.fetchall()
     conn.close()
 
+    # Resolve unmatched emails in parallel via Sequencer lookup
+    unmatched = [(r['prospect_email'] or '').lower()
+                 for r in rows if (r['prospect_email'] or '').lower() not in email_to_ind]
+    unmatched = list({e for e in unmatched if e})
+    print(f'  {len(unmatched)} bookings need Sequencer lead lookup...', flush=True)
+
+    resolved: dict = {}  # email -> (industry, campaign_id)
+    if unmatched:
+        with ThreadPoolExecutor(max_workers=10) as ex:
+            futs = {ex.submit(lookup_lead_attribution, e, campaigns_by_id): e for e in unmatched}
+            for fut in as_completed(futs):
+                e = futs[fut]
+                try:
+                    ind, cid = fut.result()
+                    if ind:
+                        resolved[e] = (ind, cid)
+                except Exception:
+                    pass
+        print(f'  Resolved {len(resolved)}/{len(unmatched)} via lead lookup', flush=True)
+
     today_d = datetime.now(EST).date()
     out = []
+    fallback_counts = {'matched': 0, 'lookup': 0, 'allaine_src': 0, 'manufacturing_default': 0}
     for r in rows:
         email = (r['prospect_email'] or '').lower()
         src   = r.get('source') or ''
-        if email in email_to_ind:       ind = email_to_ind[email]
-        elif 'allaine' in src.lower(): ind = 'IT & Consulting'
-        else:                          ind = 'Manufacturing'
+        camp_id = None
+        if email in email_to_ind:
+            ind = email_to_ind[email]; camp_id = email_to_cid.get(email); fallback_counts['matched'] += 1
+        elif email in resolved:
+            ind, camp_id = resolved[email]; fallback_counts['lookup'] += 1
+        elif 'allaine' in src.lower():
+            ind = 'IT & Consulting'; fallback_counts['allaine_src'] += 1
+        else:
+            ind = 'Manufacturing'; fallback_counts['manufacturing_default'] += 1
 
         status = r['show_status']
         demo_d = r['demo_scheduled_date']
@@ -294,8 +353,9 @@ def fetch_demo_bookings(interested_leads):
             'show_status':         status,
             'show_status_adj':     status_adj,
             'industry':            ind,
+            'campaign_id':         camp_id,
         })
-    print(f'  {len(out)} bookings', flush=True)
+    print(f'  {len(out)} bookings — attribution: {fallback_counts}', flush=True)
     return out
 
 # ── 4. Daily email stats from DB snapshots ────────────────────────────────────
@@ -377,24 +437,27 @@ def build_campaign_stats(campaigns, leads, bookings):
     for l in leads: leads_by_camp[l['campaign_id']].append(l)
     camp_emails = {cid: {l['email'] for l in ls} for cid, ls in leads_by_camp.items()}
 
+    # Bookings indexed by campaign_id (uses booking's true campaign attribution,
+    # not just emails that happened to be interested-tagged)
+    bookings_by_cid = defaultdict(list)
+    for b in bookings:
+        if b.get('campaign_id'):
+            bookings_by_cid[b['campaign_id']].append(b)
+
     out = []
     for c in campaigns:
         if c['industry'] not in ACTIVE: continue
-        cid    = c['id']
-        ls     = leads_by_camp.get(cid, [])
-        emails = camp_emails.get(cid, set())
-        demos  = [l for l in ls if l['booked_demo']]
-        shows  = [l for l in ls if l['is_showup']]
-        pend   = sum(1 for b in bookings
-                     if b['show_status'] == 'P'
-                     and (b['demo_scheduled_date'] or '') >= today_s
-                     and b['email'] in emails)
+        cid       = c['id']
+        ls        = leads_by_camp.get(cid, [])
+        camp_book = bookings_by_cid.get(cid, [])
+        nd = len(camp_book)
+        ns = sum(1 for b in camp_book if b['show_status_adj'] == 'Y')
+        pend = sum(1 for b in camp_book
+                   if b['show_status'] == 'P' and (b['demo_scheduled_date'] or '') >= today_s)
 
         sent  = max(c['emails_sent'], 1)
         cont  = max(c['total_leads_contacted'], 1)
         inte  = len(ls)
-        nd    = len(demos)
-        ns    = len(shows)
         np_d  = max(nd - pend, 0)
 
         out.append({
@@ -485,7 +548,7 @@ if __name__ == '__main__':
     campaigns     = fetch_campaigns()
     int_leads     = fetch_interested_leads(campaigns)
     int_leads     = enrich_interested_dates(int_leads)
-    bookings      = fetch_demo_bookings(int_leads)
+    bookings      = fetch_demo_bookings(int_leads, campaigns)
     daily_email   = fetch_daily_email_stats(campaigns)
     int_leads     = enrich_leads(int_leads, bookings)
     camp_stats    = build_campaign_stats(campaigns, int_leads, bookings)
