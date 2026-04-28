@@ -86,6 +86,7 @@ export default function CompareTab({
 
     { label: '', isSection: true, section: 'Demos & Show-ups', getValue: () => '' },
     { label: 'Demos Booked',     getValue: m => fmt(m.demos_booked) },
+    { label: 'Demos / Leads Contacted', getValue: m => pct(m.demos_per_contacted, 4) },
     { label: 'Demos / Interested', getValue: m => pct(m.demos_per_interested) },
     { label: 'Show-ups',         getValue: m => fmt(m.showups) },
     { label: 'Pending Demos',    getValue: m => fmt(m.pending_demos) },
