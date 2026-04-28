@@ -343,17 +343,36 @@ def fetch_demo_bookings(interested_leads, campaigns):
     print('Fetching demo bookings...', flush=True)
     campaigns_by_id = {c['id']: c for c in campaigns}
 
+    # Dedup by email FIRST (picking the latest booking per prospect by demo_scheduled_date),
+    # THEN filter by source. This matches how the demo-bookings list is curated for reporting:
+    # if a prospect's most recent booking isn't a cold-email demo, exclude them entirely.
     conn = psycopg2.connect(DB_URL)
     cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute("""
+        WITH ranked AS (
+            SELECT prospect_company, prospect_email, prospect_website,
+                   ae_name, demo_scheduled_date,
+                   created_at::date AS created_at_date,
+                   show_status, source,
+                   ROW_NUMBER() OVER (
+                       PARTITION BY LOWER(prospect_email)
+                       ORDER BY demo_scheduled_date DESC NULLS LAST,
+                                CASE show_status WHEN 'Y' THEN 1 WHEN 'P' THEN 2
+                                                  WHEN 'N' THEN 3 WHEN 'R' THEN 4
+                                                  ELSE 5 END,
+                                created_at DESC
+                   ) AS rn
+            FROM gist.gtm_inbound_demo_bookings
+            WHERE is_latest = true
+              AND prospect_email IS NOT NULL
+        )
         SELECT prospect_company, prospect_email, prospect_website,
-               ae_name, demo_scheduled_date,
-               created_at::date AS created_at_date,
+               ae_name, demo_scheduled_date, created_at_date,
                show_status, source
-        FROM gist.gtm_inbound_demo_bookings
-        WHERE source ILIKE '%%gushwork%%email%%'
-          AND is_latest = true
-        ORDER BY demo_scheduled_date DESC
+        FROM ranked
+        WHERE rn = 1
+          AND source ILIKE '%%gushwork%%email%%'
+        ORDER BY demo_scheduled_date DESC NULLS LAST
     """)
     rows = cur.fetchall()
     conn.close()
