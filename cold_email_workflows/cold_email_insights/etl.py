@@ -252,40 +252,95 @@ def enrich_interested_dates(leads):
 
 
 # ── 3. Demo bookings from DB ──────────────────────────────────────────────────
-def lookup_lead_attribution(email, campaigns_by_id):
-    """For unmatched booking emails, query Sequencer by email and derive both
-    industry and campaign_id from the lead's actual lead_campaign_data.
-    Returns (industry, campaign_id) or (None, None) on no match."""
-    try:
-        r = requests.get(
-            f'{BASE}/leads', headers=HEADERS,
-            params={'filters[email]': email, 'per_page': 5}, timeout=15,
-        )
-        if r.status_code != 200:
-            return (None, None)
-        leads = r.json().get('data') or []
-        for lead in leads:
-            # Prefer a campaign in ACTIVE
-            for lcd in (lead.get('lead_campaign_data') or []):
-                cid = lcd.get('campaign_id')
-                camp = campaigns_by_id.get(cid)
-                if camp and camp['industry'] in ACTIVE:
-                    return (camp['industry'], cid)
-            # Fall back to first campaign even if not active
-            for lcd in (lead.get('lead_campaign_data') or []):
-                cid = lcd.get('campaign_id')
-                camp = campaigns_by_id.get(cid)
-                if camp:
-                    return (camp['industry'], cid)
-    except Exception:
-        return (None, None)
+_GENERIC_DOMAINS = {'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icloud.com',
+                    'aol.com', 'protonmail.com', 'live.com', 'msn.com'}
+
+def _pick_attribution(leads, campaigns_by_id):
+    """From a list of Sequencer leads, return (industry, campaign_id) preferring
+    leads with `interested=True` in an ACTIVE campaign, then any ACTIVE campaign,
+    then any campaign at all."""
+    # Pass 1: prefer interested=True in an ACTIVE campaign
+    for L in leads:
+        for lcd in (L.get('lead_campaign_data') or []):
+            cid = lcd.get('campaign_id')
+            camp = campaigns_by_id.get(cid)
+            if camp and camp['industry'] in ACTIVE and lcd.get('interested'):
+                return (camp['industry'], cid)
+    # Pass 2: any ACTIVE campaign
+    for L in leads:
+        for lcd in (L.get('lead_campaign_data') or []):
+            cid = lcd.get('campaign_id')
+            camp = campaigns_by_id.get(cid)
+            if camp and camp['industry'] in ACTIVE:
+                return (camp['industry'], cid)
+    # Pass 3: any campaign at all (industry will be Other/Meta/Follow-ups)
+    for L in leads:
+        for lcd in (L.get('lead_campaign_data') or []):
+            cid = lcd.get('campaign_id')
+            camp = campaigns_by_id.get(cid)
+            if camp:
+                return (camp['industry'], cid)
     return (None, None)
+
+
+def lookup_lead_attribution(email, company, campaigns_by_id):
+    """Find a booking's true industry+campaign by querying Sequencer in three
+    progressive steps: exact email → domain match → company-name match.
+    Returns (industry, campaign_id, source) — source ∈ {'email','domain','company','none'}."""
+    # 1. Direct email lookup (Sequencer supports `GET /leads/{email}`)
+    try:
+        r = requests.get(f'{BASE}/leads/{email}', headers=HEADERS, timeout=20)
+        if r.status_code == 200:
+            payload = r.json().get('data') or r.json()
+            if isinstance(payload, dict) and payload.get('id'):
+                ind, cid = _pick_attribution([payload], campaigns_by_id)
+                if ind:
+                    return (ind, cid, 'email')
+    except Exception:
+        pass
+
+    # 2. Domain match (skip generic free-mail domains)
+    if '@' in email:
+        domain = email.split('@', 1)[1].lower().strip()
+        if domain and domain not in _GENERIC_DOMAINS:
+            try:
+                r = requests.get(f'{BASE}/leads', headers=HEADERS,
+                                 params={'search': domain, 'per_page': 30}, timeout=60)
+                if r.status_code == 200:
+                    leads = [L for L in (r.json().get('data') or [])
+                             if domain in (L.get('email') or '').lower()]
+                    if leads:
+                        ind, cid = _pick_attribution(leads, campaigns_by_id)
+                        if ind:
+                            return (ind, cid, 'domain')
+            except Exception:
+                pass
+
+    # 3. Company name match
+    if company:
+        try:
+            r = requests.get(f'{BASE}/leads', headers=HEADERS,
+                             params={'search': company.strip(), 'per_page': 30}, timeout=60)
+            if r.status_code == 200:
+                # Match if the lead's company contains/equals the booking company
+                key = company.lower().strip()
+                leads = []
+                for L in (r.json().get('data') or []):
+                    lc = (L.get('company') or '').lower()
+                    if lc and (key in lc or lc in key):
+                        leads.append(L)
+                if leads:
+                    ind, cid = _pick_attribution(leads, campaigns_by_id)
+                    if ind:
+                        return (ind, cid, 'company')
+        except Exception:
+            pass
+
+    return (None, None, 'none')
 
 
 def fetch_demo_bookings(interested_leads, campaigns):
     print('Fetching demo bookings...', flush=True)
-    email_to_ind = {l['email']: l['industry'] for l in interested_leads if l['email']}
-    email_to_cid = {l['email']: l['campaign_id'] for l in interested_leads if l['email']}
     campaigns_by_id = {c['id']: c for c in campaigns}
 
     conn = psycopg2.connect(DB_URL)
@@ -303,48 +358,54 @@ def fetch_demo_bookings(interested_leads, campaigns):
     rows = cur.fetchall()
     conn.close()
 
-    # Resolve unmatched emails in parallel via Sequencer lookup
-    unmatched = [(r['prospect_email'] or '').lower()
-                 for r in rows if (r['prospect_email'] or '').lower() not in email_to_ind]
-    unmatched = list({e for e in unmatched if e})
-    print(f'  {len(unmatched)} bookings need Sequencer lead lookup...', flush=True)
+    # Look up EVERY booking via Sequencer (not just unmatched) — interested_leads
+    # attribution can be wrong when leads belong to multiple campaigns.
+    unique_keys = list({((r['prospect_email'] or '').lower(), r['prospect_company'] or '')
+                        for r in rows if r['prospect_email']})
+    print(f'  Resolving {len(unique_keys)} unique bookings via Sequencer (email→domain→company)...', flush=True)
 
-    resolved: dict = {}  # email -> (industry, campaign_id)
-    if unmatched:
-        with ThreadPoolExecutor(max_workers=10) as ex:
-            futs = {ex.submit(lookup_lead_attribution, e, campaigns_by_id): e for e in unmatched}
-            for fut in as_completed(futs):
-                e = futs[fut]
-                try:
-                    ind, cid = fut.result()
-                    if ind:
-                        resolved[e] = (ind, cid)
-                except Exception:
-                    pass
-        print(f'  Resolved {len(resolved)}/{len(unmatched)} via lead lookup', flush=True)
+    resolved: dict = {}  # (email, company) -> (industry, cid, source)
+    src_counts = {'email': 0, 'domain': 0, 'company': 0, 'none': 0}
+    with ThreadPoolExecutor(max_workers=10) as ex:
+        futs = {ex.submit(lookup_lead_attribution, e, c, campaigns_by_id): (e, c)
+                for (e, c) in unique_keys}
+        done = 0
+        for fut in as_completed(futs):
+            key = futs[fut]
+            try:
+                ind, cid, src = fut.result()
+                resolved[key] = (ind, cid, src)
+                src_counts[src] += 1
+            except Exception:
+                resolved[key] = (None, None, 'none')
+                src_counts['none'] += 1
+            done += 1
+            if done % 50 == 0:
+                print(f'    [{done}/{len(unique_keys)}] resolved', flush=True)
+
+    print(f'  Attribution sources: {src_counts}', flush=True)
 
     today_d = datetime.now(EST).date()
     out = []
-    fallback_counts = {'matched': 0, 'lookup': 0, 'allaine_src': 0, 'manufacturing_default': 0}
     for r in rows:
-        email = (r['prospect_email'] or '').lower()
-        src   = r.get('source') or ''
-        camp_id = None
-        if email in email_to_ind:
-            ind = email_to_ind[email]; camp_id = email_to_cid.get(email); fallback_counts['matched'] += 1
-        elif email in resolved:
-            ind, camp_id = resolved[email]; fallback_counts['lookup'] += 1
-        elif 'allaine' in src.lower():
-            ind = 'IT & Consulting'; fallback_counts['allaine_src'] += 1
-        else:
-            ind = 'Manufacturing'; fallback_counts['manufacturing_default'] += 1
+        email   = (r['prospect_email'] or '').lower()
+        company = r['prospect_company'] or ''
+        src     = r.get('source') or ''
+        ind, cid, _ = resolved.get((email, company), (None, None, 'none'))
+
+        if not ind:
+            # Last-resort heuristic when Sequencer has no record at all
+            if 'allaine' in src.lower():
+                ind = 'IT & Consulting'
+            else:
+                ind = 'Unknown'
 
         status = r['show_status']
         demo_d = r['demo_scheduled_date']
         status_adj = 'N' if (status == 'P' and demo_d and demo_d < today_d) else status
 
         out.append({
-            'company':             r['prospect_company'] or '',
+            'company':             company,
             'email':               email,
             'website':             r['prospect_website'] or '',
             'ae_name':             r['ae_name'] or '',
@@ -353,9 +414,9 @@ def fetch_demo_bookings(interested_leads, campaigns):
             'show_status':         status,
             'show_status_adj':     status_adj,
             'industry':            ind,
-            'campaign_id':         camp_id,
+            'campaign_id':         cid,
         })
-    print(f'  {len(out)} bookings — attribution: {fallback_counts}', flush=True)
+    print(f'  {len(out)} bookings done', flush=True)
     return out
 
 # ── 4. Daily email stats from DB snapshots ────────────────────────────────────
