@@ -12913,5 +12913,315 @@
       "total_duration_min": 63,
       "analyzed_at": "2026-04-28T07:15:34.664800Z"
     }
+  },
+  "Mobix": {
+    "company": "Mobix",
+    "prospect_name": "Dayton Niemann",
+    "prospect_designation": "Account Executive",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Dayton is an AE who must pitch internally to a larger team before any decision is made.",
+    "company_industry": "Truck Transportation / Third-Party Logistics (3PL)",
+    "pain_points": [
+      {
+        "pain_point": "Over-reliance on referrals for new business",
+        "severity": "high",
+        "direct_quote": "referrals are limited to an extent. You definitely don't want to live off of them either.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as a scalable inbound channel beyond referrals."
+      },
+      {
+        "pain_point": "No scalable inbound lead generation channel",
+        "severity": "high",
+        "direct_quote": "one of the goals we had going into Q2 was just try and find another avenue or channel to engage with some leads.",
+        "addressed_in_call": true,
+        "how_addressed": "Demo showed SEO and AI search visibility driving inbound leads."
+      },
+      {
+        "pain_point": "Website not optimized to capture organic traffic",
+        "severity": "medium",
+        "direct_quote": "we know our website is an area of focus that we want to hone in on.",
+        "addressed_in_call": true,
+        "how_addressed": "Showed landing page creation and integration without rebuilding the site."
+      },
+      {
+        "pain_point": "Outbound prospecting has low conversion rates",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "AE acknowledged outbound is hard in niche logistics; inbound solves this."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Decision requires buy-in from a larger internal team",
+        "how_handled": "AE offered deck and example links for Dayton to present internally.",
+        "resolved": false
+      },
+      {
+        "objection": "Questions about contract terms, credits, and pricing model",
+        "how_handled": "AE explained month-on-month subscription, no lock-in, page-based packages.",
+        "resolved": true
+      },
+      {
+        "objection": "Concern about time to see results from SEO",
+        "how_handled": "AE set realistic expectation of initial traction within a month, full results in 3-4 months.",
+        "resolved": true
+      },
+      {
+        "objection": "Tech and IT team involvement required for integration",
+        "how_handled": "AE explained only temporary DNS access is needed; minimal disruption.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Confirmed Q2 goal is finding new lead generation channels.",
+      "Acknowledged website improvement is a current company priority.",
+      "Validated multiple relevant service categories shown by tool.",
+      "Asked for shareable materials to pitch internally to team.",
+      "Agreed to a follow-up meeting on May 12.",
+      "Called the approach 'interesting and unique' unprompted.",
+      "Recognized competitor ShipBob, showing market awareness."
+    ],
+    "negative_signals": [
+      "Not the decision maker; large internal team must approve.",
+      "Next internal review meeting is 10+ days away.",
+      "IT team filters emails, suggesting bureaucratic friction.",
+      "Low urgency tone; only started exploring options a month ago.",
+      "Expects non-referral leads to have lower conversion rates.",
+      "Calendar invite not confirmed during call."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Dayton to share demo deck with internal sales and tech team.",
+      "Dayton to present Gushwork as a candidate option internally.",
+      "Follow-up call scheduled for May 12, same time.",
+      "Arabind to send deck, landing page links, and testimonials."
+    ],
+    "next_call_date": "2026-05-12",
+    "follow_up_materials_promised": [
+      "Gushwork sales/demo deck via email.",
+      "Example landing page links for Dayton to review and share.",
+      "Link to Gushwork customer video testimonials page.",
+      "Calendar invite for May 12 follow-up call."
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Clear company pain point aligns directly with Gushwork's offering.",
+      "Prospect is genuinely interested but not the final decision maker.",
+      "Internal approval process adds significant delay and uncertainty.",
+      "Q2 goal of new lead channels creates timely urgency.",
+      "Requested shareable assets shows intent to champion internally.",
+      "No budget objection raised; pricing model explained and accepted."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE led a solid product demo with real-time competitor analysis.",
+      "Discovery was shallow; no questions on budget or team size.",
+      "AE did not identify or qualify the actual decision makers.",
+      "No BANT or MEDDIC-style qualification attempted.",
+      "Good rapport built; prospect was comfortable and engaged.",
+      "Calendar invite not confirmed before ending call \u2014 weak close.",
+      "AE offered strong follow-up assets to support internal pitch.",
+      "Time spent on tool demo was strong and relevant to prospect."
+    ],
+    "key_insights": [
+      "Dayton is a champion, not the economic buyer.",
+      "Decision requires a multi-stakeholder internal pitch process.",
+      "Company is in early-stage evaluation of new lead channels.",
+      "Referral-heavy model signals they lack inbound infrastructure.",
+      "Logistics niche (3PL, LTL/FTL) makes inbound SEO high value.",
+      "Next meeting is 10+ days away, increasing deal cooling risk.",
+      "ShipBob recognized as competitor, showing SEO competitive gap."
+    ],
+    "recommended_next_action": "Send a concise, visually compelling one-pager tailored to Mobix's 3PL services (referencing ShipBob as a competitor) that Dayton can use in his internal pitch, and proactively request an intro to the decision maker or a multi-stakeholder call before May 12.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Referral dependency addressed by positioning Gushwork as new inbound funnel.",
+      "No inbound channel addressed via live demo of SEO and AI search visibility.",
+      "Website optimization concern addressed; showed add-on hub, no site rebuild needed.",
+      "Low outbound ROI addressed by contrasting inbound intent-driven traffic benefits."
+    ],
+    "_meta": {
+      "prospect_email": "dayton@mobixlogistics.com",
+      "prospect_company": "Mobix",
+      "prospect_website": "https://www.mobix.co/",
+      "demo_date": "2026-04-28",
+      "ae_name": "Arabind",
+      "industry": "Truck Transportation",
+      "meeting_ids": [
+        "39b571950e5fc53eab923206a11a4ec9"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=b4582ca6-fa1c-425d-9477-ced51bdacc0b&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 28,
+      "analyzed_at": "2026-04-29T06:44:24.140712Z"
+    }
+  },
+  "Clutec Technology Recycling": {
+    "company": "Clutec Technology Recycling",
+    "prospect_name": "Cole Rodrigues",
+    "prospect_designation": "Procurement (title inferred from email procurement@clutec.com)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Cole deferred to an internal meeting before any decision, suggesting shared authority.",
+    "company_industry": "E-Waste & IT Asset Disposition (ITAD) / Electronics Recycling",
+    "pain_points": [
+      {
+        "pain_point": "No meaningful inbound lead generation",
+        "severity": "high",
+        "direct_quote": "to get directly to the website that will stay below. We don't have that answer right now.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated how landing pages capture inbound intent-driven leads."
+      },
+      {
+        "pain_point": "No visibility on AI search engines like ChatGPT",
+        "severity": "high",
+        "direct_quote": "it took a lot of prompts until we popped up so.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained AI-crawler-friendly page structure and LLM indexing strategy."
+      },
+      {
+        "pain_point": "Relying solely on outbound channels for leads",
+        "severity": "medium",
+        "direct_quote": "Leads everywhere, email, LinkedIn calls, leveraging connections.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as an organic inbound complement to outbound efforts."
+      },
+      {
+        "pain_point": "No desire to spend on Google Ads",
+        "severity": "medium",
+        "direct_quote": "We got no interest in throwing money in the fire for just Google AdWords.",
+        "addressed_in_call": true,
+        "how_addressed": "AE confirmed Gushwork works independently without paid ad spend."
+      },
+      {
+        "pain_point": "Manual and slow content/page creation process",
+        "severity": "medium",
+        "direct_quote": "It's just a little bit faster than what I can do when I'm creating pages.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed AI-automated page creation producing pages in seconds at scale."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Quality concern around AI-generated blog content",
+        "how_handled": "AE explained structured FAQ and long-tail strategy; Collin acknowledged AI content at scale has cost advantages.",
+        "resolved": false
+      },
+      {
+        "objection": "ROI uncertainty vs. fewer manually written articles",
+        "how_handled": "Collin raised doing 3-4 targeted articles instead; AE cited client results (10-45 leads/month).",
+        "resolved": false
+      },
+      {
+        "objection": "Concern about page content similarity across 100+ pages",
+        "how_handled": "AE clarified each page targets unique search queries with distinct content.",
+        "resolved": true
+      },
+      {
+        "objection": "Need for internal alignment before committing",
+        "how_handled": "AE accepted and offered a placeholder Q&A call; prospect preferred email follow-up.",
+        "resolved": false
+      },
+      {
+        "objection": "Uncertainty about whether Google Ads are required",
+        "how_handled": "AE confirmed platform works independently via organic; showed CTR data favoring organic results.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Cole personally tested ChatGPT visibility before the call.",
+      "Cole asked to see page creation demo again \u2014 high engagement.",
+      "Proactively asked about pricing structure and next steps.",
+      "Asked about timeline post-signing \u2014 implies purchase consideration.",
+      "Team asked detailed questions about lead volume and sources.",
+      "Cole validated that AI-organic beats paid Google Ads for them.",
+      "Team asked if pages go live on their own domain \u2014 ownership interest.",
+      "Cole confirmed they would email to follow up internally."
+    ],
+    "negative_signals": [
+      "No decision maker present \u2014 Cole may lack final authority.",
+      "Collin suggested fewer articles may be a cheaper alternative.",
+      "Team deferred to internal meeting with no set follow-up date.",
+      "Collin questioned if bulk AI content beats targeted manual SEO.",
+      "No urgency expressed \u2014 'let's keep it open' close from Cole.",
+      "Gushwork couldn't confirm exact client start dates on the spot.",
+      "Collin is an external advisor, not internal \u2014 dynamic is unclear."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send pricing structure details via email.",
+      "AE to share sample landing pages created live on call.",
+      "Clutec team to hold internal alignment meeting.",
+      "Cole to email Abhinav if they want to proceed or ask questions.",
+      "No follow-up call scheduled \u2014 left open-ended by prospect."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Pricing page link (also available on gushwork.ai).",
+      "Sample landing pages created live during the demo.",
+      "Case study data for Respect Manufacturing and Source Equipment."
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Cole self-initiated interest by testing ChatGPT visibility first.",
+      "Strong engagement with demo \u2014 asked for repeat walkthrough.",
+      "Requested pricing unprompted \u2014 clear evaluation intent.",
+      "No hard objections raised; questions were exploratory not blocking.",
+      "Risk: no DM confirmed, no follow-up date set, internal meeting needed.",
+      "Collin's DIY SEO alternative suggestion introduces competitive friction.",
+      "Overall tone was curious and positive but non-committal at close."
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE ran a live personalized demo for Clutec \u2014 strong differentiator.",
+      "AE effectively tied product to prospect's ChatGPT pain point.",
+      "AE failed to pin down a follow-up meeting before ending the call.",
+      "AE could not confirm exact client start dates \u2014 minor credibility dip.",
+      "Discovery was surface-level; deeper pain quantification was missed.",
+      "Collin's counterpoint on DIY SEO was not fully countered by AE.",
+      "AE did not identify or confirm Cole as final decision maker.",
+      "Good use of client examples (Source Equipment, Respect Manufacturing).",
+      "Pricing was not discussed on call \u2014 left entirely to async follow-up."
+    ],
+    "key_insights": [
+      "Clutec is early-stage in inbound marketing \u2014 high greenfield opportunity.",
+      "Cole's ChatGPT self-test shows strong personal awareness of the problem.",
+      "Collin Siverts (external advisor) holds significant influence on this decision.",
+      "Clutec currently has zero inbound tracking \u2014 baseline is easy to beat.",
+      "James Mannering asked technical questions \u2014 likely an internal champion.",
+      "Prospect operates in a geography-specific ITAD niche \u2014 ideal for local SEO.",
+      "Outbound tools (Dripify, Instantly) just launched \u2014 inbound gap is real.",
+      "No Google Ads budget appetite \u2014 organic-only play strongly aligns here.",
+      "Team dynamic suggests committee decision \u2014 multi-stakeholder deal risk.",
+      "Collin's SEO expertise may accelerate or complicate the buying decision."
+    ],
+    "recommended_next_action": "Send a personalized follow-up email within 24 hours including pricing, the live demo landing pages, and a tailored one-page ROI comparison (Gushwork vs. manual content creation) addressing Collin's 'fewer articles' objection \u2014 then propose a specific follow-up call date for a Q&A with the full decision-making team.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Inbound lead gap addressed via lead dashboard and form capture demo.",
+      "AI search invisibility addressed with LLM-crawler-friendly page structure.",
+      "Outbound dependency addressed by positioning Gushwork as inbound layer.",
+      "Google Ads aversion addressed \u2014 confirmed organic-only approach works.",
+      "Slow manual page creation addressed via live automated demo in seconds."
+    ],
+    "_meta": {
+      "prospect_email": "procurement@clutec.com",
+      "prospect_company": "Clutec Technology Recycling",
+      "prospect_website": "www.clutec.com",
+      "demo_date": "2026-04-27",
+      "ae_name": "Abhinav Chaturvedi",
+      "industry": "EWWS",
+      "meeting_ids": [
+        "1a9b9dcf08e560da3e0b5ee80f7d5460"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=18b28182-b799-4d6c-9842-ddfbd41b5669&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 45,
+      "analyzed_at": "2026-04-29T06:44:36.795424Z"
+    }
   }
 }
