@@ -42,35 +42,39 @@ def ordinal(n):
     return f"{n}{ {1:'st', 2:'nd', 3:'rd'}.get(n % 10, 'th') }"
 
 
-def fetch_calls(campaign_id, from_param, to_param):
-    """Paginate all calls in the window. Wider window OK — we filter precisely later."""
+def fetch_calls(campaign_id, from_param):
+    """
+    Paginate all calls from `from_param` (user's TZ date) onwards.
+    Intentionally omits `to_datetime` — the API interprets times in user's TZ
+    and rejects values in the future, but we don't know the user's TZ
+    deterministically. Python `filter_to_window` narrows precisely afterwards.
+    Raises on persistent failure (don't silently report 0).
+    """
     calls = []
     page = 0
     while True:
-        ok = False
-        for attempt in range(3):
+        last_err = None
+        for attempt in range(4):
             try:
                 r = requests.get(f'{JC_BASE}/sales_dialer/calls',
                                  headers={'Authorization': JC_AUTH},
                                  params={'campaign_id': campaign_id,
                                          'from_datetime': from_param,
-                                         'to_datetime':   to_param,
                                          'per_page': 100,
                                          'page': page,
                                          'sort': 'id', 'order': 'desc'},
                                  timeout=60)
                 if r.status_code == 200:
-                    ok = True; break
+                    last_err = None; break
                 if r.status_code == 429:
                     time.sleep(5 * (attempt + 1)); continue
-                print(f'  WARN camp={campaign_id} page={page} status={r.status_code}: {r.text[:200]}')
-                return calls
-            except Exception as e:
-                if attempt == 2:
-                    print(f'  ERROR camp={campaign_id} page={page}: {e}')
-                    return calls
+                last_err = f'status={r.status_code}: {r.text[:200]}'
                 time.sleep(2 ** attempt)
-        if not ok: return calls
+            except Exception as e:
+                last_err = f'exception: {e}'
+                time.sleep(2 ** attempt)
+        if last_err is not None:
+            raise RuntimeError(f'JC fetch failed for camp={campaign_id} page={page}: {last_err}')
         d = r.json()
         batch = d.get('data', [])
         calls += batch
@@ -154,19 +158,19 @@ def main():
     window_start_utc = (window_start_ist - IST_OFFSET).replace(tzinfo=timezone.utc)
     window_end_utc   = (window_end_ist   - IST_OFFSET).replace(tzinfo=timezone.utc)
 
-    # API range — generous on the start, capped to "now" since JustCall rejects
-    # future to_datetime values. Python filter narrows precisely afterwards.
+    # API range — start 2 days back to safely cover the IST window regardless of
+    # the JC account's user-TZ. No `to_datetime` (JC rejects future values, and
+    # we don't know the user's TZ deterministically). Python filter narrows.
     from_param = (yesterday_ist - timedelta(days=1)).strftime('%Y-%m-%d')
-    to_param   = now_ist.strftime('%Y-%m-%d %H:%M:%S')
 
     date_label = f"{ordinal(yesterday_ist.day)} {yesterday_ist.strftime('%B %Y')}"
 
     print(f'Window UTC: {window_start_utc} → {window_end_utc}')
-    print(f'API range:  {from_param} → {to_param}')
+    print(f'API from_datetime: {from_param}')
     print(f'Date label: {date_label}')
 
     print('\nFetching Cold Email calls (camp 3212549)...')
-    cold_calls = fetch_calls(CAMP_COLD, from_param, to_param)
+    cold_calls = fetch_calls(CAMP_COLD, from_param)
     print(f'  Raw: {len(cold_calls)} calls in API range')
     cold_calls = filter_to_window(cold_calls, window_start_utc, window_end_utc)
     print(f'  In IST window: {len(cold_calls)}')
@@ -174,7 +178,7 @@ def main():
     print(f'  Stats: {cold_stats}')
 
     print('\nFetching No Show calls (camp 3218289)...')
-    no_show_calls = fetch_calls(CAMP_NO_SHOW, from_param, to_param)
+    no_show_calls = fetch_calls(CAMP_NO_SHOW, from_param)
     print(f'  Raw: {len(no_show_calls)} calls in API range')
     no_show_calls = filter_to_window(no_show_calls, window_start_utc, window_end_utc)
     print(f'  In IST window: {len(no_show_calls)}')
