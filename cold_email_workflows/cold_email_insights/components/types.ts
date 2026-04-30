@@ -16,6 +16,9 @@ export interface CampaignStat {
   showups: number
   pending_demos: number
   noshow: number
+  closed?: number
+  arr?: number
+  mrr?: number
   reply_rate_per_sent: number
   reply_rate_per_contacted: number
   int_rate_per_sent: number
@@ -27,6 +30,10 @@ export interface CampaignStat {
   show_rate: number
   demos_per_interested: number
   showups_per_interested: number
+  close_per_lead?: number
+  close_per_interested?: number
+  close_per_demo?: number
+  close_per_showup?: number
 }
 
 export interface InterestedLead {
@@ -54,6 +61,22 @@ export interface DemoBooking {
   show_status: string
   show_status_adj: string
   industry: string
+  campaign_id?: number | null
+  closed?: boolean
+  arr?: number
+  monthly_amount?: number
+  cs_name?: string | null
+  onboarding_call_date?: string | null
+}
+
+export interface CloseRecord {
+  email: string
+  company: string
+  website: string
+  cs_name: string
+  onboarding_call_date: string | null
+  monthly_amount: number
+  arr: number
 }
 
 export interface DailyEmailStat {
@@ -86,6 +109,7 @@ export interface MetricsData {
   campaigns: CampaignStat[]
   interested_leads: InterestedLead[]
   demo_bookings: DemoBooking[]
+  closes?: CloseRecord[]
   daily_email_stats: DailyEmailStat[]
   time_series: { daily: TimeSeriesDay[] }
   totals: Record<string, number>
@@ -163,6 +187,9 @@ export interface ComputedMetrics {
   pending_demos: number
   completed_demos: number
   noshow: number
+  closed: number
+  arr: number
+  mrr: number
   reply_rate_per_sent: number
   reply_rate_per_contacted: number
   int_rate_per_sent: number
@@ -174,6 +201,10 @@ export interface ComputedMetrics {
   show_rate: number
   demos_per_interested: number
   showups_per_interested: number
+  close_per_lead: number
+  close_per_interested: number
+  close_per_demo: number
+  close_per_showup: number
 }
 
 export interface ComputedCampaignRow extends Omit<ComputedMetrics, 'campaigns'> {

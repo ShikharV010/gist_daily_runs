@@ -15,6 +15,12 @@ function fmt(n: number) {
   if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K'
   return n.toLocaleString()
 }
+function money(n: number) {
+  if (!n) return '—'
+  if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1) + 'M'
+  if (n >= 1_000)     return '$' + (n / 1_000).toFixed(1) + 'K'
+  return '$' + Math.round(n).toLocaleString()
+}
 
 const TH = ({ children }: { children: React.ReactNode }) => (
   <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
@@ -94,6 +100,15 @@ export default function CompareTab({
     { label: 'Actual Show Rate', getValue: m => pct(m.show_rate) },
     { label: 'Show-ups / Interested', getValue: m => pct(m.showups_per_interested) },
     { label: 'Show-ups / Lead',  getValue: m => pct(m.showups_per_contacted, 4) },
+
+    { label: '', isSection: true, section: 'Closed (Onboardings)', getValue: () => '' },
+    { label: 'Closed Deals',         getValue: m => String(m.closed) },
+    { label: 'ARR',                  getValue: m => money(m.arr) },
+    { label: 'MRR',                  getValue: m => money(m.mrr) },
+    { label: 'Close / Demo',         getValue: m => pct(m.close_per_demo) },
+    { label: 'Close / Show-up',      getValue: m => pct(m.close_per_showup) },
+    { label: 'Close / Interested',   getValue: m => pct(m.close_per_interested) },
+    { label: 'Close / Lead',         getValue: m => pct(m.close_per_lead, 4) },
 
     { label: '', isSection: true, section: 'Deal Intent (analyzed calls)', getValue: () => '' },
   ]

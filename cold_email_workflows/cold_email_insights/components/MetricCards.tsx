@@ -8,15 +8,21 @@ function fmt(n: number) {
   return n.toLocaleString()
 }
 function pctStr(n: number, digits = 2) { return n.toFixed(digits) + '%' }
+function money(n: number) {
+  if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1) + 'M'
+  if (n >= 1_000)     return '$' + (n / 1_000).toFixed(1) + 'K'
+  return '$' + Math.round(n).toLocaleString()
+}
 
 const ROW_STYLE = {
   1: { bg: '#dbeafe', border: '#93c5fd', text: '#1e40af' },  // blue
   2: { bg: '#ede9fe', border: '#c4b5fd', text: '#5b21b6' },  // violet
   3: { bg: '#d1fae5', border: '#6ee7b7', text: '#065f46' },  // emerald
+  4: { bg: '#fef3c7', border: '#fcd34d', text: '#92400e' },  // amber (closes)
 } as const
 
 function Card({ title, main, sub, row }: {
-  title: string; main: string; sub?: string; row: 1 | 2 | 3
+  title: string; main: string; sub?: string; row: 1 | 2 | 3 | 4
 }) {
   const s = ROW_STYLE[row]
   return (
@@ -63,6 +69,16 @@ export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }
         <Card title="Show-ups / Emails Sent"     main={pctStr(m.showups_per_sent, 4)}      sub={`${fmt(m.showups)} / ${fmt(m.emails_sent)} sent`}               row={3} />
         <Card title="Show-ups / Leads Contacted" main={pctStr(m.showups_per_contacted, 4)} sub={`${fmt(m.showups)} / ${fmt(m.leads_contacted)} leads`}          row={3} />
         <Card title="Show-ups / Demos"           main={pctStr(m.show_rate)}                sub={`${m.showups} showed / ${m.completed_demos} completed demos`}   row={3} />
+      </div>
+
+      <RowLabel>Closed (Onboardings)</RowLabel>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+        <Card title="Closed Deals"           main={fmt(m.closed)}                                                                                          row={4} />
+        <Card title="ARR"                    main={money(m.arr)}              sub={`MRR ${money(m.mrr)}`}                                                  row={4} />
+        <Card title="Close / Demo"           main={pctStr(m.close_per_demo)}     sub={`${m.closed} / ${fmt(m.demos_booked)} demos`}                       row={4} />
+        <Card title="Close / Show-up"        main={pctStr(m.close_per_showup)}   sub={`${m.closed} / ${fmt(m.showups)} show-ups`}                         row={4} />
+        <Card title="Close / Interested"     main={pctStr(m.close_per_interested)} sub={`${m.closed} / ${fmt(m.interested)} interested`}                  row={4} />
+        <Card title="Close / Lead"           main={pctStr(m.close_per_lead, 4)}  sub={`${m.closed} / ${fmt(m.leads_contacted)} leads`}                    row={4} />
       </div>
     </div>
   )

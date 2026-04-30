@@ -10,6 +10,12 @@ function fmt(n: number) {
   if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K'
   return n.toLocaleString()
 }
+function money(n: number) {
+  if (!n) return '—'
+  if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1) + 'M'
+  if (n >= 1_000)     return '$' + (n / 1_000).toFixed(1) + 'K'
+  return '$' + Math.round(n).toLocaleString()
+}
 
 const TH = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
   <th className={`px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap ${className}`}
@@ -62,6 +68,10 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
               <TH>Int. Rate</TH>
               <TH>Demos</TH>
               <TH>Demos / Interested</TH>
+              <TH>Show-ups</TH>
+              <TH>Closed</TH>
+              <TH>ARR</TH>
+              <TH>Close / Demo</TH>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
@@ -87,6 +97,10 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
                 <TD>{pct(c.int_rate_per_contacted, 4)}</TD>
                 <TD className="font-medium">{c.demos_booked}</TD>
                 <TD>{pct(c.demos_per_interested)}</TD>
+                <TD>{c.showups}</TD>
+                <TD className={c.closed > 0 ? 'font-semibold text-amber-700' : ''}>{c.closed}</TD>
+                <TD className={c.arr > 0 ? 'font-semibold text-amber-700' : ''}>{money(c.arr)}</TD>
+                <TD>{pct(c.close_per_demo)}</TD>
               </tr>
             ))}
           </tbody>

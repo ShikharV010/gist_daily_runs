@@ -438,6 +438,190 @@ def fetch_demo_bookings(interested_leads, campaigns):
     print(f'  {len(out)} bookings done', flush=True)
     return out
 
+# ── 3b. Closes from Onboarding_Tracker join ───────────────────────────────────
+_MANUAL_CLOSES = [
+    {
+        'email': 'johnny@divinedesignmanufacturing.com',
+        'company': 'Divine Design Manufacturing',
+        'website': 'https://divinedesignmanufacturing.com/',
+        'monthly_amount': 800.0, 'arr': 9600.0,
+        'cs_name': 'amitesh.girotiya@gushwork.ai',
+        'onboarding_call_date': '2026-02-18',
+        # Booking-side metadata for synthesizing a demo_bookings row
+        '_synth_booking': {
+            'demo_scheduled_date': '2026-02-06',
+            'created_at_date':     '2026-02-05',
+            'ae_name':             'arabind.mishra@gushwork.ai',
+            'industry':            'Manufacturing',
+        },
+    },
+    {
+        'email': 'jmatheney@icon-mh.com',
+        'company': 'Icon Material Handling',
+        'website': 'http://icon-mh.com/',
+        'monthly_amount': 600.0, 'arr': 7200.0,
+        'cs_name': 'sushanth.raj@gushwork.ai',
+        'onboarding_call_date': '2026-02-20',
+        '_synth_booking': {
+            'demo_scheduled_date': '2026-02-18',
+            'created_at_date':     '2026-02-18',
+            'ae_name':             'ajith.ponicherry@gushwork.ai',
+            'industry':            'Manufacturing',
+        },
+    },
+]
+
+CLOSES_QUERY = r"""
+WITH inbound_base AS (
+    SELECT *, COALESCE(event_url, LOWER(TRIM(prospect_email))) AS booking_key
+    FROM gist.gtm_inbound_demo_bookings
+),
+first_booking AS (
+    SELECT booking_key, MIN(created_at::date) AS demo_booking_date
+    FROM inbound_base GROUP BY booking_key
+),
+latest_rows AS (
+    SELECT DISTINCT ON (LOWER(TRIM(b.prospect_email)))
+        b.prospect_first_name, b.prospect_email, b.prospect_company,
+        b.prospect_website, b.demo_scheduled_date, b.ae_email,
+        b.show_status, b.source, b.booking_key
+    FROM inbound_base b
+    WHERE b.is_latest = true
+      AND b.prospect_first_name NOT IN ('Test','test','gushwork','Gushwork','df df','df')
+      AND b.prospect_email NOT ILIKE '%%gushwork%%'
+      AND LOWER(b.prospect_email) NOT ILIKE '%%swapnil%%'
+      AND LOWER(b.prospect_email) NOT ILIKE '%%getclientell%%'
+    ORDER BY LOWER(TRIM(b.prospect_email)), b.demo_scheduled_date DESC
+),
+inbound_with_bucket AS (
+    SELECT l.*, f.demo_booking_date,
+        CASE WHEN LOWER(l.source) LIKE '%%gushwork email%%' THEN 'Cold email' ELSE 'Other' END AS source_bucket
+    FROM latest_rows l
+    LEFT JOIN first_booking f ON l.booking_key = f.booking_key
+),
+inbound_clean AS (
+    SELECT *,
+           LOWER(SPLIT_PART(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(TRIM(prospect_website),'^https?://','','i'),'^www\.',''),'/$',''),'.',1)) AS domain_root
+    FROM inbound_with_bucket
+),
+onboarding_clean AS (
+    SELECT *,
+           LOWER(SPLIT_PART(REGEXP_REPLACE(REGEXP_REPLACE(REGEXP_REPLACE(TRIM("Domain_Name"),'^https?://','','i'),'^www\.',''),'/$',''),'.',1)) AS domain_root
+    FROM airbyte_ingestion."Onboarding_Tracker"
+)
+SELECT
+    LOWER(i.prospect_email)::text AS email,
+    i.prospect_company::text AS company,
+    i.prospect_website::text AS website,
+    o."CS_Name"::text AS cs_name,
+    o."Onboarding_Call_Date"::date AS onboarding_call_date,
+    CAST(REGEXP_REPLACE(o."Initial_Subscription_Package_Month",'[^0-9.]','','g') AS NUMERIC) AS monthly_amount,
+    CAST(REGEXP_REPLACE(o."Initial_Subscription_Package_Month",'[^0-9.]','','g') AS NUMERIC) * 12 AS arr
+FROM inbound_clean i
+INNER JOIN onboarding_clean o ON i.domain_root = o.domain_root
+WHERE i.source_bucket = 'Cold email'
+"""
+
+def fetch_closes():
+    """Pull closed deals (onboardings done) from Onboarding_Tracker joined with
+    inbound demo bookings on website domain. Adds 2 manually-tracked closes
+    that the join misses (Divine Design Manufacturing, Icon Material Handling)."""
+    print('Fetching closes (onboardings)...', flush=True)
+    closes = []
+    try:
+        conn = psycopg2.connect(DB_URL)
+        cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
+        cur.execute(CLOSES_QUERY)
+        for r in cur.fetchall():
+            closes.append({
+                'email':                (r['email'] or '').lower(),
+                'company':              r['company'] or '',
+                'website':              r['website'] or '',
+                'cs_name':              r['cs_name'] or '',
+                'onboarding_call_date': str(r['onboarding_call_date']) if r['onboarding_call_date'] else None,
+                'monthly_amount':       float(r['monthly_amount'] or 0),
+                'arr':                  float(r['arr'] or 0),
+            })
+        conn.close()
+    except Exception as e:
+        print(f'  DB error fetching closes: {e}', flush=True)
+
+    # Append manual closes (dedup by email if already present)
+    existing_emails = {c['email'] for c in closes}
+    for m in _MANUAL_CLOSES:
+        if m['email'].lower() not in existing_emails:
+            closes.append({**m, 'email': m['email'].lower()})
+    print(f'  {len(closes)} closes (ARR ${sum(c["arr"] for c in closes):,.0f})', flush=True)
+    return closes
+
+
+def _domain_root(s):
+    if not s: return ''
+    s = s.strip().lower()
+    s = re.sub(r'^https?://', '', s)
+    s = re.sub(r'^www\.', '', s)
+    s = s.split('/')[0]
+    return s.split('.')[0]
+
+
+def attach_closes_to_bookings(bookings, closes):
+    """Annotate each demo_booking with closed/arr/mrr if the close maps to it.
+    Match priority: 1) exact email, 2) website domain root, 3) company name (case-insensitive)."""
+    by_email = {c['email']: c for c in closes}
+    by_domain = {}
+    by_company = {}
+    for c in closes:
+        d = _domain_root(c.get('website') or c.get('email','').split('@',1)[-1])
+        if d and d not in by_domain: by_domain[d] = c
+        co = (c.get('company') or '').strip().lower()
+        if co and co not in by_company: by_company[co] = c
+
+    matched = set()
+    for b in bookings:
+        c = (by_email.get(b['email'])
+             or by_domain.get(_domain_root(b.get('website') or b['email'].split('@',1)[-1]))
+             or by_company.get((b.get('company') or '').strip().lower()))
+        if c:
+            b['closed']               = True
+            b['arr']                  = c['arr']
+            b['monthly_amount']       = c['monthly_amount']
+            b['cs_name']              = c['cs_name']
+            b['onboarding_call_date'] = c['onboarding_call_date']
+            matched.add(c['email'])
+        else:
+            b['closed']               = False
+            b['arr']                  = 0.0
+            b['monthly_amount']       = 0.0
+            b['cs_name']              = None
+            b['onboarding_call_date'] = None
+
+    unmatched = [c for c in closes if c['email'] not in matched]
+    if unmatched:
+        print(f'  {len(unmatched)} closes unmatched to any booking:', flush=True)
+        for c in unmatched:
+            synth = c.get('_synth_booking')
+            print(f'    {c["email"]} ({c["company"]})  ARR ${c["arr"]:.0f}{"  → synthesizing booking row" if synth else ""}', flush=True)
+            if synth:
+                bookings.append({
+                    'company':             c['company'],
+                    'email':               c['email'],
+                    'website':             c.get('website', ''),
+                    'ae_name':             synth.get('ae_name', ''),
+                    'demo_scheduled_date': synth.get('demo_scheduled_date'),
+                    'created_at_date':     synth.get('created_at_date'),
+                    'show_status':         'Y',
+                    'show_status_adj':     'Y',
+                    'industry':            synth.get('industry', 'Unknown'),
+                    'campaign_id':         None,
+                    'closed':              True,
+                    'arr':                 c['arr'],
+                    'monthly_amount':      c['monthly_amount'],
+                    'cs_name':             c['cs_name'],
+                    'onboarding_call_date': c['onboarding_call_date'],
+                })
+    return bookings
+
+
 # ── 4. Daily email stats from DB snapshots ────────────────────────────────────
 def fetch_daily_email_stats(campaigns):
     """
@@ -534,6 +718,9 @@ def build_campaign_stats(campaigns, leads, bookings):
         ns = sum(1 for b in camp_book if b['show_status_adj'] == 'Y')
         pend = sum(1 for b in camp_book
                    if b['show_status'] == 'P' and (b['demo_scheduled_date'] or '') >= today_s)
+        nc   = sum(1 for b in camp_book if b.get('closed'))
+        c_arr = sum(b.get('arr') or 0 for b in camp_book if b.get('closed'))
+        c_mrr = sum(b.get('monthly_amount') or 0 for b in camp_book if b.get('closed'))
 
         sent  = max(c['emails_sent'], 1)
         cont  = max(c['total_leads_contacted'], 1)
@@ -553,6 +740,9 @@ def build_campaign_stats(campaigns, leads, bookings):
             'showups':                  ns,
             'pending_demos':            pend,
             'noshow':                   max(np_d - ns, 0),
+            'closed':                   nc,
+            'arr':                      round(c_arr, 2),
+            'mrr':                      round(c_mrr, 2),
             'reply_rate_per_sent':      round(c['replied'] / sent * 100, 2),
             'reply_rate_per_contacted': round(c['replied'] / cont * 100, 2),
             'bounce_rate':              round(c['bounced'] / cont * 100, 2),
@@ -565,6 +755,10 @@ def build_campaign_stats(campaigns, leads, bookings):
             'show_rate':                round(ns / np_d * 100, 1) if np_d else 0,
             'demos_per_interested':     round(nd / inte * 100, 1) if inte else 0,
             'showups_per_interested':   round(ns / inte * 100, 1) if inte else 0,
+            'close_per_lead':           round(nc / cont * 100, 4),
+            'close_per_interested':     round(nc / inte * 100, 2) if inte else 0,
+            'close_per_demo':           round(nc / nd   * 100, 2) if nd   else 0,
+            'close_per_showup':         round(nc / ns   * 100, 2) if ns   else 0,
         })
     return out
 
@@ -629,6 +823,8 @@ if __name__ == '__main__':
     int_leads     = fetch_interested_leads(campaigns)
     int_leads     = enrich_interested_dates(int_leads)
     bookings      = fetch_demo_bookings(int_leads, campaigns)
+    closes        = fetch_closes()
+    bookings      = attach_closes_to_bookings(bookings, closes)
     daily_email   = fetch_daily_email_stats(campaigns)
     int_leads     = enrich_leads(int_leads, bookings)
     camp_stats    = build_campaign_stats(campaigns, int_leads, bookings)
@@ -646,6 +842,11 @@ if __name__ == '__main__':
                    if b['show_status'] == 'P'
                    and (b['demo_scheduled_date'] or '') >= today_s)
     np_d     = max(a_demos - a_pend, 0)
+    # Closes spanning ALL bookings (incl. closes whose demo was attributed to non-active
+    # industry/Unknown). Industry-level rollups still respect per-industry filtering.
+    a_closed = sum(1 for b in bookings if b.get('closed'))
+    a_arr    = sum((b.get('arr') or 0) for b in bookings if b.get('closed'))
+    a_mrr    = sum((b.get('monthly_amount') or 0) for b in bookings if b.get('closed'))
 
     def r(n, d, digits=2):
         return round(n / max(d, 1) * 100, digits)
@@ -655,6 +856,7 @@ if __name__ == '__main__':
         'campaigns':         camp_stats,
         'interested_leads':  int_leads,
         'demo_bookings':     bookings,
+        'closes':            closes,
         'daily_email_stats': daily_email,
         'time_series':       {'daily': time_series},
         'totals': {
@@ -668,6 +870,9 @@ if __name__ == '__main__':
             'showups':                  a_shows,
             'pending_demos':            a_pend,
             'noshow':                   max(np_d - a_shows, 0),
+            'closed':                   a_closed,
+            'arr':                      round(a_arr, 2),
+            'mrr':                      round(a_mrr, 2),
             'reply_rate_per_sent':      r(a_rep,   a_sent),
             'reply_rate_per_contacted': r(a_rep,   a_cont),
             'int_rate_per_sent':        r(a_int,   a_sent,  4),
@@ -679,6 +884,10 @@ if __name__ == '__main__':
             'show_rate':                r(a_shows, np_d) if np_d else 0,
             'demos_per_interested':     r(a_demos, a_int),
             'showups_per_interested':   r(a_shows, a_int),
+            'close_per_lead':           r(a_closed, a_cont,  4),
+            'close_per_interested':     r(a_closed, a_int),
+            'close_per_demo':           r(a_closed, a_demos),
+            'close_per_showup':         r(a_closed, a_shows),
         },
     }
 
@@ -688,4 +897,4 @@ if __name__ == '__main__':
     t = metrics['totals']
     print(f'\n✓ {OUT_FILE}')
     print(f'  Sent {t["emails_sent"]:,}  Contacted {t["leads_contacted"]:,}')
-    print(f'  Interested {t["interested"]}  Demos {t["demos_booked"]}  Shows {t["showups"]}  Pending {t["pending_demos"]}')
+    print(f'  Interested {t["interested"]}  Demos {t["demos_booked"]}  Shows {t["showups"]}  Pending {t["pending_demos"]}  Closed {t["closed"]} (ARR ${t["arr"]:,.0f})')

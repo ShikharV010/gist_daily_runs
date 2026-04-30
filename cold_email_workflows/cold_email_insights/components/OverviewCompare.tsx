@@ -12,6 +12,12 @@ function fmt(n: number) {
   return n.toLocaleString()
 }
 function pct(n: number, digits = 2) { return n.toFixed(digits) + '%' }
+function money(n: number) {
+  if (!n) return '—'
+  if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1) + 'M'
+  if (n >= 1_000)     return '$' + (n / 1_000).toFixed(1) + 'K'
+  return '$' + Math.round(n).toLocaleString()
+}
 
 const TH = ({ children }: { children: React.ReactNode }) => (
   <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
@@ -65,6 +71,15 @@ const ROWS: Row[] = [
   { label: 'Show-ups / Emails Sent', getValue: m => pct(m.showups_per_sent, 4) },
   { label: 'Show-ups / Leads Contacted', getValue: m => pct(m.showups_per_contacted, 4) },
   { label: 'Show-ups / Demos',       getValue: m => pct(m.show_rate) },
+
+  { label: '', section: 'Closed (Onboardings)' } as Row,
+  { label: 'Closed Deals',           getValue: m => String(m.closed), bold: true },
+  { label: 'ARR',                    getValue: m => money(m.arr), bold: true },
+  { label: 'MRR',                    getValue: m => money(m.mrr) },
+  { label: 'Close / Demo',           getValue: m => pct(m.close_per_demo) },
+  { label: 'Close / Show-up',        getValue: m => pct(m.close_per_showup) },
+  { label: 'Close / Interested',     getValue: m => pct(m.close_per_interested) },
+  { label: 'Close / Lead',           getValue: m => pct(m.close_per_lead, 4) },
 ]
 
 export default function OverviewCompare({

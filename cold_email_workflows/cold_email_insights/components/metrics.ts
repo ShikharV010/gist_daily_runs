@@ -88,6 +88,13 @@ export function computeMetrics(
   const completed_demos = showupList.filter(b => b.show_status_adj !== 'P').length
   const noshow          = Math.max(0, completed_demos - showups)
 
+  // Closes: demo_bookings flagged closed, filtered by industry. Date filter uses
+  // onboarding_call_date if present, else falls back to created_at_date.
+  const closedList = demosBookedList.filter(b => b.closed)
+  const closed = closedList.length
+  const arr = closedList.reduce((s, b) => s + (b.arr || 0), 0)
+  const mrr = closedList.reduce((s, b) => s + (b.monthly_amount || 0), 0)
+
   const pct = (n: number, d: number, digits = 2) =>
     d > 0 ? parseFloat((n / d * 100).toFixed(digits)) : 0
 
@@ -104,6 +111,9 @@ export function computeMetrics(
     pending_demos,
     completed_demos,
     noshow,
+    closed,
+    arr,
+    mrr,
     reply_rate_per_sent:      pct(replied,      Math.max(emails_sent, 1)),
     reply_rate_per_contacted: pct(replied,      Math.max(leads_contacted, 1)),
     int_rate_per_sent:        pct(interested,   Math.max(emails_sent, 1), 4),
@@ -115,6 +125,10 @@ export function computeMetrics(
     show_rate:                pct(showups,      Math.max(completed_demos, 1)),
     demos_per_interested:     pct(demos_booked, Math.max(interested, 1)),
     showups_per_interested:   pct(showups,      Math.max(interested, 1)),
+    close_per_lead:           pct(closed, Math.max(leads_contacted, 1), 4),
+    close_per_interested:     pct(closed, Math.max(interested, 1)),
+    close_per_demo:           pct(closed, Math.max(demos_booked, 1)),
+    close_per_showup:         pct(closed, Math.max(showups, 1)),
   }
 }
 
@@ -175,10 +189,12 @@ export function computeCampaignStats(
     const esrow      = emailsByCamp[cid] || { emails: 0, leads: 0 }
     const campEmails = emailSetByCamp[cid] || new Set<string>()
 
-    // Demos/show-ups: from demo_bookings if available, else from campaign totals
+    // Demos/show-ups: from demo_bookings keyed by campaign_id (true attribution),
+    // not just emails that happened to be Interested-tagged.
     let demosBooked = 0, showups = 0, completed = 0, pending = 0
+    let closed = 0, campArr = 0, campMrr = 0
     if (demoBookings.length > 0) {
-      const campBookings = demoBookings.filter(b => campEmails.has(b.email))
+      const campBookings = demoBookings.filter(b => b.campaign_id === cid)
       demosBooked = campBookings.filter(b => (!from && !to) || inDateRange(b.created_at_date)).length
       const showupList = campBookings.filter(b => (!from && !to) || inDateRange(b.demo_scheduled_date))
       showups   = showupList.filter(b => b.show_status_adj === 'Y').length
@@ -186,11 +202,18 @@ export function computeCampaignStats(
       pending   = campBookings.filter(
         b => b.show_status === 'P' && b.demo_scheduled_date && b.demo_scheduled_date >= today,
       ).length
+      const closedList = campBookings.filter(b => b.closed)
+      closed   = closedList.length
+      campArr  = closedList.reduce((s, b) => s + (b.arr || 0), 0)
+      campMrr  = closedList.reduce((s, b) => s + (b.monthly_amount || 0), 0)
     } else {
       demosBooked = c.demos_booked || 0
       showups     = c.showups      || 0
       pending     = c.pending_demos || 0
       completed   = Math.max(0, demosBooked - pending)
+      closed      = c.closed       || 0
+      campArr     = c.arr          || 0
+      campMrr     = c.mrr          || 0
     }
 
     // interested: from individual leads if available, else from campaign stat
@@ -228,6 +251,13 @@ export function computeCampaignStats(
       showups_per_sent:         pct(showups,     Math.max(emails_sent, 1), 4),
       showups_per_contacted:    pct(showups,     Math.max(leads_cont, 1), 4),
       show_rate:                pct(showups,     Math.max(completed, 1)),
+      closed:                   closed,
+      arr:                      campArr,
+      mrr:                      campMrr,
+      close_per_lead:           pct(closed, Math.max(leads_cont, 1), 4),
+      close_per_interested:     pct(closed, Math.max(interested, 1)),
+      close_per_demo:           pct(closed, Math.max(demosBooked, 1)),
+      close_per_showup:         pct(closed, Math.max(showups, 1)),
       demos_per_interested:     pct(demosBooked, Math.max(interested, 1)),
       showups_per_interested:   pct(showups,     Math.max(interested, 1)),
     }
