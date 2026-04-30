@@ -13223,5 +13223,472 @@
       "total_duration_min": 45,
       "analyzed_at": "2026-04-29T06:44:36.795424Z"
     }
+  },
+  "OneScreen": {
+    "company": "OneScreen",
+    "prospect_name": "Maida Shahid",
+    "prospect_designation": "Supply Chain / Cross-functional Business Development",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Maida explicitly requested to loop in project management and sales/marketing teams before deciding.",
+    "company_industry": "Electronics Manufacturing / Interactive Display Hardware",
+    "pain_points": [
+      {
+        "pain_point": "Low online visibility vs. competitors like Samsung",
+        "severity": "high",
+        "direct_quote": "I want to know that where we are lacking against our competitors and how can we improve?",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed live keyword gap analysis and competitor ranking data"
+      },
+      {
+        "pain_point": "Absent from AI search engine results (ChatGPT, etc.)",
+        "severity": "high",
+        "direct_quote": "If anyone answers for example in ChatGPT that I want to buy IFPDs, our name appears in that.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated how content pages target AI platform queries"
+      },
+      {
+        "pain_point": "Website traffic stagnant/declining (~250\u2013600 monthly visitors)",
+        "severity": "medium",
+        "direct_quote": "your traffic is slowly declining",
+        "addressed_in_call": true,
+        "how_addressed": "AE highlighted traffic data and explained content strategy to grow it"
+      },
+      {
+        "pain_point": "Over-reliance on bids/government tenders for revenue",
+        "severity": "medium",
+        "direct_quote": "Business is generated from yes, from bids and government tenders.",
+        "addressed_in_call": true,
+        "how_addressed": "AE proposed content to attract private buyers and new distributors"
+      },
+      {
+        "pain_point": "Supply chain optimization / operational efficiency",
+        "severity": "low",
+        "direct_quote": "I was basically how to optimize base to make ways more efficient for my supply chain work.",
+        "addressed_in_call": false,
+        "how_addressed": "AE confirmed Gushwork does not cover supply chain management"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "No immediate urgency to move quickly",
+        "how_handled": "AE acknowledged it and referenced two years of flat traffic as soft urgency",
+        "resolved": false
+      },
+      {
+        "objection": "Budget/cash flow clarity needed before committing",
+        "how_handled": "Pricing was not discussed; deferred to next meeting with full team",
+        "resolved": false
+      },
+      {
+        "objection": "Needs internal team buy-in before deciding",
+        "how_handled": "AE agreed to a follow-up meeting including sales/marketing stakeholders",
+        "resolved": false
+      },
+      {
+        "objection": "Asked if supply chain dashboard was included (scope check)",
+        "how_handled": "AE clarified scope clearly; prospect confirmed not a deal-breaker",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Prospect confirmed most keyword queries are relevant to OneScreen",
+      "Said 'everything is making sense' after product demo",
+      "Proactively requested second meeting with full team",
+      "Called the meeting 'intriguing' and expressed genuine interest",
+      "Asked for pre-call materials to pitch internal team",
+      "Wants to move 'as soon as possible' despite no hard deadline"
+    ],
+    "negative_signals": [
+      "Not the decision maker; key stakeholders not yet involved",
+      "No urgency; timeline is open-ended",
+      "Budget/cash flow not confirmed; needs adjustment period",
+      "Sales and marketing team may have existing lead-gen platforms",
+      "Hybrid work model may slow internal alignment and approval"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up meeting scheduled for May 7 at 6PM Pakistan time",
+      "Maida to invite project management and sales/marketing team",
+      "AE to send call recap and conversation insights to Maida",
+      "AE to share case studies and video links before next call",
+      "AE to prepare more tailored research for multi-stakeholder demo"
+    ],
+    "next_call_date": "2026-05-07T18:00:00+05:00",
+    "follow_up_materials_promised": [
+      "Recap of full demo call conversation and findings",
+      "Case study links relevant to OneScreen's industry",
+      "Video walkthroughs for internal team pre-call review"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Strong curiosity and engagement throughout the 31-minute call",
+      "Proactively scheduled follow-up with decision-making stakeholders",
+      "Expressed desire to start 'as soon as possible'",
+      "Budget not confirmed; cash flow planning still needed",
+      "Decision maker not yet in the room; deal not closeable yet",
+      "Existing internal lead-gen tools may create competitive friction"
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE opened with good discovery questions before pitching",
+      "Live website analysis tool created strong visual impact",
+      "AE effectively tied competitor gaps to prospect's stated goals",
+      "Pricing was never introduced; a missed qualification opportunity",
+      "Supply chain misalignment caught early; handled well",
+      "AE was late to call; minor credibility risk at the start",
+      "Next steps were clear, confirmed, and calendar-blocked on call"
+    ],
+    "key_insights": [
+      "OneScreen competes with Samsung but lacks digital discoverability",
+      "Revenue is bid-heavy; inbound lead generation is a new channel",
+      "Prospect operates cross-functionally across supply chain and sales",
+      "Internal team uses existing platforms; AE must differentiate clearly",
+      "Pakistan-based team; scheduling across time zones needs care",
+      "Company sells globally but core revenue is US and Colombia",
+      "Same IFPD supplier as Samsung; product parity is a key angle"
+    ],
+    "recommended_next_action": "Send Maida a concise pre-meeting brief with call recap, 2\u20133 industry-specific case studies, and a short ROI framing on AI search visibility; prepare a tailored multi-stakeholder demo that addresses both lead-gen for sales team and strategic visibility for project management, and include pricing/package options to unblock the budget conversation.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Showed live competitor ranking gaps to highlight visibility problem",
+      "Demonstrated AI platform query targeting to address ChatGPT absence",
+      "Presented traffic data trend to contextualize stagnation risk",
+      "Proposed distributor-focused content to reduce bid-only dependency",
+      "Clearly scoped out supply chain; avoided false promise of features"
+    ],
+    "_meta": {
+      "prospect_email": "maida@onescreensolutions.com",
+      "prospect_company": "OneScreen",
+      "prospect_website": "https://www.onescreensolutions.com/en/about-us/",
+      "demo_date": "2026-04-29",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "0561a6ce6eb445d14324767a6a4bcfd6"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=d38a6204-c7e2-4f86-90fb-440f3aba8ecd&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 31,
+      "analyzed_at": "2026-04-30T07:11:14.218597Z"
+    }
+  },
+  "Dynamic Data": {
+    "company": "Dynamic Data",
+    "prospect_name": "Victoria Gallerano",
+    "prospect_designation": "Founder & CEO at Dynamic Data",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Victoria confirmed she and Diego are the sole decision makers.",
+    "company_industry": "IT & Consulting / Data Engineering & Analytics",
+    "pain_points": [
+      {
+        "pain_point": "No active outbound or inbound lead generation",
+        "severity": "high",
+        "direct_quote": "I guess we are not promoting ourselves as much anywhere, just LinkedIn a little bit.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as a website-to-lead-funnel via SEO and AI search visibility."
+      },
+      {
+        "pain_point": "Over-reliance on Upwork and referrals for new business",
+        "severity": "high",
+        "direct_quote": "Upwork is the main one where we are actively looking for prospects.",
+        "addressed_in_call": true,
+        "how_addressed": "Demonstrated how Google and AI search can diversify lead sources organically."
+      },
+      {
+        "pain_point": "Current team at full capacity, limiting growth",
+        "severity": "high",
+        "direct_quote": "We are right now, to be honest, we are full capacity. Like if we had a new client, we probably need to go out and hire people.",
+        "addressed_in_call": true,
+        "how_addressed": "AE noted 3-month ramp time gives them runway to hire before leads arrive."
+      },
+      {
+        "pain_point": "No website visibility in Google or AI search engines",
+        "severity": "high",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "Live demo showed zero first-page rankings; solution directly targets this gap."
+      },
+      {
+        "pain_point": "Uncertainty about ROI and timing of hiring vs lead intake",
+        "severity": "medium",
+        "direct_quote": "We need just to discuss and figure out and say, okay, yes, we're ready.",
+        "addressed_in_call": true,
+        "how_addressed": "AE framed the 3-month content sprint as a natural buffer period for team scaling."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Concern about website migration or platform disruption",
+        "how_handled": "AE clarified no migration needed; a '/feeds' subfolder is created via DNS access.",
+        "resolved": true
+      },
+      {
+        "objection": "Risk of Google penalizing AI-generated content",
+        "how_handled": "AE referenced Google Search Central guidelines supporting quality AI content use.",
+        "resolved": true
+      },
+      {
+        "objection": "Need internal discussion before committing to a package",
+        "how_handled": "AE acknowledged it, booked a follow-up call for the next Tuesday.",
+        "resolved": false
+      },
+      {
+        "objection": "Team capacity concern limiting appetite for new leads",
+        "how_handled": "AE reframed 3-month delay as opportunity to hire and prepare in advance.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Victoria said the Grow package 'is interesting' unprompted.",
+      "Both decision makers attended both meetings.",
+      "Asked about page ownership after cancellation \u2014 retention thinking.",
+      "Requested reporting and analytics details \u2014 evaluating long-term use.",
+      "Confirmed keyword topics like Snowflake, DBT, BigQuery are relevant.",
+      "Agreed to book a follow-up call for next Tuesday.",
+      "Asked about CRM integration \u2014 signals operational planning mindset.",
+      "Diego actively engaged and confirmed no further questions."
+    ],
+    "negative_signals": [
+      "Team is at full capacity \u2014 may delay purchase decision.",
+      "Uncertainty around hiring capacity creates internal blocker.",
+      "No urgency expressed; decision deferred to internal discussion.",
+      "Both meetings appear to have identical transcripts \u2014 no deal progression visible.",
+      "No pricing negotiation or specific budget indication shared."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Victoria and Diego to discuss internally before deciding.",
+      "Follow-up call scheduled for next Tuesday at same time.",
+      "AE to send calendar invite for confirmation.",
+      "AE to send the demo deck and sample pages.",
+      "AE to send Gushwork call recording for reference."
+    ],
+    "next_call_date": "2026-04-22 (Tuesday, same time as demo call)",
+    "follow_up_materials_promised": [
+      "Demo deck presented during the call.",
+      "Sample landing pages link for prospect to explore.",
+      "Gushwork Sybill recording of the demo call.",
+      "Google Search Central AI guidelines link shared in chat."
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Victoria voluntarily named the 'Grow' package as her preference.",
+      "Both founders attended; no gatekeeping or proxy stakeholders.",
+      "Capacity constraint is a real blocker, not just a stall tactic.",
+      "3-month SEO ramp time actually reduces urgency to decide fast.",
+      "Identical transcripts across 2 meetings suggest no deal progression.",
+      "No budget objection raised \u2014 cost sensitivity unknown.",
+      "Genuine curiosity and good engagement throughout both calls."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "Both meeting transcripts are identical \u2014 likely a data/logging error.",
+      "AE ran a strong product demo with live website analysis.",
+      "Good discovery on lead gen channels and competitor awareness.",
+      "Pricing packages mentioned but actual price points never stated.",
+      "AE missed opportunity to quantify ROI or share client case studies.",
+      "Capacity objection handled briefly; could have been explored deeper.",
+      "No BANT qualification on budget or timeline urgency completed.",
+      "Follow-up next steps were clearly confirmed and agreed upon."
+    ],
+    "key_insights": [
+      "Dynamic Data is a small but established IT consulting firm.",
+      "Revenue comes entirely from Upwork and referrals \u2014 no inbound.",
+      "Victoria is the primary decision maker; Diego is co-decision maker.",
+      "Team at full capacity \u2014 scaling readiness is the key internal debate.",
+      "3-month content sprint aligns well with their hiring runway needs.",
+      "Grow tier (200 pages) is the self-identified preferred package.",
+      "No pricing resistance surfaced \u2014 budget conversation still pending.",
+      "Strong fit: data consulting keywords map well to Gushwork's SEO model.",
+      "Competitors like Analytics Eight were recognized \u2014 competitive framing useful.",
+      "Duplicate transcripts suggest Meeting 2 may not have been a new session."
+    ],
+    "recommended_next_action": "Send follow-up email with deck, sample pages, and a 1-2 customer case study showing lead volume from IT consulting clients; anchor the Tuesday call on resolving the capacity concern by walking through the 3-month hiring buffer math.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "No inbound leads: website-to-funnel approach directly solves this gap.",
+      "Upwork dependency: Google and AI search presented as diversified alternative.",
+      "Team capacity: 3-month ramp framed as buffer time to hire and scale.",
+      "Zero search visibility: live AI analysis showed ranking gaps in real time.",
+      "ROI uncertainty: leads dashboard and analytics board shown as proof mechanism."
+    ],
+    "_meta": {
+      "prospect_email": "victoria@dynamicdata.com",
+      "prospect_company": "Dynamic Data",
+      "prospect_website": "dynamicdata.com",
+      "demo_date": "None",
+      "ae_name": "Arabind",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "a69bbee508d9416a17a3445ac0f02ce7",
+        "a69bbee508d9416a17a3445ac0f02ce7"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=59a9a1a1-ef7b-4c9d-a932-719171054160&utm_source=AUTOMATION",
+        "https://l.sybill.ai/c?id=59a9a1a1-ef7b-4c9d-a932-719171054160&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 64,
+      "analyzed_at": "2026-04-30T07:11:19.992642Z"
+    }
+  },
+  "Apricot": {
+    "company": "Apricot",
+    "prospect_name": "Alexzandra Caldwell-Wenman",
+    "prospect_designation": "Unknown (likely Marketing/Growth lead)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Brandon appears to control vendor evaluation and tool decisions.",
+    "company_industry": "IT & Consulting / Nonprofit-Focused Staffing & Recruitment",
+    "pain_points": [
+      {
+        "pain_point": "No inbound leads from website",
+        "severity": "medium",
+        "direct_quote": "we don't necessarily have a lot of like channel strategy that goes through the website",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed 400+ monthly high-intent queries Apricot is invisible to"
+      },
+      {
+        "pain_point": "Over-reliance on unpredictable word-of-mouth",
+        "severity": "medium",
+        "direct_quote": "40 percent of our visitors are word of mouth",
+        "addressed_in_call": true,
+        "how_addressed": "AE flagged inability to control or scale word-of-mouth channel"
+      },
+      {
+        "pain_point": "Zero AI search engine visibility",
+        "severity": "medium",
+        "direct_quote": "I did look at your AI traffic, I think that's at zero right now on a monthly basis",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated how GEO content pages drive AI citations and referrals"
+      },
+      {
+        "pain_point": "Unclear ROI of SEO investment for their model",
+        "severity": "high",
+        "direct_quote": "is this an area that opens up a great amount of opportunity for people or is this something that's like, well, it's nice to have",
+        "addressed_in_call": true,
+        "how_addressed": "AE reframed value around qualified inbound leads, not rankings or impressions"
+      },
+      {
+        "pain_point": "Potential disruption to existing lead ops workflow",
+        "severity": "low",
+        "direct_quote": "I suspect we would be breaking a bunch of stuff",
+        "addressed_in_call": true,
+        "how_addressed": "AE confirmed Zoho CRM integration available, no workflow disruption needed"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Competitors like Semrush do the same thing",
+        "how_handled": "AE distinguished Gushwork as full-service lead ownership vs. DIY analytics tool",
+        "resolved": false
+      },
+      {
+        "objection": "Cannot validate claims without evidence",
+        "how_handled": "AE promised case studies, recap email, and comparison materials post-call",
+        "resolved": false
+      },
+      {
+        "objection": "Product not uniquely differentiated in market",
+        "how_handled": "AE emphasized accountability model \u2014 judged only on qualified leads delivered",
+        "resolved": false
+      },
+      {
+        "objection": "Human touch still required; SEO won't close deals",
+        "how_handled": "AE agreed but positioned SEO as top-of-funnel pre-qualification, not replacement",
+        "resolved": true
+      },
+      {
+        "objection": "No relevant nonprofit or B Corp case studies shown",
+        "how_handled": "AE acknowledged gap and committed to finding socially responsible company examples",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Alex admitted a potential visibility gap exists for AI search",
+      "Brandon explicitly asked for materials to validate and decide",
+      "Brandon said 'I would be happy to use your service' if validated",
+      "Both prospects stayed engaged for the full 34-minute demo",
+      "Brandon asked for domain-specific and B2B enterprise case studies",
+      "Alex confirmed 3 of 5 keyword clusters are directly relevant"
+    ],
+    "negative_signals": [
+      "Brandon immediately cited Semrush as a comparable alternative",
+      "No urgency \u2014 Brandon said decision cannot be made on this call",
+      "Alex unsure SEO meaningfully impacts their high-touch sales model",
+      "No budget discussion initiated by either prospect",
+      "Decision maker (Brandon) is evaluating multiple competing products",
+      "Nonprofit niche makes standard case studies less directly applicable"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send recap email with all demo pages shared",
+      "AE to send relevant B2B and nonprofit/B Corp case studies",
+      "AE to include competitive comparison vs. Semrush and alternatives",
+      "Brandon to review materials and self-validate claims independently",
+      "Follow-up call to cover pricing and implementation timeline"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Demo page recap (all screens shown during call)",
+      "Case studies including staffing/recruitment clients",
+      "Nonprofit or socially responsible company examples if available",
+      "Competitive comparison vs. Semrush and similar tools",
+      "WeekDay.ai reference as staffing-adjacent client example"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "No budget or timeline discussed; deal is still very early stage",
+      "Brandon is actively evaluating competing tools already in use",
+      "Decision requires independent validation before any commitment",
+      "No second meeting scheduled; follow-up is prospect-driven",
+      "Core value prop not yet differentiated in prospect's mind"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE did good discovery and used live SEO data effectively",
+      "Screen sharing had technical issues, reducing demo momentum",
+      "AE failed to probe budget, timeline, or decision process",
+      "Competitive differentiation vs. Semrush was weak and reactive",
+      "AE did not secure a specific follow-up meeting before closing",
+      "Good rapport built; tone was conversational and non-pushy",
+      "Nonprofit positioning gap identified late \u2014 should be caught earlier"
+    ],
+    "key_insights": [
+      "Apricot is nonprofit-focused; generic case studies will not resonate",
+      "Brandon is the real gatekeeper and product evaluator, not Alex",
+      "Word-of-mouth dependency is acknowledged but not seen as urgent risk",
+      "Prospect sees Gushwork as one option among several, not a standout",
+      "AI SEO concept is new to both prospects; education is still needed",
+      "Lead workflow integration concern signals ops-driven buying process",
+      "Q1 growth gives budget headroom; Q2 momentum may accelerate decisions"
+    ],
+    "recommended_next_action": "Send Brandon a personalized comparison doc (Gushwork vs. Semrush) with 2\u20133 B2B staffing or nonprofit case studies showing qualified lead volume, and include a clear CTA to book a 20-minute pricing and ROI call within 5 business days.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Website invisibility shown via live Ahrefs data \u2014 31\u201350 organic visits monthly",
+      "AI traffic gap confirmed at zero; AE explained GEO content fix",
+      "Word-of-mouth risk raised directly by AE as scalability concern",
+      "ROI framing shifted to leads-only accountability, not vanity metrics",
+      "Zoho CRM integration confirmed to resolve ops workflow concern"
+    ],
+    "_meta": {
+      "prospect_email": "alex@apricotinternational.org",
+      "prospect_company": "Apricot",
+      "prospect_website": "apricotinternational.org",
+      "demo_date": "2026-04-29",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "1efb0901a4c36f72790655244656ea3b"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=12bfcff5-340a-4873-aa55-b0f3ac008c4d&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 34,
+      "analyzed_at": "2026-04-30T07:11:20.402597Z"
+    }
   }
 }
