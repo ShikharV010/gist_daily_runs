@@ -13690,5 +13690,336 @@
       "total_duration_min": 34,
       "analyzed_at": "2026-04-30T07:11:20.402597Z"
     }
+  },
+  "Playable": {
+    "company": "Playable",
+    "prospect_name": "Chelsea Albright",
+    "prospect_designation": "Salesperson (Account Executive / BD)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Chelsea attended informationally on behalf of the marketing person who is the actual decision influencer, with final say likely with leadership in Australia.",
+    "company_industry": "Advertising Technology / Video Marketing SaaS",
+    "pain_points": [
+      {
+        "pain_point": "Low brand visibility and awareness",
+        "severity": "high",
+        "direct_quote": "we kind of have no brand visibility or recognition",
+        "addressed_in_call": true,
+        "how_addressed": "Nitin explained landing pages boost visibility on Google and all AI tools"
+      },
+      {
+        "pain_point": "Previous outbound lead gen vendors failed",
+        "severity": "high",
+        "direct_quote": "we have used two like outbound lead gen companies that haven't been successful for us",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned as inbound/organic channel, different from outbound"
+      },
+      {
+        "pain_point": "Very lean team, limited marketing resources",
+        "severity": "high",
+        "direct_quote": "our marketing person's like pretty new. So we haven't done a lot",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Low inbound lead volume (~1-2/day)",
+        "severity": "medium",
+        "direct_quote": "we might get like one or two a day",
+        "addressed_in_call": true,
+        "how_addressed": "Nitin showed how hundreds of landing pages can scale inbound lead flow"
+      },
+      {
+        "pain_point": "Buyers unaware video-in-email is even possible",
+        "severity": "medium",
+        "direct_quote": "people don't know that they can even add video into the marketing communications in the first place",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Australia timezone misalignment for marketing team",
+        "severity": "low",
+        "direct_quote": "a lot of the company is in Australia. So just from a compatible timing perspective, it didn't really line up well",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Six-month commitment feels too long",
+        "how_handled": "Nitin clarified it is month-to-month, not locked in; timeline is Google-driven not contractual",
+        "resolved": true
+      },
+      {
+        "objection": "Chelsea is not the decision maker",
+        "how_handled": "Nitin acknowledged and agreed to follow up via email after Chelsea consults marketing",
+        "resolved": false
+      },
+      {
+        "objection": "Website currently being rebuilt / updated",
+        "how_handled": "Nitin confirmed platform can ingest data from shell/dev domain alongside main domain",
+        "resolved": true
+      },
+      {
+        "objection": "Lead capture relies on form fills only",
+        "how_handled": "Nitin cited 60-65% conversion rate and two-layer lead vetting process",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Acknowledged zero brand visibility as a core problem",
+      "Asked detailed technical question about scraping dev/shell website",
+      "Inquired about pricing unprompted during demo",
+      "Asked about Claude and other AI platform coverage",
+      "Expressed solution is 'really interesting' and 'middle ground' on cost",
+      "Committed to checking in with marketing team next week",
+      "Preferred transparency over ghosting \u2014 positive engagement signal"
+    ],
+    "negative_signals": [
+      "Chelsea is not the decision maker; marketing team holds sway",
+      "Marketing decision maker not on call and based in Australia",
+      "Company has failed with two prior lead gen vendors",
+      "Very small team (~12 people); budget and bandwidth limited",
+      "Three-month max commitment preference signals risk aversion",
+      "No urgency expressed; outcome timeline is open-ended",
+      "No website review done before call; low pre-call intent"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Chelsea to brief marketing team on Gushwork after Friday call",
+      "Nitin to send follow-up email by Wednesday next week",
+      "Chelsea to reply with yes/no or request to continue conversation",
+      "If yes, marketing team to be looped in for next meeting"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Follow-up email from Nitin by Wednesday next week",
+      "Call recording available for Chelsea to share internally"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Chelsea is a proxy; real decision maker not yet engaged",
+      "No budget, authority, or timeline confirmed on this call",
+      "Company has history of failed vendor relationships \u2014 cautious buyer",
+      "Expressed hesitation about six-month timeline commitment",
+      "Positive curiosity shown but no urgency or commitment signals",
+      "Next step is vague email check-in, not a scheduled demo"
+    ],
+    "call_quality_score": 5,
+    "call_quality_notes": [
+      "AE did not confirm decision maker early enough in call",
+      "Discovery was surface-level; no budget or timeline uncovered",
+      "Demo was product-led but not tailored to Playable's ICP pain",
+      "AE handled website scraping and commitment objections well",
+      "No attempt to schedule a follow-up call with marketing team",
+      "Good rapport established; Chelsea remained engaged throughout",
+      "AE missed opportunity to address 'awareness gap' pain point directly"
+    ],
+    "key_insights": [
+      "Real decision maker is marketing lead based in Australia",
+      "Playable has enterprise and self-serve segments with different needs",
+      "Company actively rebuilding website \u2014 timing is tricky but an opportunity",
+      "Prior bad experiences with outbound vendors creates trust barrier",
+      "Product-market fit exists: Gushwork solves their stated awareness gap",
+      "Chelsea wears many hats; low bandwidth to champion internally",
+      "AI search visibility angle highly relevant given niche product category"
+    ],
+    "recommended_next_action": "Send Wednesday follow-up email to Chelsea with a concise 1-page summary deck tailored to Playable's awareness gap pain, and directly propose a 30-minute intro call slot that works for the Australia-based marketing lead.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Brand invisibility addressed via landing pages on Google and all AI tools",
+      "Low inbound volume addressed by showing hundreds of targeted landing pages",
+      "Failed outbound history addressed by positioning Gushwork as inbound channel",
+      "Dev website concern resolved; platform can ingest multiple domain data",
+      "Lean team concern not addressed \u2014 managed service angle was underplayed"
+    ],
+    "_meta": {
+      "prospect_email": "chelsea.albright@playable.video",
+      "prospect_company": "Playable",
+      "prospect_website": "playable.video",
+      "demo_date": "1970-01-01",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Advertising",
+      "meeting_ids": [
+        "f044da509c775a5daf666d72b5ac5e3b"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=1be5ed3c-50f0-4562-9e81-09b96755a55c&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 31,
+      "analyzed_at": "2026-05-01T07:15:09.377439Z"
+    }
+  },
+  "Experiture": {
+    "company": "Experiture",
+    "prospect_name": "Ken McNaughton",
+    "prospect_designation": "Director, Enterprise Sales",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Ken is an individual contributor who must take the decision internally with his team.",
+    "company_industry": "Advertising / Marketing Automation SaaS",
+    "pain_points": [
+      {
+        "pain_point": "Over-reliance on referrals and trade shows for leads",
+        "severity": "high",
+        "direct_quote": "to date we've really grown organically through referrals, some trade shows in the past",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned inbound SEO/AI landing pages as a scalable new channel"
+      },
+      {
+        "pain_point": "Cold email outreach underperforming",
+        "severity": "high",
+        "direct_quote": "cold email outreach, which to be very honest, has not been working for us the way we would have hoped",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork differentiated as inbound pull vs. outbound push model"
+      },
+      {
+        "pain_point": "Need for high-quality, qualified leads at scale",
+        "severity": "high",
+        "direct_quote": "20 solid leads a month would be something that would really pique our interest",
+        "addressed_in_call": true,
+        "how_addressed": "200 landing page plan pitched targeting 25-30 leads/month at maturity"
+      },
+      {
+        "pain_point": "Small sales team lacking lead generation infrastructure",
+        "severity": "medium",
+        "direct_quote": "our sales team is a total of two people",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's managed service model reduces internal resource requirements"
+      },
+      {
+        "pain_point": "Unclear SEO and paid search strategy",
+        "severity": "medium",
+        "direct_quote": "we do have to get a little bit more buttoned up about our SEO and paid search",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork explained AI-driven SEO as cost-effective alternative to PPC and agencies"
+      },
+      {
+        "pain_point": "Prefers outcome-based pricing (meetings, not just leads)",
+        "severity": "medium",
+        "direct_quote": "what would be a home run for us would be pricing based on meetings per month versus leads per month",
+        "addressed_in_call": false,
+        "how_addressed": "Nitin mentioned future product but could not offer it now"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "How is this better than paid search and a good website?",
+        "how_handled": "Explained PPC is temporary; Gushwork builds permanent owned assets",
+        "resolved": true
+      },
+      {
+        "objection": "Concern about redundancy across 100+ landing pages",
+        "how_handled": "Explained persona/industry/product segmentation strategy fills 100 pages logically",
+        "resolved": true
+      },
+      {
+        "objection": "Prefers meeting-based pricing over lead-based pricing",
+        "how_handled": "Acknowledged gap; mentioned upcoming product but no firm offer made",
+        "resolved": false
+      },
+      {
+        "objection": "Skeptical of meeting-booking services quality",
+        "how_handled": "Ken self-resolved partial skepticism; no direct counter from Nitin",
+        "resolved": false
+      },
+      {
+        "objection": "Evaluating multiple competing vendors simultaneously",
+        "how_handled": "Nitin asked for go/no-go timeline; Ken committed to mid-next-week decision",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Explicitly said decision timeline is two weeks to one month",
+      "Called the inbound angle 'refreshing' and 'interesting'",
+      "Invited Rocco (BDR) to listen in on the call",
+      "Excited to share Gushwork internally after the call",
+      "Voluntarily confirmed they're actively evaluating partners now",
+      "Asked detailed pricing and commitment questions proactively",
+      "Requested recap email and pricing materials immediately",
+      "Said 'I'll be in touch within the next several days'",
+      "Acknowledged cold email not working; open to new approach"
+    ],
+    "negative_signals": [
+      "Did not research Gushwork website before the meeting",
+      "Evaluating multiple competing vendors at the same time",
+      "Ken is not final decision maker; needs internal alignment",
+      "Ideal pricing model (per meeting) not currently offered",
+      "Skeptical of meeting-booking vendors in general",
+      "Lead volume target (20/month) requires higher-tier plan commitment"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Nitin to send recap email with call summary and pricing",
+      "Nitin to share recording of the demo call with Ken",
+      "Nitin to send pricing page link from Gushwork website",
+      "Ken to discuss internally within days after the call",
+      "Nitin scheduled follow-up email for Wednesday May 6th",
+      "Ken to respond with go/no-go direction by mid-next-week"
+    ],
+    "next_call_date": "2026-05-06",
+    "follow_up_materials_promised": [
+      "Recap email summarizing key discussion points",
+      "Recording link of the demo call",
+      "Link to Gushwork pricing page on website"
+    ],
+    "deal_closing_intent_score": 7,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Clear two-week to one-month decision timeline stated explicitly",
+      "Positive reaction to inbound SEO angle as a fresh approach",
+      "Active evaluation mode; not a future exploration, needs a partner now",
+      "Pricing and commitment questions asked with genuine interest",
+      "Key risk: not the final decision maker, needs internal buy-in",
+      "Pricing model mismatch (meetings vs. leads) could stall the deal",
+      "Competing with other vendors; not a sole evaluation"
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "Nitin effectively pivoted from cold-email assumption to inbound SEO",
+      "Live demo of the platform was a strong differentiating moment",
+      "Good discovery: product count, geography, lead volume expectations captured",
+      "PPC vs. Gushwork objection handled clearly with asset-ownership argument",
+      "Missed opportunity: did not explore internal decision-making process deeply",
+      "Did not identify other vendors Ken is evaluating to compete effectively",
+      "Pricing discussion was surface-level; no custom proposal offered",
+      "Meeting-booking pricing gap left unresolved; needs follow-up strategy",
+      "Nitin asked for go/no-go commitment\u2014shows good closing discipline"
+    ],
+    "key_insights": [
+      "Experiture has a 2-person sales team; scalability is a real pain",
+      "Three core products: Experiture platform, Easy Pearl, Omni Mail",
+      "Primarily US market with early Canada presence; global expansion planned",
+      "Cold email outreach is actively failing for their current pipeline",
+      "Ken values inbound quality leads but ideally wants meetings booked",
+      "Gushwork's 200-page plan aligns with Ken's 20 leads/month target",
+      "Ken surprised by inbound model\u2014novelty is a competitive advantage here",
+      "Rocco (BDR) is a secondary stakeholder worth engaging in follow-up",
+      "Decision expected within 2\u20134 weeks; urgency is genuine and stated"
+    ],
+    "recommended_next_action": "Send a personalized follow-up on May 6th including a custom one-page proposal for the 200-page plan, a sample landing page mock-up tailored to Experiture's brand, clear ROI projections (20+ leads/month), and a note addressing the meetings-based pricing gap with a near-term product roadmap update to pre-empt competing vendors.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Inbound SEO replaces failing cold email outreach strategy effectively",
+      "200-page plan targets 25-30 leads/month matching Ken's volume goal",
+      "Managed service model suits a 2-person sales team with no SEO staff",
+      "Asset-ownership argument directly countered PPC dependency concern",
+      "AI-driven keyword research addresses SEO gaps Ken acknowledged having",
+      "Meeting-based pricing gap was acknowledged but NOT resolved in call"
+    ],
+    "_meta": {
+      "prospect_email": "kenmn@experiture.com",
+      "prospect_company": "Experiture",
+      "prospect_website": "experiture.com",
+      "demo_date": "2026-04-30",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Advertising",
+      "meeting_ids": [
+        "101870dce610bb181affe9762639e362"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=0c8d23ca-d5b9-4a8a-bb43-466a18823d49&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 35,
+      "analyzed_at": "2026-05-01T07:15:15.267610Z"
+    }
   }
 }
