@@ -14021,5 +14021,311 @@
       "total_duration_min": 35,
       "analyzed_at": "2026-05-01T07:15:15.267610Z"
     }
+  },
+  "NeuroDrift": {
+    "company": "NeuroDrift",
+    "prospect_name": "Chirag Gupta",
+    "prospect_designation": "Co-Founder at NeuroDrift",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Chirag is a Co-Founder, giving him full authority over strategic and budget decisions.",
+    "company_industry": "AI & Automation Consulting / IT Services",
+    "pain_points": [
+      {
+        "pain_point": "Over-reliance on referrals and word-of-mouth for new business",
+        "severity": "high",
+        "direct_quote": "At some point we would need to reach out to more people, right? Maybe not today, maybe tomorrow.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as a scalable inbound channel to reduce referral dependency."
+      },
+      {
+        "pain_point": "No organic digital or SEO presence to attract unknown buyers",
+        "severity": "high",
+        "direct_quote": "I don't think we have any blog pages for SEO to recommend. In case anyone search for a service particularly.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated SEO and AEO strategy to rank on Google and AI answer engines."
+      },
+      {
+        "pain_point": "Low outbound lead conversion due to high-ticket service pricing",
+        "severity": "medium",
+        "direct_quote": "That's why the conversion rate is fairly low. It's low in terms of outbound leads.",
+        "addressed_in_call": true,
+        "how_addressed": "AE emphasized quality over quantity and high-intent inbound leads to improve conversion."
+      },
+      {
+        "pain_point": "No active campaigns or scalable lead generation motion currently",
+        "severity": "medium",
+        "direct_quote": "We don't launch any campaign for that. We only launched campaign for Voice AI initially.",
+        "addressed_in_call": true,
+        "how_addressed": "AE outlined Gushwork's content and landing page strategy as a new scalable channel."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Skeptical SEO drives high-ticket B2B enterprise contracts",
+        "how_handled": "AE clarified focus is on visibility and inbound intent, not closing deals via website alone.",
+        "resolved": false
+      },
+      {
+        "objection": "Questioned relevance for B2B service companies vs. product companies",
+        "how_handled": "AE cited Inventive AI as a comparable B2B services customer with similar goals.",
+        "resolved": true
+      },
+      {
+        "objection": "Needed commercials before committing to next discussion",
+        "how_handled": "AE agreed to send pricing and ROI breakdown over email post-call.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Proactively asked about commercials and pricing structure",
+      "Acknowledged future need to scale beyond referrals",
+      "Requested a follow-up meeting on Monday himself",
+      "Complimented the demo preparation positively",
+      "Engaged with demo content and asked clarifying questions",
+      "Shared average deal size ($5K) to assist ROI calculation"
+    ],
+    "negative_signals": [
+      "Current pipeline fully covered by referrals; no urgency today",
+      "Skeptical website can close high-value enterprise MSA deals",
+      "Hard stop cut demo short; limited deep engagement",
+      "No current marketing budget or campaigns in place",
+      "Believes enterprise buyers won't act on website alone"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up meeting scheduled for Monday at 8:30 AM Eastern",
+      "AE to send commercials and pricing details over email",
+      "AE to send ROI calculation based on $5K average deal size",
+      "AE to send calendar invite to Chirag via email"
+    ],
+    "next_call_date": "2026-05-04 08:30 AM Eastern Time",
+    "follow_up_materials_promised": [
+      "Commercials and pricing breakdown via email",
+      "ROI calculator based on $5K average service price",
+      "Calendar invite for Monday follow-up meeting"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect self-scheduled a follow-up meeting indicating genuine interest",
+      "Acknowledged future need for outbound and inbound scale",
+      "Shared deal size willingly, suggesting openness to ROI discussion",
+      "No hard rejection; curiosity-driven engagement throughout call",
+      "Key objection on B2B services relevance was partially resolved",
+      "Pricing skepticism and enterprise-deal mindset may slow decision"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "Good discovery on current lead gen channels and history",
+      "AE effectively positioned SEO vs AEO differentiation clearly",
+      "Demo crashed mid-session; had to pivot to competitor example",
+      "AE confused inbound vs outbound early, losing some credibility",
+      "Prospect's key objection on B2B services not fully resolved",
+      "Call cut short by prospect's hard stop; demo felt incomplete",
+      "AE should have confirmed pricing structure earlier in call",
+      "Good use of Inventive AI as social proof reference"
+    ],
+    "key_insights": [
+      "NeuroDrift built growth on Voice AI outbound two years ago",
+      "Now 100% reliant on referrals; no active outbound or inbound",
+      "Serves 50 enterprises; upsells from Voice AI to full automation",
+      "Target markets: US, UK, Australia; ignores India despite some clients",
+      "Average service deal size is $5,000 per engagement",
+      "Co-founder is skeptical high-ticket B2B deals come from SEO",
+      "Has a superset database of ~300K enterprises but unused now",
+      "Competitor awareness present; VAPI mentioned as past partner"
+    ],
+    "recommended_next_action": "Send a personalized ROI email showing how 2\u20133 inbound leads/month at $5K ASP justifies investment, include Inventive AI case study, and prepare a NeuroDrift-specific keyword/search landscape preview for Monday's call to overcome the high-ticket B2B SEO skepticism.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Referral dependency addressed by positioning Gushwork as scalable inbound channel",
+      "SEO gap addressed by showing keyword research and landing page strategy",
+      "Low outbound conversion addressed by emphasizing high-intent inbound lead quality",
+      "No active campaigns addressed by outlining Gushwork's content creation process",
+      "B2B services fit objection addressed using Inventive AI as reference customer"
+    ],
+    "_meta": {
+      "prospect_email": "chirag@neurodrift.ai",
+      "prospect_company": "NeuroDrift",
+      "prospect_website": "https://neurodrift.ai",
+      "demo_date": "2026-05-01",
+      "ae_name": "Sukruti Ssinha",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "3b618099659faafeca3dd322f7c3bf32"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=b361909c-73ec-4cc1-b499-5bce663e1900&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 33,
+      "analyzed_at": "2026-05-02T06:26:41.911496Z"
+    }
+  },
+  "WideFoc.us Social Media": {
+    "company": "WideFoc.us Social Media",
+    "prospect_name": "Eric Elkins",
+    "prospect_designation": "CEO and Chief Strategist",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Eric is the CEO who directly controls budget and purchasing decisions.",
+    "company_industry": "Advertising / Social Media Management Agency",
+    "pain_points": [
+      {
+        "pain_point": "Insufficient inbound qualified leads",
+        "severity": "high",
+        "direct_quote": "The dream number would be 20 to 30 and if we close two of those, we'd be golden.",
+        "addressed_in_call": true,
+        "how_addressed": "Nitin showed how 200 landing pages on Grow plan targets 30 monthly inquiries."
+      },
+      {
+        "pain_point": "Weak AI and SEO visibility",
+        "severity": "high",
+        "direct_quote": "We are very focused on AI and SEO, both for our company and for our clients.",
+        "addressed_in_call": true,
+        "how_addressed": "Platform simulates AI prompts and creates pages cited by ChatGPT, Perplexity, Gemini."
+      },
+      {
+        "pain_point": "Previous outbound efforts underperformed",
+        "severity": "medium",
+        "direct_quote": "I've worked with outbound cold callers and outbound email setups and there's just a lot that hasn't really worked very well.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned as inbound demand-generation, distinct from outbound approaches."
+      },
+      {
+        "pain_point": "Competing with AI-driven high-volume content",
+        "severity": "medium",
+        "direct_quote": "I know that we're competing with companies that are using AI to do a ton of landing pages.",
+        "addressed_in_call": true,
+        "how_addressed": "Nitin demonstrated bulk AI-generated landing pages with brand voice customization."
+      },
+      {
+        "pain_point": "AI-generated content lacking brand voice",
+        "severity": "medium",
+        "direct_quote": "I want to make sure that none of that AI speak shows up in content that people might actually read.",
+        "addressed_in_call": true,
+        "how_addressed": "Brand memory feature and chatbot editing tool demonstrated to enforce brand voice."
+      },
+      {
+        "pain_point": "Current cash flow constraints",
+        "severity": "high",
+        "direct_quote": "We don't have twelve hundred dollars a month right now. We're still kind of digging out of some cash flow problems.",
+        "addressed_in_call": true,
+        "how_addressed": "Nitin offered discounted Launch plan at $600/month with same-day decision deadline."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Price too high at $1,200/month",
+        "how_handled": "Nitin offered Launch plan at $600/month, framed as limited end-of-month promo.",
+        "resolved": false
+      },
+      {
+        "objection": "Preferred price point closer to $400\u2013500/month",
+        "how_handled": "Nitin countered at $600 as lowest feasible offer; gap still exists.",
+        "resolved": false
+      },
+      {
+        "objection": "Wix website compatibility concern",
+        "how_handled": "Nitin explained reverse proxy hosting; pages live on Gushwork CMS subdirectory.",
+        "resolved": true
+      },
+      {
+        "objection": "Content quality and QA control",
+        "how_handled": "Three review approaches offered; chatbot editing feature demonstrated.",
+        "resolved": true
+      },
+      {
+        "objection": "Annoyed by repeated AI cold calls pre-meeting",
+        "how_handled": "Nitin apologized, acknowledged AI outbound experiment, promised no more calls.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Admitted being more interested than expected.",
+      "Took screenshot of demo to review later.",
+      "Committed to responding same day with decision.",
+      "Acknowledged cash flow as the only blocker.",
+      "Compared Gushwork favorably to own client upsell logic.",
+      "Actively engaged with specific page topics during demo.",
+      "Mentioned need aligns: AI SEO visibility and inbound leads.",
+      "Appreciates low-risk, month-to-month contract structure."
+    ],
+    "negative_signals": [
+      "Budget gap: wants $400\u2013500, offered $600.",
+      "Currently experiencing cash flow problems.",
+      "No guaranteed budget approval within same day.",
+      "Receives many demos; skepticism about vendor promises.",
+      "AI cold calls nearly caused him to cancel meeting."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Eric to review cash flow within a few hours.",
+      "Eric to email Nitin same day with go/no-go decision.",
+      "Nitin to send call recording and summary via email.",
+      "Nitin holding $600 Launch plan promo pending Eric's reply."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Call recording to be sent by Nitin post-meeting.",
+      "Email summary with pricing and plan details."
+    ],
+    "deal_closing_intent_score": 7,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Only stated blocker is cash flow, not product fit.",
+      "Eric explicitly said he is interested and surprised himself.",
+      "Committed to same-day email response \u2014 high engagement signal.",
+      "Price gap remains: wants $400\u2013500, offered $600.",
+      "No firm budget approval confirmed during the call.",
+      "Strong product-market fit acknowledged by prospect directly."
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "Good discovery: uncovered goals, ICP, and current lead channels.",
+      "Demo was relevant and tailored to prospect's social media niche.",
+      "AE addressed Wix concern and content QA questions well.",
+      "Pricing introduced reactively only after prospect asked.",
+      "Discount offered too quickly without anchoring full value first.",
+      "False urgency tactic ('promo ends today') may feel manipulative.",
+      "No competitor differentiation or ROI data/case studies shared.",
+      "AI cold call friction at start was a near deal-killer."
+    ],
+    "key_insights": [
+      "Eric is CEO and sole decision-maker; no internal approvals needed.",
+      "Cash flow is only obstacle; product fit is confirmed.",
+      "Agency itself needs AI SEO \u2014 a strong personal use case.",
+      "Ideal sweet spot: 2 new clients/month at ~10% close rate.",
+      "Eric is value-sensitive: spends more when ROI is proven.",
+      "Wix reverse proxy setup must be clearly re-explained post-call.",
+      "Brand voice and AI-quality content are key differentiators for him.",
+      "HubSpot integration is a positive compatibility point.",
+      "Referrals and Clutch drive leads \u2014 AI search gaining traction.",
+      "Prospect's clients mirror Gushwork's own target market (B2B SaaS, services)."
+    ],
+    "recommended_next_action": "Send a concise follow-up email within 1 hour including the call recording, a one-page ROI summary showing expected lead volume on the $600 Launch plan, and a soft-close line reaffirming the same-day promo \u2014 then follow up by phone if no response by 3 PM prospect local time.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Inbound lead gap addressed via 100\u2013200 AI landing pages.",
+      "AI/SEO visibility gap addressed with prompt simulation demo.",
+      "Outbound failures addressed by positioning as inbound channel.",
+      "Competitor content volume addressed with bulk page generation.",
+      "AI voice/brand tone addressed via brand memory and chatbot editor.",
+      "Cash flow objection addressed with discounted $600 Launch plan offer."
+    ],
+    "_meta": {
+      "prospect_email": "eric@widefoc.us",
+      "prospect_company": "WideFoc.us Social Media",
+      "prospect_website": "widefoc.us",
+      "demo_date": "2026-05-01",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Advertising",
+      "meeting_ids": [
+        "5645d2349668b4fb309739c2db129fdc"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=7c5a9d06-17b9-4463-9f05-7f1591c08d52&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 31,
+      "analyzed_at": "2026-05-02T06:26:48.222707Z"
+    }
   }
 }
