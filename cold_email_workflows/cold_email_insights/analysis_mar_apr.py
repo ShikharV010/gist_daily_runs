@@ -449,7 +449,7 @@ def main():
     industry_week  = sum_daily('week')
 
     # Demo/close attribution per industry × month (using demo_scheduled_date)
-    demo_im = defaultdict(lambda: {'demos':0, 'shows':0, 'closes':0, 'arr':0, 'mrr':0})
+    demo_im = defaultdict(lambda: {'demos':0, 'shows':0, 'noshow':0, 'pending':0, 'closes':0, 'arr':0, 'mrr':0})
     for d in demo_list:
         ds = d['demo_scheduled_date']
         if not ds or not in_period(ds): continue
@@ -461,6 +461,8 @@ def main():
         k = (ind, month_label(ds))
         demo_im[k]['demos'] += 1
         if d['show_status_adj'] == 'Y': demo_im[k]['shows'] += 1
+        if d['show_status_adj'] == 'N': demo_im[k]['noshow'] += 1
+        if d['show_status_adj'] == 'P': demo_im[k]['pending'] += 1
         c = closes_by_email.get(em)
         if c:
             demo_im[k]['closes'] += 1; demo_im[k]['arr'] += c['arr']; demo_im[k]['mrr'] += c['mrr']
@@ -481,9 +483,9 @@ def main():
     with open(os.path.join(OUT_DIR, 'summary_industry_month.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['industry','month','sent','leads_contacted','unique_replies','interested','bounced','unsubscribed',
-                    'demos','shows','closes','arr','mrr',
+                    'demos','shows','noshow','pending','closes','arr','mrr',
                     'reply_rate_per_lead','interest_rate_per_lead','interest_rate_per_reply',
-                    'demo_per_interested','close_per_demo','close_per_interested'])
+                    'show_rate','demo_per_interested','close_per_demo','close_per_interested','close_per_showup'])
         all_keys = set(s_im.keys()) | set(demo_im.keys())
         for k in sorted(all_keys):
             ind, mo = k
@@ -491,14 +493,18 @@ def main():
             d = demo_im.get(k, {})
             demos = d.get('demos', 0); shows = d.get('shows', 0); closes_ = d.get('closes', 0)
             arr = d.get('arr', 0); mrr = d.get('mrr', 0)
-            cont1 = max(v['leads_contacted'], 1); int1 = max(v['interested'], 1); rep1 = max(v['unique_replies'], 1); demo1 = max(demos, 1)
+            noshow = d.get('noshow', 0); pending = d.get('pending', 0)
+            completed = max(demos - pending, 0)
+            cont1 = max(v['leads_contacted'], 1); int1 = max(v['interested'], 1); rep1 = max(v['unique_replies'], 1); demo1 = max(demos, 1); show1 = max(shows, 1)
             w.writerow([ind, mo, v['sent'], v['leads_contacted'], v['unique_replies'], v['interested'], v['bounced'], v['unsubscribed'],
-                        demos, shows, closes_, arr, mrr,
+                        demos, shows, noshow, pending, closes_, arr, mrr,
                         round(v['unique_replies']/cont1*100, 4), round(v['interested']/cont1*100, 4),
                         round(v['interested']/rep1*100, 2) if v['unique_replies'] else 0,
+                        round(shows/max(completed, 1)*100, 2) if completed else 0,
                         round(demos/int1*100, 2) if v['interested'] else 0,
                         round(closes_/demo1*100, 2) if demos else 0,
-                        round(closes_/int1*100, 2) if v['interested'] else 0])
+                        round(closes_/int1*100, 2) if v['interested'] else 0,
+                        round(closes_/show1*100, 2) if shows else 0])
 
     # 6d. summary_industry_week.csv — from daily timeseries.
     # NOTE: timeseries metrics are event counts, NOT unique-leads. So "replies" here
@@ -535,7 +541,7 @@ def main():
             routing_month[(recv, label)]['bounced']         += int(d.get('bounced', 0) or 0)
             routing_month[(recv, label)]['unsubscribed']    += int(d.get('unsubscribed', 0) or 0)
     # Demo/close by receiver
-    demo_rm = defaultdict(lambda: {'demos':0, 'shows':0, 'closes':0, 'arr':0, 'mrr':0})
+    demo_rm = defaultdict(lambda: {'demos':0, 'shows':0, 'noshow':0, 'pending':0, 'closes':0, 'arr':0, 'mrr':0})
     for d in demo_list:
         ds = d['demo_scheduled_date']
         if not ds or not in_period(ds): continue
@@ -546,13 +552,15 @@ def main():
         k = (recv, month_label(ds))
         demo_rm[k]['demos'] += 1
         if d['show_status_adj'] == 'Y': demo_rm[k]['shows'] += 1
+        if d['show_status_adj'] == 'N': demo_rm[k]['noshow'] += 1
+        if d['show_status_adj'] == 'P': demo_rm[k]['pending'] += 1
         c = closes_by_email.get(em)
         if c: demo_rm[k]['closes'] += 1; demo_rm[k]['arr'] += c['arr']; demo_rm[k]['mrr'] += c['mrr']
     with open(os.path.join(OUT_DIR, 'summary_routing_month.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(['receiver','month','sent','leads_contacted','unique_replies','interested','bounced',
-                    'demos','shows','closes','arr','mrr',
-                    'reply_rate','interest_rate','demos_per_interested','close_per_demo'])
+                    'demos','shows','noshow','pending','closes','arr','mrr',
+                    'reply_rate','interest_rate','show_rate','demos_per_interested','close_per_demo','close_per_showup'])
         keys = set(routing_month.keys()) | set(demo_rm.keys())
         for k in sorted(keys):
             recv, mo = k
@@ -560,12 +568,16 @@ def main():
             d = demo_rm.get(k, {})
             demos = d.get('demos',0); shows = d.get('shows',0); closes_ = d.get('closes',0)
             arr = d.get('arr',0); mrr = d.get('mrr',0)
-            cont1 = max(v['leads_contacted'], 1); int1 = max(v['interested'], 1); demo1 = max(demos, 1)
+            noshow = d.get('noshow', 0); pending = d.get('pending', 0)
+            completed = max(demos - pending, 0)
+            cont1 = max(v['leads_contacted'], 1); int1 = max(v['interested'], 1); demo1 = max(demos, 1); show1 = max(shows, 1)
             w.writerow([recv, mo, v['sent'], v['leads_contacted'], v['unique_replies'], v['interested'], v['bounced'],
-                        demos, shows, closes_, arr, mrr,
+                        demos, shows, noshow, pending, closes_, arr, mrr,
                         round(v['unique_replies']/cont1*100, 4), round(v['interested']/cont1*100, 4),
+                        round(shows/max(completed, 1)*100, 2) if completed else 0,
                         round(demos/int1*100, 2) if v['interested'] else 0,
-                        round(closes_/demo1*100, 2) if demos else 0])
+                        round(closes_/demo1*100, 2) if demos else 0,
+                        round(closes_/show1*100, 2) if shows else 0])
 
     # 6f. summary_step_industry.csv: industry × step_order rolled up
     step_ind = defaultdict(lambda: {'sent':0,'leads_contacted':0,'replies':0,'interested':0,'bounced':0,'demos':0,'closes':0})
