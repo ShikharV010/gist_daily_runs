@@ -83,6 +83,10 @@ export default function ShowupTable({
             'Advertising':          ['advertising', 'marketing', 'media'],
             'Medical Equipment':    ['medical', 'healthcare', 'device', 'equipment'],
             'Equipment Rental':     ['rental', 'equipment rental', 'leasing'],
+            'Financial Services':   ['financial', 'finance', 'banking', 'insurance', 'fintech'],
+            'Business Services':    ['business services', 'consulting', 'professional services'],
+            'Google Ads (Running)': [],
+            'Google Ads (Stopped)': [],
           }
           const keywords = matchMap[industry]
           const indLower = ind.toLowerCase()

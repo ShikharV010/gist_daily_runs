@@ -220,6 +220,6 @@ export interface DateRange {
   to: string
 }
 
-export type Industry = 'All' | 'Manufacturing' | 'IT & Consulting' | 'Truck Transportation' | 'BCS' | 'Commercial' | 'EWWS' | 'Advertising' | 'Medical Equipment' | 'Equipment Rental'
+export type Industry = 'All' | 'Manufacturing' | 'IT & Consulting' | 'Truck Transportation' | 'BCS' | 'Commercial' | 'EWWS' | 'Advertising' | 'Medical Equipment' | 'Equipment Rental' | 'Financial Services' | 'Business Services' | 'Google Ads (Running)' | 'Google Ads (Stopped)'
 export type IntentLabel = 'Hot' | 'Warm' | 'Cold' | 'Dead'
-export type Tab = 'overview' | 'manufacturing' | 'it-consulting' | 'truck' | 'bcs' | 'commercial' | 'ewws' | 'advertising' | 'medical-equipment' | 'equipment-rental' | 'compare'
+export type Tab = 'overview' | 'manufacturing' | 'it-consulting' | 'truck' | 'bcs' | 'commercial' | 'ewws' | 'advertising' | 'medical-equipment' | 'equipment-rental' | 'financial-services' | 'business-services' | 'google-ads-running' | 'google-ads-stopped' | 'compare'

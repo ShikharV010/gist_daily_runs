@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import type { MetricsData, ShowupAnalysis, Industry } from './types'
 import { computeMetrics } from './metrics'
 
-const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental']
+const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental', 'Financial Services', 'Business Services', 'Google Ads (Running)', 'Google Ads (Stopped)']
 const EMPTY_RANGE = { from: '', to: '' }
 
 function pct(n: number, digits = 1) {

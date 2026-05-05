@@ -44,7 +44,7 @@ def extract_industry(name: str) -> str:
         n = n[:m.start()].strip()
     return _NAME_ALIASES.get(n, n) or 'Other'
 
-ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental'}
+ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental', 'Financial Services', 'Business Services', 'Google Ads (Running)', 'Google Ads (Stopped)'}
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def to_est(val):
