@@ -49,8 +49,8 @@ DRY_RUN      = os.getenv('ALLAINE_DRY_RUN', '').lower() in ('1', 'true', 'yes')
 NO_PHONE_HEADERS = ['date_utc', 'lead_id', 'name', 'email', 'linkedin_url',
                     'company', 'leadmagic_tried', 'fullenrich_tried', 'fullenrich_status']
 
-# Polling FullEnrich inside the run: up to ~90s. Longer waits would overrun cron.
-FE_POLL_SECONDS = 180
+# Polling FullEnrich inside the run: up to ~5 min. Longer waits would overrun cron.
+FE_POLL_SECONDS = 300
 FE_POLL_INTERVAL = 5
 
 
@@ -153,18 +153,24 @@ def _fullenrich_phones(leads):
                               headers={'Authorization': f'Bearer {FE_KEY}'}, timeout=20)
             if pr.status_code != 200: continue
             pd = pr.json()
-            if pd.get('status') == 'COMPLETED':
+            status = (pd.get('status') or '').upper()
+            if status in ('FINISHED', 'FINISHED_WITH_ERRORS', 'COMPLETED', 'SUCCESS', 'DONE'):
                 out = {}
                 for item in pd.get('datas', []):
                     lid = (item.get('custom') or {}).get('lead_id')
-                    phones = item.get('contact', {}).get('phones') or []
+                    contact = item.get('contact', {}) or {}
+                    phones = contact.get('phones') or []
+                    phone = None
                     if phones:
-                        ph = phones[0]
+                        ph = phones[0] if isinstance(phones[0], dict) else {}
                         phone = ph.get('number') or ph.get('e164') or ph.get('phone')
+                    if not phone:
+                        phone = contact.get('most_probable_phone')
+                    try:
                         out[int(lid)] = phone if phone else None
-                    else:
-                        out[int(lid)] = None
-                log.info(f"    FullEnrich completed: {sum(1 for p in out.values() if p)}/{len(out)} found")
+                    except (TypeError, ValueError):
+                        out[lid] = phone if phone else None
+                log.info(f"    FullEnrich {status}: {sum(1 for p in out.values() if p)}/{len(out)} found")
                 return out
         except Exception:
             pass
