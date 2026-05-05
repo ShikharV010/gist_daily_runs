@@ -14327,5 +14327,337 @@
       "total_duration_min": 31,
       "analyzed_at": "2026-05-02T06:26:48.222707Z"
     }
+  },
+  "sellers hub": {
+    "company": "sellers hub",
+    "prospect_name": "Fernanda Corona",
+    "prospect_designation": "Unknown (not stated in transcript)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Fernanda explicitly said she must consult her boss, the founder, before deciding.",
+    "company_industry": "Sales Recruitment & Staffing / B2B Talent Placement",
+    "pain_points": [
+      {
+        "pain_point": "Low organic website traffic and lead generation",
+        "severity": "high",
+        "direct_quote": "it's sort of dipping over the years",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed traffic data and explained how landing pages drive organic leads"
+      },
+      {
+        "pain_point": "Existing blog pages have no CTAs or lead capture",
+        "severity": "high",
+        "direct_quote": "it's just text. There's not a single button where I can leave my information behind",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated CTA-rich landing page templates with multiple capture points"
+      },
+      {
+        "pain_point": "Current agency landing pages not discoverable via organic search",
+        "severity": "high",
+        "direct_quote": "those are only for the Google Ads campaigns...there's no way to find those website pages",
+        "addressed_in_call": true,
+        "how_addressed": "AE contrasted organic-indexed pages vs. paid-only hidden pages"
+      },
+      {
+        "pain_point": "Not appearing in AI search engines or LLM recommendations",
+        "severity": "medium",
+        "direct_quote": "leads that we may be might be missing with high intent search",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed AI overview example with Online Controls appearing in ChatGPT and Gemini"
+      },
+      {
+        "pain_point": "Current SEO agency delivering unclear ROI after one month",
+        "severity": "medium",
+        "direct_quote": "we've been working with them only for a month so far",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as data-driven tech vs. bias-prone human agency strategy"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Already working with an SEO agency doing similar work",
+        "how_handled": "AE differentiated as tech product vs. human-biased agency; highlighted automation and scale",
+        "resolved": false
+      },
+      {
+        "objection": "Asked about free trial availability",
+        "how_handled": "AE explained no free trial; positioned low-cost launch plan and no lock-in as equivalent",
+        "resolved": false
+      },
+      {
+        "objection": "Concerned landing pages look identical across clients",
+        "how_handled": "AE acknowledged template consistency; justified with conversion performance data from 300-400 clients",
+        "resolved": false
+      },
+      {
+        "objection": "Cannot decide without founder/boss approval",
+        "how_handled": "AE scheduled follow-up call and offered to send deck and recording for boss review",
+        "resolved": false
+      },
+      {
+        "objection": "Still locked into 3-month agency contract",
+        "how_handled": "AE suggested both can run in parallel; left decision to boss",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Said product 'looks good' and asked detailed plan questions",
+      "Leaning toward Launch plan; confirmed monthly billing preference",
+      "Asked if upgrading plans later is possible",
+      "Interested in calendar link and CTA customization options",
+      "Proactively asked about blog content creation capability",
+      "Asked how to feed more data like insurance vertical focus",
+      "Agreed existing pages lack CTAs and need improvement",
+      "Accepted follow-up call invite for the following Monday"
+    ],
+    "negative_signals": [
+      "Not the decision maker; must consult founder before proceeding",
+      "Already in a 3-month contract with competing SEO agency",
+      "No free trial offered; could reduce urgency to commit",
+      "Unclear if founder will join follow-up call or approve",
+      "Vague on timeline; cannot confirm if overlap with agency is okay"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call scheduled for Monday the following week",
+      "Fernanda to brief her founder/boss before next call",
+      "AE to send demo deck and sample landing page links",
+      "AE to send recording of the call for boss review",
+      "Calendar invite sent; Fernanda confirmed receipt"
+    ],
+    "next_call_date": "Monday, 2026-05-11 (same time as original call)",
+    "follow_up_materials_promised": [
+      "Demo deck with Gushwork product overview",
+      "Sample landing pages shown during demo",
+      "Call recording via Sybill link"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect showed genuine product interest and asked detailed questions",
+      "Identified preferred plan (Launch) and confirmed monthly billing works",
+      "Blocked by founder approval; not a unilateral decision",
+      "Existing 3-month agency contract is a timing and budget blocker",
+      "No free trial option may slow down commitment decision",
+      "Follow-up call booked; momentum maintained but not accelerated"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE misidentified industry as 'sales recruiting' not equipment rental",
+      "Demo was relevant but lacked vertical-specific (insurance) customization",
+      "AE proactively handled SEO agency objection with clear differentiation",
+      "AE did not clearly qualify Fernanda's decision-making authority early enough",
+      "No specific ROI example or case study for recruitment/staffing vertical shown",
+      "AE handled CTA and calendar integration question well with data-backed logic",
+      "Competitor analysis shown but Fernanda recognized none of the competitors",
+      "AE closed call by booking next meeting; good next-step discipline"
+    ],
+    "key_insights": [
+      "Fernanda is an internal champion; founder is the real decision maker",
+      "Company paying ~$1K/month to agency with poor measurable results so far",
+      "Insurance vertical is a new growth focus not reflected on their website",
+      "Existing resource hub pages have no CTAs; urgent conversion problem exists",
+      "Agency landing pages are paid-only and not organically indexed",
+      "Prospect open to running Gushwork alongside current agency contract",
+      "Template design rigidity may resurface as objection with the founder",
+      "Launch plan at entry price point aligns with trial mindset of prospect"
+    ],
+    "recommended_next_action": "Send follow-up email with deck, call recording, and a 1-page ROI summary using a staffing/recruitment client case study; prepare founder-facing pitch that addresses agency overlap, template concerns, and insurance vertical customization before Monday's call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Showed live traffic data proving organic performance is declining",
+      "Demonstrated CTA-rich landing pages vs. current blog-only content",
+      "Explained organic indexing vs. paid-only hidden agency landing pages",
+      "Showed AI overview example proving LLM visibility is achievable",
+      "Positioned software-driven approach as superior to human-biased agency strategy"
+    ],
+    "_meta": {
+      "prospect_email": "fernanda@sellershub.com",
+      "prospect_company": "sellers hub",
+      "prospect_website": "https://sellershub.com/",
+      "demo_date": "2026-05-04",
+      "ae_name": "Arabind",
+      "industry": "Equipment Rental",
+      "meeting_ids": [
+        "173ce1ddcc2538ad2aaef4a59748c8e6"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=5f3cf98d-3ada-410b-b64a-b8d62fcca3c1&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 40,
+      "analyzed_at": "2026-05-05T06:36:24.011234Z"
+    }
+  },
+  "Cloudsheer Consulting": {
+    "company": "Cloudsheer Consulting",
+    "prospect_name": "Shubham Bansal",
+    "prospect_designation": "Growth & Operations at Cloudsheer Consulting",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Shubham needs CEO finance approval before committing to any purchase.",
+    "company_industry": "IT & Consulting / Salesforce Implementation Services",
+    "pain_points": [
+      {
+        "pain_point": "Zero organic/AI search visibility",
+        "severity": "high",
+        "direct_quote": "we are really looking forward to enhance our organic outreach now",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed visibility gap tool and AI search ranking strategy"
+      },
+      {
+        "pain_point": "Over-reliance on referrals for new business",
+        "severity": "high",
+        "direct_quote": "we were generating business via referrals... we've not paid a lot of attention to the website",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as scalable inbound lead channel beyond referrals"
+      },
+      {
+        "pain_point": "No presence on AI platforms like ChatGPT or Perplexity",
+        "severity": "high",
+        "direct_quote": "Probably get cited in answers in ChatGPT, Perplexity, Gemini",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained AI prompt targeting and 24/7 page optimization via AI agents"
+      },
+      {
+        "pain_point": "Brand new website with no content traction",
+        "severity": "medium",
+        "direct_quote": "this website is relatively new... we just made it live one and a half weeks back",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed 100+ page AI knowledge base as accelerator for new site"
+      },
+      {
+        "pain_point": "In-house content efforts not scalable or optimized",
+        "severity": "medium",
+        "direct_quote": "we will be optimizing them on a monthly basis",
+        "addressed_in_call": true,
+        "how_addressed": "AE contrasted human monthly updates vs 24/7 AI agent optimization"
+      },
+      {
+        "pain_point": "No defined lead generation goal or content strategy",
+        "severity": "medium",
+        "direct_quote": "we do not have a goal in our mind that how much we can get",
+        "addressed_in_call": true,
+        "how_addressed": "AE anchored expectations: 4-8 leads by month 3, scaling to 10-20 by month 4"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Can replicate this in-house with AI agent",
+        "how_handled": "AE acknowledged but noted human scale limits vs 24/7 automated optimization; suggested trying in-house and returning if it fails",
+        "resolved": false
+      },
+      {
+        "objection": "Service seems like basic blog creation only",
+        "how_handled": "AE explained differentiation: proprietary LLM prompt data, AI agents, automated optimization layer",
+        "resolved": false
+      },
+      {
+        "objection": "Needs CEO finance approval",
+        "how_handled": "AE acknowledged it but probed whether personal conviction was there first",
+        "resolved": false
+      },
+      {
+        "objection": "Concerned about pages hosted on Gushwork server",
+        "how_handled": "AE explained AI agents require server access; clarified content ownership retained by prospect",
+        "resolved": true
+      },
+      {
+        "objection": "What happens to pages after contract ends",
+        "how_handled": "AE confirmed prospect keeps all pages; offered to migrate to their server if needed",
+        "resolved": true
+      },
+      {
+        "objection": "Wants analytics on AI citations and blog traffic",
+        "how_handled": "AE admitted dashboard lacks this but offered CSM monthly email reports",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Expressed desire to start ASAP to avoid delaying growth",
+      "Said yes to paying GST, open to INR payment",
+      "Showed interest in upgrading from Launch to Grow later",
+      "Asked detailed questions about blog hosting and analytics",
+      "Confirmed keywords shown were exactly right for their business",
+      "Has strong Salesforce niche and clear US/UK/AU target market",
+      "Previously scaled organic traffic to 1M/month at prior company"
+    ],
+    "negative_signals": [
+      "Wants to sleep on it before deciding",
+      "Believes in-house AI agent could replicate Gushwork's service",
+      "Expectations misaligned; felt it was just blog creation",
+      "No urgency trigger; no hard deadline or campaign pressure",
+      "Prospect is influencer, not final decision maker",
+      "Leaning toward DIY first before engaging an agency",
+      "Requested discounts; none available to offer"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Shubham will discuss with CEO for finance approval",
+      "Shubham requested knowledge articles showing Gushwork's added value",
+      "AE to send follow-up materials or product updates"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Knowledge articles or case studies on Gushwork's differentiation",
+      "Product updates or new feature announcements if relevant"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect leaning toward building in-house before paying for agency",
+      "No clear next step or follow-up meeting scheduled",
+      "Needs CEO approval with no committed internal champion yet",
+      "Core objection around perceived value vs DIY unresolved",
+      "AE conceded and suggested prospect try in-house first",
+      "No urgency, no deadline, no strong emotional buy-in expressed"
+    ],
+    "call_quality_score": 5,
+    "call_quality_notes": [
+      "Discovery was shallow; BANT not fully qualified upfront",
+      "AE conceded too early on DIY objection, weakening close",
+      "Pricing was revealed without anchoring ROI or LTV first",
+      "Good move probing personal conviction before CEO approval",
+      "Technical questions answered well; hosting/ownership concerns resolved",
+      "AE failed to quantify prospect's cost of inaction clearly",
+      "No concrete next step or follow-up meeting locked in",
+      "Audio/video issues disrupted flow and reduced call momentum",
+      "AE asked budget question awkwardly without ROI framing",
+      "Prospect's strong SEO background was underutilized as leverage"
+    ],
+    "key_insights": [
+      "Prospect has real pain but overestimates DIY AI agent capability",
+      "Shubham is sophisticated marketer; needs data-driven case not demos",
+      "High LTV customer base means even 2-3 leads/month is ROI-positive",
+      "Salesforce consulting is highly competitive; urgency angle underused",
+      "AE should have used competitor-citing-Cloudsheer scenario more forcefully",
+      "Prospect referenced Leverage Edu; credibility signal worth leveraging",
+      "Launch plan at $800/month is low barrier; ROI framing was weak",
+      "No follow-up meeting locked; deal risks going cold immediately"
+    ],
+    "recommended_next_action": "Send a personalized ROI email within 24 hours: show exact revenue potential from 4-8 leads/month at Cloudsheer's current ACV, include a competitor citation example in Salesforce consulting, attach a 1-page case study (e.g. John May's 17 leads in 30 days), and propose a 20-minute CEO-inclusive call to finalize.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Visibility gap shown via live keyword audit tool on Cloudsheer.com",
+      "AI platform citation strategy explained with ChatGPT/Perplexity targeting",
+      "24/7 AI agent optimization contrasted against monthly human updates",
+      "Lead dashboard demo showed measurable outcome tracking for marketer",
+      "Content ownership and post-cancellation rights clearly communicated",
+      "Timeline set: leads expected by end of month 3 with compounding growth",
+      "Salesforce CRM integration offered to fit existing tech stack"
+    ],
+    "_meta": {
+      "prospect_email": "shubham@cloudsheer.com",
+      "prospect_company": "Cloudsheer Consulting",
+      "prospect_website": "https://cloudsheer.com",
+      "demo_date": "2026-05-04",
+      "ae_name": "Ajith Ponicherry",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "ea650e472c2e3e8d472bb357dd2b0707"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=07651587-b892-456d-896d-98b0ff42b89e&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 49,
+      "analyzed_at": "2026-05-05T06:36:28.735855Z"
+    }
   }
 }
