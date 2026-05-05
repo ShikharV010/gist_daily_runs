@@ -20,8 +20,8 @@ function money(n: number) {
 }
 
 const TH = ({ children, sticky }: { children: React.ReactNode; sticky?: 'left' }) => (
-  <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky top-0 ${sticky === 'left' ? 'left-0 z-30' : 'z-20'}`}
-      style={{ backgroundColor: '#0070FF', color: '#ffffff' }}>
+  <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky ${sticky === 'left' ? 'left-0 z-30' : 'z-20'}`}
+      style={{ backgroundColor: '#0070FF', color: '#ffffff', top: '73px' }}>
     {children}
   </th>
 )
@@ -103,7 +103,7 @@ export default function OverviewCompare({
         </h2>
         <p className="text-xs text-gray-400 mt-0.5">All metrics side-by-side for selected date range</p>
       </div>
-      <div className="overflow-auto max-h-[80vh]">
+      <div className="overflow-x-auto">
         <table className="w-full border-collapse">
           <thead>
             <tr>
