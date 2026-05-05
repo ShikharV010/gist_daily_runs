@@ -41,6 +41,11 @@ __pycache__/
 # vercel
 .vercel
 
+# offline analysis — keep local only, never publish to repo or dashboard
+/data/analysis/
+analysis_mar_apr.py
+variant_analysis.py
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts
