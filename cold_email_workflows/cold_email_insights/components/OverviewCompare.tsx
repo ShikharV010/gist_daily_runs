@@ -19,8 +19,8 @@ function money(n: number) {
   return '$' + Math.round(n).toLocaleString()
 }
 
-const TH = ({ children }: { children: React.ReactNode }) => (
-  <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
+const TH = ({ children, sticky }: { children: React.ReactNode; sticky?: 'left' }) => (
+  <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky top-0 ${sticky === 'left' ? 'left-0 z-30' : 'z-20'}`}
       style={{ backgroundColor: '#0070FF', color: '#ffffff' }}>
     {children}
   </th>
@@ -103,11 +103,11 @@ export default function OverviewCompare({
         </h2>
         <p className="text-xs text-gray-400 mt-0.5">All metrics side-by-side for selected date range</p>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-auto max-h-[80vh]">
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <TH>Metric</TH>
+              <TH sticky="left">Metric</TH>
               {INDUSTRIES.map(ind => <TH key={ind}>{ind}</TH>)}
             </tr>
           </thead>
@@ -119,7 +119,7 @@ export default function OverviewCompare({
               if (!row.getValue) return null
               return (
                 <tr key={row.label} className="hover:bg-gray-50">
-                  <td className="px-4 py-2.5 text-sm text-gray-600 font-medium whitespace-nowrap">
+                  <td className="px-4 py-2.5 text-sm text-gray-600 font-medium whitespace-nowrap sticky left-0 bg-white z-10 border-r border-gray-100">
                     {row.label}
                   </td>
                   {INDUSTRIES.map(ind => (

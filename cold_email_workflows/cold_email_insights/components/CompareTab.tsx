@@ -22,8 +22,8 @@ function money(n: number) {
   return '$' + Math.round(n).toLocaleString()
 }
 
-const TH = ({ children }: { children: React.ReactNode }) => (
-  <th className="px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
+const TH = ({ children, sticky }: { children: React.ReactNode; sticky?: 'left' }) => (
+  <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky top-0 ${sticky === 'left' ? 'left-0 z-30' : 'z-20'}`}
       style={{ backgroundColor: '#0070FF', color: '#ffffff' }}>
     {children}
   </th>
@@ -121,11 +121,11 @@ export default function CompareTab({
         </h2>
         <p className="text-xs text-gray-400 mt-0.5">All-time totals · no date filter applied</p>
       </div>
-      <div className="overflow-x-auto">
+      <div className="overflow-auto max-h-[80vh]">
         <table className="w-full border-collapse">
           <thead>
             <tr>
-              <TH>Metric</TH>
+              <TH sticky="left">Metric</TH>
               {INDUSTRIES.map(ind => <TH key={ind}>{ind}</TH>)}
             </tr>
           </thead>
@@ -136,7 +136,7 @@ export default function CompareTab({
               }
               return (
                 <tr key={row.label} className="hover:bg-gray-50">
-                  <td className="px-4 py-2.5 text-sm text-gray-600 font-medium">{row.label}</td>
+                  <td className="px-4 py-2.5 text-sm text-gray-600 font-medium sticky left-0 bg-white z-10 border-r border-gray-100">{row.label}</td>
                   {INDUSTRIES.map(ind => (
                     <TD key={ind} highlight={false}>
                       {row.getValue(byIndustry[ind], ind)}
@@ -149,7 +149,7 @@ export default function CompareTab({
             {/* Intent breakdown rows */}
             {(['Hot', 'Warm', 'Cold', 'Dead'] as const).map(lbl => (
               <tr key={lbl} className="hover:bg-gray-50">
-                <td className="px-4 py-2.5 text-sm text-gray-600 font-medium">{lbl}</td>
+                <td className="px-4 py-2.5 text-sm text-gray-600 font-medium sticky left-0 bg-white z-10 border-r border-gray-100">{lbl}</td>
                 {INDUSTRIES.map(ind => {
                   const counts = intentByIndustry[ind] || {}
                   const count  = counts[lbl] || 0
@@ -172,7 +172,7 @@ export default function CompareTab({
 
             {/* Hot + Warm % summary */}
             <tr className="bg-green-50 font-semibold">
-              <td className="px-4 py-2.5 text-sm text-green-800 font-bold">Hot + Warm %</td>
+              <td className="px-4 py-2.5 text-sm text-green-800 font-bold sticky left-0 bg-green-50 z-10 border-r border-green-100">Hot + Warm %</td>
               {INDUSTRIES.map(ind => {
                 const counts = intentByIndustry[ind] || {}
                 const hw = (counts.Hot || 0) + (counts.Warm || 0)
