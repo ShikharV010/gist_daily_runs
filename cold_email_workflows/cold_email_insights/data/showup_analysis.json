@@ -14659,5 +14659,314 @@
       "total_duration_min": 49,
       "analyzed_at": "2026-05-05T06:36:28.735855Z"
     }
+  },
+  "Keyless Entry Remote Fob": {
+    "company": "Keyless Entry Remote Fob",
+    "prospect_name": "Stephanie Hansen",
+    "prospect_designation": "Unknown (likely marketing or operations staff)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Stephanie explicitly said she needs boss/owner approval for purchase decisions.",
+    "company_industry": "Manufacturing / Automotive Accessories & Key Fob Retail",
+    "pain_points": [
+      {
+        "pain_point": "Insufficient lead volume to hit revenue goals",
+        "severity": "high",
+        "direct_quote": "Yes, more, more income, more leads. I just, I think we're trying to make it up to 25k a day.",
+        "addressed_in_call": true,
+        "how_addressed": "Nitin showed how 100+ landing pages drive high-intent leads from AI and search engines."
+      },
+      {
+        "pain_point": "Low visibility on AI platforms like ChatGPT",
+        "severity": "high",
+        "direct_quote": "I've clicked on some of those. That's why I'm like, wow, that's how that works. Finally clicking in my head.",
+        "addressed_in_call": true,
+        "how_addressed": "Demo showed ChatGPT citation example; explained machine-readable page structure for AI visibility."
+      },
+      {
+        "pain_point": "Revenue gap between current daily run-rate and target",
+        "severity": "high",
+        "direct_quote": "We're trying to make it up to 25k a day... weekly we're making around 60k on the website.",
+        "addressed_in_call": true,
+        "how_addressed": "AE quantified the gap (~$14k/day vs $25k goal) and positioned Gushwork as growth lever."
+      },
+      {
+        "pain_point": "Relying on paid channels without organic AI/SEO coverage",
+        "severity": "medium",
+        "direct_quote": "We have social media, eBay channel, BigCommerce website, and some Google marketing.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned landing pages as complementary to paid ads, covering new long-tail keywords."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Needs boss/owner approval before committing",
+        "how_handled": "AE accepted the timeline, scheduled follow-up email for May 18th.",
+        "resolved": false
+      },
+      {
+        "objection": "Uncertainty about whether visitor data is captured automatically",
+        "how_handled": "AE clarified only CTA-based submissions captured for higher lead intent.",
+        "resolved": true
+      },
+      {
+        "objection": "Confusion about whether product is just another AI tool",
+        "how_handled": "AE explained computing layer on top of AI tools, not a generic AI product.",
+        "resolved": true
+      },
+      {
+        "objection": "Concern about commitment and cancellation flexibility",
+        "how_handled": "AE confirmed month-to-month, no lock-in, 30-day notice, pages kept forever.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Prospect said 'I'm loving this' about the offer.",
+      "Excited that company already uses AI daily.",
+      "Proactively asked for pricing and trial options.",
+      "Committed to giving yes/no by end of May.",
+      "Expressed intent to pitch the owner internally.",
+      "Called the demo 'super exciting' and 'great explanation'.",
+      "Said 'I look forward to hopefully working with you guys.'"
+    ],
+    "negative_signals": [
+      "Stephanie is NOT the decision maker.",
+      "Boss traveling next week; delays internal discussion.",
+      "No confirmed meeting with the owner scheduled.",
+      "Decision timeline pushed to end of May at earliest.",
+      "No budget or spending authority confirmed."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Nitin to send follow-up email with call recording.",
+      "Stephanie to present Gushwork to the owner/boss.",
+      "Nitin to send follow-up email on Monday, May 18.",
+      "Stephanie to respond with yes/no by end of May.",
+      "Stephanie committed to communicate regardless of decision."
+    ],
+    "next_call_date": "2026-05-18",
+    "follow_up_materials_promised": [
+      "Email recap of everything discussed in the call.",
+      "Recording of the demo call to be shared.",
+      "Pricing details for all three plan tiers."
+    ],
+    "deal_closing_intent_score": 7,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Strong enthusiasm and multiple positive buying signals shown.",
+      "Prospect is a champion but lacks decision-making authority.",
+      "Owner not yet engaged; deal could stall without his buy-in.",
+      "Clear revenue gap gives strong business justification for buying.",
+      "Month-to-month pricing lowers barrier to getting approval.",
+      "Defined follow-up date and decision deadline is a positive sign."
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE effectively ran a live demo tailored to prospect's site.",
+      "Good discovery on revenue goals and current channel mix.",
+      "AE quantified the revenue gap clearly and compellingly.",
+      "AE did not identify or attempt to engage the actual decision maker.",
+      "No attempt to schedule a follow-up call with the owner.",
+      "Objections around commitment and data capture handled well.",
+      "Could have probed deeper on budget and decision-making process.",
+      "Timeline for ROI (month 3) was clearly communicated."
+    ],
+    "key_insights": [
+      "Prospect is a strong internal champion, not the buyer.",
+      "Owner is the real decision maker and is currently unreachable.",
+      "Company making ~$85k/week; clear ambition to scale further.",
+      "Key fob price range $10\u2013$120 indicates varied product catalog.",
+      "Already running Google PPC; Gushwork would complement paid efforts.",
+      "Company in business since 2011; established brand with $2M+ sales.",
+      "Prospect unfamiliar with AI SEO; demo created strong aha moment.",
+      "No cannibalization risk; new long-tail keywords will be targeted only."
+    ],
+    "recommended_next_action": "Send the May 18 follow-up email with a concise one-page ROI summary and a pre-built ask: 'Can we schedule a 15-minute call with you and the owner together?'",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Lead volume gap addressed via 100+ high-intent landing pages.",
+      "AI visibility gap addressed with live ChatGPT citation demo.",
+      "Revenue gap quantified (~$14k vs $25k/day) and solution mapped.",
+      "Over-reliance on paid ads addressed by covering new organic keywords."
+    ],
+    "_meta": {
+      "prospect_email": "stephanie.h@keylessentryremotefob.com",
+      "prospect_company": "Keyless Entry Remote Fob",
+      "prospect_website": "keyfobs.com",
+      "demo_date": "2026-05-05",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "86ba39e1e972a02bf04cf017a069ab6b"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=5565ca2c-447c-43fa-a695-496884dec385&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 22,
+      "analyzed_at": "2026-05-06T07:17:51.395143Z"
+    }
+  },
+  "Aylward Enterprises": {
+    "company": "Aylward Enterprises",
+    "prospect_name": "Bruce Teeling",
+    "prospect_designation": "Regional Sales Manager at Aylward Enterprises",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Bruce explicitly stated the decision is above his pay grade and requires India-based leadership (Elmac) approval.",
+    "company_industry": "Manufacturing / Pharmaceutical Packaging Machinery",
+    "pain_points": [
+      {
+        "pain_point": "Zero inbound leads from website",
+        "severity": "high",
+        "direct_quote": "I have gotten zero leads from the website. I don't know what else I can do.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed website has no AI/Google visibility and demonstrated how Gushwork creates ranked content pages."
+      },
+      {
+        "pain_point": "No visibility on Google or AI search engines",
+        "severity": "high",
+        "direct_quote": "If we Google the best, whatever. We're just not found.",
+        "addressed_in_call": true,
+        "how_addressed": "AE confirmed zero traffic data and showed how 100-400 pages drive AI and Google rankings."
+      },
+      {
+        "pain_point": "Current PR company delivering no results",
+        "severity": "high",
+        "direct_quote": "Why spend all this money and get no results. We're getting nothing.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as intent-based inbound alternative vs. LinkedIn broadcast approach."
+      },
+      {
+        "pain_point": "Trade show leads all ghosting after events",
+        "severity": "medium",
+        "direct_quote": "We get 30, 40 leads and they all ghost us after the show.",
+        "addressed_in_call": true,
+        "how_addressed": "AE briefly suggested competitors at shows may have stronger offerings; not fully resolved."
+      },
+      {
+        "pain_point": "Aylward product line in decade-long decline",
+        "severity": "high",
+        "direct_quote": "The product line has been on the decline for about 10 years, really declined in the last five.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Internal resistance to digital marketing investment",
+        "severity": "high",
+        "direct_quote": "I pitched them another digital marketing company and there was pushback.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Not the decision maker; needs India leadership approval",
+        "how_handled": "AE asked Bruce to share materials internally and requested a follow-up path.",
+        "resolved": false
+      },
+      {
+        "objection": "Company already paying for a PR contract until June",
+        "how_handled": "AE noted the June contract end as a natural window; not directly pushed.",
+        "resolved": false
+      },
+      {
+        "objection": "Previous digital marketing pitch was rejected internally",
+        "how_handled": "AE acknowledged but did not strategize on overcoming internal resistance.",
+        "resolved": false
+      },
+      {
+        "objection": "Results take time; not instantaneous",
+        "how_handled": "Bruce actually self-resolved; AE confirmed 30-45 day rollout and 90-day guarantee.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Bruce agreed website visibility is zero and needs fixing.",
+      "Acknowledged current PR spend yields zero ROI.",
+      "Asked for pricing unprompted during the demo.",
+      "Requested email materials to share with leadership.",
+      "Noted PR contract ends in June \u2014 natural switch window.",
+      "Expressed personal urgency: no commissions without leads.",
+      "Mentioned potential cultural alignment between Elmac and Gushwork."
+    ],
+    "negative_signals": [
+      "Bruce is not the decision maker; Elmac India decides.",
+      "Previous digital marketing pitch was rejected by leadership.",
+      "Indian parent company may be slow or resistant to change.",
+      "Aylward product line declining for 10 years \u2014 demand risk.",
+      "Company shrunk from 110 to fewer than 10 employees.",
+      "Bruce uncertain leadership will act even if convinced.",
+      "No concrete next meeting scheduled with decision makers."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to email pricing sheet to Bruce.",
+      "AE to send mockup landing pages to Bruce.",
+      "Bruce to share materials internally with Elmac leadership.",
+      "Monitor outcome of current PR contract expiry in June."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Pricing sheet with three package tiers ($800/$1500/$2800).",
+      "Mockup SEO/AI content landing pages for Aylward.",
+      "Demo pages for pharmaceutical machinery search queries."
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Bruce is an internal champion, not a decision maker.",
+      "Elmac India leadership has final authority and is hard to reach.",
+      "Prior digital marketing pitch was rejected \u2014 precedent set.",
+      "No follow-up meeting scheduled with actual decision makers.",
+      "Company in structural decline; budget priority unclear.",
+      "Buying window may open in June when PR contract ends."
+    ],
+    "call_quality_score": 5,
+    "call_quality_notes": [
+      "AE skipped discovery; jumped straight into screen share demo.",
+      "No qualification of budget authority or decision process early on.",
+      "AE did not identify Bruce's non-DM status until late in call.",
+      "Rapport-building was solid; India connection helped.",
+      "AE failed to strategize on navigating internal resistance.",
+      "No concrete next step set beyond emailing materials.",
+      "AE made culturally insensitive generalization about Indian decision-makers.",
+      "Pain point acknowledgment was good but solution framing was generic.",
+      "Pricing was shared without anchoring to ROI or current spend waste.",
+      "Call ended abruptly without a scheduled follow-up."
+    ],
+    "key_insights": [
+      "Bruce is an internal champion, not the economic buyer.",
+      "Elmac India controls budget; cultural alignment may help access.",
+      "PR contract ending June is the best natural sales window.",
+      "Aylward has zero organic or AI search presence \u2014 strong demo hook.",
+      "Product commoditization is real; SEO alone may not fix pipeline.",
+      "Bruce is frustrated, motivated, and emotionally invested in fixing this.",
+      "Company has shrunk 90% in headcount \u2014 urgency is real.",
+      "Decision maker is overseas; multi-stakeholder deal required."
+    ],
+    "recommended_next_action": "Send promised materials to Bruce immediately, then request a 20-minute call with Bruce plus an Elmac India decision maker before their PR contract expires in June, framing Gushwork as the replacement strategy with a clear ROI comparison to current PR spend.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Zero website leads: AE showed live traffic data confirming no visibility.",
+      "No Google/AI presence: AE demonstrated competitor rankings vs. Aylward's absence.",
+      "PR company ROI failure: AE contrasted intent-based search with broadcast social posts.",
+      "Trade show ghosting: AE offered brief hypothesis but did not provide solution.",
+      "Product line decline: Not addressed; outside Gushwork's scope.",
+      "Internal resistance to digital spend: Not addressed; no stakeholder strategy offered."
+    ],
+    "_meta": {
+      "prospect_email": "brucet@aylward-usa.com",
+      "prospect_company": "Aylward Enterprises",
+      "prospect_website": "www.aylwardenterprises.com",
+      "demo_date": "2026-05-05",
+      "ae_name": "Ajith Ponicherry",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "a715534702fd50141f63d25a654ea718"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=c823732c-fbf1-4e1b-b2df-001859c61f74&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 29,
+      "analyzed_at": "2026-05-06T07:17:58.390124Z"
+    }
   }
 }
