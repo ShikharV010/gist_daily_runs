@@ -14968,5 +14968,305 @@
       "total_duration_min": 29,
       "analyzed_at": "2026-05-06T07:17:58.390124Z"
     }
+  },
+  "cms": {
+    "company": "cms",
+    "prospect_name": "Adriana Batisti",
+    "prospect_designation": "Sales Team Member",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Adriana said she doesn't know if purchasing is 'up to her' and suggested sharing with her team internally.",
+    "company_industry": "Medical Equipment / Endoscopy Equipment Sales & Repair",
+    "pain_points": [
+      {
+        "pain_point": "Zero inbound leads from website",
+        "severity": "high",
+        "direct_quote": "No.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed competitor visibility gap and content solution demo"
+      },
+      {
+        "pain_point": "Invisible to buyers searching online",
+        "severity": "high",
+        "direct_quote": "We don't have so many.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed competitors ranking for CMS-relevant keywords"
+      },
+      {
+        "pain_point": "Over-reliance on existing customer lists and referrals",
+        "severity": "medium",
+        "direct_quote": "When I start here, I already receive a list for my customers that I have for a long time.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as new inbound channel beyond referrals"
+      },
+      {
+        "pain_point": "Limited new client acquisition per month",
+        "severity": "medium",
+        "direct_quote": "A month? I think five or six.",
+        "addressed_in_call": true,
+        "how_addressed": "AE framed solution as multiplying high-intent leads monthly"
+      },
+      {
+        "pain_point": "No awareness of Gushwork or the solution",
+        "severity": "low",
+        "direct_quote": "I don't know your company, what you do for help me? I don't know.",
+        "addressed_in_call": true,
+        "how_addressed": "AE gave product overview and live website analysis demo"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "No prior knowledge of Gushwork",
+        "how_handled": "AE explained company positioning and demonstrated live analysis",
+        "resolved": true
+      },
+      {
+        "objection": "Unclear if she has purchase authority",
+        "how_handled": "AE suggested sending email recap for internal team discussion",
+        "resolved": false
+      },
+      {
+        "objection": "Language and communication barrier throughout call",
+        "how_handled": "AE repeated questions, spoke louder, kept explanation simple",
+        "resolved": false
+      },
+      {
+        "objection": "No budget discussion or approval process raised",
+        "how_handled": "AE mentioned pricing briefly but didn't probe budget readiness",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Agreed call was useful and thanked AE for explanation",
+      "Asked AE to send email with solution details and pricing",
+      "Acknowledged being invisible in search is 'not good for us'",
+      "Open to sharing information internally with her team",
+      "Confirmed global client base, suggesting scale plan relevance",
+      "Stayed engaged through demo despite communication difficulties"
+    ],
+    "negative_signals": [
+      "Prospect did not know who Gushwork was before call",
+      "Likely not the decision maker; deferred to team",
+      "Significant language barrier reduced comprehension and engagement",
+      "No clear urgency or timeline expressed for purchasing",
+      "No budget or approval process discussed",
+      "Call was only 18 minutes; very surface-level discovery"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send email recap with solution details and pricing",
+      "Adriana to share information internally with her team",
+      "Follow-up call to be scheduled after internal review",
+      "Adriana to email AE when ready for next conversation"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Email recap of Gushwork solution and how it helps CMS",
+      "Pricing details for all three plans including Scale at $2,200",
+      "Summary of competitor visibility gap for endoscopy keywords",
+      "Sample content pages created during live demo"
+    ],
+    "deal_closing_intent_score": 2,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect had zero prior knowledge of Gushwork before call",
+      "Adriana is not the decision maker; needs internal buy-in",
+      "No urgency, budget, or timeline discussed during call",
+      "Communication barrier limited depth of discovery and rapport",
+      "Positive reaction was polite curiosity, not strong purchase intent",
+      "No next call scheduled; follow-up is entirely prospect-dependent"
+    ],
+    "call_quality_score": 4,
+    "call_quality_notes": [
+      "AE pivoted to demo quickly without deep discovery first",
+      "Language barrier was not proactively managed or escalated",
+      "AE failed to identify or qualify decision maker early",
+      "Budget and approval process were never explored",
+      "Demo was relevant and tailored to endoscopy verticals",
+      "Pricing was mentioned but not anchored to prospect value",
+      "No clear next call date set before ending the meeting",
+      "AE was polite and patient despite communication challenges"
+    ],
+    "key_insights": [
+      "CMS sells endoscopy equipment globally via eBay and Bimetis",
+      "Website generates no inbound leads currently \u2014 clear gap",
+      "Adriana is a salesperson, not a business owner or decision maker",
+      "Competitors like Steris and Henry Schein dominate search results",
+      "Global operations make Grow or Scale plan more appropriate",
+      "Discovery was shallow due to language and comprehension issues",
+      "Meeting 1 (Stefanie) showed stronger fit and clearer intent",
+      "Both meetings lacked confirmed next call \u2014 follow-up at risk"
+    ],
+    "recommended_next_action": "Send a clear, concise email to Adriana with a one-page visual summary, pricing, and a direct calendar link \u2014 and CC or identify the business owner/decision maker for a follow-up call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Showed live keyword gap \u2014 competitors outranking CMS on search",
+      "Demonstrated how content pages drive inbound lead requests",
+      "Framed solution as replacing over-reliance on existing client lists",
+      "Positioned Gushwork to scale globally across multiple markets",
+      "Explained lead dashboard to show tangible ROI tracking"
+    ],
+    "_meta": {
+      "prospect_email": "abatisti@cmsscopes.com",
+      "prospect_company": "cms",
+      "prospect_website": "https://www.cmsscopes.com/",
+      "demo_date": "2026-05-06",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "Medical Equipment",
+      "meeting_ids": [
+        "329d46b3683f00516c1393e36846925f",
+        "1a929da79d8b244ab7afdee6b0d3a23e"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=f94dc45b-de6c-448d-867f-d363cb5e4d0c&utm_source=AUTOMATION",
+        "https://l.sybill.ai/c?id=1d1f61a6-baf5-4026-8395-85591e0cb896&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 42,
+      "analyzed_at": "2026-05-07T07:27:24.047732Z"
+    }
+  },
+  "DigitalCoast Marketing, LLC": {
+    "company": "DigitalCoast Marketing, LLC",
+    "prospect_name": "Brad Wilson",
+    "prospect_designation": "Owner / Founder",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Brad sold his previous company and is sole founder rebuilding a new agency.",
+    "company_industry": "Digital Marketing / Web Design Agency",
+    "pain_points": [
+      {
+        "pain_point": "Needs lead generation for new agency",
+        "severity": "high",
+        "direct_quote": "I really just need the leads.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed AI-driven content pages designed to generate inbound leads."
+      },
+      {
+        "pain_point": "Needs AI-optimized content for clients",
+        "severity": "high",
+        "direct_quote": "I need help with the writing. I need some writing that'll do that.",
+        "addressed_in_call": true,
+        "how_addressed": "AE confirmed Gushwork creates content optimized for LLMs like ChatGPT and Gemini."
+      },
+      {
+        "pain_point": "Current AI writing tool too expensive per client",
+        "severity": "medium",
+        "direct_quote": "It's expensive. It's about a hundred dollars a site.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Low website visibility and traffic",
+        "severity": "medium",
+        "direct_quote": "Obviously you're not driving traffic.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed SEMrush data and demonstrated content pages to improve rankings."
+      },
+      {
+        "pain_point": "Wants clients ranked in LLMs like ChatGPT",
+        "severity": "high",
+        "direct_quote": "I want, I need some writing that'll do that... whenever we write the content, then we show the client where they rank.",
+        "addressed_in_call": true,
+        "how_addressed": "AE confirmed platform tracks LLM visibility including ChatGPT, Claude, Perplexity."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Pricing too high to resell profitably to existing clients",
+        "how_handled": "AE suggested reseller model at $700-$1000 per client with $100 margin.",
+        "resolved": false
+      },
+      {
+        "objection": "Already building city landing pages with AI himself",
+        "how_handled": "AE acknowledged overlap but did not differentiate Gushwork's value clearly.",
+        "resolved": false
+      },
+      {
+        "objection": "Gushwork only does one thing \u2014 not enough services",
+        "how_handled": "AE confirmed single-service focus; no counter-value proposition offered.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Explicitly stated he needs leads for new agency.",
+      "Asked about LLM content writing \u2014 core Gushwork capability.",
+      "Interested in keyword ranking visibility reporting.",
+      "Acknowledged possible fit for larger clients like law firms.",
+      "Asked AE to email demo details; said 'let's keep in touch'.",
+      "Currently paying $100/site for a competing AI writing tool."
+    ],
+    "negative_signals": [
+      "Already building city landing pages with AI himself.",
+      "Said pricing too high for current 7-8 small clients.",
+      "Stated he wouldn't make money reselling at current rates.",
+      "Felt Gushwork overlapped with what he already does.",
+      "No urgency \u2014 relaxed after 1.5 years of inactivity.",
+      "Seemed to be evaluating rather than ready to buy."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to email demo summary and pricing details to Brad.",
+      "Brad open to future conversation if right client arises.",
+      "No formal follow-up meeting scheduled."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Email with demo recap and pricing packages.",
+      "Coastal Web Team demo page created by AE to be shared."
+    ],
+    "deal_closing_intent_score": 2,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect already does most of what Gushwork offers himself.",
+      "Pricing model doesn't work for his current small client base.",
+      "No next meeting scheduled; only vague 'keep in touch' close.",
+      "Only possible future fit is larger clients like law firms.",
+      "No urgency \u2014 company still being rebuilt after long break.",
+      "Call ended without any commitment or clear buying intent."
+    ],
+    "call_quality_score": 4,
+    "call_quality_notes": [
+      "AE failed to research prospect's new company before the call.",
+      "Demo was for wrong company initially; caused early confusion.",
+      "AE admitted emails were automated \u2014 reduced trust immediately.",
+      "Discovery was shallow; pain points uncovered late in call.",
+      "No strong differentiation against prospect's existing workflow.",
+      "Reseller angle introduced but not developed into a real pitch.",
+      "AE did not probe for larger client opportunities proactively.",
+      "Call felt unstructured and reactive rather than consultative."
+    ],
+    "key_insights": [
+      "Brad is a savvy digital marketer \u2014 not a typical prospect.",
+      "He sold his prior agency; now rebuilding Coastal Web Team.",
+      "His real need: scalable AI content for 7-8 existing clients.",
+      "Reseller or white-label model is the only viable entry point.",
+      "Current tool (RankGPT) is direct competitor at $100/site.",
+      "Larger clients like law firms are the real target opportunity.",
+      "LLM visibility tracking resonated most strongly with Brad.",
+      "Pricing must be restructured for agency reseller economics."
+    ],
+    "recommended_next_action": "Send a tailored reseller/white-label proposal targeting Brad's agency model, showing per-client unit economics that beat RankGPT's $100/site cost, and include a case study for a law firm or professional services client to anchor a future upsell conversation.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Lead generation need addressed via demo of inbound content pages.",
+      "LLM writing need confirmed \u2014 platform targets ChatGPT, Gemini, Perplexity.",
+      "Low website visibility shown via SEMrush data (16 visitors/month).",
+      "Keyword ranking reporting confirmed via email delivery workflow.",
+      "Client cost concern raised but not resolved with strong reseller math."
+    ],
+    "_meta": {
+      "prospect_email": "brad@digitalcoastmarketing.com",
+      "prospect_company": "DigitalCoast Marketing, LLC",
+      "prospect_website": "https://digitalcoastmarketing.com",
+      "demo_date": "2026-05-06",
+      "ae_name": "Ajith Ponicherry",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "eefbf94aeef4ab753253093884026065"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=150e0e44-d924-4df0-9a9f-166f2f632066&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 20,
+      "analyzed_at": "2026-05-07T07:27:24.521981Z"
+    }
   }
 }
