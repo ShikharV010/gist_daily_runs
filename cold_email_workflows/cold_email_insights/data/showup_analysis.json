@@ -16075,5 +16075,123 @@
       "total_duration_min": 30,
       "analyzed_at": "2026-05-08T06:18:46.387688Z"
     }
+  },
+  "Pulse Drying System": {
+    "company": "Pulse Drying System",
+    "prospect_name": "Bob Engelhart",
+    "prospect_designation": "Unknown",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Bob independently booked the meeting and makes decisions about marketing vendors.",
+    "company_industry": "Manufacturing / Industrial Drying Systems",
+    "pain_points": [
+      {
+        "pain_point": "Limited AI search visibility",
+        "severity": "medium",
+        "direct_quote": "I want to know, on the AI side in particular... I wanted to see if there was anything that you do that's different than what we're already doing.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained Gushwork's AI search visibility offering but demo failed before full walkthrough."
+      },
+      {
+        "pain_point": "Unclear attribution of AI-driven leads",
+        "severity": "low",
+        "direct_quote": "I'm not sure.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Uncertain differentiation from existing agency",
+        "severity": "medium",
+        "direct_quote": "I want to see if you guys have any leg up.",
+        "addressed_in_call": false,
+        "how_addressed": "Demo crashed before AE could demonstrate competitive differentiation."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Already has an outsourced SEO and content agency",
+        "how_handled": "AE acknowledged overlap but positioned Gushwork's AI-search layer as additive.",
+        "resolved": false
+      },
+      {
+        "objection": "Doubts Gushwork offers anything uniquely different",
+        "how_handled": "AE started demo walkthrough but technical failure prevented full response.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Proactively booked meeting after receiving Gushwork email.",
+      "Expressed genuine interest in AI search differentiation.",
+      "Willing to reschedule for a full demo next week.",
+      "Accepted calendar invite immediately during the call.",
+      "Said 'I'm interested' and wants to explore further."
+    ],
+    "negative_signals": [
+      "Current SEO agency already delivering results he's happy with.",
+      "Joined on mobile; appeared distracted finishing a class.",
+      "No confirmed pain or urgency driving immediate switch.",
+      "Skeptical Gushwork offers anything beyond existing coverage.",
+      "No budget or timeline discussion happened."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Full product demo rescheduled for Wednesday next week.",
+      "Bob will join from desktop for better visibility.",
+      "AE to come better prepared with Pulse Drying analysis.",
+      "AE to understand existing agency scope before next call."
+    ],
+    "next_call_date": "2026-05-13 at 10:30 AM Central Time",
+    "follow_up_materials_promised": [
+      "Calendar invite sent and accepted during call.",
+      "AE promised deeper pre-call research on Pulse Drying."
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "No pain urgency; existing agency is performing adequately.",
+      "Curiosity-driven inquiry, not a problem-driven buying motion.",
+      "Demo failed; value proposition not fully delivered yet.",
+      "No budget, timeline, or stakeholder discussion occurred.",
+      "Prospect is evaluating, not actively seeking to switch."
+    ],
+    "call_quality_score": 3,
+    "call_quality_notes": [
+      "Demo failed mid-call due to AE's technical issues.",
+      "Discovery was surface-level; no deep pain uncovered.",
+      "AE did not ask about budget or decision process.",
+      "AE failed to probe existing agency gaps specifically.",
+      "Rapport was friendly but call ended prematurely.",
+      "No competitive differentiation was demonstrated this call."
+    ],
+    "key_insights": [
+      "Prospect is curious about AI SEO, not actively hurting.",
+      "Existing agency does SEO and content marketing already.",
+      "Bob doesn't track whether leads come from AI platforms.",
+      "AI search visibility gap exists per AE's pre-call research.",
+      "Bob is open-minded but needs a compelling differentiation proof.",
+      "Next call is critical \u2014 first real chance to demonstrate value."
+    ],
+    "recommended_next_action": "Before the Wednesday demo, prepare a side-by-side comparison showing Pulse Drying's Google vs. AI search visibility gaps, and script specific examples of AI-driven leads competitors are capturing that Pulse Drying is missing.",
+    "pain_points_addressed_by_ae": false,
+    "pain_points_addressed_details": [
+      "AI visibility gap was mentioned but demo crashed before proof.",
+      "Existing agency overlap objection was not resolved or addressed.",
+      "No data or case study shared to validate Gushwork's edge."
+    ],
+    "_meta": {
+      "prospect_email": "bengelhart@pulsedry.com",
+      "prospect_company": "Pulse Drying System",
+      "prospect_website": "pulsedry.com",
+      "demo_date": "2026-05-08",
+      "ae_name": "Sukruti Ssinha",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "64d0dcbfc4863174269f5e4228d64b12"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=e114091c-1723-4c93-af45-3fc93583da10&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 18,
+      "analyzed_at": "2026-05-09T06:34:34.700489Z"
+    }
   }
 }
