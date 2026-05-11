@@ -85,6 +85,7 @@ export default function ShowupTable({
             'Equipment Rental':     ['rental', 'equipment rental', 'leasing'],
             'Financial Services':   ['financial', 'finance', 'banking', 'insurance', 'fintech'],
             'Business Services':    ['business services', 'consulting', 'professional services'],
+            'Construction':         ['construction', 'building', 'contractor'],
             'Google Ads (Running)': [],
             'Google Ads (Stopped)': [],
           }

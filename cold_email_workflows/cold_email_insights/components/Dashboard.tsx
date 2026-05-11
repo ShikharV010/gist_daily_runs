@@ -29,6 +29,7 @@ const TABS: { id: Tab; label: string; industry: Industry }[] = [
   { id: 'equipment-rental',   label: 'Equipment Rental',     industry: 'Equipment Rental' },
   { id: 'financial-services', label: 'Financial Services',   industry: 'Financial Services' },
   { id: 'business-services',  label: 'Business Services',    industry: 'Business Services' },
+  { id: 'construction',       label: 'Construction',         industry: 'Construction' },
   { id: 'google-ads-running', label: 'Google Ads (Running)', industry: 'Google Ads (Running)' },
   { id: 'google-ads-stopped', label: 'Google Ads (Stopped)', industry: 'Google Ads (Stopped)' },
   { id: 'compare',            label: 'Compare',              industry: 'All' },
