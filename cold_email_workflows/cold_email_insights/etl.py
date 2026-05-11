@@ -44,7 +44,7 @@ def extract_industry(name: str) -> str:
         n = n[:m.start()].strip()
     return _NAME_ALIASES.get(n, n) or 'Other'
 
-ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental', 'Financial Services', 'Business Services', 'Google Ads (Running)', 'Google Ads (Stopped)'}
+ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental', 'Financial Services', 'Business Services', 'Construction', 'Google Ads (Running)', 'Google Ads (Stopped)'}
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def to_est(val):
@@ -371,7 +371,12 @@ def fetch_demo_bookings(interested_leads, campaigns):
                show_status, source
         FROM ranked
         WHERE rn = 1
-          AND source ILIKE '%%gushwork%%email%%'
+          -- Widened: catch any "email"-tagged source. This includes forwards
+          -- where the booker tags the source as "email", "Email and Web",
+          -- "email from Gushwork", "Richard Wilson email", etc. Exclude sync
+          -- since that's a separate channel.
+          AND source ILIKE '%%email%%'
+          AND source NOT ILIKE '%%sync%%'
         ORDER BY demo_scheduled_date DESC NULLS LAST
     """)
     rows = cur.fetchall()
