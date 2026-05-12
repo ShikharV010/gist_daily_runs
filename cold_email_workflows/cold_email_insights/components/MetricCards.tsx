@@ -14,22 +14,14 @@ function money(n: number) {
   return '$' + Math.round(n).toLocaleString()
 }
 
-const ROW_STYLE = {
-  1: { bg: '#dbeafe', border: '#93c5fd', text: '#1e40af' },  // blue
-  2: { bg: '#ede9fe', border: '#c4b5fd', text: '#5b21b6' },  // violet
-  3: { bg: '#d1fae5', border: '#6ee7b7', text: '#065f46' },  // emerald
-  4: { bg: '#fef3c7', border: '#fcd34d', text: '#92400e' },  // amber (closes)
-} as const
-
-function Card({ title, main, sub, row }: {
-  title: string; main: string; sub?: string; row: 1 | 2 | 3 | 4
+function Card({ title, main, sub }: {
+  title: string; main: string; sub?: string; row?: 1 | 2 | 3 | 4
 }) {
-  const s = ROW_STYLE[row]
   return (
-    <div className="rounded-xl border p-4" style={{ background: s.bg, borderColor: s.border }}>
-      <p className="text-xs font-medium uppercase tracking-wide mb-2" style={{ color: '#111827' }}>{title}</p>
-      <p className="text-2xl font-bold" style={{ color: s.text }}>{main}</p>
-      {sub && <p className="text-xs mt-1" style={{ color: '#6b7280' }}>{sub}</p>}
+    <div className="rounded-xl border border-gray-200 bg-white p-4">
+      <p className="text-xs font-medium uppercase tracking-wide mb-2 text-gray-500">{title}</p>
+      <p className="text-2xl font-bold text-gray-900">{main}</p>
+      {sub && <p className="text-xs mt-1 text-gray-500">{sub}</p>}
     </div>
   )
 }

@@ -13,6 +13,8 @@ import ShowupTable from './ShowupTable'
 import DemosTable from './DemosTable'
 import OverviewCompare from './OverviewCompare'
 import CompareTab from './CompareTab'
+import DailyDetailsTables from './DailyDetailsTables'
+import MonthlyOverlayChart from './MonthlyOverlayChart'
 
 // ── Tab config ────────────────────────────────────────────────────────────────
 
@@ -65,26 +67,32 @@ function IndustryTab({
   return (
     <div className="space-y-8">
       <MetricCards metrics={metrics} />
-      <div>
-        <button
-          onClick={() => setChartCollapsed(c => !c)}
-          className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 hover:text-gray-700 transition-colors"
-        >
-          <span>Daily Funnel Trend</span>
-          <span>{chartCollapsed ? '▼ Show' : '▲ Hide'}</span>
-        </button>
-        {!chartCollapsed && (
-          <FunnelChart
-            timeSeries={data.time_series.daily}
-            industry={industry}
-            dateRange={dateRange}
-          />
-        )}
-      </div>
       {industry === 'All' ? (
-        <OverviewCompare data={data} dateRange={dateRange} />
+        <>
+          <MonthlyOverlayChart data={data} />
+          <DailyDetailsTables data={data} />
+          <OverviewCompare data={data} dateRange={dateRange} />
+        </>
       ) : (
-        <CampaignTable campaigns={campStats} />
+        <>
+          <div>
+            <button
+              onClick={() => setChartCollapsed(c => !c)}
+              className="flex items-center gap-2 text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2 hover:text-gray-700 transition-colors"
+            >
+              <span>Daily Funnel Trend</span>
+              <span>{chartCollapsed ? '▼ Show' : '▲ Hide'}</span>
+            </button>
+            {!chartCollapsed && (
+              <FunnelChart
+                timeSeries={data.time_series.daily}
+                industry={industry}
+                dateRange={dateRange}
+              />
+            )}
+          </div>
+          <CampaignTable campaigns={campStats} />
+        </>
       )}
       {industry !== 'All' && (
         <DemosTable
