@@ -220,6 +220,23 @@ export interface DateRange {
   to: string
 }
 
-export type Industry = 'All' | 'Manufacturing' | 'IT & Consulting' | 'Truck Transportation' | 'BCS' | 'Commercial' | 'EWWS' | 'Advertising' | 'Medical Equipment' | 'Equipment Rental' | 'Financial Services' | 'Business Services' | 'Construction' | 'Google Ads (Running)' | 'Google Ads (Stopped)'
+// Industry / Tab are open string types — the dashboard auto-derives the
+// active set from metrics.json campaigns[].industry. Special values:
+//   'All'      = aggregate across all non-excluded industries
+//   'overview' = the overview tab (industry='All')
+//   'compare'  = the compare tab (industry='All')
+export type Industry = string
+export type Tab = string
 export type IntentLabel = 'Hot' | 'Warm' | 'Cold' | 'Dead'
-export type Tab = 'overview' | 'manufacturing' | 'it-consulting' | 'truck' | 'bcs' | 'commercial' | 'ewws' | 'advertising' | 'medical-equipment' | 'equipment-rental' | 'financial-services' | 'business-services' | 'construction' | 'google-ads-running' | 'google-ads-stopped' | 'compare'
+
+// Industries that should NEVER appear on the dashboard (housekeeping campaigns,
+// non-cold-email channels, system tags). Any other industry that has at least
+// one campaign with emails_sent > 0 will automatically appear as a tab.
+export const EXCLUDED_INDUSTRIES: ReadonlySet<string> = new Set([
+  'Follow-ups',
+  'Meta/Other',
+  'No Show',
+  'Website Visitors',
+  'Other',
+  'Unknown',
+])

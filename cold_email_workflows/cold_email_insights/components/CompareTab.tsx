@@ -2,9 +2,8 @@
 
 import { useMemo } from 'react'
 import type { MetricsData, ShowupAnalysis, Industry } from './types'
-import { computeMetrics } from './metrics'
+import { computeMetrics, getActiveIndustries } from './metrics'
 
-const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental', 'Financial Services', 'Business Services', 'Construction', 'Google Ads (Running)', 'Google Ads (Stopped)']
 const EMPTY_RANGE = { from: '', to: '' }
 
 function pct(n: number, digits = 1) {
@@ -33,9 +32,9 @@ const TD = ({ children, highlight = false }: { children: React.ReactNode; highli
     {children}
   </td>
 )
-const Section = ({ label }: { label: string }) => (
+const Section = ({ label, span }: { label: string; span: number }) => (
   <tr>
-    <td colSpan={INDUSTRIES.length + 1}
+    <td colSpan={span}
         className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-center border-t border-blue-100"
         style={{ backgroundColor: '#dbeafe', color: '#1e40af' }}>
       {label}
@@ -50,11 +49,13 @@ export default function CompareTab({
   data: MetricsData
   showupData: ShowupAnalysis
 }) {
+  const INDUSTRIES = useMemo(() => getActiveIndustries(data), [data])
+
   const byIndustry = useMemo(() => {
     return Object.fromEntries(
       INDUSTRIES.map(ind => [ind, computeMetrics(ind, EMPTY_RANGE, data)]),
     ) as Record<Industry, ReturnType<typeof computeMetrics>>
-  }, [data])
+  }, [data, INDUSTRIES])
 
   // Intent breakdown from showup_analysis
   const intentByIndustry = useMemo(() => {
@@ -71,7 +72,7 @@ export default function CompareTab({
       }
     }
     return result
-  }, [showupData])
+  }, [showupData, INDUSTRIES])
 
   const rows: Array<{
     label: string
@@ -132,7 +133,7 @@ export default function CompareTab({
           <tbody className="divide-y divide-gray-100">
             {rows.map((row, i) => {
               if (row.isSection) {
-                return <Section key={i} label={row.section!} />
+                return <Section key={i} label={row.section!} span={INDUSTRIES.length + 1} />
               }
               return (
                 <tr key={row.label} className="hover:bg-gray-50">

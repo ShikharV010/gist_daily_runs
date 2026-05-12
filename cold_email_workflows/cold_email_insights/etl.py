@@ -44,7 +44,12 @@ def extract_industry(name: str) -> str:
         n = n[:m.start()].strip()
     return _NAME_ALIASES.get(n, n) or 'Other'
 
-ACTIVE = {'Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental', 'Financial Services', 'Business Services', 'Construction', 'Google Ads (Running)', 'Google Ads (Stopped)'}
+# Denylist instead of allowlist — any new industry (e.g. "Financial Services 1-5",
+# upcoming employee-count segments) automatically flows through ETL + dashboard
+# without code changes. Mirror this set in components/types.ts EXCLUDED_INDUSTRIES.
+EXCLUDED = {'Follow-ups', 'Meta/Other', 'No Show', 'Website Visitors', 'Other', 'Unknown'}
+def is_active(ind: str) -> bool:
+    return bool(ind) and ind not in EXCLUDED
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def to_est(val):
@@ -168,8 +173,8 @@ def fetch_interested_leads(campaigns):
         camp = id_to_camp.get(cid, {})
         ind  = extract_industry(camp['name']) if camp.get('name') else 'Unknown'
 
-        # Skip leads not in active industries
-        if ind not in ACTIVE:
+        # Skip leads not in active industries (denylist via EXCLUDED)
+        if not is_active(ind):
             continue
 
         # Best available date proxy for "when they became interested"
@@ -257,21 +262,21 @@ _GENERIC_DOMAINS = {'gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'icl
 
 def _pick_attribution(leads, campaigns_by_id):
     """From a list of Sequencer leads, return (industry, campaign_id) preferring
-    leads with `interested=True` in an ACTIVE campaign, then any ACTIVE campaign,
+    leads with `interested=True` in an active campaign, then any active campaign,
     then any campaign at all."""
-    # Pass 1: prefer interested=True in an ACTIVE campaign
+    # Pass 1: prefer interested=True in an active campaign
     for L in leads:
         for lcd in (L.get('lead_campaign_data') or []):
             cid = lcd.get('campaign_id')
             camp = campaigns_by_id.get(cid)
-            if camp and camp['industry'] in ACTIVE and lcd.get('interested'):
+            if camp and is_active(camp['industry']) and lcd.get('interested'):
                 return (camp['industry'], cid)
-    # Pass 2: any ACTIVE campaign
+    # Pass 2: any active campaign
     for L in leads:
         for lcd in (L.get('lead_campaign_data') or []):
             cid = lcd.get('campaign_id')
             camp = campaigns_by_id.get(cid)
-            if camp and camp['industry'] in ACTIVE:
+            if camp and is_active(camp['industry']):
                 return (camp['industry'], cid)
     # Pass 3: any campaign at all (industry will be Other/Meta/Follow-ups)
     for L in leads:
@@ -648,7 +653,7 @@ def fetch_daily_email_stats(campaigns):
     snapshots). Delta = today − yesterday gives actual sends per day.
     """
     print('Fetching daily email stats (DB snapshots)...', flush=True)
-    active_camps = [c for c in campaigns if c['industry'] in ACTIVE]
+    active_camps = [c for c in campaigns if is_active(c['industry'])]
     active_ids   = [c['id'] for c in active_camps]
     id_to_ind    = {c['id']: c['industry'] for c in campaigns}
     daily        = []
@@ -729,7 +734,7 @@ def build_campaign_stats(campaigns, leads, bookings):
 
     out = []
     for c in campaigns:
-        if c['industry'] not in ACTIVE: continue
+        if not is_active(c['industry']): continue
         cid       = c['id']
         ls        = leads_by_camp.get(cid, [])
         camp_book = bookings_by_cid.get(cid, [])

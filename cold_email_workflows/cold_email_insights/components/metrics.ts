@@ -2,12 +2,24 @@ import type {
   MetricsData, ComputedMetrics, ComputedCampaignRow,
   DateRange, Industry, InterestedLead,
 } from './types'
+import { EXCLUDED_INDUSTRIES } from './types'
 
-// 'All' means active industries only — never Meta/Other or Follow-ups
-const ACTIVE_INDUSTRIES = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental', 'Financial Services', 'Business Services', 'Construction', 'Google Ads (Running)', 'Google Ads (Stopped)']
+// Derive the active industry set from the data itself: every industry that has
+// at least one campaign with emails_sent > 0, minus the EXCLUDED_INDUSTRIES
+// housekeeping bucket. Sorted by total emails_sent desc so the dashboard tabs
+// (and 'All' aggregation) auto-pick up new tests like "Financial Services 1-5".
+export function getActiveIndustries(data: MetricsData): string[] {
+  const totals = new Map<string, number>()
+  for (const c of data.campaigns || []) {
+    if (!c.industry || EXCLUDED_INDUSTRIES.has(c.industry)) continue
+    if ((c.emails_sent || 0) <= 0) continue
+    totals.set(c.industry, (totals.get(c.industry) || 0) + c.emails_sent)
+  }
+  return [...totals.entries()].sort((a, b) => b[1] - a[1]).map(([ind]) => ind)
+}
 
-function byIndustry(industry: Industry, ind: string): boolean {
-  if (industry === 'All') return ACTIVE_INDUSTRIES.includes(ind)
+function byIndustry(industry: Industry, ind: string, active: Set<string>): boolean {
+  if (industry === 'All') return active.has(ind)
   return ind === industry
 }
 
@@ -20,6 +32,7 @@ export function computeMetrics(
 ): ComputedMetrics {
   const today = new Date().toISOString().split('T')[0]
   const { from, to } = dateRange
+  const active = new Set(getActiveIndustries(data))
 
   const inDateRange = (d: string | null | undefined) => {
     if (!d) return false
@@ -28,7 +41,7 @@ export function computeMetrics(
     return true
   }
 
-  const matchInd = (ind: string) => byIndustry(industry, ind)
+  const matchInd = (ind: string) => byIndustry(industry, ind, active)
 
   // Guard: new-format fields may be absent if metrics.json is from old ETL
   const dailyEmailStats = data.daily_email_stats || []
@@ -150,6 +163,7 @@ export function computeCampaignStats(
 ): ComputedCampaignRow[] {
   const today = new Date().toISOString().split('T')[0]
   const { from, to } = dateRange
+  const active = new Set(getActiveIndustries(data))
 
   const inDateRange = (d: string | null | undefined) => {
     if (!d) return false
@@ -158,7 +172,7 @@ export function computeCampaignStats(
     return true
   }
 
-  const campaigns = (data.campaigns || []).filter(c => byIndustry(industry, c.industry))
+  const campaigns = (data.campaigns || []).filter(c => byIndustry(industry, c.industry, active))
 
   // Guard: new-format fields
   const interestedLeads = data.interested_leads || []
@@ -168,7 +182,7 @@ export function computeCampaignStats(
   // Index raw data by campaign_id
   const leadsByCamp: Record<number, InterestedLead[]> = {}
   for (const l of interestedLeads) {
-    if (!byIndustry(industry, l.industry)) continue
+    if (!byIndustry(industry, l.industry, active)) continue
     if (!leadsByCamp[l.campaign_id]) leadsByCamp[l.campaign_id] = []
     leadsByCamp[l.campaign_id].push(l)
   }
@@ -176,7 +190,7 @@ export function computeCampaignStats(
   // Email stats by campaign
   const emailsByCamp: Record<number, { emails: number; leads: number }> = {}
   for (const r of dailyEmailStats) {
-    if (!byIndustry(industry, r.industry)) continue
+    if (!byIndustry(industry, r.industry, active)) continue
     if (from && r.date < from) continue
     if (to   && r.date > to)   continue
     if (!emailsByCamp[r.campaign_id]) emailsByCamp[r.campaign_id] = { emails: 0, leads: 0 }

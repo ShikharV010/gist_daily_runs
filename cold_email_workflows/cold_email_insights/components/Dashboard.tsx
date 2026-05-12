@@ -5,7 +5,7 @@ import type {
   MetricsData, ShowupAnalysis,
   DateRange, Industry, Tab, IntentLabel,
 } from './types'
-import { computeMetrics, computeCampaignStats } from './metrics'
+import { computeMetrics, computeCampaignStats, getActiveIndustries } from './metrics'
 import MetricCards from './MetricCards'
 import FunnelChart from './FunnelChart'
 import CampaignTable from './CampaignTable'
@@ -16,24 +16,24 @@ import CompareTab from './CompareTab'
 
 // ── Tab config ────────────────────────────────────────────────────────────────
 
-const TABS: { id: Tab; label: string; industry: Industry }[] = [
-  { id: 'overview',           label: 'Overview',             industry: 'All' },
-  { id: 'manufacturing',      label: 'Manufacturing',        industry: 'Manufacturing' },
-  { id: 'it-consulting',      label: 'IT & Consulting',      industry: 'IT & Consulting' },
-  { id: 'truck',              label: 'Truck Transportation', industry: 'Truck Transportation' },
-  { id: 'bcs',                label: 'BCS',                  industry: 'BCS' },
-  { id: 'commercial',         label: 'Commercial',           industry: 'Commercial' },
-  { id: 'ewws',               label: 'EWWS',                 industry: 'EWWS' },
-  { id: 'advertising',        label: 'Advertising',          industry: 'Advertising' },
-  { id: 'medical-equipment',  label: 'Medical Equipment',    industry: 'Medical Equipment' },
-  { id: 'equipment-rental',   label: 'Equipment Rental',     industry: 'Equipment Rental' },
-  { id: 'financial-services', label: 'Financial Services',   industry: 'Financial Services' },
-  { id: 'business-services',  label: 'Business Services',    industry: 'Business Services' },
-  { id: 'construction',       label: 'Construction',         industry: 'Construction' },
-  { id: 'google-ads-running', label: 'Google Ads (Running)', industry: 'Google Ads (Running)' },
-  { id: 'google-ads-stopped', label: 'Google Ads (Stopped)', industry: 'Google Ads (Stopped)' },
-  { id: 'compare',            label: 'Compare',              industry: 'All' },
-]
+// Slugify an industry name into a stable URL-safe tab id.
+// 'IT & Consulting'    → 'it-consulting'
+// 'Google Ads (Stopped)' → 'google-ads-stopped'
+// 'Financial Services 1-5' → 'financial-services-1-5'
+function slugify(s: string): string {
+  return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
+}
+
+// Derive the tab list from the data: Overview first, then every active
+// industry (sorted by emails_sent desc inside getActiveIndustries), Compare last.
+function buildTabs(data: MetricsData): { id: Tab; label: string; industry: Industry }[] {
+  const industries = getActiveIndustries(data)
+  return [
+    { id: 'overview', label: 'Overview', industry: 'All' },
+    ...industries.map(ind => ({ id: slugify(ind), label: ind, industry: ind })),
+    { id: 'compare', label: 'Compare', industry: 'All' },
+  ]
+}
 
 // ── Industry tab content ──────────────────────────────────────────────────────
 
@@ -133,7 +133,8 @@ export default function Dashboard() {
       })
   }, [])
 
-  const currentTab = TABS.find(t => t.id === activeTab)!
+  const tabs = useMemo(() => (data ? buildTabs(data) : []), [data])
+  const currentTab = tabs.find(t => t.id === activeTab) ?? tabs[0]
 
   if (loading) {
     return (
@@ -211,7 +212,7 @@ export default function Dashboard() {
         {/* Vertical tab sidebar — sticky below header */}
         <aside className="w-52 flex-shrink-0 sticky top-[73px] self-start">
           <nav className="flex flex-col gap-1 p-3">
-            {TABS.map(tab => (
+            {tabs.map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
@@ -234,7 +235,7 @@ export default function Dashboard() {
             <CompareTab data={data} showupData={showupData} />
           ) : (
             <IndustryTab
-              industry={currentTab.industry}
+              industry={currentTab!.industry}
               dateRange={dateRange}
               data={data}
               showupData={showupData}

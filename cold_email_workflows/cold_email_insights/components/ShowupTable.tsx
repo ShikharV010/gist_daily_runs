@@ -69,31 +69,15 @@ export default function ShowupTable({
         const meta = r._meta
         if (!meta) return false
 
-        // Industry filter
+        // Industry filter — data-driven match: trust meta.industry written by ETL.
+        // Exact match first; fall back to case-insensitive substring either way
+        // so "Financial Services" tab includes future "Financial Services 1-5"
+        // segments (and vice versa).
         const ind = meta.industry || r.company_industry || ''
         if (industry !== 'All') {
-          const matchMap: Record<Industry, string[]> = {
-            'All':                  [],
-            'Manufacturing':        ['manufacturing', 'mfg'],
-            'IT & Consulting':      ['it', 'consulting', 'technology'],
-            'Truck Transportation': ['truck', 'transport'],
-            'BCS':                  ['bcs', 'business consulting', 'business services'],
-            'Commercial':           ['commercial', 'retail', 'real estate'],
-            'EWWS':                 ['ewws', 'environment', 'water', 'waste', 'sustainability'],
-            'Advertising':          ['advertising', 'marketing', 'media'],
-            'Medical Equipment':    ['medical', 'healthcare', 'device', 'equipment'],
-            'Equipment Rental':     ['rental', 'equipment rental', 'leasing'],
-            'Financial Services':   ['financial', 'finance', 'banking', 'insurance', 'fintech'],
-            'Business Services':    ['business services', 'consulting', 'professional services'],
-            'Construction':         ['construction', 'building', 'contractor'],
-            'Google Ads (Running)': [],
-            'Google Ads (Stopped)': [],
-          }
-          const keywords = matchMap[industry]
-          const indLower = ind.toLowerCase()
-          if (!keywords.some(k => indLower.includes(k))) {
-            if (meta.industry !== industry) return false
-          }
+          const a = industry.toLowerCase()
+          const b = ind.toLowerCase()
+          if (ind !== industry && !a.includes(b) && !b.includes(a)) return false
         }
 
         // Date filter

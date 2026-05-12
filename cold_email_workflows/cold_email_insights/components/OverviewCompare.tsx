@@ -2,9 +2,7 @@
 
 import { useMemo } from 'react'
 import type { MetricsData, Industry, DateRange } from './types'
-import { computeMetrics } from './metrics'
-
-const INDUSTRIES: Industry[] = ['Manufacturing', 'IT & Consulting', 'Truck Transportation', 'BCS', 'Commercial', 'EWWS', 'Advertising', 'Medical Equipment', 'Equipment Rental', 'Financial Services', 'Business Services', 'Construction', 'Google Ads (Running)', 'Google Ads (Stopped)']
+import { computeMetrics, getActiveIndustries } from './metrics'
 
 function fmt(n: number) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
@@ -30,9 +28,9 @@ const TD = ({ children, className = '' }: { children: React.ReactNode; className
     {children}
   </td>
 )
-const Section = ({ label }: { label: string }) => (
+const Section = ({ label, span }: { label: string; span: number }) => (
   <tr>
-    <td colSpan={INDUSTRIES.length + 1}
+    <td colSpan={span}
         className="px-4 py-2 text-xs font-bold uppercase tracking-widest text-center border-t border-blue-100"
         style={{ backgroundColor: '#dbeafe', color: '#1e40af' }}>
       {label}
@@ -89,11 +87,13 @@ export default function OverviewCompare({
   data: MetricsData
   dateRange: DateRange
 }) {
+  const INDUSTRIES = useMemo(() => getActiveIndustries(data), [data])
+
   const byIndustry = useMemo(() =>
     Object.fromEntries(
       INDUSTRIES.map(ind => [ind, computeMetrics(ind, dateRange, data)]),
     ) as Record<Industry, ReturnType<typeof computeMetrics>>,
-  [data, dateRange])
+  [data, dateRange, INDUSTRIES])
 
   return (
     <div className="bg-white rounded-xl border border-gray-200">
@@ -114,7 +114,7 @@ export default function OverviewCompare({
           <tbody className="divide-y divide-gray-100">
             {ROWS.map((row, i) => {
               if ('section' in row && row.section) {
-                return <Section key={i} label={row.section} />
+                return <Section key={i} label={row.section} span={INDUSTRIES.length + 1} />
               }
               if (!row.getValue) return null
               return (
