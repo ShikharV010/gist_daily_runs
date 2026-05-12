@@ -343,9 +343,19 @@ def fetch_demo_bookings(interested_leads, campaigns):
     print('Fetching demo bookings...', flush=True)
     campaigns_by_id = {c['id']: c for c in campaigns}
 
-    # Dedup by email FIRST (picking the latest booking per prospect by demo_scheduled_date),
-    # THEN filter by source. This matches how the demo-bookings list is curated for reporting:
-    # if a prospect's most recent booking isn't a cold-email demo, exclude them entirely.
+    # Build the inclusion set from Sequencer interested leads. A demo is "ours"
+    # if the booker's email OR domain appears among our Sequencer prospects —
+    # regardless of how the source field was tagged. This catches:
+    #   * Source "email" / "Gushwork Email" / "Email and Web" (most cases)
+    #   * Source = a person's name (e.g. "Grace Lee", "Lizzi Santos") that an
+    #     AE typed in instead of leaving the source as "email"
+    #   * Forwarded cold-email demos (booker at the same domain as our prospect)
+    #
+    # We still exclude sync-email outright since it's a separate channel.
+    lead_emails = sorted({(l.get('email') or '').lower() for l in interested_leads if l.get('email')})
+    lead_domains = sorted({e.split('@', 1)[1] for e in lead_emails if '@' in e and e.split('@', 1)[1] not in _GENERIC_DOMAINS})
+    print(f'  Inclusion set: {len(lead_emails)} lead emails, {len(lead_domains)} lead domains', flush=True)
+
     conn = psycopg2.connect(DB_URL)
     cur  = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute("""
@@ -371,14 +381,18 @@ def fetch_demo_bookings(interested_leads, campaigns):
                show_status, source
         FROM ranked
         WHERE rn = 1
-          -- Widened: catch any "email"-tagged source. This includes forwards
-          -- where the booker tags the source as "email", "Email and Web",
-          -- "email from Gushwork", "Richard Wilson email", etc. Exclude sync
-          -- since that's a separate channel.
-          AND source ILIKE '%%email%%'
-          AND source NOT ILIKE '%%sync%%'
+          AND (source IS NULL OR source NOT ILIKE %s)
+          AND (
+              -- Definitely-cold-email source labels
+              source ILIKE %s
+              -- OR booker's email is one of our Sequencer prospects
+              OR LOWER(prospect_email) = ANY(%s)
+              -- OR booker's domain matches a Sequencer prospect's domain
+              -- (forwards / same-company colleagues)
+              OR LOWER(SPLIT_PART(prospect_email, '@', 2)) = ANY(%s)
+          )
         ORDER BY demo_scheduled_date DESC NULLS LAST
-    """)
+    """, ('%sync%', '%email%', lead_emails, lead_domains))
     rows = cur.fetchall()
     conn.close()
 
