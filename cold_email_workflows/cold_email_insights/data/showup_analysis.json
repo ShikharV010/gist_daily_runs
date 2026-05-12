@@ -17343,5 +17343,284 @@
       "total_duration_min": 63,
       "analyzed_at": "2026-05-12T07:26:09.556672Z"
     }
+  },
+  "SuccessBilt Inc.": {
+    "company": "Control Station",
+    "prospect_name": "Keith Brooks",
+    "prospect_designation": "Unknown (likely sales or business development role)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Title unknown; speaks on behalf of company needs but no authority confirmed.",
+    "company_industry": "Manufacturing / Industrial Process Control & Automation",
+    "pain_points": [
+      {
+        "pain_point": "Need for inbound RFQs and quote requests",
+        "severity": "high",
+        "direct_quote": "we're always looking for requests for quotes and referrals here at Control Station",
+        "addressed_in_call": false,
+        "how_addressed": "Demo never reached relevant analysis due to wrong website loaded"
+      },
+      {
+        "pain_point": "Reaching process manufacturing companies for PID solutions",
+        "severity": "high",
+        "direct_quote": "We're looking for process manufacturing companies that are have possibilities of some interest in PID control optimization monitoring solutions and PID tuning",
+        "addressed_in_call": false,
+        "how_addressed": "Wrong website used; demo showed irrelevant customer success manager queries"
+      },
+      {
+        "pain_point": "Low visibility in AI search engines for niche industrial queries",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": false,
+        "how_addressed": "Demo was cut short before any relevant data was shown"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Demo analysis showed completely irrelevant keywords",
+        "how_handled": "AE acknowledged mistake; apologized and rescheduled",
+        "resolved": false
+      },
+      {
+        "objection": "Wrong company website was analyzed during live demo",
+        "how_handled": "AE admitted error mid-call and requested reschedule",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Booked meeting based on AI-generated RFQ email interest",
+      "Clearly articulated target ICP and solution need",
+      "Agreed to reschedule same day without resistance",
+      "Engaged and clarified what they actually need from tool"
+    ],
+    "negative_signals": [
+      "Demo used wrong website; prospect visibly confused",
+      "No product value was demonstrated in the call",
+      "Prospect questioned relevance of every keyword shown",
+      "Call ended in under 14 minutes with zero discovery"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Reschedule demo same day at 1pm Eastern (12pm prospect time)",
+      "AE to load correct website: controlstation.com before next call",
+      "Calendar invite updated and confirmed received by prospect"
+    ],
+    "next_call_date": "2026-05-12 at 1:00 PM Eastern",
+    "follow_up_materials_promised": [
+      "Updated calendar invite with correct website pre-loaded"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Initial interest was genuine based on RFQ email hook",
+      "Demo failed completely due to wrong website loaded",
+      "No product value demonstrated; prospect never saw relevant data",
+      "Prospect remained polite but engagement is fragile",
+      "Next call is a recovery attempt, not a progression"
+    ],
+    "call_quality_score": 2,
+    "call_quality_notes": [
+      "Critical error: wrong prospect website used in live demo",
+      "AE did no discovery before jumping into product demo",
+      "No qualification of role, budget, or decision authority",
+      "Prospect had to self-explain their ICP and business needs",
+      "Recovery was handled politely but damage to credibility done",
+      "Prospect name and company mismatch not caught pre-call"
+    ],
+    "key_insights": [
+      "Prospect is Control Station, not SuccessBilt \u2014 CRM data wrong",
+      "Target ICP: process manufacturers needing PID tuning solutions",
+      "Keith responded to AI-generated RFQ angle \u2014 strong messaging fit",
+      "Correct website to analyze: controlstation.com, not successbilt.com",
+      "Deal salvageable only if next demo is flawless and relevant"
+    ],
+    "recommended_next_action": "Before the rescheduled call, pre-run the Gushwork analysis on controlstation.com and validate PID control / process manufacturing keyword opportunities to present a compelling, relevant demo.",
+    "pain_points_addressed_by_ae": false,
+    "pain_points_addressed_details": [
+      "RFQ generation need was never explored or tied to product",
+      "PID/process manufacturing audience targeting was never addressed",
+      "AI search visibility for industrial queries was not demonstrated"
+    ],
+    "_meta": {
+      "prospect_email": "keith.brooks@controlstation.com",
+      "prospect_company": "SuccessBilt Inc.",
+      "prospect_website": "successbilt.com",
+      "demo_date": "2026-05-12",
+      "ae_name": "Arabind",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "d856da00431b98d89dfbf8fa3a6c3e18"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=45fc38cf-323e-430c-826a-242c79290782&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 14,
+      "analyzed_at": "2026-05-12T14:06:45.460285Z"
+    }
+  },
+  "Orange Biomed": {
+    "company": "Orange Biomed",
+    "prospect_name": "Derik Jeon",
+    "prospect_designation": "Director of Global Sales & Business at Orange Biomed",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Derik leads global sales and business, sets marketing strategy, and controls budget decisions directly.",
+    "company_industry": "Medical Equipment / At-Home Diagnostics & Point-of-Care Devices",
+    "pain_points": [
+      {
+        "pain_point": "Zero AI/digital visibility for brand",
+        "severity": "high",
+        "direct_quote": "if I type that same question six months later, the GPT will probably say Orange Biomed",
+        "addressed_in_call": true,
+        "how_addressed": "Sukriti explained GEO/AEO/SEO four-phase workflow to build AI search visibility"
+      },
+      {
+        "pain_point": "No current SEO or marketing in place",
+        "severity": "high",
+        "direct_quote": "we recently terminated the contract... we've decided to do the SEO ourselves",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned as ready outsourced replacement for previous US marketing firm"
+      },
+      {
+        "pain_point": "Limited internal team of only 11 people",
+        "severity": "high",
+        "direct_quote": "we only have 11 people and we would rather outsource those marketings and sales",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork framed as lean outsourced partner requiring no headcount expansion"
+      },
+      {
+        "pain_point": "Unclear go-to-market strategy pre-FDA clearance",
+        "severity": "medium",
+        "direct_quote": "we just don't know where to start",
+        "addressed_in_call": true,
+        "how_addressed": "Sukriti suggested starting Nov/Dec 2026 to build pipeline before mid-2027 FDA clearance"
+      },
+      {
+        "pain_point": "High customer acquisition cost risk on paid ads",
+        "severity": "medium",
+        "direct_quote": "you are spending a ton in acquiring one lead",
+        "addressed_in_call": true,
+        "how_addressed": "Organic GEO/SEO strategy pitched as cost-reducer alongside planned paid social spend"
+      },
+      {
+        "pain_point": "B2B strategy underdeveloped due to resource constraints",
+        "severity": "medium",
+        "direct_quote": "we can't diversify, our resources don't... that's why we were focusing on B2C",
+        "addressed_in_call": true,
+        "how_addressed": "Sukriti proposed Gushwork handle B2B lead gen so team stays focused on B2C ops"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Product not FDA-cleared yet; sales cannot start",
+        "how_handled": "Sukriti reframed: start Nov/Dec 2026 to build visibility before mid-2027 FDA approval",
+        "resolved": true
+      },
+      {
+        "objection": "B2C self-checkout model may not need lead generation",
+        "how_handled": "Sukriti clarified B2B focus still boosts B2C organically; both covered simultaneously",
+        "resolved": true
+      },
+      {
+        "objection": "Only 11 people; cannot manage B2B and B2C simultaneously",
+        "how_handled": "Gushwork proposed owning B2B outreach entirely, freeing team for B2C execution",
+        "resolved": true
+      },
+      {
+        "objection": "Time constraints; Derik at 11pm, call running long",
+        "how_handled": "Agreed to send demo video + pricing; schedule follow-up call next week",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Explicitly said 'we are very interested in your business'",
+      "Asked for pricing information proactively before call ended",
+      "Understood GEO/AEO importance and validated Gushwork's approach",
+      "Agreed on Nov/Dec 2026 start timing strategy without pushback",
+      "Planning $10\u201320M marketing budget; signals serious growth intent",
+      "Requested demo video and committed to reviewing this week",
+      "Agreed to schedule a follow-up call next week"
+    ],
+    "negative_signals": [
+      "FDA clearance not until mid-2027; revenue still 12+ months away",
+      "Budget still investor-dependent; not yet secured or confirmed",
+      "Previous US marketing firm contract still active for 3\u20134 months",
+      "Company has thin marketing knowledge; onboarding may take longer",
+      "Primary focus is B2C paid ads; Gushwork's organic play secondary",
+      "No urgency to close immediately; prospect is in research/evaluation mode"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Sukriti to send 6.5-min Gushwork product demo video",
+      "Sukriti to send pricing information via email",
+      "Sukriti to send relevant customer case studies",
+      "Derik to review all materials by end of week",
+      "Derik to email Sukriti confirming availability for next week call",
+      "Follow-up discovery/demo call to be scheduled next week"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "6.5-minute Gushwork product demo video",
+      "Gushwork pricing information document",
+      "Relevant customer case studies from Gushwork"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Strong verbal interest: 'we are very interested in your business'",
+      "Proactively asked for pricing; classic buying behavior signal",
+      "Clear strategic alignment on GEO/AEO/SEO importance acknowledged",
+      "Timing gap is significant; FDA clearance not until mid-2027",
+      "Budget is investor-dependent; not yet internally approved or confirmed",
+      "Agreed on logical start window of Nov/Dec 2026; shows future intent",
+      "No competitor mentioned; Gushwork may be first vendor evaluated here"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "Discovery was solid; Sukriti uncovered budget, timeline, and ICP well",
+      "Four-phase workflow explanation was clear and well-structured",
+      "Rapport built effectively via India/Korea personal connection",
+      "Demo was not shown; major missed opportunity in this call",
+      "Pricing not discussed on call despite prospect readiness to hear it",
+      "AE Manideep Rajeev had no speaking role; unclear if present or useful",
+      "Call ran long on small talk near the end; time could be better used",
+      "No BANT fully qualified: Budget is assumed, Authority confirmed only"
+    ],
+    "key_insights": [
+      "Orange Biomed is pre-revenue; FDA clearance expected mid-2027",
+      "Company plans $10\u201320M marketing budget; serious growth ambition",
+      "Both OTC (B2C) and POC (B2B clinical) channels are active targets",
+      "Recurring cartridge revenue model makes B2B clinics high-value targets",
+      "Community health centers are primary B2B target segment in the US",
+      "Device priced $100 B2C and $200 B2B with $10\u201320 cartridge recurring",
+      "Previous US marketing firm recently terminated; Gushwork fills the gap",
+      "Derik personally uses ChatGPT daily; highly receptive to AI search pitch",
+      "Company wants to stay lean at 11 people; outsourcing is core strategy",
+      "Start window of Nov/Dec 2026 agreed; gives 6-month runway before FDA"
+    ],
+    "recommended_next_action": "Send demo video, pricing deck, and 2 medical-sector case studies within 24 hours, then follow up by email in 48 hours to lock a specific date/time for the product demo call next week.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "AI/digital invisibility addressed via four-phase GEO/AEO/SEO workflow explanation",
+      "SEO gap addressed by positioning Gushwork as replacement for terminated marketing firm",
+      "Small team constraint addressed by offering full B2B lead gen ownership",
+      "Pre-FDA timing addressed with Nov/Dec 2026 strategic start recommendation",
+      "High paid-ad CAC risk addressed by pitching organic as cost-efficiency layer",
+      "B2B resource gap addressed by Gushwork taking over B2B outreach entirely"
+    ],
+    "_meta": {
+      "prospect_email": "derik.jeon@orangebiomed.com",
+      "prospect_company": "Orange Biomed",
+      "prospect_website": "www.orangebiomed.com",
+      "demo_date": "2026-05-12",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "Medical Equipment",
+      "meeting_ids": [
+        "e0b27d3d7d2b353b7cec435bd17d1926"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=1da381d4-42b4-450d-ab23-3da2e000c29f&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 54,
+      "analyzed_at": "2026-05-12T14:07:06.439257Z"
+    }
   }
 }
