@@ -69,24 +69,33 @@ export function computeMetrics(
     ? demosBookedList.length
     : campaigns.reduce((s, c) => s + (c.demos_booked || 0), 0)
 
-  // Pending: current-state upcoming demos
-  const pending_demos = demoBookings.length > 0
-    ? demoBookings.filter(b =>
-        matchInd(b.industry) &&
-        b.show_status === 'P' &&
-        b.demo_scheduled_date && b.demo_scheduled_date >= today,
-      ).length
-    : campaigns.reduce((s, c) => s + (c.pending_demos || 0), 0)
-
   // Show-ups: demo_bookings filtered by demo_scheduled_date; fallback to campaign totals
   const showupList = demoBookings.filter(b =>
     matchInd(b.industry) && ((!from && !to) || inDateRange(b.demo_scheduled_date)),
   )
+
+  // Pending / show-up / no-show classification: compute LIVE (don't trust
+  // show_status_adj, which is baked at ETL time and goes stale daily).
+  // - showup        = show_status === 'Y'
+  // - past P        = P with demo_scheduled_date < today (treated as no-show)
+  // - pending       = P with demo_scheduled_date >= today
+  // - completed     = showups + N + past-P (anything with a final or past outcome)
+  // - demos_booked  = showups + pending + noshow  (always adds up to total)
+  const isPending  = (b: any) => b.show_status === 'P' && b.demo_scheduled_date && b.demo_scheduled_date >= today
+  const isPastP    = (b: any) => b.show_status === 'P' && b.demo_scheduled_date && b.demo_scheduled_date <  today
+
+  const pending_demos = showupList.length > 0
+    ? showupList.filter(isPending).length
+    : campaigns.reduce((s, c) => s + (c.pending_demos || 0), 0)
+
   const showups = showupList.length > 0
-    ? showupList.filter(b => b.show_status_adj === 'Y').length
+    ? showupList.filter(b => b.show_status === 'Y').length
     : campaigns.reduce((s, c) => s + (c.showups || 0), 0)
-  const completed_demos = showupList.filter(b => b.show_status_adj !== 'P').length
-  const noshow          = Math.max(0, completed_demos - showups)
+
+  const completed_demos = showupList.filter(b =>
+    b.show_status === 'Y' || b.show_status === 'N' || b.show_status === 'R' || isPastP(b),
+  ).length
+  const noshow = Math.max(0, completed_demos - showups)
 
   // Closes: demo_bookings flagged closed, filtered by industry. Date filter uses
   // onboarding_call_date if present, else falls back to created_at_date.
@@ -197,8 +206,12 @@ export function computeCampaignStats(
       const campBookings = demoBookings.filter(b => b.campaign_id === cid)
       demosBooked = campBookings.filter(b => (!from && !to) || inDateRange(b.created_at_date)).length
       const showupList = campBookings.filter(b => (!from && !to) || inDateRange(b.demo_scheduled_date))
-      showups   = showupList.filter(b => b.show_status_adj === 'Y').length
-      completed = showupList.filter(b => b.show_status_adj !== 'P').length
+      // Live date-based classification (don't trust ETL-baked show_status_adj)
+      const isPastP = (b: any) => b.show_status === 'P' && b.demo_scheduled_date && b.demo_scheduled_date < today
+      showups   = showupList.filter(b => b.show_status === 'Y').length
+      completed = showupList.filter(b =>
+        b.show_status === 'Y' || b.show_status === 'N' || b.show_status === 'R' || isPastP(b),
+      ).length
       pending   = campBookings.filter(
         b => b.show_status === 'P' && b.demo_scheduled_date && b.demo_scheduled_date >= today,
       ).length
