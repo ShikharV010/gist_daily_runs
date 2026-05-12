@@ -75,9 +75,9 @@ function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
   )
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200">
-      <div className="px-6 py-3 border-b border-gray-100">
-        <h3 className="text-sm font-semibold text-gray-700">{label}</h3>
+    <div className="bg-white rounded-xl border border-gray-300">
+      <div className="px-6 py-3 border-b border-gray-200">
+        <h3 className="text-sm font-bold text-gray-900">{label}</h3>
         <p className="text-xs text-gray-400 mt-0.5">
           {fmt(totals.emails)} emails · {totals.demosBooked} demos · {totals.showups} show-ups
         </p>
@@ -128,7 +128,7 @@ export default function DailyDetailsTables({ data }: { data: MetricsData }) {
 
   return (
     <div>
-      <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Daily Details</h2>
+      <h2 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Daily Details</h2>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {months.map(ym => <MonthTable key={ym} ym={ym} rows={byMonth[ym]} />)}
       </div>

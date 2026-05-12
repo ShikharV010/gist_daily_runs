@@ -18,8 +18,11 @@ function Card({ title, main, sub }: {
   title: string; main: string; sub?: string; row?: 1 | 2 | 3 | 4
 }) {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4">
-      <p className="text-xs font-medium uppercase tracking-wide mb-2 text-gray-500">{title}</p>
+    <div
+      className="rounded-xl border border-gray-300 bg-white p-4 border-t-[3px]"
+      style={{ borderTopColor: '#0070FF' }}
+    >
+      <p className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: '#0070FF' }}>{title}</p>
       <p className="text-2xl font-bold text-gray-900">{main}</p>
       {sub && <p className="text-xs mt-1 text-gray-500">{sub}</p>}
     </div>
@@ -27,13 +30,13 @@ function Card({ title, main, sub }: {
 }
 
 const RowLabel = ({ children }: { children: React.ReactNode }) => (
-  <p className="text-xs font-semibold text-gray-600 uppercase tracking-widest mt-4 mb-2">{children}</p>
+  <p className="text-xs font-bold text-gray-900 uppercase tracking-widest mt-4 mb-2">{children}</p>
 )
 
 export default function MetricCards({ metrics: m }: { metrics: ComputedMetrics }) {
   return (
     <div>
-      <h2 className="text-sm font-semibold text-gray-700 mb-3 uppercase tracking-wide">Summary</h2>
+      <h2 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-wide">Summary</h2>
 
       <RowLabel>Email</RowLabel>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">

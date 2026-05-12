@@ -93,30 +93,43 @@ type MetricDef = {
   get: (r: DailyRec) => number | null
 }
 
-const safePct = (n: number, d: number): number | null => (d > 0 ? (n / d) * 100 : null)
+// Returns a percentage, or null when the denominator is too small to be
+// statistically meaningful. Small-denom days (e.g. 50 emails → 1 demo = 2%)
+// create giant spikes that visually flatten the rest of the trend.
+const safePct = (n: number, d: number, minDenom = 0): number | null =>
+  (d > minDenom ? (n / d) * 100 : null)
+
+// Thresholds tuned so a single anomalous data point can't dominate the y-axis:
+//  - email-based ratios: need a real send day (≥1000 emails)
+//  - lead-based ratios:  need ≥500 leads contacted
+//  - interested-based:   need ≥10 interested replies
+//  - demos/showups based: leave at 0 (these are low-magnitude by nature)
+const MIN_EMAILS = 1000
+const MIN_LEADS  = 500
+const MIN_INT    = 10
 
 const METRICS: MetricDef[] = [
   { key: 'emails_sent',           label: 'Emails Sent',             group: 'Email',    unit: 'count', get: r => r.emails_sent },
   { key: 'leads_contacted',       label: 'Leads Contacted',         group: 'Email',    unit: 'count', get: r => r.leads_contacted },
   { key: 'interested',            label: 'Interested Replies',      group: 'Email',    unit: 'count', get: r => r.interested },
   { key: 'bounced',               label: 'Bounced',                 group: 'Email',    unit: 'count', get: r => r.bounced },
-  { key: 'bounce_rate',           label: 'Bounce %',                group: 'Email',    unit: 'pct',   get: r => safePct(r.bounced, r.leads_contacted) },
+  { key: 'bounce_rate',           label: 'Bounce %',                group: 'Email',    unit: 'pct',   get: r => safePct(r.bounced, r.leads_contacted, MIN_LEADS) },
   { key: 'demos_booked',          label: 'Demos Booked',            group: 'Demos',    unit: 'count', get: r => r.demos_booked },
-  { key: 'demos_per_sent',        label: 'Demos / Emails Sent',     group: 'Demos',    unit: 'pct',   get: r => safePct(r.demos_booked, r.emails_sent) },
-  { key: 'demos_per_contacted',   label: 'Demos / Leads Contacted', group: 'Demos',    unit: 'pct',   get: r => safePct(r.demos_booked, r.leads_contacted) },
-  { key: 'demos_per_interested',  label: 'Demos / Interested',      group: 'Demos',    unit: 'pct',   get: r => safePct(r.demos_booked, r.interested) },
+  { key: 'demos_per_sent',        label: 'Demos / Emails Sent',     group: 'Demos',    unit: 'pct',   get: r => safePct(r.demos_booked, r.emails_sent, MIN_EMAILS) },
+  { key: 'demos_per_contacted',   label: 'Demos / Leads Contacted', group: 'Demos',    unit: 'pct',   get: r => safePct(r.demos_booked, r.leads_contacted, MIN_LEADS) },
+  { key: 'demos_per_interested',  label: 'Demos / Interested',      group: 'Demos',    unit: 'pct',   get: r => safePct(r.demos_booked, r.interested, MIN_INT) },
   { key: 'showups',               label: 'Total Show-ups',          group: 'Show-ups', unit: 'count', get: r => r.showups },
   { key: 'noshow',                label: 'No-shows',                group: 'Show-ups', unit: 'count', get: r => r.noshow },
-  { key: 'showups_per_sent',      label: 'Show-ups / Emails Sent',  group: 'Show-ups', unit: 'pct',   get: r => safePct(r.showups, r.emails_sent) },
-  { key: 'showups_per_contacted', label: 'Show-ups / Leads Contacted', group: 'Show-ups', unit: 'pct', get: r => safePct(r.showups, r.leads_contacted) },
+  { key: 'showups_per_sent',      label: 'Show-ups / Emails Sent',  group: 'Show-ups', unit: 'pct',   get: r => safePct(r.showups, r.emails_sent, MIN_EMAILS) },
+  { key: 'showups_per_contacted', label: 'Show-ups / Leads Contacted', group: 'Show-ups', unit: 'pct', get: r => safePct(r.showups, r.leads_contacted, MIN_LEADS) },
   { key: 'show_rate',             label: 'Show-ups / Demos',        group: 'Show-ups', unit: 'pct',   get: r => safePct(r.showups, r.completed_demos) },
   { key: 'closed',                label: 'Closed Deals',            group: 'Closes',   unit: 'count', get: r => r.closed },
   { key: 'arr',                   label: 'ARR',                     group: 'Closes',   unit: 'money', get: r => r.arr },
   { key: 'mrr',                   label: 'MRR',                     group: 'Closes',   unit: 'money', get: r => r.mrr },
   { key: 'close_per_demo',        label: 'Close / Demo',            group: 'Closes',   unit: 'pct',   get: r => safePct(r.closed, r.demos_booked) },
   { key: 'close_per_showup',      label: 'Close / Show-up',         group: 'Closes',   unit: 'pct',   get: r => safePct(r.closed, r.showups) },
-  { key: 'close_per_interested',  label: 'Close / Interested',      group: 'Closes',   unit: 'pct',   get: r => safePct(r.closed, r.interested) },
-  { key: 'close_per_lead',        label: 'Close / Lead',            group: 'Closes',   unit: 'pct',   get: r => safePct(r.closed, r.leads_contacted) },
+  { key: 'close_per_interested',  label: 'Close / Interested',      group: 'Closes',   unit: 'pct',   get: r => safePct(r.closed, r.interested, MIN_INT) },
+  { key: 'close_per_lead',        label: 'Close / Lead',            group: 'Closes',   unit: 'pct',   get: r => safePct(r.closed, r.leads_contacted, MIN_LEADS) },
 ]
 
 // ── Helpers ─────────────────────────────────────────────────────────────────
@@ -221,10 +234,10 @@ export default function MonthlyOverlayChart({ data }: { data: MetricsData }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-6">
+    <div className="bg-white rounded-xl border border-gray-300 p-6">
       <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
         <div>
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+          <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
             Monthly Trend Overlay
           </h2>
           <p className="text-xs text-gray-400 mt-0.5">
