@@ -56,6 +56,11 @@ function buildMonthlyRollups(data: MetricsData): Record<string, DailyRow[]> {
   return out
 }
 
+function ratioPct(num: number, denom: number): string {
+  if (denom <= 0) return '—'
+  return ((num / denom) * 100).toFixed(4) + '%'
+}
+
 function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
   const [y, m] = ym.split('-')
   const label = `${MONTH_LABEL[Number(m) - 1]} ${y}`
@@ -84,6 +89,7 @@ function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
               <th className="px-4 py-2 text-left font-semibold">Date</th>
               <th className="px-4 py-2 text-right font-semibold">Emails Sent</th>
               <th className="px-4 py-2 text-right font-semibold">Demos Booked</th>
+              <th className="px-4 py-2 text-right font-semibold">Demos / Emails</th>
               <th className="px-4 py-2 text-right font-semibold">Show-ups</th>
             </tr>
           </thead>
@@ -93,6 +99,7 @@ function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
                 <td className="px-4 py-1.5 text-gray-700 whitespace-nowrap">{r.date}</td>
                 <td className="px-4 py-1.5 text-right text-gray-700 tabular-nums">{r.emails ? fmt(r.emails) : '—'}</td>
                 <td className="px-4 py-1.5 text-right text-gray-700 tabular-nums">{r.demosBooked || '—'}</td>
+                <td className="px-4 py-1.5 text-right text-gray-700 tabular-nums">{ratioPct(r.demosBooked, r.emails)}</td>
                 <td className="px-4 py-1.5 text-right text-gray-700 tabular-nums">{r.showups || '—'}</td>
               </tr>
             ))}
@@ -102,6 +109,7 @@ function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
               <td className="px-4 py-2 text-gray-700">Total</td>
               <td className="px-4 py-2 text-right text-gray-900 tabular-nums">{fmt(totals.emails)}</td>
               <td className="px-4 py-2 text-right text-gray-900 tabular-nums">{totals.demosBooked}</td>
+              <td className="px-4 py-2 text-right text-gray-900 tabular-nums">{ratioPct(totals.demosBooked, totals.emails)}</td>
               <td className="px-4 py-2 text-right text-gray-900 tabular-nums">{totals.showups}</td>
             </tr>
           </tfoot>
@@ -113,8 +121,9 @@ function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
 
 export default function DailyDetailsTables({ data }: { data: MetricsData }) {
   const byMonth = useMemo(() => buildMonthlyRollups(data), [data])
-  // Most recent first
-  const months = Object.keys(byMonth).sort().reverse()
+  // Show only the 2 most recent months that actually have data. As new months
+  // start (June 2026, July 2026, …) the window auto-rolls forward — no code change.
+  const months = Object.keys(byMonth).sort().slice(-2).reverse()
   if (months.length === 0) return null
 
   return (

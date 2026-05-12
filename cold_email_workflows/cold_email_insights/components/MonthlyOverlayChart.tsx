@@ -82,15 +82,18 @@ function buildDailyIndex(data: MetricsData): Record<string, DailyRec> {
 
 // ── Metric registry ─────────────────────────────────────────────────────────
 // Anything user-selectable in the picker. Ratios returned as percentages (0-100).
+// `get` returns null when the value is undefined for that day (e.g. ratio with
+// zero denominator). Recharts skips null points (connectNulls is on) so the
+// y-axis auto-fits to the real data range instead of being anchored at 0.
 type MetricDef = {
   key: string
   label: string
   group: 'Email' | 'Demos' | 'Show-ups' | 'Closes'
   unit: 'count' | 'pct' | 'money'
-  get: (r: DailyRec) => number
+  get: (r: DailyRec) => number | null
 }
 
-const safePct = (n: number, d: number) => (d > 0 ? (n / d) * 100 : 0)
+const safePct = (n: number, d: number): number | null => (d > 0 ? (n / d) * 100 : null)
 
 const METRICS: MetricDef[] = [
   { key: 'emails_sent',           label: 'Emails Sent',             group: 'Email',    unit: 'count', get: r => r.emails_sent },
@@ -123,6 +126,23 @@ function monthLabel(ym: string) {
   return `${MONTH_LABEL[Number(m) - 1]} ${y.slice(2)}`  // "Apr 26"
 }
 
+// Returns the ordered list of working-day dates (Mon-Fri) for a given YYYY-MM.
+// Working-day index = position in this list (1-based). So "1st working day of
+// May 2026" lines up with "1st working day of April 2026" even if calendar
+// dates differ — fixes spurious spikes from weekend mismatch across months.
+function workingDatesForMonth(ym: string): string[] {
+  const [y, m] = ym.split('-').map(Number)
+  const lastDay = new Date(y, m, 0).getDate()
+  const out: string[] = []
+  for (let d = 1; d <= lastDay; d++) {
+    const dow = new Date(y, m - 1, d).getDay()  // 0=Sun, 6=Sat
+    if (dow !== 0 && dow !== 6) {
+      out.push(`${y}-${String(m).padStart(2, '0')}-${String(d).padStart(2, '0')}`)
+    }
+  }
+  return out
+}
+
 // Distinct colour per series. Cycles if >6 months selected.
 const COLORS = ['#0070FF', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899', '#6366f1', '#14b8a6']
 
@@ -139,11 +159,24 @@ function fmtValue(v: number | null | undefined, unit: 'count' | 'pct' | 'money')
 export default function MonthlyOverlayChart({ data }: { data: MetricsData }) {
   const dailyIdx = useMemo(() => buildDailyIndex(data), [data])
 
-  // Available months sorted ascending — auto-derived from data
+  // Available months — only keep months that look like real activity.
+  // Filters out: (a) 1970-epoch artifacts from null dates ("Jan 70"),
+  // (b) tiny pilot months with negligible email volume.
   const monthsAvailable = useMemo(() => {
-    const set = new Set<string>()
-    for (const d of Object.keys(dailyIdx)) set.add(d.slice(0, 7))
-    return [...set].sort()
+    const emailsByMonth = new Map<string, number>()
+    for (const [d, rec] of Object.entries(dailyIdx)) {
+      const ym = d.slice(0, 7)
+      emailsByMonth.set(ym, (emailsByMonth.get(ym) || 0) + rec.emails_sent)
+    }
+    const MIN_EMAILS_FOR_REAL_MONTH = 5000
+    const MIN_YEAR = 2024
+    return [...emailsByMonth.entries()]
+      .filter(([ym, total]) => {
+        const year = Number(ym.slice(0, 4))
+        return year >= MIN_YEAR && total >= MIN_EMAILS_FOR_REAL_MONTH
+      })
+      .map(([ym]) => ym)
+      .sort()
   }, [dailyIdx])
 
   // Default: last 2 months selected
@@ -152,23 +185,29 @@ export default function MonthlyOverlayChart({ data }: { data: MetricsData }) {
   )
   const [metricKey, setMetricKey] = useState<string>('emails_sent')
 
-  // Re-sync selectedMonths default when data first arrives (init only)
-  // — handled by useState initializer, no effect needed.
-
   const metric = METRICS.find(m => m.key === metricKey)!
 
-  // Build the recharts data array: one row per day-of-month (1..31),
-  // each row has the metric value for every month selected.
+  // Build the recharts data array: one row per working-day index (1..23).
+  // Each row has the metric value for every month at THAT working-day index.
+  // April-day-9 (e.g. Apr 13 Tue) lines up with May-day-9 (e.g. May 13 Wed).
   const chartData = useMemo(() => {
-    const rows: Array<Record<string, number | string>> = []
-    for (let day = 1; day <= 31; day++) {
-      const row: Record<string, number | string> = { day }
+    // Compute working-date list for each selected month
+    const datesPerMonth: Record<string, string[]> = {}
+    let maxLen = 0
+    for (const ym of selectedMonths) {
+      const dates = workingDatesForMonth(ym)
+      datesPerMonth[ym] = dates
+      if (dates.length > maxLen) maxLen = dates.length
+    }
+
+    const rows: Array<Record<string, number | string | null>> = []
+    for (let i = 0; i < maxLen; i++) {
+      const row: Record<string, number | string | null> = { day: i + 1 }
       for (const ym of selectedMonths) {
-        const date = `${ym}-${String(day).padStart(2, '0')}`
+        const date = datesPerMonth[ym][i]
+        if (!date) continue
         const rec = dailyIdx[date]
-        if (rec) {
-          row[ym] = metric.get(rec)
-        }
+        row[ym] = rec ? metric.get(rec) : null
       }
       rows.push(row)
     }
@@ -240,15 +279,16 @@ export default function MonthlyOverlayChart({ data }: { data: MetricsData }) {
             <XAxis
               dataKey="day"
               tick={{ fontSize: 11, fill: '#6b7280' }}
-              label={{ value: 'Day of month', position: 'insideBottom', offset: -5, fontSize: 11, fill: '#9ca3af' }}
+              label={{ value: 'Working day (Mon–Fri only)', position: 'insideBottom', offset: -5, fontSize: 11, fill: '#9ca3af' }}
             />
             <YAxis
+              domain={['auto', 'auto']}
               tick={{ fontSize: 11, fill: '#6b7280' }}
               tickFormatter={(v: number) => fmtValue(v, metric.unit)}
             />
             <Tooltip
               formatter={(v) => fmtValue(typeof v === 'number' ? v : Number(v), metric.unit)}
-              labelFormatter={(d) => `Day ${d}`}
+              labelFormatter={(d) => `Working day ${d}`}
               contentStyle={{ fontSize: 12 }}
             />
             <Legend wrapperStyle={{ fontSize: 12 }} />
