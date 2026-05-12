@@ -83,10 +83,10 @@ export default function DemosTable({
   }, [filtered])
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200">
+    <div className="bg-white rounded-xl border border-gray-300">
       <div className="px-6 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+          <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
             Demos Booked{industry !== 'All' ? ` — ${industry}` : ''}
           </h2>
           <p className="text-xs text-gray-400 mt-0.5">

@@ -33,8 +33,8 @@ const TD = ({ children, className = '' }: { children: React.ReactNode; className
 export default function CampaignTable({ campaigns }: { campaigns: ComputedCampaignRow[] }) {
   if (campaigns.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <h2 className="text-sm font-semibold text-gray-700 mb-2 uppercase tracking-wide">
+      <div className="bg-white rounded-xl border border-gray-300 p-6">
+        <h2 className="text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide">
           Campaign Breakdown
         </h2>
         <p className="text-gray-400 text-sm">No campaigns to show.</p>
@@ -43,9 +43,9 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200">
+    <div className="bg-white rounded-xl border border-gray-300">
       <div className="px-6 py-4 border-b border-gray-100">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
           Campaign Breakdown
         </h2>
         <p className="text-xs text-gray-400 mt-0.5">

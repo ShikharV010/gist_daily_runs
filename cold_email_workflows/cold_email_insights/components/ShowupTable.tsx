@@ -120,12 +120,12 @@ export default function ShowupTable({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200">
+    <div className="bg-white rounded-xl border border-gray-300">
       {/* Header + filters */}
       <div className="px-6 py-4 border-b border-gray-100 flex flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
-            <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+            <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
               Show-up Analysis
             </h2>
             <p className="text-xs text-gray-400 mt-0.5">{rows.length} records · scored by deal intent</p>

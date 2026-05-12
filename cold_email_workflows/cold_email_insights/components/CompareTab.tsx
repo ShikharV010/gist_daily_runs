@@ -115,9 +115,9 @@ export default function CompareTab({
   ]
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200">
+    <div className="bg-white rounded-xl border border-gray-300">
       <div className="px-6 py-4 border-b border-gray-100">
-        <h2 className="text-sm font-semibold text-gray-700 uppercase tracking-wide">
+        <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
           Industry Comparison
         </h2>
         <p className="text-xs text-gray-400 mt-0.5">All-time totals · no date filter applied</p>
