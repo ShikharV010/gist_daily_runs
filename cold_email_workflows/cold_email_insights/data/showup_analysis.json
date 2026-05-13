@@ -17622,5 +17622,620 @@
       "total_duration_min": 54,
       "analyzed_at": "2026-05-12T14:07:06.439257Z"
     }
+  },
+  "ASTRELUX IT INC": {
+    "company": "ASTRELUX IT INC",
+    "prospect_name": "Abrar Ahmad Nath",
+    "prospect_designation": "Founder at Astrelux IT Inc.",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "He is the Founder, giving him full authority over purchase decisions.",
+    "company_industry": "IT Services & Consulting / Software & Cybersecurity",
+    "pain_points": [
+      {
+        "pain_point": "Low organic search visibility on Google and AI engines",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed live website scan revealing 5 missed high-volume searches"
+      },
+      {
+        "pain_point": "Website content not answering target customer queries",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated gap between site content and 1700+ monthly searches"
+      },
+      {
+        "pain_point": "Reliance on own proprietary lead gen with unclear scalability",
+        "severity": "medium",
+        "direct_quote": "I'm using my own particular lead generation system which gives me the lead generation.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "No inbound pipeline from AI search engines like GPT or Gemini",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained Gushwork targets AI search engine citations specifically"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Requested a free trial before committing",
+        "how_handled": "AE explained no trial exists due to custom engine build per client",
+        "resolved": false
+      },
+      {
+        "objection": "Unclear on what Gushwork actually does before the call",
+        "how_handled": "AE gave product overview and live website scan demo",
+        "resolved": true
+      },
+      {
+        "objection": "Wants time to review before deciding \u2014 deferred to email",
+        "how_handled": "AE agreed to send follow-up summary email",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Agreed to attend and stay for the full demo call",
+      "Asked specific question: 'How do you generate leads?'",
+      "Requested a trial \u2014 signals interest in experiencing product",
+      "Said 'by tomorrow I'll let you know' \u2014 set self-imposed deadline",
+      "Acknowledged demo with 'Okay' and stayed engaged throughout"
+    ],
+    "negative_signals": [
+      "Already has own proprietary lead generation system in place",
+      "Vague about business specifics \u2014 guarded about sharing details",
+      "No urgency expressed around current lead gen challenges",
+      "Did not ask about pricing, onboarding, or next steps proactively",
+      "Call ended abruptly without scheduling a follow-up meeting",
+      "Tone was exploratory, not evaluative \u2014 low purchase intent vibe"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send follow-up summary email after the call",
+      "Abrar to review email and respond by the next day"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Summary email recapping the demo call discussion",
+      "Details of Gushwork's process and landing page strategy"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect came in with no prior knowledge of Gushwork",
+      "Already has existing lead gen system \u2014 low urgency to switch",
+      "Asked for free trial, which was denied \u2014 friction introduced",
+      "No pricing discussion, no timeline, no follow-up call scheduled",
+      "Deferred decision to email review \u2014 low-commitment signal",
+      "Exploratory curiosity, not active problem-solving mindset"
+    ],
+    "call_quality_score": 5,
+    "call_quality_notes": [
+      "AE pivoted quickly to live demo \u2014 good tactical move",
+      "Discovery was too shallow \u2014 services and pain points barely explored",
+      "AE did not uncover budget, timeline, or decision process (BANT)",
+      "No follow-up call booked \u2014 missed critical closing step",
+      "Trial request objection handled but left prospect without alternative",
+      "AE should have probed existing lead gen system more deeply",
+      "Call ran only 14 minutes \u2014 insufficient for meaningful qualification",
+      "Demo was product-led, not pain-led \u2014 lacked personalization depth"
+    ],
+    "key_insights": [
+      "Astrelux is a broad IT services firm \u2014 software, gaming, cybersecurity",
+      "Prospect is Founder \u2014 fast decision maker if convinced of value",
+      "Has existing in-house lead gen app \u2014 sees himself as self-sufficient",
+      "Low awareness of Gushwork pre-call \u2014 purely exploratory intent",
+      "AI search visibility gap is a real, demonstrable opportunity here",
+      "No BANT qualification done \u2014 deal stage is effectively unknown",
+      "Follow-up email is the only active thread keeping this deal alive"
+    ],
+    "recommended_next_action": "Send a personalized follow-up email with the live scan results, a sample landing page for Astrelux's top missed keyword, and a specific ROI framing \u2014 then include a calendar link to book a 20-minute follow-up call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Showed Astrelux missing 5 high-intent searches via live scan",
+      "Explained content gap as root cause of poor search visibility",
+      "Demonstrated 1700+ monthly searches Astrelux is not capturing",
+      "Showed how landing pages convert searchers into contact form leads",
+      "Highlighted AI search engines (GPT, Gemini) as new lead channels"
+    ],
+    "_meta": {
+      "prospect_email": "abrar@astrelux.com",
+      "prospect_company": "ASTRELUX IT INC",
+      "prospect_website": "www.astrelux.com",
+      "demo_date": "2026-05-12",
+      "ae_name": "Akshaya Sampath",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "4cb4d77903ec00991357ff1f9d5db894"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=c42a3f03-e3de-4af1-b314-70834842627e&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 14,
+      "analyzed_at": "2026-05-13T07:39:49.347260Z"
+    }
+  },
+  "3K Services": {
+    "company": "3K Services",
+    "prospect_name": "Dana Key",
+    "prospect_designation": "Principal CEO at 3K-Services LLC",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Dana is the Principal CEO and sole decision-maker for the company.",
+    "company_industry": "Energy / Utility-Scale Solar EPC & Consulting",
+    "pain_points": [
+      {
+        "pain_point": "Over-reliance on word-of-mouth for new business",
+        "severity": "high",
+        "direct_quote": "Just from word of mouth from the years I've been in the business, just from the friends that I have",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained word-of-mouth exhausts over time; proposed pull marketing as scalable alternative"
+      },
+      {
+        "pain_point": "Wants larger, higher-value projects",
+        "severity": "high",
+        "direct_quote": "The projects that I want to build are much bigger than the ones I'm doing",
+        "addressed_in_call": true,
+        "how_addressed": "AE framed even 1 converted inquiry as full-year ROI for high-value deals"
+      },
+      {
+        "pain_point": "Lacks a structured outbound or marketing strategy",
+        "severity": "medium",
+        "direct_quote": "My background is not in project development or this side. I've always been the project manager.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as hands-off pull marketing solution requiring no marketing expertise"
+      },
+      {
+        "pain_point": "Limited digital visibility and inbound lead flow",
+        "severity": "medium",
+        "direct_quote": "I have my website there, I get a few calls off of it from LinkedIn and places like that",
+        "addressed_in_call": true,
+        "how_addressed": "AE proposed SEO and AI search optimization to increase surface area and inbound inquiries"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Product seems built for residential solar, not enterprise EPC",
+        "how_handled": "AE clarified B2B focus; cited niche customers like satellite and aircraft windshield companies",
+        "resolved": true
+      },
+      {
+        "objection": "High-trust, multi-million dollar deals won't come from Google searches",
+        "how_handled": "AE reframed goal as generating inquiries, not instant contracts; cited 10-15 leads/month target",
+        "resolved": false
+      },
+      {
+        "objection": "Skeptical of success rate and ROI for niche industry",
+        "how_handled": "AE referenced 300-400 customers and $10M funding; positioned month-3 traction timeline",
+        "resolved": false
+      },
+      {
+        "objection": "Cold outreach and pull marketing feel misaligned with her business model",
+        "how_handled": "AE distinguished pull vs push marketing; acknowledged her niche positioning",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Showed up to the call despite low initial fit confidence",
+      "Explicitly stated desire to grow and expand business",
+      "Wants larger, higher-value projects than current pipeline",
+      "Open to being proven wrong about product fit",
+      "Agreed to reschedule follow-up call the next day",
+      "Said 'I'm always interested in generating business for sure'"
+    ],
+    "negative_signals": [
+      "Opened call stating she doesn't think it's a good fit",
+      "Strong skepticism that inbound works for trust-based EPC deals",
+      "Relies entirely on referrals; uncomfortable with new channels",
+      "Demo could not be completed due to technical software error",
+      "Core value proposition never fully demonstrated to prospect",
+      "Low urgency; no active search for a marketing solution"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Reschedule demo call for 1 PM Eastern the following day",
+      "AE to send a calendar invite to Dana via email",
+      "AE must fix website URL input issue before next call",
+      "Complete the AI opportunity analysis demo on her website"
+    ],
+    "next_call_date": "2026-05-13 at 1:00 PM Eastern",
+    "follow_up_materials_promised": [
+      "Calendar invite for rescheduled meeting sent by AE"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect opened call expecting to politely decline",
+      "Core objection around trust-based sales model remains unresolved",
+      "Demo was never completed due to a technical failure",
+      "No clear pain point urgency driving purchase decision now",
+      "Agreed to follow-up but tone was non-committal",
+      "High skepticism about channel fit for utility-scale EPC deals"
+    ],
+    "call_quality_score": 4,
+    "call_quality_notes": [
+      "AE recovered well after prospect's opening skepticism",
+      "Good use of analogies: satellite and aircraft windshield clients",
+      "Pull vs push marketing explanation was clear and relevant",
+      "Critical failure: demo tool broke mid-call, killing momentum",
+      "AE did not deeply probe Dana's ideal customer profile",
+      "ROI framing was solid but trust objection was not closed",
+      "Call ended prematurely; only 14 minutes with no demo shown",
+      "AE should have had a backup demo ready for tool failures"
+    ],
+    "key_insights": [
+      "Dana is a project executor turned business owner seeking growth",
+      "Her sales cycle is entirely relationship and referral driven",
+      "She needs proof of B2B EPC-specific use cases to convert",
+      "Technical demo failure was the biggest risk to deal progression",
+      "ROI argument is valid but needs a concrete comparable case study",
+      "Utility-scale solar EPC is highly niche; generic pitch won't land",
+      "She is open-minded but needs strong vertical-specific evidence"
+    ],
+    "recommended_next_action": "Before the rescheduled call, fix the demo tool issue and prepare a solar or heavy-industry B2B case study showing inquiry-to-contract conversion to directly address Dana's trust-based sales objection.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Word-of-mouth exhaustion addressed via pull marketing scalability pitch",
+      "Desire for larger projects addressed with high-value ROI framing",
+      "Lack of marketing expertise addressed by positioning Gushwork as done-for-you",
+      "Low digital visibility addressed via AI search and SEO optimization pitch"
+    ],
+    "_meta": {
+      "prospect_email": "dana@3k-services.com",
+      "prospect_company": "3K Services",
+      "prospect_website": "3K Services.com",
+      "demo_date": "2026-05-12",
+      "ae_name": "Arabind",
+      "industry": "IT & Consulting",
+      "meeting_ids": [
+        "7148b1689b880a56fb83f445756b506e"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=2b1c3109-5598-4475-896f-79f384efe82a&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 14,
+      "analyzed_at": "2026-05-13T07:39:52.119228Z"
+    }
+  },
+  "Sirqul, Branch to Hope, Wellaroo (Formally World Health Collective), and Local Relief": {
+    "company": "Sirqul, Branch to Hope, Wellaroo (Formally World Health Collective), and Local Relief",
+    "prospect_name": "Grace Sims",
+    "prospect_designation": "Director of Account Management at Sirqul, Inc.",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Grace is an intermediary; she needs founder Rob Frederick's approval for Sirqul and must relay Gushwork to Branch to Hope's owner separately.",
+    "company_industry": "App Platform Development / Faith-Based Consumer Products",
+    "pain_points": [
+      {
+        "pain_point": "Near-zero website visibility and organic traffic",
+        "severity": "high",
+        "direct_quote": "we haven't been getting a lot, I would say in, I don't know, maybe eight months or more",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed live SEO data; explained landing page strategy to boost organic rankings."
+      },
+      {
+        "pain_point": "Sirqul's app project deliberately on hold for new leads",
+        "severity": "high",
+        "direct_quote": "he has put a halt on even advertising my part of what I do. And so my client base is currently not growing at all.",
+        "addressed_in_call": true,
+        "how_addressed": "AE pivoted focus to Branch to Hope as active opportunity instead."
+      },
+      {
+        "pain_point": "Branch to Hope showing up for wrong search prompts",
+        "severity": "medium",
+        "direct_quote": "somebody, the father of three children, one of them tragically died after committing suicide",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained page optimization ensures brand appears for correct, relevant queries."
+      },
+      {
+        "pain_point": "Entirely reliant on word-of-mouth; no inbound lead channel",
+        "severity": "high",
+        "direct_quote": "It's always been for my little piece, it's always been word of mouth.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated how landing pages create scalable inbound discovery channel."
+      },
+      {
+        "pain_point": "Branch to Hope has limited budget as a startup",
+        "severity": "medium",
+        "direct_quote": "they are a startup company and so they don't have a lot of expendable money.",
+        "addressed_in_call": true,
+        "how_addressed": "AE recommended Launch plan; explained pause option and month-to-month flexibility."
+      },
+      {
+        "pain_point": "No lead management system in place for Branch to Hope",
+        "severity": "low",
+        "direct_quote": "I don't think so, no.",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered built-in dashboard or integration with existing tools like Track Desk."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Sirqul project is on hold; no new clients needed now",
+        "how_handled": "AE acknowledged timing, pivoted to Branch to Hope as active use case.",
+        "resolved": true
+      },
+      {
+        "objection": "Concern about paying Google for ads vs. organic SEO",
+        "how_handled": "AE clearly distinguished PPC ads from organic SEO and AI search visibility.",
+        "resolved": true
+      },
+      {
+        "objection": "Worried about long-term value after initial engagement",
+        "how_handled": "AE explained continuous optimization, rank monitoring, and new page releases.",
+        "resolved": true
+      },
+      {
+        "objection": "Concern about pausing contract if budget tightens",
+        "how_handled": "AE confirmed pause option exists; cited real client example of pausing.",
+        "resolved": true
+      },
+      {
+        "objection": "Grace is not the decision maker; needs to relay to clients",
+        "how_handled": "AE agreed to send follow-up email and schedule call after Grace consults client.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Grace proactively mentioned multiple clients as potential leads.",
+      "Expressed Branch to Hope as a strong, timely fit.",
+      "Asked about long-term value, showing commitment thinking.",
+      "Requested recording to share with relevant stakeholders.",
+      "Mentioned founder Rob Frederick approved moving forward.",
+      "Agreed to follow-up call date of May 21st.",
+      "Showed curiosity about contract terms and pause options.",
+      "Said she would discuss Gushwork with Sirqul team too."
+    ],
+    "negative_signals": [
+      "Sirqul's core app project on hold until end of 2025.",
+      "Grace is not decision maker for any of the companies.",
+      "Branch to Hope has limited startup budget constraints.",
+      "Grace hadn't visited Gushwork website before the call.",
+      "Multiple stakeholders needed before any deal can close.",
+      "Branch to Hope owner busy with deadlines this week."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send follow-up email summarizing today's discussion.",
+      "Grace to speak with Branch to Hope owner next week.",
+      "Follow-up call scheduled for Thursday, May 21st.",
+      "Grace to optionally introduce Gushwork to Sirqul leadership.",
+      "Grace may review full client list for additional prospects."
+    ],
+    "next_call_date": "2026-05-21",
+    "follow_up_materials_promised": [
+      "Summary email of entire call discussion from AE.",
+      "Recording link shareable with Branch to Hope stakeholder."
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Grace is genuinely interested but is not the buyer.",
+      "Branch to Hope is active and timely fit for service.",
+      "Sirqul deal blocked until end of 2025 at earliest.",
+      "No pricing objection raised; budget concern is manageable.",
+      "Multiple positive signals but deal depends on third parties.",
+      "Follow-up date agreed; momentum exists but outcome uncertain."
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE successfully pivoted from blocked Sirqul to Branch to Hope.",
+      "Good discovery of pain points; lead gen context well established.",
+      "Live website audit added tangible value and credibility.",
+      "AE missed asking about Branch to Hope owner's name and email.",
+      "No pricing discussed; critical gap for deal progression.",
+      "Rapport was strong; tone was conversational and engaging.",
+      "AE should have pushed for direct intro to Branch to Hope owner.",
+      "Call ran over 30 min but stayed productive throughout."
+    ],
+    "key_insights": [
+      "Grace acts as a connector/champion, not economic buyer.",
+      "Branch to Hope is the most immediate and active opportunity.",
+      "Sirqul opportunity exists but is 6-12 months away minimum.",
+      "Founder Rob Frederick could be high-value future contact.",
+      "Branch to Hope targeting bulk B2B orders of 500+ units.",
+      "Faith-based niche requires carefully targeted keyword strategy.",
+      "Grace manages multiple brands; potential multi-client pipeline.",
+      "Affiliate program just launched May 1st; growth mode active."
+    ],
+    "recommended_next_action": "Send Grace a concise follow-up email by EOD with call summary, pricing for Launch plan, and a suggested agenda for a three-way intro call with Branch to Hope's owner on or around May 21st.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "AE showed live low-traffic data for both Sirqul and Branch to Hope.",
+      "AE explained organic SEO landing pages replace word-of-mouth dependency.",
+      "AE demonstrated wrong-prompt citations and how optimization fixes it.",
+      "AE confirmed Launch plan as budget-friendly starting point.",
+      "AE offered dashboard or Track Desk integration for lead management.",
+      "AE validated pause option to address startup budget volatility."
+    ],
+    "_meta": {
+      "prospect_email": "grace@sirqul.com",
+      "prospect_company": "Sirqul, Branch to Hope, Wellaroo (Formally World Health Collective), and Local Relief",
+      "prospect_website": "https://corp.sirqul.com/; https://www.branchtohope.app/",
+      "demo_date": "2026-05-12",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Advertising",
+      "meeting_ids": [
+        "477d6fb045c394d50d2377891d3ad6bc"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=7414be41-4bd8-4e3f-9f8f-6cc055613868&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 53,
+      "analyzed_at": "2026-05-13T07:39:58.289388Z"
+    }
+  },
+  "Lazer Logistics": {
+    "company": "Lazer Logistics",
+    "prospect_name": "Drew Carl",
+    "prospect_designation": "Maintenance Technician at Lazer Logistics",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Drew explicitly stated 'I'm the decision maker, so it's really up to me.'",
+    "company_industry": "Logistics / Third-Party Logistics (3PL) & Yard Management",
+    "pain_points": [
+      {
+        "pain_point": "Low brand visibility and market awareness",
+        "severity": "high",
+        "direct_quote": "We've not done a great job getting our name out there and leveraging the story that we can tell.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's SEO/AEO platform builds visibility via landing pages and thought leadership content."
+      },
+      {
+        "pain_point": "Poor website conversion rate (under 3%)",
+        "severity": "high",
+        "direct_quote": "Our conversion percentage is probably under 3% now, and it needs to probably be closer to 15, maybe 20%.",
+        "addressed_in_call": true,
+        "how_addressed": "Nitin explained optimized landing pages with CTAs and CRM integration improve conversions."
+      },
+      {
+        "pain_point": "No structured digital marketing strategy",
+        "severity": "high",
+        "direct_quote": "We didn't really have a great strategy when it came to trade shows or paid search or running digital campaigns.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's systematic SEO/AEO approach provides a structured organic demand generation strategy."
+      },
+      {
+        "pain_point": "Lack of visibility in AI search engines (AEO)",
+        "severity": "high",
+        "direct_quote": "I need to do something with the AEO side and plus this actually helps on the SEO side.",
+        "addressed_in_call": true,
+        "how_addressed": "Nitin demonstrated AEO-optimized pages with schema markup and machine-readable structure."
+      },
+      {
+        "pain_point": "Weak lead tracking and CRM data integrity",
+        "severity": "medium",
+        "direct_quote": "I really don't have a great grasp on how many leads our website is generating.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork integrates with Salesforce and provides a detailed leads dashboard with analytics."
+      },
+      {
+        "pain_point": "New to role with limited time and bandwidth",
+        "severity": "medium",
+        "direct_quote": "Just new into my role. Just under two months or right at two months.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Concern about content accuracy from AI-generated pages",
+        "how_handled": "Nitin offered two review options: post-publish two-week review window or pre-publish approval before going live.",
+        "resolved": true
+      },
+      {
+        "objection": "Concern about page ownership and data portability on exit",
+        "how_handled": "Nitin confirmed all pages can be migrated via 301 redirects to client's domain free of cost with 30-day notice.",
+        "resolved": true
+      },
+      {
+        "objection": "Unclear where hosted pages live and URL structure",
+        "how_handled": "Nitin explained reverse proxy setup under client domain slash feeds with domain authority transfer.",
+        "resolved": true
+      },
+      {
+        "objection": "Busy schedule and delayed decision timeline",
+        "how_handled": "Nitin immediately proposed a follow-up call placeholder for the following Thursday at same time.",
+        "resolved": true
+      },
+      {
+        "objection": "Uncertainty about annual commitment vs monthly flexibility",
+        "how_handled": "Nitin clarified annual is still billed monthly with no upfront cost, just a 12-month commitment.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Explicitly said 'We're probably going to move forward with this.'",
+      "Self-identified as sole decision maker with no approvals needed.",
+      "Agreed to a follow-up call on a specific date (Thursday next week).",
+      "Asked detailed technical questions indicating deep evaluation intent.",
+      "Confirmed AEO is a priority need he must address soon.",
+      "Expressed strong interest: 'I'm definitely interested.'",
+      "Engaged for full 45 minutes despite being pressed for time.",
+      "Asked about Salesforce CRM integration signaling implementation readiness.",
+      "Proactively inquired about pricing plans and annual billing structure.",
+      "Asked about form customization and multi-service dropdown fields."
+    ],
+    "negative_signals": [
+      "Traveling end of week, boss out next week \u2014 busy schedule.",
+      "New to role (2 months), still establishing processes and priorities.",
+      "Title is 'Maintenance Technician' \u2014 possible org misalignment risk.",
+      "Multiple competing priorities may delay final decision by 1\u20132 weeks.",
+      "No budget figure or budget approval process mentioned."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call scheduled for Thursday next week, same time slot.",
+      "AE to send all demo materials and discussed information via email.",
+      "Drew to review and finalize decision within one to two weeks.",
+      "AE to send calendar placeholder immediately after the call."
+    ],
+    "next_call_date": "2026-05-21 (Thursday, same time as demo call)",
+    "follow_up_materials_promised": [
+      "Demo recap email with all discussed information.",
+      "Links to sample landing pages and client examples shown.",
+      "Pricing plan details for Launch, Grow, and Scale tiers.",
+      "Calendar invite for follow-up call on Thursday next week."
+    ],
+    "deal_closing_intent_score": 8,
+    "deal_closing_intent_label": "Hot",
+    "intent_reasoning": [
+      "Prospect explicitly said 'probably going to move forward with this.'",
+      "Confirmed himself as sole decision maker \u2014 no committee involved.",
+      "Strong product-market fit: AEO and SEO align with his stated goals.",
+      "Agreed to a specific follow-up date without resistance.",
+      "Asked implementation-level questions (forms, CRM, DNS, URL structure).",
+      "Only delays are logistical (travel, boss out), not product or budget.",
+      "Expressed urgency around AEO visibility as an immediate need."
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE delivered a clear and structured product demo with live examples.",
+      "Good discovery: pain points, current channels, and conversion goals uncovered.",
+      "AE handled all technical objections confidently and with specifics.",
+      "Missed opportunity to confirm budget range or procurement process.",
+      "No competitive landscape discussion or differentiation from other SEO vendors.",
+      "Prospect title (Maintenance Technician) was never clarified or questioned.",
+      "AE could have quantified ROI or shared relevant logistics client results.",
+      "Strong close: secured follow-up date and agreed on next steps."
+    ],
+    "key_insights": [
+      "Drew is newly hired (2 months) to build Lazer Logistics marketing from scratch.",
+      "Company is 30 years old with no prior structured digital marketing strategy.",
+      "Website gets 10\u201320K visitors/month but converts under 3% \u2014 major gap.",
+      "AEO is an explicitly stated priority and unmet need for Drew.",
+      "Sales team of 20 plus 3 BDRs suggests mid-market company with sales infrastructure.",
+      "Transitioning from HubSpot to Salesforce \u2014 CRM is in flux but stabilizing.",
+      "Drew is enthusiastic but logistically constrained for the next 1\u20132 weeks.",
+      "Prospect title mismatch (Maintenance Technician) may reflect CRM data error.",
+      "Yard management technology and gate management are top priority service areas.",
+      "Drew values content review control \u2014 pre-publish approval process is important."
+    ],
+    "recommended_next_action": "Send a personalized follow-up email within 24 hours with demo recap, pricing tiers, a sample page mockup for 'yard management technology,' and a confirmed Thursday calendar invite \u2014 then prep a ROI-focused slide showing logistics client lead growth for the closing call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Brand visibility: landing pages and thought leadership content build awareness.",
+      "Low conversion: optimized CTAs, forms, and Salesforce integration drive leads.",
+      "No digital strategy: Gushwork provides structured organic demand generation.",
+      "AEO gap: machine-readable pages with schema markup target AI search engines.",
+      "Lead tracking: Salesforce-integrated dashboard with per-page analytics provided.",
+      "Bandwidth concern: not directly addressed \u2014 growth strategist support implied."
+    ],
+    "_meta": {
+      "prospect_email": "dcarl@lazerlogistics.com",
+      "prospect_company": "Lazer Logistics",
+      "prospect_website": "https://www.lazerlogistics.com/",
+      "demo_date": "2026-05-12",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Meta/Other",
+      "meeting_ids": [
+        "ad661adf08ae61b69d9c5e74e1f7ded5"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=05aa4707-ec30-417d-982f-2b592be548c4&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 45,
+      "analyzed_at": "2026-05-13T07:40:04.329936Z"
+    }
   }
 }
