@@ -19070,5 +19070,355 @@
       "total_duration_min": 33,
       "analyzed_at": "2026-05-14T07:32:06.090461Z"
     }
+  },
+  "Provision Power and Gas": {
+    "company": "Provision Power and Gas",
+    "prospect_name": "Santiago Daroch",
+    "prospect_designation": "Director of Inside Sales at CarbonBetter",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Santiago said he needs to discuss with his boss before deciding.",
+    "company_industry": "Energy / Deregulated Retail Electricity & Natural Gas",
+    "pain_points": [
+      {
+        "pain_point": "Insufficient lead volume for growing sales team",
+        "severity": "high",
+        "direct_quote": "I need to be able to get my hands on about 3,000 leads a week.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork pitched inbound lead gen via 100+ AI-optimized landing pages."
+      },
+      {
+        "pain_point": "Inconsistent quality from purchased lead vendors",
+        "severity": "high",
+        "direct_quote": "Sometimes they work and sometimes they don't. So I'm just shopping around.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned inbound organic leads as higher intent than bought lists."
+      },
+      {
+        "pain_point": "No active inbound lead strategy on website",
+        "severity": "medium",
+        "direct_quote": "We are not using our website to drive leads. No.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork showed live demo of landing pages with embedded lead forms."
+      },
+      {
+        "pain_point": "Team scaling requires new lead sources fast",
+        "severity": "high",
+        "direct_quote": "I went from three agents, now I have seven, and I want to grow to 10.",
+        "addressed_in_call": true,
+        "how_addressed": "AE highlighted speed: 100 pages live in 30\u201345 days vs months elsewhere."
+      },
+      {
+        "pain_point": "Low online enrollment due to friction-heavy signup process",
+        "severity": "medium",
+        "direct_quote": "A lot of people just don't do it. The process of enrolling is tedious.",
+        "addressed_in_call": true,
+        "how_addressed": "AE agreed simpler lead form captures intent; phone team closes enrollment."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Unsure if service fits residential consumer B2C model",
+        "how_handled": "AE confirmed form-based lead capture works; e-commerce/Shopify excluded, not this.",
+        "resolved": true
+      },
+      {
+        "objection": "ROI concern: $800/month for uncertain lead volume",
+        "how_handled": "AE acknowledged low ticket size and promised best possible pricing on Launch plan.",
+        "resolved": false
+      },
+      {
+        "objection": "No click-to-call tracking capability on landing pages",
+        "how_handled": "AE admitted feature not live; only form-based tracking available currently.",
+        "resolved": false
+      },
+      {
+        "objection": "Needs boss approval before committing",
+        "how_handled": "AE agreed to send demo link and pricing for internal review.",
+        "resolved": false
+      },
+      {
+        "objection": "Website is getprovision.com not carbonbetter.com, low traffic",
+        "how_handled": "AE noted low traffic and pivoted; confirmed getprovision.com is correct target domain.",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Actively shopping multiple lead vendors right now.",
+      "Asked detailed questions about pricing tiers and adjustability.",
+      "Probed data ownership and offboarding terms carefully.",
+      "Calculated ROI math aloud: 100 leads, sell 10 customers.",
+      "Asked about CRM integration with Odoo being implemented.",
+      "Requested demo link to share with his boss.",
+      "Engaged deeply on landing page customization for residential forms.",
+      "Showed interest in upgrading/downgrading packages flexibly."
+    ],
+    "negative_signals": [
+      "Not a decision maker; must consult boss first.",
+      "Currently not buying any leads at all.",
+      "Gushwork's 100 pages far below his 3,000 leads/week need.",
+      "Click-to-call tracking gap is a real product limitation.",
+      "No urgency anchor or committed timeline mentioned.",
+      "getprovision.com has very low organic traffic baseline.",
+      "Skeptical: has talked to similar vendors before without buying."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send email with Gushwork website link.",
+      "AE to send link to demo landing pages created on call.",
+      "AE to share best possible pricing for Launch package.",
+      "Santiago to review materials and discuss with his boss.",
+      "No follow-up call date set during the meeting."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Gushwork website/product overview link via email.",
+      "Live demo landing page link for getprovision.com.",
+      "Best discounted pricing proposal for Launch plan."
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect is actively in buying mode for lead vendors.",
+      "Engaged seriously with pricing, ROI, and offboarding terms.",
+      "Blocked by boss approval; not a solo decision maker.",
+      "Product volume (100 leads) likely below his 3,000/week need.",
+      "No next call scheduled; follow-up momentum risk is high.",
+      "Tone was curious and constructive, not dismissive."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE failed to schedule a concrete follow-up call date.",
+      "No BANT qualification: budget and timeline not confirmed.",
+      "AE did not probe boss's name or internal approval process.",
+      "Good live demo created real-time pages for getprovision.com.",
+      "AE correctly acknowledged click-to-call gap honestly.",
+      "AE missed clarifying how 100 pages maps to lead volume goal.",
+      "Competitor landscape not explored beyond vague references.",
+      "AE promised best pricing without anchoring value first."
+    ],
+    "key_insights": [
+      "Two brands under CarbonBetter: Provision (Ohio/Michigan) and Peak 6 (California).",
+      "Peak 6 Power and Gas is a potential second upsell opportunity.",
+      "CarbonBetter B2B site gets more traffic; not target for this deal.",
+      "Team dialing existing churned customers; classic retention-first motion.",
+      "Odoo CRM in implementation; webhook integration is feasible.",
+      "Prospect values contact rate and clean DIDs over raw lead count.",
+      "Energy enrollment requires 20+ data fields; voice beats web form.",
+      "Cost-per-enrollment model means high volume needed to justify spend."
+    ],
+    "recommended_next_action": "Send follow-up email within 24 hours with demo link, pricing, and a specific calendar invite for a 20-minute ROI-focused call with Santiago and his boss.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Lead volume gap addressed via scalable landing page content strategy.",
+      "Vendor inconsistency addressed: inbound intent leads vs cold bought lists.",
+      "No website lead strategy addressed with live getprovision.com demo.",
+      "Team scaling speed addressed: 100 pages live in 30\u201345 days.",
+      "Enrollment friction addressed: simple 4-field form captures intent only."
+    ],
+    "_meta": {
+      "prospect_email": "santiago@carbonbetter.com",
+      "prospect_company": "Provision Power and Gas",
+      "prospect_website": "https://www.getprovision.com",
+      "demo_date": "2026-05-05",
+      "ae_name": "Abhinav Chaturvedi",
+      "industry": "EWWS",
+      "meeting_ids": [
+        "5870d3430326f3589e79fc9674e2a25c"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=e9891ea5-37a8-4f79-8a6a-ca1ebec9a94a&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 35,
+      "analyzed_at": "2026-05-14T11:48:19.430279Z"
+    }
+  },
+  "Four Seasons General Merchandise": {
+    "company": "Four Seasons General Merchandise",
+    "prospect_name": "Mahmoud Paridehpour",
+    "prospect_designation": "Unknown (likely IT/Marketing or Operations lead)",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Mahmoud explicitly said he needs to check with his CEO before deciding.",
+    "company_industry": "Wholesale Distribution / Consumer General Merchandise",
+    "pain_points": [
+      {
+        "pain_point": "Low qualified inbound leads despite existing SEO efforts",
+        "severity": "high",
+        "direct_quote": "We are in position one. But still, maybe we are not get that much traffic as much as we expected.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned long-tail SEO pages and AI search visibility to drive qualified B2B leads."
+      },
+      {
+        "pain_point": "Consumer traffic polluting B2B lead pipeline",
+        "severity": "high",
+        "direct_quote": "Every traffic comes to our website is a consumer. That is the main problem we have.",
+        "addressed_in_call": true,
+        "how_addressed": "AE emphasized ICP-based lead filtering and B2B-focused content targeting."
+      },
+      {
+        "pain_point": "Manual lead qualification is resource-intensive",
+        "severity": "high",
+        "direct_quote": "We are short-handed, it's very easy. We don't have that much time or resources.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's automated lead qualification and validation workflow was introduced."
+      },
+      {
+        "pain_point": "Blog and content creation stalled due to limited bandwidth",
+        "severity": "medium",
+        "direct_quote": "Because we are short-handed... We can use the tools for that reason. We are looking for a partner.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's automated content generation and active page management was demonstrated."
+      },
+      {
+        "pain_point": "Seasonal and licensed products need rapid visibility turnaround",
+        "severity": "medium",
+        "direct_quote": "If I'm doing it today, I think I lose the opportunity for that reason.",
+        "addressed_in_call": false,
+        "how_addressed": "AE acknowledged the point but did not offer a concrete solution for rapid seasonal content deployment."
+      },
+      {
+        "pain_point": "No AI search engine visibility (ChatGPT, Gemini, etc.)",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "Sukriti and Manthan explained Gushwork targets AI search engines where paid ads have no presence."
+      },
+      {
+        "pain_point": "Visitors not identified unless they register on website",
+        "severity": "medium",
+        "direct_quote": "How to know that the information of this visitor, the name, address, phone number.",
+        "addressed_in_call": false,
+        "how_addressed": "AE clarified Gushwork only captures registered leads via forms, not anonymous visitors."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Paid ads are necessary and complement organic strategy",
+        "how_handled": "Sukriti agreed ads and Gushwork work together; 96% of customers use both simultaneously.",
+        "resolved": true
+      },
+      {
+        "objection": "Many similar AI/SEO service providers exist; what is different?",
+        "how_handled": "Positioned as a tech platform not an agency; proprietary platform with end-to-end service.",
+        "resolved": false
+      },
+      {
+        "objection": "Platform does not identify anonymous website visitors",
+        "how_handled": "AE clarified Gushwork focuses on form-submitted B2B leads, not anonymous tracking.",
+        "resolved": false
+      },
+      {
+        "objection": "Need to validate cost vs. value before committing",
+        "how_handled": "Pricing shown; suggested starting with Launch plan month-to-month to test.",
+        "resolved": false
+      },
+      {
+        "objection": "CEO approval required before any decision",
+        "how_handled": "Follow-up call scheduled; CEO invited to join the next meeting.",
+        "resolved": false
+      },
+      {
+        "objection": "Concerned about content quality and relevance to their niche",
+        "how_handled": "AE promised strategy call with growth strategist to align content with business inputs.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Actively looking for a partner to automate content and lead gen.",
+      "Expressed interest in seeing platform functionality in detail.",
+      "Agreed to a follow-up call and mentioned CEO involvement.",
+      "Said he prefers to start basic before scaling \u2014 showed intent.",
+      "Acknowledged gap in content updates due to limited resources.",
+      "Asked about pricing and plan limits \u2014 genuine evaluation behavior.",
+      "Used Semrush already; understands SEO value deeply.",
+      "Asked for customer references \u2014 serious vendor evaluation signal."
+    ],
+    "negative_signals": [
+      "Not the decision maker; CEO approval needed before moving forward.",
+      "Skeptical Gushwork differs meaningfully from other AI/SEO tools.",
+      "Questioned ability to identify and qualify anonymous visitors.",
+      "Repeatedly compared Gushwork to other competing lead-list vendors.",
+      "Said 'something is missing' from the solution multiple times.",
+      "Highly knowledgeable; will scrutinize solution deeply before buying.",
+      "Call had multiple interruptions; reduced prospect engagement quality.",
+      "Did not commit to any plan or next step beyond review."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call scheduled for Tuesday, May 13th, same time.",
+      "Mahmoud to discuss with CEO and check his availability.",
+      "CEO potentially joining the next call.",
+      "Mahmoud to internally review Gushwork offering and compare options.",
+      "Gushwork to send customer references and case studies via email.",
+      "Gushwork to send follow-up calendar invite for next meeting."
+    ],
+    "next_call_date": "2026-05-13",
+    "follow_up_materials_promised": [
+      "Customer references and case studies via email.",
+      "Calendar invite for follow-up meeting on May 13th.",
+      "Pricing and plan details summary to be shared."
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect is genuinely interested but not yet convinced.",
+      "CEO approval is a hard blocker before any deal progresses.",
+      "Explicitly said 'something is missing' \u2014 solution gaps remain.",
+      "Highly experienced prospect will require stronger differentiation proof.",
+      "Agreed to follow-up and said he'd start with basic plan if convinced.",
+      "Requested references \u2014 indicates active but cautious evaluation.",
+      "Competitor services already being evaluated in parallel."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE failed to fully address seasonal product rapid visibility gap.",
+      "Anonymous visitor identification objection was not resolved clearly.",
+      "Sukriti's involvement helped rescue a drifting conversation midway.",
+      "AE spent too much time on paid ads debate instead of pivoting faster.",
+      "Discovery was solid \u2014 good understanding of prospect's business model.",
+      "Demo was shown but not tightly tailored to prospect's specific use case.",
+      "Multiple call interruptions from prospect's side reduced momentum.",
+      "Pricing was shown without a strong ROI anchor or comparison framing.",
+      "No clear differentiation established vs. competing lead-list vendors.",
+      "Follow-up call and CEO inclusion were secured \u2014 a positive close."
+    ],
+    "key_insights": [
+      "Prospect has 40+ years in business and 20+ years in e-commerce \u2014 very savvy.",
+      "Two product strategies: evergreen generics and short-lifecycle licensed items.",
+      "Main pain: consumer traffic drowning B2B leads on their e-commerce site.",
+      "Already uses Semrush, retargeting tools, Google Ads, and Sweet CRM.",
+      "Content blog exists but is outdated due to lack of internal bandwidth.",
+      "Qualified lead definition is strict \u2014 validated business, size, and location matter.",
+      "Prospect sells to US retailers, global importers, chain stores, and dollar stores.",
+      "CEO is the real decision maker; Mahmoud is the evaluator and influencer.",
+      "Prospect is comparing Gushwork against lead-list vendors, not just SEO tools.",
+      "Gushwork's lack of anonymous visitor identification is a perceived gap."
+    ],
+    "recommended_next_action": "Send a tailored follow-up email with 2\u20133 relevant case studies from wholesale or distribution clients, clearly address the anonymous visitor gap and seasonal content speed concern, and confirm CEO's attendance for the May 13th strategy call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Low qualified leads: long-tail SEO and AI search targeting explained.",
+      "Consumer traffic issue: ICP-based B2B lead filtering introduced.",
+      "Manual qualification: automated lead validation workflow discussed.",
+      "Content bandwidth gap: Gushwork's automated content generation demoed.",
+      "AI search invisibility: ChatGPT/Gemini organic ranking explained clearly.",
+      "Seasonal product speed: NOT adequately addressed \u2014 gap remains open.",
+      "Anonymous visitor identification: clarified but prospect remained unsatisfied."
+    ],
+    "_meta": {
+      "prospect_email": "mahmoudp@4sgm.com",
+      "prospect_company": "Four Seasons General Merchandise",
+      "prospect_website": "https://www.4sgm.com",
+      "demo_date": "2026-05-06",
+      "ae_name": "Manthan Gupta",
+      "industry": "Manufacturing",
+      "meeting_ids": [
+        "2bdb30d059a9ffe8846cad6c7a031923"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=6b11d523-7cbe-42f1-b7e9-429ee34a5b32&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 77,
+      "analyzed_at": "2026-05-14T11:48:25.134184Z"
+    }
   }
 }
