@@ -21,9 +21,12 @@ function money(n: number) {
   return '$' + Math.round(n).toLocaleString()
 }
 
+// Sticky position is relative to the scroll container around the table
+// (overflow-auto with bounded max-height) — so top: 0 anchors the thead to the
+// top of that scrollable area. The page header sits above (separate sticky).
 const TH = ({ children, sticky }: { children: React.ReactNode; sticky?: 'left' }) => (
   <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide sticky ${sticky === 'left' ? 'left-0 z-30 min-w-[180px]' : 'z-20 whitespace-nowrap'}`}
-      style={{ backgroundColor: '#0070FF', color: '#ffffff', top: '73px' }}>
+      style={{ backgroundColor: '#0070FF', color: '#ffffff', top: 0 }}>
     {children}
   </th>
 )
@@ -122,7 +125,9 @@ export default function CompareTab({
         </h2>
         <p className="text-xs text-gray-400 mt-0.5">All-time totals · no date filter applied</p>
       </div>
-      <div className="overflow-x-auto">
+      {/* Bounded scroll container so both the thead AND the first column stay
+          pinned while the user pages through 18+ industries × 30+ metrics. */}
+      <div className="overflow-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
         <table className="w-full border-collapse">
           <thead>
             <tr>

@@ -213,11 +213,10 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Body: sidebar + content — document-level scroll, background stays fixed
-          (see .dashboard-bg) so elements pass over a stationary grid. Wrapped in
-          a max-width container with side padding so the layout doesn't go edge-
-          to-edge on wide monitors. */}
-      <div className="max-w-[1600px] mx-auto px-4 flex items-start">
+      {/* Body: sidebar + content — wrapped in max-w-[1800px] + px-6 to align
+          exactly with the header above (sidebar left edge = logo left edge;
+          main right edge = date-filter right edge). */}
+      <div className="max-w-[1800px] mx-auto px-6 flex items-start">
 
         {/* Vertical tab sidebar — sticky below header, internally scrollable so
             18+ industries don't get cut off on shorter viewports. */}
