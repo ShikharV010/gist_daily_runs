@@ -18,10 +18,7 @@ function Card({ title, main, sub }: {
   title: string; main: string; sub?: string; row?: 1 | 2 | 3 | 4
 }) {
   return (
-    <div
-      className="rounded-xl border border-gray-300 bg-white p-4 border-t-[3px]"
-      style={{ borderTopColor: '#0070FF' }}
-    >
+    <div className="rounded-xl border border-gray-400 bg-white p-4">
       <p className="text-xs font-bold uppercase tracking-wide mb-2" style={{ color: '#0070FF' }}>{title}</p>
       <p className="text-2xl font-bold text-gray-900">{main}</p>
       {sub && <p className="text-xs mt-1 text-gray-500">{sub}</p>}

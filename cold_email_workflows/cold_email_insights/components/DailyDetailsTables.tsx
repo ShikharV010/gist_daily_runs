@@ -75,7 +75,7 @@ function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
   )
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300">
+    <div className="bg-white rounded-xl border border-gray-400">
       <div className="px-6 py-3 border-b border-gray-200">
         <h3 className="text-sm font-bold text-gray-900">{label}</h3>
         <p className="text-xs text-gray-400 mt-0.5">
@@ -85,12 +85,12 @@ function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-xs uppercase tracking-wide text-gray-500 border-b border-gray-100">
-              <th className="px-4 py-2 text-left font-semibold">Date</th>
-              <th className="px-4 py-2 text-right font-semibold">Emails Sent</th>
-              <th className="px-4 py-2 text-right font-semibold">Demos Booked</th>
-              <th className="px-4 py-2 text-right font-semibold">Demos / Emails</th>
-              <th className="px-4 py-2 text-right font-semibold">Show-ups</th>
+            <tr className="text-xs uppercase tracking-wide text-white">
+              <th className="px-4 py-2 text-left font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Date</th>
+              <th className="px-4 py-2 text-right font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Emails Sent</th>
+              <th className="px-4 py-2 text-right font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Demos Booked</th>
+              <th className="px-4 py-2 text-right font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Demos / Emails</th>
+              <th className="px-4 py-2 text-right font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Show-ups</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">

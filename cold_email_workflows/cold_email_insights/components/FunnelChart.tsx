@@ -47,7 +47,7 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
 
   if (chartData.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-300 p-6">
+      <div className="bg-white rounded-xl border border-gray-400 p-6">
         <h2 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">
           Daily Funnel Trend
         </h2>
@@ -57,7 +57,7 @@ export default function FunnelChart({ timeSeries, industry, dateRange }: Props) 
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300 p-6">
+    <div className="bg-white rounded-xl border border-gray-400 p-6">
       <h2 className="text-sm font-bold text-gray-900 mb-4 uppercase tracking-wide">
         Daily Funnel Trend
       </h2>

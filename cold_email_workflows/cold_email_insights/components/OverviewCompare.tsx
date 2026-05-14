@@ -96,7 +96,7 @@ export default function OverviewCompare({
   [data, dateRange, INDUSTRIES])
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300">
+    <div className="bg-white rounded-xl border border-gray-400">
       <div className="px-6 py-4 border-b border-gray-100">
         <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
           Industry Comparison

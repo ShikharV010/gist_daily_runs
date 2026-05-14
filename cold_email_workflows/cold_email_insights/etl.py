@@ -51,6 +51,19 @@ EXCLUDED = {'Follow-ups', 'Meta/Other', 'No Show', 'Website Visitors', 'Other', 
 def is_active(ind: str) -> bool:
     return bool(ind) and ind not in EXCLUDED
 
+# Manual attribution overrides for bookings the email→domain→company matcher
+# cannot resolve (e.g. forward-and-book scenarios where the booker's email
+# isn't in any Sequencer campaign). Curated from `python3 analyze_demos.py`.
+# Format: lowercase email → industry name. Applied BEFORE the source-name
+# heuristic, so it takes precedence over the "Allaine → IT & Consulting"
+# fallback. Add new entries when an unmapped booking is verified manually.
+MANUAL_ATTRIBUTION_OVERRIDES = {
+    'karin.hurt@letsgrowleaders.com': 'Business Services',
+    'galen@ampedpipeline.com':        'Advertising',
+    'info@dispatch.city':             'IT & Consulting',
+    # lynnmakena01@gmail.com (Solis Office) → could not categorize, leaves Unknown
+}
+
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def to_est(val):
     if not val: return None
@@ -437,8 +450,11 @@ def fetch_demo_bookings(interested_leads, campaigns):
         ind, cid, _ = resolved.get((email, company), (None, None, 'none'))
 
         if not ind:
-            # Last-resort heuristic when Sequencer has no record at all
-            if 'allaine' in src.lower():
+            # 1) Manual curated overrides (from analyze_demos.py audits)
+            if email in MANUAL_ATTRIBUTION_OVERRIDES:
+                ind = MANUAL_ATTRIBUTION_OVERRIDES[email]
+            # 2) Last-resort source-name heuristic
+            elif 'allaine' in src.lower():
                 ind = 'IT & Consulting'
             else:
                 ind = 'Unknown'

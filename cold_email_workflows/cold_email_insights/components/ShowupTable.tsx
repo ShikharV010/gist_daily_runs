@@ -69,16 +69,12 @@ export default function ShowupTable({
         const meta = r._meta
         if (!meta) return false
 
-        // Industry filter — data-driven match: trust meta.industry written by ETL.
-        // Exact match first; fall back to case-insensitive substring either way
-        // so "Financial Services" tab includes future "Financial Services 1-5"
-        // segments (and vice versa).
+        // Industry filter — STRICT exact match. meta.industry is set by ETL from
+        // the campaign's industry tag, so "Financial Services" and "Financial
+        // Services 1-5" stay strictly separate (similarly MFG Account vs MFG 1-5
+        // vs Manufacturing, etc).
         const ind = meta.industry || r.company_industry || ''
-        if (industry !== 'All') {
-          const a = industry.toLowerCase()
-          const b = ind.toLowerCase()
-          if (ind !== industry && !a.includes(b) && !b.includes(a)) return false
-        }
+        if (industry !== 'All' && ind !== industry) return false
 
         // Date filter
         const d = meta.demo_date
@@ -120,7 +116,7 @@ export default function ShowupTable({
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300">
+    <div className="bg-white rounded-xl border border-gray-400">
       {/* Header + filters */}
       <div className="px-6 py-4 border-b border-gray-100 flex flex-col gap-3">
         <div className="flex flex-wrap items-center justify-between gap-3">
@@ -160,7 +156,7 @@ export default function ShowupTable({
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search company, AE, or website…"
-            className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 min-w-[260px]"
+            className="border border-gray-400 rounded-lg px-3 py-1.5 text-sm text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 min-w-[260px]"
           />
           <div className="flex items-center gap-1">
             <span className="text-xs text-gray-500">Sort:</span>
@@ -211,8 +207,8 @@ export default function ShowupTable({
                 ].map(h => (
                   <th
                     key={h}
-                    className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap"
-                    style={{ backgroundColor: '#0070FF', color: '#ffffff' }}
+                    className="px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky"
+                    style={{ backgroundColor: '#0070FF', color: '#ffffff', top: '73px' }}
                   >
                     {h}
                   </th>

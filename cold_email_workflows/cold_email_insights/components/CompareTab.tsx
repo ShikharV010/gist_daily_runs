@@ -22,7 +22,7 @@ function money(n: number) {
 }
 
 const TH = ({ children, sticky }: { children: React.ReactNode; sticky?: 'left' }) => (
-  <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky ${sticky === 'left' ? 'left-0 z-30' : 'z-20'}`}
+  <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide sticky ${sticky === 'left' ? 'left-0 z-30 min-w-[180px]' : 'z-20 whitespace-nowrap'}`}
       style={{ backgroundColor: '#0070FF', color: '#ffffff', top: '73px' }}>
     {children}
   </th>
@@ -115,7 +115,7 @@ export default function CompareTab({
   ]
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300">
+    <div className="bg-white rounded-xl border border-gray-400">
       <div className="px-6 py-4 border-b border-gray-100">
         <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
           Industry Comparison
@@ -137,7 +137,7 @@ export default function CompareTab({
               }
               return (
                 <tr key={row.label} className="hover:bg-gray-50">
-                  <td className="px-4 py-2.5 text-sm text-gray-600 font-medium sticky left-0 bg-white z-10 border-r border-gray-100">{row.label}</td>
+                  <td className="px-4 py-2.5 text-sm text-gray-700 font-medium sticky left-0 bg-white z-10 border-r border-gray-100 min-w-[180px] leading-snug">{row.label}</td>
                   {INDUSTRIES.map(ind => (
                     <TD key={ind} highlight={false}>
                       {row.getValue(byIndustry[ind], ind)}
@@ -150,7 +150,7 @@ export default function CompareTab({
             {/* Intent breakdown rows */}
             {(['Hot', 'Warm', 'Cold', 'Dead'] as const).map(lbl => (
               <tr key={lbl} className="hover:bg-gray-50">
-                <td className="px-4 py-2.5 text-sm text-gray-600 font-medium sticky left-0 bg-white z-10 border-r border-gray-100">{lbl}</td>
+                <td className="px-4 py-2.5 text-sm text-gray-700 font-medium sticky left-0 bg-white z-10 border-r border-gray-100 min-w-[180px] leading-snug">{lbl}</td>
                 {INDUSTRIES.map(ind => {
                   const counts = intentByIndustry[ind] || {}
                   const count  = counts[lbl] || 0

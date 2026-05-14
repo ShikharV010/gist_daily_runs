@@ -234,7 +234,7 @@ export default function MonthlyOverlayChart({ data }: { data: MetricsData }) {
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300 p-6">
+    <div className="bg-white rounded-xl border border-gray-400 p-6">
       <div className="flex flex-wrap items-start justify-between gap-3 mb-4">
         <div>
           <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
@@ -249,7 +249,7 @@ export default function MonthlyOverlayChart({ data }: { data: MetricsData }) {
           <select
             value={metricKey}
             onChange={e => setMetricKey(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+            className="border border-gray-400 rounded-lg px-3 py-1.5 text-sm text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
           >
             {['Email', 'Demos', 'Show-ups', 'Closes'].map(group => (
               <optgroup key={group} label={group}>

@@ -16,8 +16,8 @@ const TH = ({ children, onClick, sorted }: {
 }) => (
   <th
     onClick={onClick}
-    className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap ${onClick ? 'cursor-pointer select-none' : ''}`}
-    style={{ backgroundColor: '#0070FF', color: '#ffffff' }}
+    className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky ${onClick ? 'cursor-pointer select-none' : ''}`}
+    style={{ backgroundColor: '#0070FF', color: '#ffffff', top: '73px' }}
   >
     {children}
     {sorted === 'asc' && ' ↑'}
@@ -83,7 +83,7 @@ export default function DemosTable({
   }, [filtered])
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300">
+    <div className="bg-white rounded-xl border border-gray-400">
       <div className="px-6 py-4 border-b border-gray-100 flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
@@ -104,7 +104,7 @@ export default function DemosTable({
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search company or email…"
-            className="border border-gray-300 rounded-lg px-3 py-1 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 min-w-[200px]"
+            className="border border-gray-400 rounded-lg px-3 py-1 text-xs text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-blue-500 min-w-[200px]"
           />
           {/* Status filter */}
           <div className="flex gap-1">

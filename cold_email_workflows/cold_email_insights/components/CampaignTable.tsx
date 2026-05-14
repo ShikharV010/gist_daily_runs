@@ -18,8 +18,8 @@ function money(n: number) {
 }
 
 const TH = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <th className={`px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap ${className}`}
-      style={{ backgroundColor: '#0070FF', color: '#ffffff' }}>
+  <th className={`px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky ${className}`}
+      style={{ backgroundColor: '#0070FF', color: '#ffffff', top: '73px' }}>
     {children}
   </th>
 )
@@ -33,7 +33,7 @@ const TD = ({ children, className = '' }: { children: React.ReactNode; className
 export default function CampaignTable({ campaigns }: { campaigns: ComputedCampaignRow[] }) {
   if (campaigns.length === 0) {
     return (
-      <div className="bg-white rounded-xl border border-gray-300 p-6">
+      <div className="bg-white rounded-xl border border-gray-400 p-6">
         <h2 className="text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide">
           Campaign Breakdown
         </h2>
@@ -43,7 +43,7 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
   }
 
   return (
-    <div className="bg-white rounded-xl border border-gray-300">
+    <div className="bg-white rounded-xl border border-gray-400">
       <div className="px-6 py-4 border-b border-gray-100">
         <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
           Campaign Breakdown

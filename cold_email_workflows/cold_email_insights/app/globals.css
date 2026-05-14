@@ -32,5 +32,7 @@ body {
     linear-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px),
     linear-gradient(90deg, rgba(0, 0, 0, 0.04) 1px, transparent 1px);
   background-size: 100% 100%, 40px 40px, 40px 40px;
-  background-attachment: fixed, scroll, scroll;
+  /* All three layers anchored to the viewport so the page background stays
+     stationary while content scrolls over it (matches the railway-style feel). */
+  background-attachment: fixed, fixed, fixed;
 }

@@ -11,7 +11,6 @@ import FunnelChart from './FunnelChart'
 import CampaignTable from './CampaignTable'
 import ShowupTable from './ShowupTable'
 import DemosTable from './DemosTable'
-import OverviewCompare from './OverviewCompare'
 import CompareTab from './CompareTab'
 import DailyDetailsTables from './DailyDetailsTables'
 import MonthlyOverlayChart from './MonthlyOverlayChart'
@@ -26,14 +25,15 @@ function slugify(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '')
 }
 
-// Derive the tab list from the data: Overview first, then every active
-// industry (sorted by emails_sent desc inside getActiveIndustries), Compare last.
+// Derive the tab list from the data: Overview first, every active industry in
+// ALPHABETICAL order, Industry Comparison last. New industries auto-appear in
+// the right spot without code changes.
 function buildTabs(data: MetricsData): { id: Tab; label: string; industry: Industry }[] {
-  const industries = getActiveIndustries(data)
+  const industries = [...getActiveIndustries(data)].sort((a, b) => a.localeCompare(b))
   return [
     { id: 'overview', label: 'Overview', industry: 'All' },
     ...industries.map(ind => ({ id: slugify(ind), label: ind, industry: ind })),
-    { id: 'compare', label: 'Compare', industry: 'All' },
+    { id: 'compare', label: 'Industry Comparison', industry: 'All' },
   ]
 }
 
@@ -71,7 +71,6 @@ function IndustryTab({
         <>
           <MonthlyOverlayChart data={data} />
           <DailyDetailsTables data={data} />
-          <OverviewCompare data={data} dateRange={dateRange} />
         </>
       ) : (
         <>
@@ -190,14 +189,14 @@ export default function Dashboard() {
                   type="date"
                   value={dateRange.from}
                   onChange={e => setDateRange(d => ({ ...d, from: e.target.value }))}
-                  className="border border-gray-300 rounded px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="border border-gray-400 rounded px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
                 <span className="text-gray-400">–</span>
                 <input
                   type="date"
                   value={dateRange.to}
                   onChange={e => setDateRange(d => ({ ...d, to: e.target.value }))}
-                  className="border border-gray-300 rounded px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
+                  className="border border-gray-400 rounded px-2 py-1 text-xs text-gray-700 focus:outline-none focus:ring-1 focus:ring-blue-500"
                 />
                 {(dateRange.from || dateRange.to) && (
                   <button
@@ -214,11 +213,15 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {/* Body: sidebar + content — document-level scroll so content passes under frosted header */}
-      <div className="flex items-start">
+      {/* Body: sidebar + content — document-level scroll, background stays fixed
+          (see .dashboard-bg) so elements pass over a stationary grid. Wrapped in
+          a max-width container with side padding so the layout doesn't go edge-
+          to-edge on wide monitors. */}
+      <div className="max-w-[1600px] mx-auto px-4 flex items-start">
 
-        {/* Vertical tab sidebar — sticky below header */}
-        <aside className="w-52 flex-shrink-0 sticky top-[73px] self-start">
+        {/* Vertical tab sidebar — sticky below header, internally scrollable so
+            18+ industries don't get cut off on shorter viewports. */}
+        <aside className="w-52 flex-shrink-0 sticky top-[73px] self-start max-h-[calc(100vh-73px)] overflow-y-auto">
           <nav className="flex flex-col gap-1 p-3">
             {tabs.map(tab => (
               <button
@@ -238,7 +241,7 @@ export default function Dashboard() {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 min-w-0 px-6 py-6">
+        <main className="flex-1 min-w-0 px-4 py-6 pb-12">
           {activeTab === 'compare' ? (
             <CompareTab data={data} showupData={showupData} />
           ) : (
