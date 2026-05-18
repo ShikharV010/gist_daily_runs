@@ -16,8 +16,8 @@ const TH = ({ children, onClick, sorted }: {
 }) => (
   <th
     onClick={onClick}
-    className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky ${onClick ? 'cursor-pointer select-none' : ''}`}
-    style={{ backgroundColor: '#0070FF', color: '#ffffff', top: '73px' }}
+    className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap ${onClick ? 'cursor-pointer select-none' : ''}`}
+    style={{ backgroundColor: '#0070FF', color: '#ffffff' }}
   >
     {children}
     {sorted === 'asc' && ' ↑'}

@@ -85,12 +85,12 @@ function MonthTable({ ym, rows }: { ym: string; rows: DailyRow[] }) {
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
-            <tr className="text-xs uppercase tracking-wide text-white">
-              <th className="px-4 py-2 text-left font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Date</th>
-              <th className="px-4 py-2 text-right font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Emails Sent</th>
-              <th className="px-4 py-2 text-right font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Demos Booked</th>
-              <th className="px-4 py-2 text-right font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Demos / Emails</th>
-              <th className="px-4 py-2 text-right font-bold sticky" style={{ backgroundColor: '#0070FF', top: '73px' }}>Show-ups</th>
+            <tr className="text-xs uppercase tracking-wide text-white" style={{ backgroundColor: '#0070FF' }}>
+              <th className="px-4 py-2 text-left font-bold">Date</th>
+              <th className="px-4 py-2 text-right font-bold">Emails Sent</th>
+              <th className="px-4 py-2 text-right font-bold">Demos Booked</th>
+              <th className="px-4 py-2 text-right font-bold">Demos / Emails</th>
+              <th className="px-4 py-2 text-right font-bold">Show-ups</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">

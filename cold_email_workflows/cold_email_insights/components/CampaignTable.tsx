@@ -18,8 +18,8 @@ function money(n: number) {
 }
 
 const TH = ({ children, className = '' }: { children: React.ReactNode; className?: string }) => (
-  <th className={`px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap sticky ${className}`}
-      style={{ backgroundColor: '#0070FF', color: '#ffffff', top: '73px' }}>
+  <th className={`px-3 py-2 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap ${className}`}
+      style={{ backgroundColor: '#0070FF', color: '#ffffff' }}>
     {children}
   </th>
 )
