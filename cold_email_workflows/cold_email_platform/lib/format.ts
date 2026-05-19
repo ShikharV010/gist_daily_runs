@@ -26,7 +26,7 @@ export function fmtTime(iso: string | null | undefined, tz: Tz = "IST"): string 
 export function dialerHref(phone: string | null | undefined): string | null {
   if (!phone) return null;
   const e164 = phone.startsWith("+") ? phone : `+${phone}`;
-  return `https://app.justcall.io/app/macapp/dialpad_app_v2_orion_apex.php?number=${encodeURIComponent(e164)}`;
+  return `https://app.justcall.io/dialer?numbers=${encodeURIComponent(e164)}`;
 }
 
 export function mailtoHref(
