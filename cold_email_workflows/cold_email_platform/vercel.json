@@ -1,0 +1,18 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/dedup-dialer",
+      "schedule": "*/15 * * * *"
+    },
+    {
+      "path": "/api/cron/refresh-reminders",
+      "schedule": "30 12 * * *"
+    }
+  ],
+  "functions": {
+    "app/api/webhooks/sequencer/route.ts": { "maxDuration": 30 },
+    "app/api/webhooks/justcall/route.ts":  { "maxDuration": 15 },
+    "app/api/cron/dedup-dialer/route.ts":  { "maxDuration": 60 },
+    "app/api/cron/refresh-reminders/route.ts": { "maxDuration": 60 }
+  }
+}
