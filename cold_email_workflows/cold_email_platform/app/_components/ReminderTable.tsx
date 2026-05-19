@@ -34,7 +34,7 @@ export default function ReminderTable({ rows, tz }: { rows: ReminderRow[]; tz: T
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-3 py-12 text-center text-sm text-[color:var(--muted)]">
+                <td colSpan={9} className="px-3 py-12 text-center text-sm text-[color:var(--muted)]">
                   No bookings for today yet. This list refreshes at 6 PM IST.
                 </td>
               </tr>
@@ -56,6 +56,9 @@ export default function ReminderTable({ rows, tz }: { rows: ReminderRow[]; tz: T
                     ) : (
                       "—"
                     )}
+                  </Td>
+                  <Td className="whitespace-nowrap font-mono text-xs">
+                    {formatPhone(r.phone)}
                   </Td>
                   <Td>
                     {r.sequencer_thread_url ? (
@@ -102,6 +105,7 @@ function Headers() {
       <Th>Name</Th>
       <Th>Company</Th>
       <Th>Website</Th>
+      <Th>Phone</Th>
       <Th>Reply</Th>
       <Th>Demo</Th>
       <Th>Actions</Th>
@@ -109,6 +113,12 @@ function Headers() {
       <Th>Status</Th>
     </tr>
   );
+}
+
+function formatPhone(p: string | null): string {
+  if (!p) return "—";
+  const e164 = p.startsWith("+") ? p : `+${p}`;
+  return e164;
 }
 
 function StatCard({

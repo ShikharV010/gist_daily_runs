@@ -60,7 +60,7 @@ export default function Dashboard() {
     <main className="max-w-7xl mx-auto px-6 py-8 w-full">
       <header className="mb-6 flex items-baseline justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">In Cold Email Platform</h1>
+          <h1 className="text-2xl font-semibold">In-House Cold Email Platform</h1>
           <p className="text-sm text-[color:var(--muted)]">
             Live dialing queue + appointment reminders
           </p>

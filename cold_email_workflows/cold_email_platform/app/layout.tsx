@@ -6,7 +6,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "In Cold Email Platform",
+  title: "In-House Cold Email Platform",
   description: "5-min dialing + appointment reminders dashboard",
 };
 
