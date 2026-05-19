@@ -2,7 +2,7 @@
 
 import { Mail, MessageSquare, Phone } from "lucide-react";
 import { useMemo, useState } from "react";
-import { fmtTime, dialerHref, type Tz } from "@/lib/format";
+import { fmtTime, dialerHref, toE164, type Tz } from "@/lib/format";
 import {
   REMINDER_STATUS_OPTIONS,
   type ReminderRow,
@@ -116,9 +116,7 @@ function Headers() {
 }
 
 function formatPhone(p: string | null): string {
-  if (!p) return "—";
-  const e164 = p.startsWith("+") ? p : `+${p}`;
-  return e164;
+  return toE164(p) || "—";
 }
 
 function StatCard({

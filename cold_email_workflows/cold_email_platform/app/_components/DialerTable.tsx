@@ -1,7 +1,7 @@
 "use client";
 
 import { Check, Phone } from "lucide-react";
-import { fmtTime, dialerHref, type Tz } from "@/lib/format";
+import { fmtTime, dialerHref, toE164, type Tz } from "@/lib/format";
 import type { DialerRow } from "@/lib/types";
 
 export default function DialerTable({ rows, tz }: { rows: DialerRow[]; tz: Tz }) {
@@ -64,7 +64,7 @@ export default function DialerTable({ rows, tz }: { rows: DialerRow[]; tz: Tz })
                   )}
                 </Td>
                 <Td className="whitespace-nowrap font-mono text-xs">
-                  {r.phone ? (r.phone.startsWith("+") ? r.phone : `+${r.phone}`) : "—"}
+                  {toE164(r.phone) || "—"}
                 </Td>
                 <Td className="whitespace-nowrap">{fmtTime(r.reply_at, tz)}</Td>
                 <Td className="whitespace-nowrap">{fmtTime(r.call_at, tz)}</Td>

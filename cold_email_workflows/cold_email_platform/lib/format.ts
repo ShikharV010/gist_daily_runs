@@ -23,9 +23,18 @@ export function fmtTime(iso: string | null | undefined, tz: Tz = "IST"): string 
  * Returns a URL that opens the JustCall web dialer with the number pre-filled.
  * Opens in a new tab.
  */
-export function dialerHref(phone: string | null | undefined): string | null {
+/** Normalize a phone string to E.164. If 10 digits, assume US (+1). */
+export function toE164(phone: string | null | undefined): string | null {
   if (!phone) return null;
-  const e164 = phone.startsWith("+") ? phone : `+${phone}`;
+  let digits = String(phone).replace(/\D/g, "");
+  if (digits.length === 10) digits = "1" + digits; // assume US local → +1
+  if (digits.length < 10) return null;
+  return `+${digits}`;
+}
+
+export function dialerHref(phone: string | null | undefined): string | null {
+  const e164 = toE164(phone);
+  if (!e164) return null;
   return `https://app.justcall.io/dialer?numbers=${encodeURIComponent(e164)}`;
 }
 
