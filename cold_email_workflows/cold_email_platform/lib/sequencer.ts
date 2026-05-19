@@ -52,10 +52,9 @@ export function threadUrl(opts: {
   leadId?: number | string;
   replyUuid?: string;
 }): string | null {
-  // EmailBison's stable per-lead URL is /leads/{id}. Other patterns
-  // (/campaigns/.../inbox?reply=...) 404 on Gushwork's instance.
-  if (opts.leadId) {
-    return `${PUBLIC_BASE}/leads/${opts.leadId}`;
+  // Gushwork Sequencer inbox URL format: /inbox/replies/{reply_uuid}.
+  if (opts.replyUuid) {
+    return `${PUBLIC_BASE}/inbox/replies/${opts.replyUuid}`;
   }
   return null;
 }

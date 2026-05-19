@@ -2,7 +2,7 @@
 
 import { Mail, MessageSquare, Phone } from "lucide-react";
 import { useMemo, useState } from "react";
-import { fmtTime, type Tz } from "@/lib/format";
+import { fmtTime, dialerHref, type Tz } from "@/lib/format";
 import {
   REMINDER_STATUS_OPTIONS,
   type ReminderRow,
@@ -145,52 +145,18 @@ function StatCard({
 }
 
 function CallBtn({ row }: { row: ReminderRow }) {
-  const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState<"idle" | "ringing" | "error">("idle");
-  const [errMsg, setErrMsg] = useState<string | null>(null);
-
-  if (!row.phone) return <span className="text-xs text-[color:var(--muted)]">no phone</span>;
-
-  async function placeCall() {
-    setBusy(true);
-    setErrMsg(null);
-    try {
-      const res = await fetch("/api/actions/call", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ row_id: row.id }),
-      });
-      if (res.ok) {
-        setStatus("ringing");
-        setTimeout(() => setStatus("idle"), 4000);
-      } else {
-        const j = await res.json().catch(() => ({}));
-        setStatus("error");
-        setErrMsg(j?.error || `HTTP ${res.status}`);
-      }
-    } catch (e) {
-      setStatus("error");
-      setErrMsg(e instanceof Error ? e.message : "call failed");
-    } finally {
-      setBusy(false);
-    }
-  }
-
+  const href = dialerHref(row.phone);
+  if (!href) return <span className="text-xs text-[color:var(--muted)]">no phone</span>;
   return (
-    <button
-      onClick={placeCall}
-      disabled={busy}
-      title={errMsg ? `Call error: ${errMsg}` : "Initiate JustCall (rings Allaine first)"}
-      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs disabled:opacity-50 ${
-        status === "ringing"
-          ? "bg-[color:var(--success)] text-white"
-          : status === "error"
-          ? "bg-red-100 text-red-700"
-          : "bg-[color:var(--accent)] text-white hover:opacity-90"
-      }`}
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      title="Open JustCall dialer with number pre-filled"
+      className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[color:var(--accent)] text-white text-xs hover:opacity-90"
     >
       <Phone size={14} />
-    </button>
+    </a>
   );
 }
 

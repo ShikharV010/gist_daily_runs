@@ -20,14 +20,13 @@ export function fmtTime(iso: string | null | undefined, tz: Tz = "IST"): string 
 }
 
 /**
- * Returns a tel: link. With the JustCall Chrome/Edge extension installed, this
- * opens the JustCall dialer pre-filled. Without it, the browser falls back to
- * the OS phone app.
+ * Returns a URL that opens the JustCall web dialer with the number pre-filled.
+ * Opens in a new tab.
  */
 export function dialerHref(phone: string | null | undefined): string | null {
   if (!phone) return null;
   const e164 = phone.startsWith("+") ? phone : `+${phone}`;
-  return `tel:${e164}`;
+  return `https://app.justcall.io/app/macapp/dialpad_app_v2_orion_apex.php?number=${encodeURIComponent(e164)}`;
 }
 
 export function mailtoHref(
