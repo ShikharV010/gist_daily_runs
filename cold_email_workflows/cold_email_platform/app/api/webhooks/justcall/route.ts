@@ -90,12 +90,23 @@ function pickCallAt(d: JcPayload["data"]): Date {
   return new Date();
 }
 
+// Allow GET so JustCall's webhook validation ping (HEAD/GET) sees a 200.
+export async function GET() {
+  return NextResponse.json({ status: "ok", route: "justcall-webhook" });
+}
+export async function HEAD() {
+  return new NextResponse(null, { status: 200 });
+}
+
 export async function POST(req: NextRequest) {
   const raw = await req.text();
   const sig = req.headers.get("x-justcall-signature");
   if (process.env.JUSTCALL_WEBHOOK_SECRET && sig) {
     if (!verifyHmac(raw, sig, process.env.JUSTCALL_WEBHOOK_SECRET)) {
-      return NextResponse.json({ error: "invalid signature" }, { status: 401 });
+      // Even for invalid sig, return 200 so JustCall doesn't disable the hook;
+      // log it for review instead.
+      console.warn("[justcall] invalid signature, ignoring");
+      return NextResponse.json({ status: "ignored", reason: "invalid signature" });
     }
   }
 
@@ -103,18 +114,19 @@ export async function POST(req: NextRequest) {
   try {
     body = JSON.parse(raw);
   } catch {
-    return NextResponse.json({ error: "invalid json" }, { status: 400 });
+    // JustCall test pings may send empty bodies — return 200 so save succeeds.
+    return NextResponse.json({ status: "ignored", reason: "invalid json" });
   }
 
   const direction = pickDirection(body.data);
-  // Only outbound calls matter for the dialing metric. JustCall uses "Outgoing".
   if (direction && !/(outbound|outgoing)/i.test(direction)) {
     return NextResponse.json({ status: "ignored", reason: "not outbound", direction });
   }
 
   const phone = digitsOnly(body.data?.contact_number || body.data?.dialed_number);
   if (!phone) {
-    return NextResponse.json({ error: "no contact number in payload" }, { status: 400 });
+    // Validation pings often have no contact number — accept silently.
+    return NextResponse.json({ status: "ignored", reason: "no contact number" });
   }
 
   const callAtIso = pickCallAt(body.data).toISOString();
