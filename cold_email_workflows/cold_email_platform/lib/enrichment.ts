@@ -80,7 +80,11 @@ async function fePoll(
         contact?: { phones?: Array<{ number?: string; e164?: string; phone?: string }> };
       }>;
     };
-    if (data.status !== "COMPLETED") return { done: false, phones: new Map() };
+    // FullEnrich emits status="FINISHED" on success (some older docs/snippets
+    // mention COMPLETED — accept both to be safe).
+    if (data.status !== "FINISHED" && data.status !== "COMPLETED") {
+      return { done: false, phones: new Map() };
+    }
     const out = new Map<string, string | null>();
     for (const item of data.datas || []) {
       const leadId = item.custom?.lead_id;
