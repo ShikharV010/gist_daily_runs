@@ -2,7 +2,7 @@
 
 import { Mail, MessageSquare, Phone } from "lucide-react";
 import { useMemo, useState } from "react";
-import { fmtTime, dialerHref, mailtoHref, type Tz } from "@/lib/format";
+import { fmtTime, type Tz } from "@/lib/format";
 import {
   REMINDER_STATUS_OPTIONS,
   type ReminderRow,
@@ -26,29 +26,20 @@ export default function ReminderTable({ rows, tz }: { rows: ReminderRow[]; tz: T
         <StatCard label="Cancelled" value={stats.cancelled} tone="danger" />
       </div>
 
-      {rows.length === 0 ? (
-        <div className="overflow-x-auto border border-[color:var(--border)] rounded">
-          <table className="w-full text-sm">
-            <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
-              <Headers />
-            </thead>
-            <tbody>
+      <div className="overflow-x-auto border border-[color:var(--border)] rounded">
+        <table className="w-full text-sm">
+          <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
+            <Headers />
+          </thead>
+          <tbody>
+            {rows.length === 0 ? (
               <tr>
                 <td colSpan={8} className="px-3 py-12 text-center text-sm text-[color:var(--muted)]">
                   No bookings for today yet. This list refreshes at 6 PM IST.
                 </td>
               </tr>
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div className="overflow-x-auto border border-[color:var(--border)] rounded">
-          <table className="w-full text-sm">
-            <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
-              <Headers />
-            </thead>
-            <tbody>
-              {rows.map((r) => (
+            ) : (
+              rows.map((r) => (
                 <tr key={r.id} className="border-t border-[color:var(--border)]">
                   <Td>{r.name || r.email}</Td>
                   <Td>{r.company || "—"}</Td>
@@ -84,9 +75,9 @@ export default function ReminderTable({ rows, tz }: { rows: ReminderRow[]; tz: T
                   <Td>
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1">
-                        <CallBtn phone={r.phone} />
+                        <CallBtn row={r} />
                         <SmsBtn row={r} />
-                        <EmailBtn row={r} tz={tz} />
+                        <EmailBtn row={r} />
                       </div>
                       <PhoneSourceBadge source={r.phone_source} />
                     </div>
@@ -96,11 +87,11 @@ export default function ReminderTable({ rows, tz }: { rows: ReminderRow[]; tz: T
                     <StatusDropdown row={r} />
                   </Td>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      )}
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
@@ -143,17 +134,53 @@ function StatCard({
   );
 }
 
-function CallBtn({ phone }: { phone: string | null }) {
-  const href = dialerHref(phone);
-  if (!href) return <span className="text-xs text-[color:var(--muted)]">no phone</span>;
+function CallBtn({ row }: { row: ReminderRow }) {
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState<"idle" | "ringing" | "error">("idle");
+  const [errMsg, setErrMsg] = useState<string | null>(null);
+
+  if (!row.phone) return <span className="text-xs text-[color:var(--muted)]">no phone</span>;
+
+  async function placeCall() {
+    setBusy(true);
+    setErrMsg(null);
+    try {
+      const res = await fetch("/api/actions/call", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ row_id: row.id }),
+      });
+      if (res.ok) {
+        setStatus("ringing");
+        setTimeout(() => setStatus("idle"), 4000);
+      } else {
+        const j = await res.json().catch(() => ({}));
+        setStatus("error");
+        setErrMsg(j?.error || `HTTP ${res.status}`);
+      }
+    } catch (e) {
+      setStatus("error");
+      setErrMsg(e instanceof Error ? e.message : "call failed");
+    } finally {
+      setBusy(false);
+    }
+  }
+
   return (
-    <a
-      href={href}
-      title="Call via JustCall (tel: link)"
-      className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[color:var(--accent)] text-white text-xs hover:opacity-90"
+    <button
+      onClick={placeCall}
+      disabled={busy}
+      title={errMsg ? `Call error: ${errMsg}` : "Initiate JustCall (rings Allaine first)"}
+      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs disabled:opacity-50 ${
+        status === "ringing"
+          ? "bg-[color:var(--success)] text-white"
+          : status === "error"
+          ? "bg-red-100 text-red-700"
+          : "bg-[color:var(--accent)] text-white hover:opacity-90"
+      }`}
     >
       <Phone size={14} />
-    </a>
+    </button>
   );
 }
 
@@ -162,6 +189,7 @@ function SmsBtn({ row }: { row: ReminderRow }) {
   const [status, setStatus] = useState<"idle" | "sent" | "error">("idle");
   const [errMsg, setErrMsg] = useState<string | null>(null);
   if (!row.phone) return null;
+
   async function send() {
     setBusy(true);
     setErrMsg(null);
@@ -185,42 +213,40 @@ function SmsBtn({ row }: { row: ReminderRow }) {
       setBusy(false);
     }
   }
+
   return (
     <button
       onClick={send}
       disabled={busy}
       title={errMsg ? `SMS error: ${errMsg}` : "Send reminder SMS via JustCall"}
-      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs ${
+      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs disabled:opacity-50 ${
         status === "sent"
           ? "bg-[color:var(--success)] text-white"
           : status === "error"
           ? "bg-red-100 text-red-700"
           : "bg-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--border)]/80"
-      } disabled:opacity-50`}
+      }`}
     >
       <MessageSquare size={14} />
     </button>
   );
 }
 
-function EmailBtn({ row, tz }: { row: ReminderRow; tz: Tz }) {
-  const firstName = (row.name || "there").split(" ")[0];
-  const timeStr = `${fmtTime(row.demo_at, tz)} ${tz}`;
-  const subject = `Reminder: your Gushwork demo today at ${timeStr}`;
-  const body = `Hi ${firstName},
-
-Quick reminder that your demo with Gushwork is scheduled for ${timeStr} today.
-
-If anything changes, just reply to this email and we'll reschedule.
-
-Talk soon!
-Gushwork`;
-  const href = mailtoHref(row.email, subject, body);
+function EmailBtn({ row }: { row: ReminderRow }) {
+  if (!row.sequencer_thread_url) {
+    return (
+      <span className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs bg-[color:var(--border)]/40 text-[color:var(--muted)]">
+        <Mail size={14} />
+      </span>
+    );
+  }
   return (
     <a
-      href={href}
-      title="Compose reminder email"
-      className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--border)]/80 text-xs"
+      href={row.sequencer_thread_url}
+      target="_blank"
+      rel="noreferrer"
+      title="Open Sequencer conversation"
+      className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs bg-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--border)]/80"
     >
       <Mail size={14} />
     </a>
