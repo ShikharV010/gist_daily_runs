@@ -16,6 +16,7 @@ export type DialerRow = {
   reply_at: string;
   call_at: string | null;
   call_within_5min: boolean | null;
+  call_attempts: number;
   enrichment_status: string;
 };
 
@@ -34,23 +35,6 @@ export const REMINDER_STATUS_OPTIONS: ReminderStatus[] = [
   "Not Connected",
 ];
 
-export type AnalyticsBucket = {
-  bucket: string;
-  calls_within_5min: number;
-  bookings_from_calls: number;
-};
-
-export type AnalyticsResponse = {
-  tz: "IST" | "EST";
-  totals: {
-    calls_within_5min: number;
-    bookings_from_calls: number;
-    total_dialer_rows: number;
-  };
-  by_day: AnalyticsBucket[];
-  by_week: AnalyticsBucket[];
-};
-
 export type ReminderRow = {
   id: string;
   external_id: string;
@@ -65,6 +49,28 @@ export type ReminderRow = {
   demo_at: string;
   source: string;
   call_at: string | null;
+  call_attempts: number;
   status: ReminderStatus | null;
   enrichment_status: string;
+};
+
+export type AnalyticsBucket = {
+  bucket: string;
+  calls_within_5min: number;
+  calls_outside_5min: number;
+  bookings_within_5min: number;
+  bookings_outside_5min: number;
+};
+
+export type AnalyticsResponse = {
+  tz: "IST" | "EST";
+  totals: {
+    total_dialer_rows: number;
+    calls_within_5min: number;
+    calls_outside_5min: number;
+    bookings_within_5min: number;
+    bookings_outside_5min: number;
+  };
+  by_day: AnalyticsBucket[];
+  by_week: AnalyticsBucket[];
 };

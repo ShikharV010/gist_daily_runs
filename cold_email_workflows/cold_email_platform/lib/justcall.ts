@@ -11,19 +11,27 @@ function jcHeaders() {
   };
 }
 
-/** Build a JustCall web-dialer URL pre-filled with the phone number. */
-export function dialerUrl(phone: string | null | undefined): string | null {
-  if (!phone) return null;
-  const e164 = phone.startsWith("+") ? phone : `+${phone}`;
-  return `https://app.justcall.io/app/dialer?phone=${encodeURIComponent(e164)}`;
-}
+export async function sendSms(
+  toPhone: string,
+  body: string
+): Promise<{ ok: boolean; status: number; data: unknown }> {
+  const fromRaw = process.env.JUSTCALL_SMS_NUMBER;
+  if (!fromRaw) {
+    return {
+      ok: false,
+      status: 0,
+      data: { error: "JUSTCALL_SMS_NUMBER env var not set" },
+    };
+  }
+  const justcall_number = fromRaw.startsWith("+") ? fromRaw : `+${fromRaw}`;
+  const contact_number = toPhone.startsWith("+") ? toPhone : `+${toPhone}`;
 
-export async function sendSms(toPhone: string, body: string): Promise<{ ok: boolean; status: number; data: unknown }> {
   const res = await fetch(`${JC_BASE}/texts/new`, {
     method: "POST",
     headers: jcHeaders(),
     body: JSON.stringify({
-      contact_number: toPhone.startsWith("+") ? toPhone : `+${toPhone}`,
+      justcall_number,
+      contact_number,
       body,
       restrict_once: false,
     }),

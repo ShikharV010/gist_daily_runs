@@ -19,8 +19,25 @@ export function fmtTime(iso: string | null | undefined, tz: Tz = "IST"): string 
   });
 }
 
+/**
+ * Returns a tel: link. With the JustCall Chrome/Edge extension installed, this
+ * opens the JustCall dialer pre-filled. Without it, the browser falls back to
+ * the OS phone app.
+ */
 export function dialerHref(phone: string | null | undefined): string | null {
   if (!phone) return null;
   const e164 = phone.startsWith("+") ? phone : `+${phone}`;
-  return `https://app.justcall.io/app/dialer?phone=${encodeURIComponent(e164)}`;
+  return `tel:${e164}`;
+}
+
+export function mailtoHref(
+  email: string,
+  subject?: string,
+  body?: string
+): string {
+  const params = new URLSearchParams();
+  if (subject) params.set("subject", subject);
+  if (body) params.set("body", body);
+  const qs = params.toString();
+  return `mailto:${email}${qs ? "?" + qs : ""}`;
 }

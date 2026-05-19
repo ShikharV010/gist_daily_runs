@@ -4,10 +4,7 @@ import type { DialerRow } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
-// Read-time dedup against gist.gtm_inbound_demo_bookings: hide any dialer row
-// whose lead has since booked a demo (matched on lowercased email OR website
-// domain). This replaces the 15-min cron — same effect, works on Vercel Hobby.
-
+// Read-time dedup: hide any dialer row whose lead has since booked a demo.
 export async function GET() {
   const rows = await query<DialerRow>(
     `
@@ -32,7 +29,7 @@ export async function GET() {
     SELECT d.id::text, d.external_id, d.name, d.company, d.website, d.email,
            d.phone, d.phone_source,
            d.sequencer_thread_url, d.reply_at, d.call_at,
-           d.call_within_5min, d.enrichment_status
+           d.call_within_5min, d.call_attempts, d.enrichment_status
       FROM gist.gtm_unified_db_source d
      WHERE d.row_type = 'dialer'
        AND lower(d.email) NOT IN (SELECT email FROM booked_emails)

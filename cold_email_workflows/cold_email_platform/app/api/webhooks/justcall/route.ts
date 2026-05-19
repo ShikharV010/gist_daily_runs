@@ -1,5 +1,5 @@
-// JustCall webhook receiver. Updates call_at, call_within_5min, and
-// call_disposition on any row matching the contact phone.
+// JustCall webhook receiver. Updates call_at, call_within_5min,
+// call_disposition, and increments call_attempts on every event.
 
 import { NextRequest, NextResponse } from "next/server";
 import { query, digitsOnly } from "@/lib/db";
@@ -27,13 +27,7 @@ type JcPayload = {
 
 function pickDisposition(d: JcPayload["data"]): string | null {
   if (!d) return null;
-  return (
-    d.disposition ||
-    d.outcome ||
-    d.disposition_code ||
-    d.notes ||
-    null
-  );
+  return d.disposition || d.outcome || d.disposition_code || d.notes || null;
 }
 
 export async function POST(req: NextRequest) {
@@ -64,8 +58,10 @@ export async function POST(req: NextRequest) {
   const callAtIso = (body.data?.datetime ? new Date(body.data.datetime) : new Date()).toISOString();
   const disposition = pickDisposition(body.data);
 
-  // Update any matching row(s). Always overwrite disposition (latest call wins).
-  // call_at is only set if currently NULL (first call wins for the 5-min metric).
+  // - First call's timestamp wins (call_at = COALESCE(call_at, $1)).
+  // - call_within_5min is computed from that first call only.
+  // - call_attempts increments on EVERY webhook event.
+  // - call_disposition always reflects the latest call.
   const updated = await query<{
     id: string;
     row_type: string;
@@ -78,7 +74,8 @@ export async function POST(req: NextRequest) {
               WHEN reply_at IS NULL THEN NULL
               ELSE EXTRACT(EPOCH FROM ($1::timestamptz - reply_at)) <= 300
             END,
-            call_disposition = $3
+            call_disposition = $3,
+            call_attempts = COALESCE(call_attempts, 0) + 1
       WHERE phone = $2
       RETURNING id, row_type, external_id`,
     [callAtIso, phone, disposition]

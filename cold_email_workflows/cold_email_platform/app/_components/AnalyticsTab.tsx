@@ -45,21 +45,26 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
         <StatCard
-          label="Total dialer rows"
-          value={data?.totals.total_dialer_rows ?? 0}
-          tone="neutral"
-        />
-        <StatCard
-          label="Calls within 5 min"
+          label="Calls < 5 min"
           value={data?.totals.calls_within_5min ?? 0}
           tone="accent"
         />
         <StatCard
-          label="Bookings from calls"
-          value={data?.totals.bookings_from_calls ?? 0}
+          label="Calls ≥ 5 min"
+          value={data?.totals.calls_outside_5min ?? 0}
+          tone="neutral"
+        />
+        <StatCard
+          label="Bookings from < 5 min"
+          value={data?.totals.bookings_within_5min ?? 0}
           tone="success"
+        />
+        <StatCard
+          label="Bookings from ≥ 5 min"
+          value={data?.totals.bookings_outside_5min ?? 0}
+          tone="muted"
         />
       </div>
 
@@ -82,27 +87,24 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
         </div>
       </div>
 
-      <div className="border border-[color:var(--border)] rounded p-4 bg-white">
-        {chartData.length === 0 ? (
-          <div className="text-sm text-[color:var(--muted)] py-12 text-center">
-            {loading ? "Loading…" : "No call data yet."}
-          </div>
-        ) : (
-          <div style={{ width: "100%", height: 320 }}>
-            <ResponsiveContainer>
-              <BarChart data={chartData} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-                <XAxis dataKey="bucket" stroke="#6b7280" fontSize={12} />
-                <YAxis allowDecimals={false} stroke="#6b7280" fontSize={12} />
-                <Tooltip />
-                <Legend />
-                <Bar dataKey="calls_within_5min" name="Calls < 5 min" fill="#2563eb" />
-                <Bar dataKey="bookings_from_calls" name="Bookings from calls" fill="#16a34a" />
-              </BarChart>
-            </ResponsiveContainer>
-          </div>
-        )}
-      </div>
+      <ChartCard
+        title="Calls"
+        data={chartData}
+        loading={loading}
+        series={[
+          { key: "calls_within_5min", name: "< 5 min", fill: "#2563eb" },
+          { key: "calls_outside_5min", name: "≥ 5 min", fill: "#94a3b8" },
+        ]}
+      />
+      <ChartCard
+        title="Bookings"
+        data={chartData}
+        loading={loading}
+        series={[
+          { key: "bookings_within_5min", name: "From < 5 min calls", fill: "#16a34a" },
+          { key: "bookings_outside_5min", name: "From ≥ 5 min calls", fill: "#fbbf24" },
+        ]}
+      />
 
       <BucketTable rows={buckets} granularity={granularity} />
     </div>
@@ -116,18 +118,63 @@ function StatCard({
 }: {
   label: string;
   value: number;
-  tone: "accent" | "success" | "neutral";
+  tone: "accent" | "success" | "neutral" | "muted";
 }) {
   const cls =
     tone === "accent"
       ? "border-blue-200 bg-blue-50"
       : tone === "success"
       ? "border-emerald-200 bg-emerald-50"
+      : tone === "muted"
+      ? "border-amber-200 bg-amber-50"
       : "border-[color:var(--border)] bg-white";
   return (
     <div className={`border rounded p-4 ${cls}`}>
       <div className="text-xs uppercase tracking-wide text-[color:var(--muted)]">{label}</div>
       <div className="text-2xl font-semibold mt-1">{value.toLocaleString()}</div>
+    </div>
+  );
+}
+
+function ChartCard({
+  title,
+  data,
+  loading,
+  series,
+}: {
+  title: string;
+  data: AnalyticsBucket[];
+  loading: boolean;
+  series: { key: keyof AnalyticsBucket; name: string; fill: string }[];
+}) {
+  return (
+    <div className="border border-[color:var(--border)] rounded p-4 bg-white">
+      <h4 className="text-sm font-medium mb-3">{title}</h4>
+      {data.length === 0 ? (
+        <div className="text-sm text-[color:var(--muted)] py-12 text-center">
+          {loading ? "Loading…" : "No call data yet."}
+        </div>
+      ) : (
+        <div style={{ width: "100%", height: 280 }}>
+          <ResponsiveContainer>
+            <BarChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
+              <XAxis dataKey="bucket" stroke="#6b7280" fontSize={12} />
+              <YAxis allowDecimals={false} stroke="#6b7280" fontSize={12} />
+              <Tooltip />
+              <Legend />
+              {series.map((s) => (
+                <Bar
+                  key={String(s.key)}
+                  dataKey={String(s.key)}
+                  name={s.name}
+                  fill={s.fill}
+                />
+              ))}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+      )}
     </div>
   );
 }
@@ -148,8 +195,10 @@ function BucketTable({
             <th className="px-3 py-2 font-medium text-[color:var(--muted)]">
               {granularity === "day" ? "Day" : "Week of"}
             </th>
-            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Calls &lt; 5 min</th>
-            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Bookings from calls</th>
+            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Calls &lt; 5</th>
+            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Calls ≥ 5</th>
+            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Bookings &lt; 5</th>
+            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Bookings ≥ 5</th>
           </tr>
         </thead>
         <tbody>
@@ -157,7 +206,9 @@ function BucketTable({
             <tr key={r.bucket} className="border-t border-[color:var(--border)]">
               <td className="px-3 py-2 whitespace-nowrap">{r.bucket}</td>
               <td className="px-3 py-2">{r.calls_within_5min}</td>
-              <td className="px-3 py-2">{r.bookings_from_calls}</td>
+              <td className="px-3 py-2">{r.calls_outside_5min}</td>
+              <td className="px-3 py-2">{r.bookings_within_5min}</td>
+              <td className="px-3 py-2">{r.bookings_outside_5min}</td>
             </tr>
           ))}
         </tbody>

@@ -1,8 +1,8 @@
 "use client";
 
 import { Mail, MessageSquare, Phone } from "lucide-react";
-import { useState } from "react";
-import { fmtTime, dialerHref, type Tz } from "@/lib/format";
+import { useMemo, useState } from "react";
+import { fmtTime, dialerHref, mailtoHref, type Tz } from "@/lib/format";
 import {
   REMINDER_STATUS_OPTIONS,
   type ReminderRow,
@@ -11,78 +11,134 @@ import {
 import { PhoneSourceBadge } from "./DialerTable";
 
 export default function ReminderTable({ rows, tz }: { rows: ReminderRow[]; tz: Tz }) {
-  if (rows.length === 0) {
-    return (
-      <div className="text-sm text-[color:var(--muted)] py-12 text-center border border-dashed border-[color:var(--border)] rounded">
-        No bookings for today yet. This list refreshes at 6 PM IST.
-      </div>
-    );
-  }
+  const stats = useMemo(() => {
+    const total = rows.length;
+    const confirmed = rows.filter((r) => r.status === "Confirmed").length;
+    const cancelled = rows.filter((r) => r.status === "Cancelled").length;
+    return { total, confirmed, cancelled };
+  }, [rows]);
+
   return (
-    <div className="overflow-x-auto border border-[color:var(--border)] rounded">
-      <table className="w-full text-sm">
-        <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
-          <tr>
-            <Th>Name</Th>
-            <Th>Company</Th>
-            <Th>Website</Th>
-            <Th>Reply</Th>
-            <Th>Demo</Th>
-            <Th>Actions</Th>
-            <Th>Status</Th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.id} className="border-t border-[color:var(--border)]">
-              <Td>{r.name || r.email}</Td>
-              <Td>{r.company || "—"}</Td>
-              <Td>
-                {r.website ? (
-                  <a
-                    href={normalizeUrl(r.website)}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[color:var(--accent)] hover:underline"
-                  >
-                    {r.website}
-                  </a>
-                ) : (
-                  "—"
-                )}
-              </Td>
-              <Td>
-                {r.sequencer_thread_url ? (
-                  <a
-                    href={r.sequencer_thread_url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="text-[color:var(--accent)] hover:underline"
-                  >
-                    View reply
-                  </a>
-                ) : (
-                  "—"
-                )}
-              </Td>
-              <Td className="whitespace-nowrap">{fmtTime(r.demo_at, tz)}</Td>
-              <Td>
-                <div className="flex items-center gap-2">
-                  <div className="flex gap-1">
-                    <CallBtn phone={r.phone} />
-                    <SmsBtn row={r} />
-                    <EmailBtn row={r} />
-                  </div>
-                  <PhoneSourceBadge source={r.phone_source} />
-                </div>
-              </Td>
-              <Td>
-                <StatusDropdown row={r} />
-              </Td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="space-y-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <StatCard label="Total Bookings Today" value={stats.total} tone="neutral" />
+        <StatCard label="Confirmed" value={stats.confirmed} tone="success" />
+        <StatCard label="Cancelled" value={stats.cancelled} tone="danger" />
+      </div>
+
+      {rows.length === 0 ? (
+        <div className="overflow-x-auto border border-[color:var(--border)] rounded">
+          <table className="w-full text-sm">
+            <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
+              <Headers />
+            </thead>
+            <tbody>
+              <tr>
+                <td colSpan={8} className="px-3 py-12 text-center text-sm text-[color:var(--muted)]">
+                  No bookings for today yet. This list refreshes at 6 PM IST.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      ) : (
+        <div className="overflow-x-auto border border-[color:var(--border)] rounded">
+          <table className="w-full text-sm">
+            <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
+              <Headers />
+            </thead>
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r.id} className="border-t border-[color:var(--border)]">
+                  <Td>{r.name || r.email}</Td>
+                  <Td>{r.company || "—"}</Td>
+                  <Td>
+                    {r.website ? (
+                      <a
+                        href={normalizeUrl(r.website)}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[color:var(--accent)] hover:underline"
+                      >
+                        {r.website}
+                      </a>
+                    ) : (
+                      "—"
+                    )}
+                  </Td>
+                  <Td>
+                    {r.sequencer_thread_url ? (
+                      <a
+                        href={r.sequencer_thread_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[color:var(--accent)] hover:underline"
+                      >
+                        View reply
+                      </a>
+                    ) : (
+                      "—"
+                    )}
+                  </Td>
+                  <Td className="whitespace-nowrap">{fmtTime(r.demo_at, tz)}</Td>
+                  <Td>
+                    <div className="flex items-center gap-2">
+                      <div className="flex gap-1">
+                        <CallBtn phone={r.phone} />
+                        <SmsBtn row={r} />
+                        <EmailBtn row={r} tz={tz} />
+                      </div>
+                      <PhoneSourceBadge source={r.phone_source} />
+                    </div>
+                  </Td>
+                  <Td>{r.call_attempts || 0}</Td>
+                  <Td>
+                    <StatusDropdown row={r} />
+                  </Td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Headers() {
+  return (
+    <tr>
+      <Th>Name</Th>
+      <Th>Company</Th>
+      <Th>Website</Th>
+      <Th>Reply</Th>
+      <Th>Demo</Th>
+      <Th>Actions</Th>
+      <Th>Attempts</Th>
+      <Th>Status</Th>
+    </tr>
+  );
+}
+
+function StatCard({
+  label,
+  value,
+  tone,
+}: {
+  label: string;
+  value: number;
+  tone: "neutral" | "success" | "danger";
+}) {
+  const cls =
+    tone === "success"
+      ? "border-emerald-200 bg-emerald-50"
+      : tone === "danger"
+      ? "border-red-200 bg-red-50"
+      : "border-[color:var(--border)] bg-white";
+  return (
+    <div className={`border rounded p-4 ${cls}`}>
+      <div className="text-xs uppercase tracking-wide text-[color:var(--muted)]">{label}</div>
+      <div className="text-2xl font-semibold mt-1">{value.toLocaleString()}</div>
     </div>
   );
 }
@@ -93,9 +149,7 @@ function CallBtn({ phone }: { phone: string | null }) {
   return (
     <a
       href={href}
-      target="_blank"
-      rel="noreferrer"
-      title="Call via JustCall"
+      title="Call via JustCall (tel: link)"
       className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[color:var(--accent)] text-white text-xs hover:opacity-90"
     >
       <Phone size={14} />
@@ -106,18 +160,27 @@ function CallBtn({ phone }: { phone: string | null }) {
 function SmsBtn({ row }: { row: ReminderRow }) {
   const [busy, setBusy] = useState(false);
   const [status, setStatus] = useState<"idle" | "sent" | "error">("idle");
+  const [errMsg, setErrMsg] = useState<string | null>(null);
   if (!row.phone) return null;
   async function send() {
     setBusy(true);
+    setErrMsg(null);
     try {
       const res = await fetch("/api/actions/sms", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ reminder_id: row.id }),
       });
-      setStatus(res.ok ? "sent" : "error");
-    } catch {
+      if (res.ok) {
+        setStatus("sent");
+      } else {
+        const j = await res.json().catch(() => ({}));
+        setStatus("error");
+        setErrMsg(j?.error || `HTTP ${res.status}`);
+      }
+    } catch (e) {
       setStatus("error");
+      setErrMsg(e instanceof Error ? e.message : "send failed");
     } finally {
       setBusy(false);
     }
@@ -126,10 +189,12 @@ function SmsBtn({ row }: { row: ReminderRow }) {
     <button
       onClick={send}
       disabled={busy}
-      title="Send reminder SMS via JustCall"
+      title={errMsg ? `SMS error: ${errMsg}` : "Send reminder SMS via JustCall"}
       className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs ${
         status === "sent"
           ? "bg-[color:var(--success)] text-white"
+          : status === "error"
+          ? "bg-red-100 text-red-700"
           : "bg-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--border)]/80"
       } disabled:opacity-50`}
     >
@@ -138,42 +203,31 @@ function SmsBtn({ row }: { row: ReminderRow }) {
   );
 }
 
-function EmailBtn({ row }: { row: ReminderRow }) {
-  const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState<"idle" | "sent" | "error">("idle");
-  async function send() {
-    setBusy(true);
-    try {
-      const res = await fetch("/api/actions/email", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reminder_id: row.id }),
-      });
-      setStatus(res.ok ? "sent" : "error");
-    } catch {
-      setStatus("error");
-    } finally {
-      setBusy(false);
-    }
-  }
+function EmailBtn({ row, tz }: { row: ReminderRow; tz: Tz }) {
+  const firstName = (row.name || "there").split(" ")[0];
+  const timeStr = `${fmtTime(row.demo_at, tz)} ${tz}`;
+  const subject = `Reminder: your Gushwork demo today at ${timeStr}`;
+  const body = `Hi ${firstName},
+
+Quick reminder that your demo with Gushwork is scheduled for ${timeStr} today.
+
+If anything changes, just reply to this email and we'll reschedule.
+
+Talk soon!
+Gushwork`;
+  const href = mailtoHref(row.email, subject, body);
   return (
-    <button
-      onClick={send}
-      disabled={busy}
-      title="Send reminder email via EmailBison"
-      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs ${
-        status === "sent"
-          ? "bg-[color:var(--success)] text-white"
-          : "bg-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--border)]/80"
-      } disabled:opacity-50`}
+    <a
+      href={href}
+      title="Compose reminder email"
+      className="inline-flex items-center gap-1 px-2 py-1 rounded bg-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--border)]/80 text-xs"
     >
       <Mail size={14} />
-    </button>
+    </a>
   );
 }
 
 function StatusDropdown({ row }: { row: ReminderRow }) {
-  // Optimistic local state so the UI reflects the change before the poll re-fetches.
   const [value, setValue] = useState<ReminderStatus>(
     (row.status as ReminderStatus) || "Not yet dialed"
   );

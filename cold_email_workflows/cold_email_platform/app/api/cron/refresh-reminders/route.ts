@@ -8,7 +8,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { query, digitsOnly, domainFromEmail } from "@/lib/db";
-import { lookupLeadByEmail, phoneFromCustomVars, linkedinFromCustomVars } from "@/lib/sequencer";
+import { lookupLeadByEmail, phoneFromCustomVars, linkedinFromCustomVars, threadUrl } from "@/lib/sequencer";
 import { leadMagicPhone, waitForFullEnrich } from "@/lib/enrichment";
 import { scrapePhoneFromWebsite } from "@/lib/scraper";
 
@@ -39,6 +39,7 @@ type Enriched = {
   linkedin: string | null;
   firstName: string | null;
   lastName: string | null;
+  sequencerLeadId: string | null;
 };
 
 async function inParallel<T, R>(
@@ -94,22 +95,27 @@ export async function GET(_req: NextRequest) {
       linkedin: null,
       firstName: b.prospect_first_name,
       lastName: null,
+      sequencerLeadId: null,
     };
   });
 
   // 3) For rows without a phone: lookup the lead in Sequencer (in parallel)
   //    to get LinkedIn URL (for LeadMagic/FullEnrich) and possibly a phone
   //    from custom_variables.
-  const needLookup = enriched.filter((e) => !e.phone && e.email);
-  await inParallel(needLookup, 8, async (e) => {
+  // Look up every reminder in Sequencer so we can populate the thread URL
+  // (independent of whether enrichment is needed).
+  await inParallel(enriched, 8, async (e) => {
+    if (!e.email) return;
     const lead = await lookupLeadByEmail(e.email);
     if (!lead) return;
+    if (lead.id) e.sequencerLeadId = String(lead.id);
     // Only pull names from Sequencer if bookings didn't give us one — the
     // bookings prospect_first_name often already contains the full name.
     if (!e.firstName) {
       e.firstName = lead.first_name || null;
       e.lastName = lead.last_name || null;
     }
+    if (e.phone) return; // skip phone-enrichment branch if we already have one
     const seqPhone = phoneFromCustomVars(lead.custom_variables);
     if (seqPhone) {
       e.phone = seqPhone;
@@ -174,18 +180,21 @@ export async function GET(_req: NextRequest) {
     const name =
       [e.firstName || "", e.lastName || ""].filter(Boolean).join(" ").trim() || null;
     const domain = domainFromEmail(e.email);
+    const seqUrl = threadUrl({ leadId: e.sequencerLeadId ?? undefined });
 
     await query(
       `INSERT INTO gist.gtm_unified_db_source
          (row_type, external_id, name, company, website, email, domain, phone,
-          phone_source, demo_at, source, status, enrichment_status, refreshed_at)
-       VALUES ('reminder', $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12, NOW())
+          phone_source, sequencer_thread_url, demo_at, source, status,
+          enrichment_status, refreshed_at)
+       VALUES ('reminder', $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13, NOW())
        ON CONFLICT (row_type, external_id) DO UPDATE SET
          name = EXCLUDED.name,
          company = EXCLUDED.company,
          website = EXCLUDED.website,
          phone = EXCLUDED.phone,
          phone_source = EXCLUDED.phone_source,
+         sequencer_thread_url = EXCLUDED.sequencer_thread_url,
          demo_at = EXCLUDED.demo_at,
          source = EXCLUDED.source,
          refreshed_at = NOW()`,
@@ -198,6 +207,7 @@ export async function GET(_req: NextRequest) {
         domain,
         e.phone,
         e.phoneSource,
+        seqUrl,
         demoIso,
         b.source,
         DEFAULT_STATUS,
