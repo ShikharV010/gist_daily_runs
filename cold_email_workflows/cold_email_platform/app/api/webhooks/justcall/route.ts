@@ -1,5 +1,24 @@
-// JustCall webhook receiver. Updates call_at, call_within_5min,
-// call_disposition, and increments call_attempts on every event.
+// JustCall webhook receiver.
+//
+// JustCall v2 payload shape (Call completed in JustCall):
+// {
+//   "request_id": "...",
+//   "type": "call.completed",
+//   "data": {
+//     "id": 178632100,
+//     "contact_number": "1681381XXXX",
+//     "call_date": "2024-01-18",          // agent local date
+//     "call_time": "14:34:13",            // agent local time
+//     "call_user_date": "2024-01-18",     // user-tz date
+//     "call_user_time": "07:27:57",       // user-tz time
+//     "call_info": {
+//       "direction": "Incoming" | "Outgoing",
+//       "type": "answered" | "missed" | ...,
+//       "disposition": "",
+//       "notes": ""
+//     }
+//   }
+// }
 
 import { NextRequest, NextResponse } from "next/server";
 import { query, digitsOnly } from "@/lib/db";
@@ -9,15 +28,26 @@ export const dynamic = "force-dynamic";
 export const maxDuration = 15;
 
 type JcPayload = {
-  event_id?: string;
-  event_type?: string;
+  request_id?: string;
+  type?: string;
   data?: {
     id?: number | string;
-    direction?: string;
-    datetime?: string;
     contact_number?: string;
     dialed_number?: string;
-    agent_number?: string;
+    call_date?: string;
+    call_time?: string;
+    call_user_date?: string;
+    call_user_time?: string;
+    datetime?: string; // some events use this directly
+    call_info?: {
+      direction?: string;
+      type?: string;
+      disposition?: string;
+      notes?: string;
+      missed_call_reason?: string;
+    };
+    // top-level fallbacks (older payload shapes)
+    direction?: string;
     disposition?: string;
     disposition_code?: string;
     outcome?: string;
@@ -25,9 +55,39 @@ type JcPayload = {
   };
 };
 
+function pickDirection(d: JcPayload["data"]): string | null {
+  if (!d) return null;
+  return d.call_info?.direction || d.direction || null;
+}
+
 function pickDisposition(d: JcPayload["data"]): string | null {
   if (!d) return null;
-  return d.disposition || d.outcome || d.disposition_code || d.notes || null;
+  return (
+    d.call_info?.disposition ||
+    d.call_info?.notes ||
+    d.disposition ||
+    d.outcome ||
+    d.disposition_code ||
+    d.notes ||
+    null
+  );
+}
+
+function pickCallAt(d: JcPayload["data"]): Date {
+  if (!d) return new Date();
+  if (d.datetime) {
+    const t = new Date(d.datetime);
+    if (!isNaN(t.getTime())) return t;
+  }
+  // Combine date + time. JustCall doesn't ship a timezone with this — we treat
+  // it as UTC. Off-by-hours is fine; the < 5 min check uses reply_at delta.
+  const date = d.call_date || d.call_user_date;
+  const time = d.call_time || d.call_user_time;
+  if (date && time) {
+    const t = new Date(`${date}T${time}Z`);
+    if (!isNaN(t.getTime())) return t;
+  }
+  return new Date();
 }
 
 export async function POST(req: NextRequest) {
@@ -46,8 +106,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "invalid json" }, { status: 400 });
   }
 
-  if (body.data?.direction && !/outbound/i.test(body.data.direction)) {
-    return NextResponse.json({ status: "ignored", reason: "not outbound" });
+  const direction = pickDirection(body.data);
+  // Only outbound calls matter for the dialing metric. JustCall uses "Outgoing".
+  if (direction && !/(outbound|outgoing)/i.test(direction)) {
+    return NextResponse.json({ status: "ignored", reason: "not outbound", direction });
   }
 
   const phone = digitsOnly(body.data?.contact_number || body.data?.dialed_number);
@@ -55,13 +117,9 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "no contact number in payload" }, { status: 400 });
   }
 
-  const callAtIso = (body.data?.datetime ? new Date(body.data.datetime) : new Date()).toISOString();
+  const callAtIso = pickCallAt(body.data).toISOString();
   const disposition = pickDisposition(body.data);
 
-  // - First call's timestamp wins (call_at = COALESCE(call_at, $1)).
-  // - call_within_5min is computed from that first call only.
-  // - call_attempts increments on EVERY webhook event.
-  // - call_disposition always reflects the latest call.
   const updated = await query<{
     id: string;
     row_type: string;
