@@ -14,9 +14,6 @@ jobs:
       - name: Hit Vercel cron endpoint
         env:
           BASE: ${{ secrets.COLD_EMAIL_PLATFORM_URL }}
-          SECRET: ${{ secrets.COLD_EMAIL_PLATFORM_CRON_SECRET }}
         run: |
           set -euo pipefail
-          curl -fsSL --max-time 300 -X GET \
-            -H "Authorization: Bearer ${SECRET}" \
-            "${BASE}/api/cron/refresh-reminders"
+          curl -fsSL --max-time 300 -X GET "${BASE}/api/cron/refresh-reminders"

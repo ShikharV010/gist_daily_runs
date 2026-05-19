@@ -8,7 +8,6 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { query, digitsOnly, domainFromEmail } from "@/lib/db";
-import { verifyCron } from "@/lib/auth";
 import { lookupLeadByEmail, phoneFromCustomVars, linkedinFromCustomVars } from "@/lib/sequencer";
 import { leadMagicPhone, waitForFullEnrich } from "@/lib/enrichment";
 import { scrapePhoneFromWebsite } from "@/lib/scraper";
@@ -60,11 +59,7 @@ async function inParallel<T, R>(
   return out;
 }
 
-export async function GET(req: NextRequest) {
-  if (!verifyCron(req.headers.get("authorization"))) {
-    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
-  }
-
+export async function GET(_req: NextRequest) {
   // 1) Today's bookings
   const bookings = await query<Booking>(
     `
