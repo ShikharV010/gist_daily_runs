@@ -84,6 +84,37 @@ function seqHeaders() {
 }
 
 /**
+ * Find the latest reply UUID for a given lead email by searching the EmailBison
+ * /replies endpoint. Returns null if not found.
+ */
+export async function lookupLatestReplyUuid(email: string): Promise<string | null> {
+  try {
+    const url = new URL(`${BASE}/replies`);
+    url.searchParams.set("search", email);
+    url.searchParams.set("per_page", "5");
+    const res = await fetch(url.toString(), {
+      headers: seqHeaders(),
+      signal: AbortSignal.timeout(15_000),
+    });
+    if (!res.ok) return null;
+    const data = (await res.json()) as {
+      data?: Array<{
+        uuid?: string;
+        lead?: { email?: string };
+      }>;
+    };
+    const items = data.data || [];
+    // Prefer the entry whose lead email matches exactly.
+    const exact = items.find(
+      (r) => (r.lead?.email || "").toLowerCase() === email.toLowerCase()
+    );
+    return exact?.uuid || items[0]?.uuid || null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Look up a lead in Sequencer by email and return its full record (including
  * custom_variables, where phone + linkedin often live). Returns null if not found.
  */

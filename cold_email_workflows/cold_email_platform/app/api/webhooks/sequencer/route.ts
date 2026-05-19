@@ -76,7 +76,13 @@ export async function POST(req: NextRequest) {
   const email = lead.email;
   const domain = domainFromEmail(email);
   const company = lead.company || null;
-  const website = customVar(lead.custom_variables, "website") || customVar(lead.custom_variables, "company_website") || null;
+  // EmailBison doesn't ship a website field — fall back to email domain.
+  const website =
+    customVar(lead.custom_variables, "website") ||
+    customVar(lead.custom_variables, "company_website") ||
+    customVar(lead.custom_variables, "company website") ||
+    domain ||
+    null;
 
   const replyAtStr = reply?.date_received || reply?.created_at;
   const replyAt = replyAtStr ? new Date(replyAtStr) : new Date();

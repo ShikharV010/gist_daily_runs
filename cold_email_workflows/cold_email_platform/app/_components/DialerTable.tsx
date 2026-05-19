@@ -14,6 +14,7 @@ export default function DialerTable({ rows, tz }: { rows: DialerRow[]; tz: Tz })
             <Th>Company</Th>
             <Th>Website</Th>
             <Th>Reply</Th>
+            <Th>Phone</Th>
             <Th>Time of Reply</Th>
             <Th>Time of Call</Th>
             <Th>Call</Th>
@@ -24,7 +25,7 @@ export default function DialerTable({ rows, tz }: { rows: DialerRow[]; tz: Tz })
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={9} className="px-3 py-12 text-center text-sm text-[color:var(--muted)]">
+              <td colSpan={10} className="px-3 py-12 text-center text-sm text-[color:var(--muted)]">
                 No positive replies yet. Rows appear here as Sequencer fires the
                 Contact Interested webhook.
               </td>
@@ -61,6 +62,9 @@ export default function DialerTable({ rows, tz }: { rows: DialerRow[]; tz: Tz })
                   ) : (
                     "—"
                   )}
+                </Td>
+                <Td className="whitespace-nowrap font-mono text-xs">
+                  {r.phone ? (r.phone.startsWith("+") ? r.phone : `+${r.phone}`) : "—"}
                 </Td>
                 <Td className="whitespace-nowrap">{fmtTime(r.reply_at, tz)}</Td>
                 <Td className="whitespace-nowrap">{fmtTime(r.call_at, tz)}</Td>

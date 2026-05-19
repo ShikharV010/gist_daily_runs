@@ -8,7 +8,13 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { query, digitsOnly, domainFromEmail } from "@/lib/db";
-import { lookupLeadByEmail, phoneFromCustomVars, linkedinFromCustomVars, threadUrl } from "@/lib/sequencer";
+import {
+  lookupLeadByEmail,
+  lookupLatestReplyUuid,
+  phoneFromCustomVars,
+  linkedinFromCustomVars,
+  threadUrl,
+} from "@/lib/sequencer";
 import { leadMagicPhone, waitForFullEnrich } from "@/lib/enrichment";
 import { scrapePhoneFromWebsite } from "@/lib/scraper";
 
@@ -40,6 +46,7 @@ type Enriched = {
   firstName: string | null;
   lastName: string | null;
   sequencerLeadId: string | null;
+  replyUuid: string | null;
 };
 
 async function inParallel<T, R>(
@@ -96,7 +103,15 @@ export async function GET(_req: NextRequest) {
       firstName: b.prospect_first_name,
       lastName: null,
       sequencerLeadId: null,
+      replyUuid: null,
     };
+  });
+
+  // Fetch the latest reply UUID for each row (in parallel) so the "View reply"
+  // link points at the actual Sequencer conversation.
+  await inParallel(enriched, 8, async (e) => {
+    if (!e.email) return;
+    e.replyUuid = await lookupLatestReplyUuid(e.email);
   });
 
   // 3) For rows without a phone: lookup the lead in Sequencer (in parallel)
@@ -180,7 +195,7 @@ export async function GET(_req: NextRequest) {
     const name =
       [e.firstName || "", e.lastName || ""].filter(Boolean).join(" ").trim() || null;
     const domain = domainFromEmail(e.email);
-    const seqUrl = threadUrl({ leadId: e.sequencerLeadId ?? undefined });
+    const seqUrl = threadUrl({ replyUuid: e.replyUuid ?? undefined });
 
     await query(
       `INSERT INTO gist.gtm_unified_db_source
