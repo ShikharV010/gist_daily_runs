@@ -57,8 +57,11 @@ def db_connect():
 # already exists with all columns. If columns are missing, the INSERT in
 # log_send() will fail loudly with a clear error.
 
-def fetch_upcoming_bookings(con, window_start_utc, window_end_utc):
-    """Pull bookings starting in the window, source = Gushwork Email, not yet reminded."""
+def fetch_upcoming_bookings(con, window_start_utc, window_end_utc, reminder_type=None):
+    """Pull bookings starting in the window, source = Gushwork Email, not yet reminded.
+    Excludes bookings already logged for the given reminder_type (defaults to REMINDER_TYPE).
+    """
+    rt = reminder_type or REMINDER_TYPE
     with con.cursor() as cur:
         cur.execute("""
         SELECT b.event_id, b.prospect_email, b.prospect_first_name, b.prospect_company,
@@ -77,7 +80,7 @@ def fetch_upcoming_bookings(con, window_start_utc, window_end_utc):
           AND b.prospect_email IS NOT NULL AND b.prospect_email LIKE '%%@%%'
           AND b.event_id IS NOT NULL
         ORDER BY b.start_time_utc ASC
-        """, (REMINDER_TYPE, GUSHWORK_EMAIL_SOURCES_LIKE, window_start_utc, window_end_utc))
+        """, (rt, GUSHWORK_EMAIL_SOURCES_LIKE, window_start_utc, window_end_utc))
         cols = [c.name for c in cur.description]
         return [dict(zip(cols, row)) for row in cur.fetchall()]
 
@@ -86,11 +89,13 @@ SEQUENCER_UI_BASE = 'https://sequencer.gushwork.ai'
 def log_send(con, *, event_id, reminder_type, prospect_email, prospect_first_name,
              prospect_company, meeting_start_utc, meeting_time_zone, meeting_local_time_str,
              source, ae_name, ae_email, sender_email_id, sender_first_name, sender_email_address,
-             sequencer_lead_id, sequencer_reply_id, cal_invite_url,
+             sequencer_lead_id, sequencer_reply_id, sequencer_reply_uuid, cal_invite_url,
              email_subject, email_body_html, response_status, response_body, success):
     """Insert full audit record. Idempotent on (event_id, reminder_type)."""
-    sequencer_lead_url  = f'{SEQUENCER_UI_BASE}/leads/{sequencer_lead_id}'   if sequencer_lead_id  else None
-    sequencer_reply_url = f'{SEQUENCER_UI_BASE}/replies/{sequencer_reply_id}' if sequencer_reply_id else None
+    # Lead UI page doesn't expose a stable URL (leads have no UUID) — leave NULL.
+    sequencer_lead_url  = None
+    # Reply UI link uses the UUID, not the numeric id: /inbox/replies/{uuid}
+    sequencer_reply_url = f'{SEQUENCER_UI_BASE}/inbox/replies/{sequencer_reply_uuid}' if sequencer_reply_uuid else None
     with con.cursor() as cur:
         cur.execute("""
         INSERT INTO gist.gtm_booking_reminders_sent (
@@ -138,38 +143,54 @@ def sequencer_session():
     })
     return s
 
+def _get_with_retry(s, url, params=None, attempts=4, timeout=30):
+    """GET with retry on timeout / 5xx / 429. Returns response or None."""
+    for a in range(attempts):
+        try:
+            r = s.get(url, params=params, timeout=timeout)
+            if r.status_code == 200: return r
+            if r.status_code == 429 or r.status_code >= 500:
+                time.sleep(2 ** a)
+                continue
+            return r   # 4xx other than 429 — return as-is
+        except requests.exceptions.Timeout:
+            time.sleep(2 ** a)
+        except requests.exceptions.RequestException:
+            time.sleep(2 ** a)
+    return None
+
 def find_lead_by_email(s, email):
-    """Return the lead_id for an email, or None."""
-    r = s.get(f'{SEQUENCER_BASE}/leads', params={'search': email, 'per_page': 5}, timeout=30)
-    if r.status_code != 200: return None
+    r = _get_with_retry(s, f'{SEQUENCER_BASE}/leads', params={'search': email, 'per_page': 5})
+    if not r or r.status_code != 200: return None
     for item in r.json().get('data', []):
         if (item.get('email') or '').lower() == email.lower():
             return item['id']
     return None
 
 def find_most_recent_reply(s, lead_id):
-    """Return (reply_id, sender_email_id) for the most-recent reply in the thread, or (None, None)."""
-    r = s.get(f'{SEQUENCER_BASE}/leads/{lead_id}/replies', params={'per_page': 10}, timeout=30)
-    if r.status_code != 200: return (None, None)
+    """Returns (reply_id, sender_email_id, reply_uuid)."""
+    r = _get_with_retry(s, f'{SEQUENCER_BASE}/leads/{lead_id}/replies', params={'per_page': 10})
+    if not r or r.status_code != 200: return (None, None, None)
     data = r.json().get('data', [])
-    if not data: return (None, None)
+    if not data: return (None, None, None)
     def keyfn(x):
         return x.get('created_at') or x.get('received_at') or ''
     latest = sorted(data, key=keyfn, reverse=True)[0]
-    return latest.get('id'), latest.get('sender_email_id')
+    return latest.get('id'), latest.get('sender_email_id'), latest.get('uuid')
 
 # Cache sender lookups within one run
 _SENDER_CACHE = {}
 _SENDER_DETAILS_CACHE = {}   # sender_email_id -> email_address
 def get_sender_first_name(s, sender_email_id):
-    """Look up the sender (e.g. Anna Wong, Alison George) and return their FIRST name only."""
     if not sender_email_id: return None
     if sender_email_id in _SENDER_CACHE: return _SENDER_CACHE[sender_email_id]
-    r = s.get(f'{SEQUENCER_BASE}/sender-emails/{sender_email_id}', timeout=30)
-    if r.status_code != 200:
+    r = _get_with_retry(s, f'{SEQUENCER_BASE}/sender-emails/{sender_email_id}')
+    if not r or r.status_code != 200:
         _SENDER_CACHE[sender_email_id] = None
         return None
-    name = (r.json().get('data') or {}).get('name', '') or ''
+    data = r.json().get('data') or {}
+    name = data.get('name', '') or ''
+    _SENDER_DETAILS_CACHE[sender_email_id] = data.get('email')
     fn = extract_first_name(name)
     _SENDER_CACHE[sender_email_id] = fn or None
     return fn or None
@@ -332,7 +353,7 @@ def main():
                     print(f'  [SKIP] {email}: lead not found in Sequencer')
                     skipped_no_lead += 1; continue
 
-                reply_id, sender_email_id = find_most_recent_reply(s, lead_id)
+                reply_id, sender_email_id, reply_uuid = find_most_recent_reply(s, lead_id)
                 if not reply_id:
                     print(f'  [SKIP] {email}: no prior reply thread (lead {lead_id})')
                     skipped_no_thread += 1; continue
@@ -376,6 +397,7 @@ def main():
                     sender_first_name=sender_first,
                     sender_email_address=sender_email_addr,
                     sequencer_lead_id=lead_id, sequencer_reply_id=reply_id,
+                    sequencer_reply_uuid=reply_uuid,
                     cal_invite_url=cal_url,
                     email_subject=subject, email_body_html=body,
                     response_status=r.status_code, response_body=r.text[:500],
