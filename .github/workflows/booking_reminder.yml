@@ -4,9 +4,10 @@
 
 name: Booking Reminder (2h before)
 
+# Triggered by cron-job.org (every 30 min) via the GH workflow_dispatch API.
+# GH's own schedule: trigger is unreliable on free-tier free runners, so we
+# drive cadence externally.
 on:
-  schedule:
-    - cron: '*/30 * * * *'   # every 30 min
   workflow_dispatch:
     inputs:
       dry_run:
