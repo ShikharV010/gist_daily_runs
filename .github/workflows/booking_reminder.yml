@@ -1,0 +1,42 @@
+# Copy into gist_daily_runs/.github/workflows/booking_reminder.yml
+# Also copy send_reminders.py + requirements.txt into
+#   gist_daily_runs/cold_email_workflows/booking_reminder/
+
+name: Booking Reminder (2h before)
+
+on:
+  schedule:
+    - cron: '*/30 * * * *'   # every 30 min
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no sends)'
+        type: boolean
+        default: false
+
+jobs:
+  send-reminders:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        working-directory: cold_email_workflows/booking_reminder
+        run: pip install -r requirements.txt
+
+      - name: Send reminders
+        working-directory: cold_email_workflows/booking_reminder
+        env:
+          DATABASE_URL:      ${{ secrets.DATABASE_URL }}
+          SEQUENCER_API_KEY: ${{ secrets.SEQUENCER_API_KEY }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python send_reminders.py --dry-run
+          else
+            python send_reminders.py
+          fi
