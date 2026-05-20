@@ -38,6 +38,23 @@ export function dialerHref(phone: string | null | undefined): string | null {
   return `https://app.justcall.io/dialer?numbers=${encodeURIComponent(e164)}`;
 }
 
+/**
+ * Open the JustCall messages composer with both ends pre-filled.
+ * Sending number = JUSTCALL_SMS_NUMBER (Allaine's line).
+ */
+export function smsHref(
+  toPhone: string | null | undefined,
+  fromPhone: string | null | undefined
+): string | null {
+  const to = toE164(toPhone);
+  const from = toE164(fromPhone);
+  if (!to) return null;
+  const params = new URLSearchParams();
+  params.set("numbers", to);
+  if (from) params.set("from", from);
+  return `https://app.justcall.io/messages?${params.toString()}`;
+}
+
 export function mailtoHref(
   email: string,
   subject?: string,

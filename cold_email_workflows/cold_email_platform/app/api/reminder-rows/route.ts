@@ -8,7 +8,7 @@ export async function GET() {
   const rows = await query<ReminderRow>(
     `SELECT id::text, external_id, name, company, website, email, phone, phone_source,
             sequencer_thread_url, reply_at, demo_at, source,
-            call_at, call_attempts, status, enrichment_status
+            call_at, call_attempts, call_disposition, status, enrichment_status
      FROM gist.gtm_unified_db_source
      WHERE row_type = 'reminder'
      ORDER BY demo_at ASC`

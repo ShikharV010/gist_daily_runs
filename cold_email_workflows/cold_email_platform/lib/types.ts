@@ -17,6 +17,7 @@ export type DialerRow = {
   call_at: string | null;
   call_within_5min: boolean | null;
   call_attempts: number;
+  call_disposition: string | null;
   enrichment_status: string;
 };
 
@@ -50,6 +51,7 @@ export type ReminderRow = {
   source: string;
   call_at: string | null;
   call_attempts: number;
+  call_disposition: string | null;
   status: ReminderStatus | null;
   enrichment_status: string;
 };

@@ -59,11 +59,15 @@ export default function Dashboard() {
   return (
     <main className="max-w-7xl mx-auto px-6 py-8 w-full">
       <header className="mb-6 flex items-baseline justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold">In-House Cold Email Platform</h1>
-          <p className="text-sm text-[color:var(--muted)]">
-            Live dialing queue + appointment reminders
-          </p>
+        <div className="flex items-center gap-3">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/gushwork-logo.svg" alt="Gushwork" className="h-7" />
+          <div className="border-l border-[color:var(--border)] pl-3">
+            <h1 className="text-2xl font-semibold">In-House Cold Email Platform</h1>
+            <p className="text-sm text-[color:var(--muted)]">
+              Live dialing queue + appointment reminders
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-3">
           <TzToggle value={tz} onChange={setTz} />

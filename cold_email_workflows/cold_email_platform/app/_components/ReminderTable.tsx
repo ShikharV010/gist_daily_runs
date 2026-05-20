@@ -1,8 +1,12 @@
 "use client";
 
-import { Mail, MessageSquare, Phone } from "lucide-react";
+import { Mail, MessageSquare, Phone, RefreshCw } from "lucide-react";
 import { useMemo, useState } from "react";
-import { fmtTime, dialerHref, toE164, type Tz } from "@/lib/format";
+import { fmtTime, dialerHref, smsHref, toE164, type Tz } from "@/lib/format";
+
+// JustCall sending number (Allaine's). Hard-coded for the SMS pre-fill since
+// it's not secret — same number is in JUSTCALL_SMS_NUMBER on the server side.
+const JC_SENDING_NUMBER = "+18315259187";
 import {
   REMINDER_STATUS_OPTIONS,
   type ReminderRow,
@@ -20,10 +24,13 @@ export default function ReminderTable({ rows, tz }: { rows: ReminderRow[]; tz: T
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <StatCard label="Total Bookings Today" value={stats.total} tone="neutral" />
-        <StatCard label="Confirmed" value={stats.confirmed} tone="success" />
-        <StatCard label="Cancelled" value={stats.cancelled} tone="danger" />
+      <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 flex-1">
+          <StatCard label="Total Bookings Today" value={stats.total} tone="neutral" />
+          <StatCard label="Confirmed" value={stats.confirmed} tone="success" />
+          <StatCard label="Cancelled" value={stats.cancelled} tone="danger" />
+        </div>
+        <RefreshButton />
       </div>
 
       <div className="overflow-x-auto border border-[color:var(--border)] rounded">
@@ -159,30 +166,37 @@ function CallBtn({ row }: { row: ReminderRow }) {
 }
 
 function SmsBtn({ row }: { row: ReminderRow }) {
-  const [busy, setBusy] = useState(false);
-  const [status, setStatus] = useState<"idle" | "sent" | "error">("idle");
-  const [errMsg, setErrMsg] = useState<string | null>(null);
-  if (!row.phone) return null;
+  const href = smsHref(row.phone, JC_SENDING_NUMBER);
+  if (!href) return null;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noreferrer"
+      title="Open JustCall message composer (pre-filled)"
+      className="inline-flex items-center gap-1 px-2 py-1 rounded text-xs bg-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--border)]/80"
+    >
+      <MessageSquare size={14} />
+    </a>
+  );
+}
 
-  async function send() {
+function RefreshButton() {
+  const [busy, setBusy] = useState(false);
+  const [status, setStatus] = useState<"idle" | "done" | "error">("idle");
+
+  async function refresh() {
     setBusy(true);
-    setErrMsg(null);
     try {
-      const res = await fetch("/api/actions/sms", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reminder_id: row.id }),
-      });
+      const res = await fetch("/api/cron/refresh-reminders", { cache: "no-store" });
       if (res.ok) {
-        setStatus("sent");
+        setStatus("done");
+        setTimeout(() => setStatus("idle"), 3000);
       } else {
-        const j = await res.json().catch(() => ({}));
         setStatus("error");
-        setErrMsg(j?.error || `HTTP ${res.status}`);
       }
-    } catch (e) {
+    } catch {
       setStatus("error");
-      setErrMsg(e instanceof Error ? e.message : "send failed");
     } finally {
       setBusy(false);
     }
@@ -190,18 +204,19 @@ function SmsBtn({ row }: { row: ReminderRow }) {
 
   return (
     <button
-      onClick={send}
+      onClick={refresh}
       disabled={busy}
-      title={errMsg ? `SMS error: ${errMsg}` : "Send reminder SMS via JustCall"}
-      className={`inline-flex items-center gap-1 px-2 py-1 rounded text-xs disabled:opacity-50 ${
-        status === "sent"
-          ? "bg-[color:var(--success)] text-white"
+      title="Re-fetch today's bookings from gist.gtm_inbound_demo_bookings"
+      className={`ml-4 inline-flex items-center gap-2 px-3 py-2 rounded border text-sm disabled:opacity-50 ${
+        status === "done"
+          ? "bg-emerald-50 border-emerald-300 text-emerald-700"
           : status === "error"
-          ? "bg-red-100 text-red-700"
-          : "bg-[color:var(--border)] text-[color:var(--foreground)] hover:bg-[color:var(--border)]/80"
+          ? "bg-red-50 border-red-300 text-red-700"
+          : "border-[color:var(--border)] hover:bg-[color:var(--border)]/40"
       }`}
     >
-      <MessageSquare size={14} />
+      <RefreshCw size={14} className={busy ? "animate-spin" : ""} />
+      {busy ? "Refreshing…" : status === "done" ? "Refreshed" : "Refresh"}
     </button>
   );
 }

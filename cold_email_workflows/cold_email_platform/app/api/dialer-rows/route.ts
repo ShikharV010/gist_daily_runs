@@ -29,7 +29,7 @@ export async function GET() {
     SELECT d.id::text, d.external_id, d.name, d.company, d.website, d.email,
            d.phone, d.phone_source,
            d.sequencer_thread_url, d.reply_at, d.call_at,
-           d.call_within_5min, d.call_attempts, d.enrichment_status
+           d.call_within_5min, d.call_attempts, d.call_disposition, d.enrichment_status
       FROM gist.gtm_unified_db_source d
      WHERE d.row_type = 'dialer'
        AND lower(d.email) NOT IN (SELECT email FROM booked_emails)

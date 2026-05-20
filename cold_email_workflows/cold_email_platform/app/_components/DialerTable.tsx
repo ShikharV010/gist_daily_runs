@@ -20,12 +20,13 @@ export default function DialerTable({ rows, tz }: { rows: DialerRow[]; tz: Tz })
             <Th>Call</Th>
             <Th>{"Call < 5 min"}</Th>
             <Th>Attempts</Th>
+            <Th>Disposition</Th>
           </tr>
         </thead>
         <tbody>
           {rows.length === 0 ? (
             <tr>
-              <td colSpan={10} className="px-3 py-12 text-center text-sm text-[color:var(--muted)]">
+              <td colSpan={11} className="px-3 py-12 text-center text-sm text-[color:var(--muted)]">
                 No positive replies yet. Rows appear here as Sequencer fires the
                 Contact Interested webhook.
               </td>
@@ -79,6 +80,15 @@ export default function DialerTable({ rows, tz }: { rows: DialerRow[]; tz: Tz })
                   )}
                 </Td>
                 <Td>{r.call_attempts || 0}</Td>
+                <Td>
+                  {r.call_disposition ? (
+                    <span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                      {r.call_disposition}
+                    </span>
+                  ) : (
+                    "—"
+                  )}
+                </Td>
               </tr>
             ))
           )}

@@ -7,7 +7,10 @@ const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"]
 
 export const metadata: Metadata = {
   title: "In-House Cold Email Platform",
-  description: "5-min dialing + appointment reminders dashboard",
+  description: "Live dialing queue + appointment reminders",
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
 };
 
 export default function RootLayout({
