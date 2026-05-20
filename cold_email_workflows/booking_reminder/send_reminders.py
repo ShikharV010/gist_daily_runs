@@ -52,22 +52,10 @@ def db_connect():
         raise RuntimeError('DATABASE_URL env var not set')
     return psycopg2.connect(DATABASE_URL, connect_timeout=15)
 
-def ensure_tracking_table(con):
-    """Create gist.gtm_booking_reminders_sent if missing."""
-    with con.cursor() as cur:
-        cur.execute("""
-        CREATE TABLE IF NOT EXISTS gist.gtm_booking_reminders_sent (
-            event_id        TEXT NOT NULL,
-            reminder_type   TEXT NOT NULL,
-            prospect_email  TEXT,
-            sent_at         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            sequencer_reply_id BIGINT,
-            response_status INT,
-            response_body   TEXT,
-            PRIMARY KEY (event_id, reminder_type)
-        )
-        """)
-    con.commit()
+# NOTE: schema is created/altered MANUALLY by the user (see schema.sql).
+# This script never runs DDL — it assumes gist.gtm_booking_reminders_sent
+# already exists with all columns. If columns are missing, the INSERT in
+# log_send() will fail loudly with a clear error.
 
 def fetch_upcoming_bookings(con, window_start_utc, window_end_utc):
     """Pull bookings starting in the window, source = Gushwork Email, not yet reminded."""
@@ -93,14 +81,48 @@ def fetch_upcoming_bookings(con, window_start_utc, window_end_utc):
         cols = [c.name for c in cur.description]
         return [dict(zip(cols, row)) for row in cur.fetchall()]
 
-def mark_sent(con, event_id, prospect_email, reply_id, status_code, response_text):
+SEQUENCER_UI_BASE = 'https://sequencer.gushwork.ai'
+
+def log_send(con, *, event_id, reminder_type, prospect_email, prospect_first_name,
+             prospect_company, meeting_start_utc, meeting_time_zone, meeting_local_time_str,
+             source, ae_name, ae_email, sender_email_id, sender_first_name, sender_email_address,
+             sequencer_lead_id, sequencer_reply_id, cal_invite_url,
+             email_subject, email_body_html, response_status, response_body, success):
+    """Insert full audit record. Idempotent on (event_id, reminder_type)."""
+    sequencer_lead_url  = f'{SEQUENCER_UI_BASE}/leads/{sequencer_lead_id}'   if sequencer_lead_id  else None
+    sequencer_reply_url = f'{SEQUENCER_UI_BASE}/replies/{sequencer_reply_id}' if sequencer_reply_id else None
     with con.cursor() as cur:
         cur.execute("""
-        INSERT INTO gist.gtm_booking_reminders_sent
-            (event_id, reminder_type, prospect_email, sequencer_reply_id, response_status, response_body)
-        VALUES (%s, %s, %s, %s, %s, %s)
+        INSERT INTO gist.gtm_booking_reminders_sent (
+            event_id, reminder_type,
+            prospect_email, prospect_first_name, prospect_company,
+            meeting_start_utc, meeting_time_zone, meeting_local_time_str,
+            source, ae_name, ae_email,
+            sender_email_id, sender_first_name, sender_email_address,
+            sequencer_lead_id, sequencer_reply_id, sequencer_lead_url, sequencer_reply_url,
+            cal_invite_url, email_subject, email_body_html,
+            response_status, response_body, success
+        ) VALUES (
+            %s, %s,
+            %s, %s, %s,
+            %s, %s, %s,
+            %s, %s, %s,
+            %s, %s, %s,
+            %s, %s, %s, %s,
+            %s, %s, %s,
+            %s, %s, %s
+        )
         ON CONFLICT (event_id, reminder_type) DO NOTHING
-        """, (event_id, REMINDER_TYPE, prospect_email, reply_id, status_code, (response_text or '')[:2000]))
+        """, (
+            event_id, reminder_type,
+            prospect_email, prospect_first_name, prospect_company,
+            meeting_start_utc, meeting_time_zone, meeting_local_time_str,
+            source, ae_name, ae_email,
+            sender_email_id, sender_first_name, sender_email_address,
+            sequencer_lead_id, sequencer_reply_id, sequencer_lead_url, sequencer_reply_url,
+            cal_invite_url, email_subject, (email_body_html or '')[:50000],
+            response_status, (response_body or '')[:2000], success,
+        ))
     con.commit()
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -138,6 +160,7 @@ def find_most_recent_reply(s, lead_id):
 
 # Cache sender lookups within one run
 _SENDER_CACHE = {}
+_SENDER_DETAILS_CACHE = {}   # sender_email_id -> email_address
 def get_sender_first_name(s, sender_email_id):
     """Look up the sender (e.g. Anna Wong, Alison George) and return their FIRST name only."""
     if not sender_email_id: return None
@@ -274,7 +297,6 @@ def main():
 
     con = db_connect()
     try:
-        ensure_tracking_table(con)
         bookings = fetch_upcoming_bookings(con, win_start, win_end)
         print(f'  Found {len(bookings)} booking(s) to remind')
 
@@ -317,7 +339,19 @@ def main():
 
                 # Signature = the gushwork mailbox name on this thread (Anna/Alison/Grace/...)
                 sender_first = get_sender_first_name(s, sender_email_id) or 'Team Gushwork'
+                # Also fetch full sender details for audit logging
+                sender_email_addr = None
+                if sender_email_id and sender_email_id in _SENDER_DETAILS_CACHE:
+                    sender_email_addr = _SENDER_DETAILS_CACHE[sender_email_id]
+                elif sender_email_id:
+                    try:
+                        sr = s.get(f'{SEQUENCER_BASE}/sender-emails/{sender_email_id}', timeout=20).json()
+                        sender_email_addr = (sr.get('data') or {}).get('email')
+                        _SENDER_DETAILS_CACHE[sender_email_id] = sender_email_addr
+                    except Exception: pass
                 body = build_html_body(first_name, time_str, sender_first, event_id)
+                subject = f'Reminder: our call today at {time_str}'
+                cal_url = f'https://cal.com/booking/{event_id}'
 
                 print(f'  [{"DRY" if args.dry_run else "SEND"}] {email}  | {time_str}  | reply_id={reply_id}  | sender={sender_first}')
                 print(f'           body: "Hey {first_name}, call today at {time_str}, link: https://cal.com/booking/{event_id}"')
@@ -327,14 +361,33 @@ def main():
                     continue
 
                 r = send_in_thread_reply(s, reply_id, body)
-                if r.status_code in (200, 201, 202):
-                    mark_sent(con, event_id, email, reply_id, r.status_code, r.text[:500])
+                ok = r.status_code in (200, 201, 202)
+
+                log_send(con,
+                    event_id=event_id, reminder_type=REMINDER_TYPE,
+                    prospect_email=email, prospect_first_name=first_name,
+                    prospect_company=b.get('prospect_company'),
+                    meeting_start_utc=b.get('start_time_utc'),
+                    meeting_time_zone=b.get('attendee_time_zone'),
+                    meeting_local_time_str=time_str,
+                    source=b.get('source'),
+                    ae_name=b.get('ae_name'), ae_email=b.get('ae_email'),
+                    sender_email_id=sender_email_id,
+                    sender_first_name=sender_first,
+                    sender_email_address=sender_email_addr,
+                    sequencer_lead_id=lead_id, sequencer_reply_id=reply_id,
+                    cal_invite_url=cal_url,
+                    email_subject=subject, email_body_html=body,
+                    response_status=r.status_code, response_body=r.text[:500],
+                    success=ok,
+                )
+
+                if ok:
                     sent_ok += 1
                     print(f'           ✓ sent (HTTP {r.status_code})')
                 else:
                     failed += 1
                     print(f'           ✗ FAILED HTTP {r.status_code}: {r.text[:300]}')
-                    mark_sent(con, event_id, email, reply_id, r.status_code, r.text[:500])
 
             except Exception as e:
                 failed += 1
