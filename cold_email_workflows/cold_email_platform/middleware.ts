@@ -1,51 +1,40 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
-// HTTP Basic Auth for the entire dashboard. Webhooks (Sequencer/JustCall) and
-// the GitHub-Actions cron route stay open so they can hit us without creds.
+// Simple password gate via cookie. The dashboard renders a /login page that
+// posts to /api/auth/login; on success we set an HttpOnly cookie. This
+// middleware checks for that cookie on every request except the open paths.
 
 const PASSWORD = process.env.DASHBOARD_PASSWORD || "gushwork_password_10";
-const USERNAME = process.env.DASHBOARD_USERNAME || "gushwork";
+const COOKIE_NAME = "icep_auth";
 
-function isOpenPath(pathname: string): boolean {
+function isOpenPath(p: string): boolean {
   return (
-    pathname.startsWith("/api/webhooks/") ||
-    pathname.startsWith("/api/cron/") ||
-    pathname.startsWith("/_next/") ||
-    pathname === "/favicon.ico" ||
-    pathname === "/favicon.svg" ||
-    pathname === "/gushwork-logo.svg"
+    p.startsWith("/api/webhooks/") || // EmailBison / JustCall
+    p.startsWith("/api/cron/") ||      // GitHub Actions
+    p === "/api/auth/login" ||
+    p === "/login" ||
+    p.startsWith("/_next/") ||
+    p === "/favicon.ico" ||
+    p === "/favicon.svg" ||
+    p === "/gushwork-logo.svg"
   );
 }
 
 export function middleware(req: NextRequest) {
-  if (isOpenPath(req.nextUrl.pathname)) {
-    return NextResponse.next();
+  if (isOpenPath(req.nextUrl.pathname)) return NextResponse.next();
+  const cookie = req.cookies.get(COOKIE_NAME)?.value;
+  if (cookie === PASSWORD) return NextResponse.next();
+
+  // API routes: 401
+  if (req.nextUrl.pathname.startsWith("/api/")) {
+    return new NextResponse("Unauthorized", { status: 401 });
   }
-  const auth = req.headers.get("authorization");
-  if (auth) {
-    const [scheme, encoded] = auth.split(" ");
-    if (scheme === "Basic" && encoded) {
-      try {
-        const decoded = Buffer.from(encoded, "base64").toString("utf8");
-        const colon = decoded.indexOf(":");
-        const user = decoded.slice(0, colon);
-        const pass = decoded.slice(colon + 1);
-        if (user === USERNAME && pass === PASSWORD) {
-          return NextResponse.next();
-        }
-      } catch {
-        // fall through to 401
-      }
-    }
-  }
-  return new NextResponse("Authentication required", {
-    status: 401,
-    headers: {
-      "WWW-Authenticate": 'Basic realm="In-House Cold Email Platform"',
-      "Content-Type": "text/plain",
-    },
-  });
+  // Pages: bounce to /login with ?next=
+  const url = req.nextUrl.clone();
+  url.pathname = "/login";
+  url.searchParams.set("next", req.nextUrl.pathname);
+  return NextResponse.redirect(url);
 }
 
 export const config = {
