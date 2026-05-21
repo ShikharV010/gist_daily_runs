@@ -1,4 +1,4 @@
-# In Cold Email Platform
+# GTM In-House Cold Email Demo Farm
 
 Two-tab ops dashboard:
 

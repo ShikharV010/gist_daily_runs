@@ -55,7 +55,7 @@ function LoginForm() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/gushwork-logo.svg" alt="Gushwork" className="h-8" />
           <div>
-            <h1 className="text-lg font-semibold">In-House Cold Email Platform</h1>
+            <h1 className="text-lg font-semibold">GTM In-House Cold Email Demo Farm</h1>
             <p className="text-xs text-[color:var(--muted)]">Enter the password to continue</p>
           </div>
         </div>

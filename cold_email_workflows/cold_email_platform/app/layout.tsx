@@ -6,7 +6,7 @@ const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "In-House Cold Email Platform",
+  title: "GTM In-House Cold Email Demo Farm",
   description: "Live dialing queue + appointment reminders",
   icons: {
     icon: [{ url: "/gushwork-icon.svg", type: "image/svg+xml" }],

@@ -99,7 +99,7 @@ export default function Dashboard() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/gushwork-icon.svg" alt="Gushwork" className="h-7 w-7" />
           <div>
-            <h1 className="text-2xl font-semibold">In-House Cold Email Platform</h1>
+            <h1 className="text-2xl font-semibold">GTM In-House Cold Email Demo Farm</h1>
             <p className="text-sm text-[color:var(--muted)]">
               Live dialing queue + appointment reminders
             </p>
