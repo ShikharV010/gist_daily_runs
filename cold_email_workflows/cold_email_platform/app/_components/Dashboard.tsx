@@ -93,7 +93,7 @@ export default function Dashboard() {
   }, []);
 
   return (
-    <main className="max-w-7xl mx-auto px-6 py-8 w-full">
+    <main className="max-w-screen-2xl mx-auto px-8 py-8 w-full">
       <header className="mb-6 flex items-baseline justify-between">
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
