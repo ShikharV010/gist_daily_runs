@@ -1,14 +1,14 @@
 "use client";
 
 import * as Tabs from "@radix-ui/react-tabs";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, Volume2 } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DialerTable from "./DialerTable";
 import ReminderTable from "./ReminderTable";
 import AnalyticsTab from "./AnalyticsTab";
 import type { DialerRow, ReminderRow } from "@/lib/types";
 import type { Tz } from "@/lib/format";
-import { ensureNotifPermission, notifyNewLead, preloadChime } from "@/lib/notify";
+import { chime, ensureNotifPermission, notifyNewLead, preloadChime } from "@/lib/notify";
 
 type Theme = "light" | "dark";
 const THEME_STORAGE_KEY = "icep:theme";
@@ -97,8 +97,8 @@ export default function Dashboard() {
       <header className="mb-6 flex items-baseline justify-between">
         <div className="flex items-center gap-3">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/gushwork-logo.svg" alt="Gushwork" className="h-7" />
-          <div className="border-l border-[color:var(--border)] pl-3">
+          <img src="/gushwork-icon.svg" alt="Gushwork" className="h-7 w-7" />
+          <div>
             <h1 className="text-2xl font-semibold">In-House Cold Email Platform</h1>
             <p className="text-sm text-[color:var(--muted)]">
               Live dialing queue + appointment reminders
@@ -106,6 +106,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <TestSoundButton />
           <ThemeToggle theme={theme} onChange={setTheme} />
           <TzToggle value={tz} onChange={setTz} />
           <div className="text-xs text-[color:var(--muted)]">
@@ -137,6 +138,18 @@ export default function Dashboard() {
         </Tabs.Content>
       </Tabs.Root>
     </main>
+  );
+}
+
+function TestSoundButton() {
+  return (
+    <button
+      onClick={() => chime()}
+      title="Play the new-row alert sound (also unlocks audio for the session)"
+      className="inline-flex items-center justify-center w-8 h-8 rounded border border-[color:var(--border)] hover:bg-[color:var(--border)]/40"
+    >
+      <Volume2 size={14} />
+    </button>
   );
 }
 

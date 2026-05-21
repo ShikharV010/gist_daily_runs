@@ -17,7 +17,9 @@ function isOpenPath(p: string): boolean {
     p.startsWith("/_next/") ||
     p === "/favicon.ico" ||
     p === "/favicon.svg" ||
-    p === "/gushwork-logo.svg"
+    p === "/gushwork-logo.svg" ||
+    p === "/gushwork-icon.svg" ||
+    p === "/chime.wav"
   );
 }
 

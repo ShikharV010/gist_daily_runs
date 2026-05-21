@@ -1,6 +1,7 @@
 // Browser-side new-row alerts: sound + native Notification + title flash.
 
 let audioEl: HTMLAudioElement | null = null;
+let unlocked = false;
 
 function getAudio(): HTMLAudioElement | null {
   if (typeof window === "undefined") return null;
@@ -8,26 +9,58 @@ function getAudio(): HTMLAudioElement | null {
   audioEl = new Audio("/chime.wav");
   audioEl.preload = "auto";
   audioEl.volume = 0.6;
+  // Try to load immediately so first play is instant.
+  audioEl.load();
   return audioEl;
 }
 
-/** Play the chime. Audio element is reliable once the user has interacted with
- *  the page (e.g. clicking "Enter" on the login screen). */
-export function chime(): void {
+/** Pre-create the audio element and attach a one-time gesture handler that
+ *  "unlocks" autoplay for the rest of the session. */
+export function preloadChime(): void {
+  if (typeof window === "undefined") return;
+  getAudio();
+  if (unlocked) return;
+  const unlock = () => {
+    const a = getAudio();
+    if (!a) return;
+    a.muted = true;
+    a.play()
+      .then(() => {
+        a.pause();
+        a.currentTime = 0;
+        a.muted = false;
+        unlocked = true;
+      })
+      .catch(() => {
+        a.muted = false;
+      });
+    window.removeEventListener("click", unlock);
+    window.removeEventListener("keydown", unlock);
+    window.removeEventListener("touchstart", unlock);
+  };
+  window.addEventListener("click", unlock);
+  window.addEventListener("keydown", unlock);
+  window.addEventListener("touchstart", unlock);
+}
+
+/** Play the chime. Returns the play() promise so callers can await/inspect. */
+export function chime(): Promise<void> | void {
   const a = getAudio();
   if (!a) return;
   try {
     a.currentTime = 0;
     const p = a.play();
-    if (p && typeof p.catch === "function") p.catch(() => {});
-  } catch {
-    // ignore
+    if (p && typeof p.catch === "function") {
+      p.catch((err) => {
+        // Most common: browser rejected autoplay. Will succeed after first user
+        // gesture (the unlock above handles this for non-test plays).
+        console.warn("[chime] play blocked:", err?.message || err);
+      });
+      return p as Promise<void>;
+    }
+  } catch (e) {
+    console.warn("[chime] threw:", e);
   }
-}
-
-/** Eagerly load the audio so playback latency is zero on first new row. */
-export function preloadChime(): void {
-  getAudio();
 }
 
 export function ensureNotifPermission(): void {
