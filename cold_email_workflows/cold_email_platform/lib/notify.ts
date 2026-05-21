@@ -8,7 +8,7 @@ function getAudio(): HTMLAudioElement | null {
   if (audioEl) return audioEl;
   audioEl = new Audio("/chime.wav");
   audioEl.preload = "auto";
-  audioEl.volume = 0.6;
+  audioEl.volume = 1.0;
   // Try to load immediately so first play is instant.
   audioEl.load();
   return audioEl;
