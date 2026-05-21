@@ -32,6 +32,7 @@ export async function GET() {
            d.call_within_5min, d.call_attempts, d.call_disposition, d.enrichment_status
       FROM gist.gtm_unified_db_source d
      WHERE d.row_type = 'dialer'
+       AND d.reply_at >= NOW() - INTERVAL '48 hours'
        AND lower(d.email) NOT IN (SELECT email FROM booked_emails)
        AND (d.domain IS NULL OR d.domain NOT IN (SELECT domain FROM booked_domains))
      ORDER BY d.reply_at DESC
