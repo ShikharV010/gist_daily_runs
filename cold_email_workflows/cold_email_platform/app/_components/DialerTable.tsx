@@ -82,7 +82,7 @@ export default function DialerTable({ rows, tz }: { rows: DialerRow[]; tz: Tz })
                 <Td>{r.call_attempts || 0}</Td>
                 <Td>
                   {r.call_disposition ? (
-                    <span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700">
+                    <span className="text-xs px-2 py-0.5 rounded bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-200">
                       {r.call_disposition}
                     </span>
                   ) : (

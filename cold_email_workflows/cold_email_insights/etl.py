@@ -535,7 +535,11 @@ latest_rows AS (
 ),
 inbound_with_bucket AS (
     SELECT l.*, f.demo_booking_date,
-        CASE WHEN LOWER(l.source) LIKE '%%gushwork email%%' THEN 'Cold email' ELSE 'Other' END AS source_bucket
+        -- Cold-email sources show up under a few free-text labels:
+        --   'Gushwork Email', 'Gushwork Email(Allaine)', 'Gushwork Email (Paula)',
+        --   'Emails from Gushwork' (words reversed) — match any order.
+        CASE WHEN LOWER(l.source) LIKE '%%gushwork%%' AND LOWER(l.source) LIKE '%%email%%'
+             THEN 'Cold email' ELSE 'Other' END AS source_bucket
     FROM latest_rows l
     LEFT JOIN first_booking f ON l.booking_key = f.booking_key
 ),

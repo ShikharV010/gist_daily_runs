@@ -81,7 +81,9 @@ export default function ReminderTable({ rows, tz }: { rows: ReminderRow[]; tz: T
                       "—"
                     )}
                   </Td>
-                  <Td className="whitespace-nowrap">{fmtTime(r.demo_at, tz)}</Td>
+                  <Td className="whitespace-nowrap">
+                    <DemoTime iso={r.demo_at} tz={tz} />
+                  </Td>
                   <Td>
                     <div className="flex items-center gap-2">
                       <div className="flex gap-1">
@@ -126,6 +128,26 @@ function formatPhone(p: string | null): string {
   return toE164(p) || "—";
 }
 
+/**
+ * Demo time cell. Turns red once the demo time has been reached, so SDRs
+ * don't call a prospect during their demo. The Dashboard component polls
+ * every 10s, which is what re-renders this and flips the colour.
+ */
+function DemoTime({ iso, tz }: { iso: string; tz: Tz }) {
+  const started = new Date(iso).getTime() <= Date.now();
+  const label = fmtTime(iso, tz);
+  if (!started) return <span>{label}</span>;
+  return (
+    <span
+      title="Demo is in progress / already happened — don't call"
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-red-50 text-red-700 dark:bg-red-950/40 dark:text-red-300 font-semibold"
+    >
+      <span className="w-1.5 h-1.5 rounded-full bg-red-600 dark:bg-red-400 animate-pulse" />
+      {label}
+    </span>
+  );
+}
+
 function StatCard({
   label,
   value,
@@ -137,10 +159,10 @@ function StatCard({
 }) {
   const cls =
     tone === "success"
-      ? "border-emerald-200 bg-emerald-50"
+      ? "border-emerald-200 bg-emerald-50 dark:border-emerald-900/40 dark:bg-emerald-950/30"
       : tone === "danger"
-      ? "border-red-200 bg-red-50"
-      : "border-[color:var(--border)] bg-white";
+      ? "border-red-200 bg-red-50 dark:border-red-900/40 dark:bg-red-950/30"
+      : "border-[color:var(--border)] bg-[color:var(--card)]";
   return (
     <div className={`border rounded p-4 ${cls}`}>
       <div className="text-xs uppercase tracking-wide text-[color:var(--muted)]">{label}</div>
@@ -268,14 +290,14 @@ function StatusDropdown({ row }: { row: ReminderRow }) {
 
   const tone =
     value === "Confirmed"
-      ? "bg-emerald-50 text-emerald-700 border-emerald-300"
+      ? "bg-emerald-50 text-emerald-700 border-emerald-300 dark:bg-emerald-950/40 dark:text-emerald-300 dark:border-emerald-800"
       : value === "Cancelled"
-      ? "bg-red-50 text-red-700 border-red-300"
+      ? "bg-red-50 text-red-700 border-red-300 dark:bg-red-950/40 dark:text-red-300 dark:border-red-800"
       : value === "Rescheduled"
-      ? "bg-amber-50 text-amber-700 border-amber-300"
+      ? "bg-amber-50 text-amber-700 border-amber-300 dark:bg-amber-950/40 dark:text-amber-300 dark:border-amber-800"
       : value === "Not Connected"
-      ? "bg-slate-100 text-slate-700 border-slate-300"
-      : "bg-white text-[color:var(--foreground)] border-[color:var(--border)]";
+      ? "bg-slate-100 text-slate-700 border-slate-300 dark:bg-slate-800 dark:text-slate-200 dark:border-slate-700"
+      : "bg-[color:var(--card)] text-[color:var(--foreground)] border-[color:var(--border)]";
 
   return (
     <select

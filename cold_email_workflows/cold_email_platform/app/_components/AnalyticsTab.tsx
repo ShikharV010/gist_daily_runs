@@ -122,12 +122,12 @@ function StatCard({
 }) {
   const cls =
     tone === "accent"
-      ? "border-blue-200 bg-blue-50"
+      ? "border-blue-200 bg-blue-50 dark:border-blue-900/40 dark:bg-blue-950/30"
       : tone === "success"
-      ? "border-emerald-200 bg-emerald-50"
+      ? "border-emerald-200 bg-emerald-50 dark:border-emerald-900/40 dark:bg-emerald-950/30"
       : tone === "muted"
-      ? "border-amber-200 bg-amber-50"
-      : "border-[color:var(--border)] bg-white";
+      ? "border-amber-200 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/30"
+      : "border-[color:var(--border)] bg-[color:var(--card)]";
   return (
     <div className={`border rounded p-4 ${cls}`}>
       <div className="text-xs uppercase tracking-wide text-[color:var(--muted)]">{label}</div>
@@ -148,7 +148,7 @@ function ChartCard({
   series: { key: keyof AnalyticsBucket; name: string; fill: string }[];
 }) {
   return (
-    <div className="border border-[color:var(--border)] rounded p-4 bg-white">
+    <div className="border border-[color:var(--border)] rounded p-4 bg-[color:var(--card)]">
       <h4 className="text-sm font-medium mb-3">{title}</h4>
       {data.length === 0 ? (
         <div className="text-sm text-[color:var(--muted)] py-12 text-center">

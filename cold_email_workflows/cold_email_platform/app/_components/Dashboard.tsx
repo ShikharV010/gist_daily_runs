@@ -1,6 +1,7 @@
 "use client";
 
 import * as Tabs from "@radix-ui/react-tabs";
+import { Moon, Sun } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import DialerTable from "./DialerTable";
 import ReminderTable from "./ReminderTable";
@@ -8,6 +9,9 @@ import AnalyticsTab from "./AnalyticsTab";
 import type { DialerRow, ReminderRow } from "@/lib/types";
 import type { Tz } from "@/lib/format";
 import { ensureNotifPermission, notifyNewLead } from "@/lib/notify";
+
+type Theme = "light" | "dark";
+const THEME_STORAGE_KEY = "icep:theme";
 
 const POLL_MS = 10_000;
 const TZ_STORAGE_KEY = "icep:tz";
@@ -22,16 +26,26 @@ export default function Dashboard() {
   const [reminders, setReminders] = useState<ReminderRow[]>([]);
   const [lastSync, setLastSync] = useState<Date | null>(null);
   const [tz, setTz] = useState<Tz>("IST");
+  const [theme, setTheme] = useState<Theme>("light");
 
-  // Restore tz preference from localStorage.
+  // Restore tz + theme prefs from localStorage.
   useEffect(() => {
-    const saved = typeof window !== "undefined" ? window.localStorage.getItem(TZ_STORAGE_KEY) : null;
-    if (saved === "IST" || saved === "EST") setTz(saved);
+    if (typeof window === "undefined") return;
+    const savedTz = window.localStorage.getItem(TZ_STORAGE_KEY);
+    if (savedTz === "IST" || savedTz === "EST") setTz(savedTz);
+    const savedTheme = window.localStorage.getItem(THEME_STORAGE_KEY);
+    if (savedTheme === "dark" || savedTheme === "light") setTheme(savedTheme);
   }, []);
 
   useEffect(() => {
     if (typeof window !== "undefined") window.localStorage.setItem(TZ_STORAGE_KEY, tz);
   }, [tz]);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem(THEME_STORAGE_KEY, theme);
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
 
   // Track which dialer rows we've already seen so we only chime on truly new ones.
   const seenDialerIds = useRef<Set<string> | null>(null);
@@ -90,6 +104,7 @@ export default function Dashboard() {
           </div>
         </div>
         <div className="flex items-center gap-3">
+          <ThemeToggle theme={theme} onChange={setTheme} />
           <TzToggle value={tz} onChange={setTz} />
           <div className="text-xs text-[color:var(--muted)]">
             {lastSync
@@ -120,6 +135,25 @@ export default function Dashboard() {
         </Tabs.Content>
       </Tabs.Root>
     </main>
+  );
+}
+
+function ThemeToggle({
+  theme,
+  onChange,
+}: {
+  theme: Theme;
+  onChange: (t: Theme) => void;
+}) {
+  const next = theme === "dark" ? "light" : "dark";
+  return (
+    <button
+      onClick={() => onChange(next)}
+      title={`Switch to ${next} mode`}
+      className="inline-flex items-center justify-center w-8 h-8 rounded border border-[color:var(--border)] hover:bg-[color:var(--border)]/40"
+    >
+      {theme === "dark" ? <Sun size={14} /> : <Moon size={14} />}
+    </button>
   );
 }
 
