@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   title: "In-House Cold Email Platform",
   description: "Live dialing queue + appointment reminders",
   icons: {
-    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+    icon: [{ url: "/gushwork-icon.svg", type: "image/svg+xml" }],
   },
 };
 

@@ -1,40 +1,33 @@
-// Browser-side notifications. Sound + native Notification.
+// Browser-side new-row alerts: sound + native Notification + title flash.
 
-let audioCtx: AudioContext | null = null;
-function getCtx(): AudioContext | null {
+let audioEl: HTMLAudioElement | null = null;
+
+function getAudio(): HTMLAudioElement | null {
   if (typeof window === "undefined") return null;
-  if (audioCtx) return audioCtx;
-  const W = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext };
-  const Ctor = W.AudioContext || W.webkitAudioContext;
-  if (!Ctor) return null;
-  audioCtx = new Ctor();
-  return audioCtx;
+  if (audioEl) return audioEl;
+  audioEl = new Audio("/chime.wav");
+  audioEl.preload = "auto";
+  audioEl.volume = 0.6;
+  return audioEl;
 }
 
-/** Play a short two-tone chime. No asset file needed. */
+/** Play the chime. Audio element is reliable once the user has interacted with
+ *  the page (e.g. clicking "Enter" on the login screen). */
 export function chime(): void {
-  const ctx = getCtx();
-  if (!ctx) return;
-  // Some browsers suspend audio until a user gesture; resume just in case.
-  if (ctx.state === "suspended") ctx.resume().catch(() => {});
-
-  const tones = [
-    { freq: 880, start: 0, duration: 0.12 },   // A5
-    { freq: 1318, start: 0.13, duration: 0.18 }, // E6
-  ];
-  const now = ctx.currentTime;
-  for (const t of tones) {
-    const osc = ctx.createOscillator();
-    const gain = ctx.createGain();
-    osc.type = "sine";
-    osc.frequency.value = t.freq;
-    gain.gain.setValueAtTime(0, now + t.start);
-    gain.gain.linearRampToValueAtTime(0.18, now + t.start + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + t.start + t.duration);
-    osc.connect(gain).connect(ctx.destination);
-    osc.start(now + t.start);
-    osc.stop(now + t.start + t.duration + 0.02);
+  const a = getAudio();
+  if (!a) return;
+  try {
+    a.currentTime = 0;
+    const p = a.play();
+    if (p && typeof p.catch === "function") p.catch(() => {});
+  } catch {
+    // ignore
   }
+}
+
+/** Eagerly load the audio so playback latency is zero on first new row. */
+export function preloadChime(): void {
+  getAudio();
 }
 
 export function ensureNotifPermission(): void {
@@ -45,19 +38,55 @@ export function ensureNotifPermission(): void {
   }
 }
 
+// Title flashing: prepend "(N new) " when there are unseen new rows.
+let originalTitle: string | null = null;
+let flashCount = 0;
+let flashTimer: ReturnType<typeof setInterval> | null = null;
+
+function startTitleFlash() {
+  if (typeof document === "undefined") return;
+  if (originalTitle === null) originalTitle = document.title;
+  if (flashTimer) return;
+  let on = true;
+  flashTimer = setInterval(() => {
+    if (typeof document === "undefined") return;
+    document.title = on
+      ? `(${flashCount} new) ${originalTitle}`
+      : (originalTitle as string);
+    on = !on;
+  }, 1500);
+
+  const stopOnFocus = () => {
+    if (flashTimer) {
+      clearInterval(flashTimer);
+      flashTimer = null;
+    }
+    if (originalTitle !== null) document.title = originalTitle;
+    flashCount = 0;
+    window.removeEventListener("focus", stopOnFocus);
+    document.removeEventListener("visibilitychange", visibilityHandler);
+  };
+  const visibilityHandler = () => {
+    if (document.visibilityState === "visible") stopOnFocus();
+  };
+  window.addEventListener("focus", stopOnFocus);
+  document.addEventListener("visibilitychange", visibilityHandler);
+}
+
 export function notifyNewLead(opts: { name: string; company?: string | null }): void {
   if (typeof window === "undefined") return;
   chime();
+  flashCount += 1;
+  startTitleFlash();
   if (!("Notification" in window) || Notification.permission !== "granted") return;
   const title = "New positive reply";
   const body = opts.company ? `${opts.name} · ${opts.company}` : opts.name;
   try {
     const n = new Notification(title, {
       body,
-      icon: "/gushwork-logo.svg",
+      icon: "/gushwork-icon.svg",
       tag: "icep-new-lead",
     });
-    // Auto-close after 6s
     setTimeout(() => n.close(), 6000);
     n.onclick = () => window.focus();
   } catch {

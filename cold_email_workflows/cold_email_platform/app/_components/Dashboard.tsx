@@ -8,7 +8,7 @@ import ReminderTable from "./ReminderTable";
 import AnalyticsTab from "./AnalyticsTab";
 import type { DialerRow, ReminderRow } from "@/lib/types";
 import type { Tz } from "@/lib/format";
-import { ensureNotifPermission, notifyNewLead } from "@/lib/notify";
+import { ensureNotifPermission, notifyNewLead, preloadChime } from "@/lib/notify";
 
 type Theme = "light" | "dark";
 const THEME_STORAGE_KEY = "icep:theme";
@@ -82,8 +82,10 @@ export default function Dashboard() {
     }
     tick();
     const id = setInterval(tick, POLL_MS);
-    // Ask for notification permission once (no-op if already granted/denied).
+    // Ask for notification permission once + preload chime audio so the first
+    // new-row trigger has zero latency.
     ensureNotifPermission();
+    preloadChime();
     return () => {
       cancelled = true;
       clearInterval(id);
