@@ -1,39 +1,46 @@
 // Browser-side new-row alerts: sound + native Notification + title flash.
 
-let audioEl: HTMLAudioElement | null = null;
+// We keep a small pool of pre-loaded Audio elements so overlapping chimes
+// don't cancel each other (the browser restarts a single element if you call
+// .play() while it's already playing).
+const POOL_SIZE = 5;
+let pool: HTMLAudioElement[] = [];
+let poolIdx = 0;
 let unlocked = false;
 
-function getAudio(): HTMLAudioElement | null {
-  if (typeof window === "undefined") return null;
-  if (audioEl) return audioEl;
-  audioEl = new Audio("/chime.wav");
-  audioEl.preload = "auto";
-  audioEl.volume = 1.0;
-  // Try to load immediately so first play is instant.
-  audioEl.load();
-  return audioEl;
+function buildPool(): HTMLAudioElement[] {
+  if (typeof window === "undefined") return [];
+  if (pool.length) return pool;
+  for (let i = 0; i < POOL_SIZE; i++) {
+    const a = new Audio("/chime.wav");
+    a.preload = "auto";
+    a.volume = 1.0;
+    a.load();
+    pool.push(a);
+  }
+  return pool;
 }
 
-/** Pre-create the audio element and attach a one-time gesture handler that
- *  "unlocks" autoplay for the rest of the session. */
+/** Pre-create the audio pool and attach a one-time gesture handler that
+ *  "unlocks" autoplay for every element in the pool. */
 export function preloadChime(): void {
   if (typeof window === "undefined") return;
-  getAudio();
+  buildPool();
   if (unlocked) return;
   const unlock = () => {
-    const a = getAudio();
-    if (!a) return;
-    a.muted = true;
-    a.play()
-      .then(() => {
-        a.pause();
-        a.currentTime = 0;
-        a.muted = false;
-        unlocked = true;
-      })
-      .catch(() => {
-        a.muted = false;
-      });
+    for (const a of buildPool()) {
+      a.muted = true;
+      a.play()
+        .then(() => {
+          a.pause();
+          a.currentTime = 0;
+          a.muted = false;
+        })
+        .catch(() => {
+          a.muted = false;
+        });
+    }
+    unlocked = true;
     window.removeEventListener("click", unlock);
     window.removeEventListener("keydown", unlock);
     window.removeEventListener("touchstart", unlock);
@@ -43,20 +50,20 @@ export function preloadChime(): void {
   window.addEventListener("touchstart", unlock);
 }
 
-/** Play the chime. Returns the play() promise so callers can await/inspect. */
-export function chime(): Promise<void> | void {
-  const a = getAudio();
-  if (!a) return;
+/** Play the chime. Uses a round-robin pool so back-to-back calls overlap
+ *  rather than cancel each other. */
+export function chime(): void {
+  const p = buildPool();
+  if (p.length === 0) return;
+  const a = p[poolIdx % p.length];
+  poolIdx++;
   try {
     a.currentTime = 0;
-    const p = a.play();
-    if (p && typeof p.catch === "function") {
-      p.catch((err) => {
-        // Most common: browser rejected autoplay. Will succeed after first user
-        // gesture (the unlock above handles this for non-test plays).
+    const r = a.play();
+    if (r && typeof r.catch === "function") {
+      r.catch((err) => {
         console.warn("[chime] play blocked:", err?.message || err);
       });
-      return p as Promise<void>;
     }
   } catch (e) {
     console.warn("[chime] threw:", e);
@@ -106,6 +113,8 @@ function startTitleFlash() {
   document.addEventListener("visibilitychange", visibilityHandler);
 }
 
+let notifCounter = 0;
+
 export function notifyNewLead(opts: { name: string; company?: string | null }): void {
   if (typeof window === "undefined") return;
   chime();
@@ -115,10 +124,12 @@ export function notifyNewLead(opts: { name: string; company?: string | null }): 
   const title = "New positive reply";
   const body = opts.company ? `${opts.name} · ${opts.company}` : opts.name;
   try {
+    // Unique tag per call so the browser doesn't collapse rapid notifications
+    // into a single visible one.
     const n = new Notification(title, {
       body,
       icon: "/gushwork-icon.svg",
-      tag: "icep-new-lead",
+      tag: `icep-new-lead-${++notifCounter}-${Date.now()}`,
     });
     setTimeout(() => n.close(), 6000);
     n.onclick = () => window.focus();
