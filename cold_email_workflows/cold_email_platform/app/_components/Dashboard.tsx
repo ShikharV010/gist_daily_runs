@@ -1,12 +1,13 @@
 "use client";
 
 import * as Tabs from "@radix-ui/react-tabs";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import DialerTable from "./DialerTable";
 import ReminderTable from "./ReminderTable";
 import AnalyticsTab from "./AnalyticsTab";
 import type { DialerRow, ReminderRow } from "@/lib/types";
 import type { Tz } from "@/lib/format";
+import { ensureNotifPermission, notifyNewLead } from "@/lib/notify";
 
 const POLL_MS = 10_000;
 const TZ_STORAGE_KEY = "icep:tz";
@@ -32,6 +33,9 @@ export default function Dashboard() {
     if (typeof window !== "undefined") window.localStorage.setItem(TZ_STORAGE_KEY, tz);
   }, [tz]);
 
+  // Track which dialer rows we've already seen so we only chime on truly new ones.
+  const seenDialerIds = useRef<Set<string> | null>(null);
+
   useEffect(() => {
     let cancelled = false;
     async function tick() {
@@ -41,15 +45,31 @@ export default function Dashboard() {
           fetch("/api/reminder-rows", { cache: "no-store" }).then((res) => res.json()),
         ]);
         if (cancelled) return;
-        setDialer(d.rows ?? []);
+        const dialerRows: DialerRow[] = d.rows ?? [];
+        setDialer(dialerRows);
         setReminders(r.rows ?? []);
         setLastSync(new Date());
+
+        // Notify on new dialer rows (skip the first poll — those are pre-existing).
+        if (seenDialerIds.current === null) {
+          seenDialerIds.current = new Set(dialerRows.map((row) => row.id));
+        } else {
+          const seen = seenDialerIds.current;
+          for (const row of dialerRows) {
+            if (!seen.has(row.id)) {
+              notifyNewLead({ name: row.name || row.email, company: row.company });
+              seen.add(row.id);
+            }
+          }
+        }
       } catch {
         // swallow — try again next tick
       }
     }
     tick();
     const id = setInterval(tick, POLL_MS);
+    // Ask for notification permission once (no-op if already granted/denied).
+    ensureNotifPermission();
     return () => {
       cancelled = true;
       clearInterval(id);
