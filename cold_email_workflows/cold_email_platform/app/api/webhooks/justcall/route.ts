@@ -1,21 +1,22 @@
 // JustCall webhook receiver.
 //
-// JustCall v2 payload shape (Call completed in JustCall):
+// Subscribe to BOTH events in JustCall → Settings → Webhooks (V2):
+//   - "Call completed in JustCall"  → increments call_attempts, sets call_at
+//   - "Call updated in JustCall"    → captures disposition (SDR marks it after the call)
+//
+// Both should use the same URL: /api/webhooks/justcall
+//
+// JustCall v2 payload shape:
 // {
-//   "request_id": "...",
-//   "type": "call.completed",
+//   "type": "call.completed" | "call.updated",
 //   "data": {
 //     "id": 178632100,
 //     "contact_number": "1681381XXXX",
-//     "call_date": "2024-01-18",          // agent local date
-//     "call_time": "14:34:13",            // agent local time
-//     "call_user_date": "2024-01-18",     // user-tz date
-//     "call_user_time": "07:27:57",       // user-tz time
+//     "call_date": "2024-01-18", "call_time": "14:34:13",
 //     "call_info": {
 //       "direction": "Incoming" | "Outgoing",
-//       "type": "answered" | "missed" | ...,
-//       "disposition": "",
-//       "notes": ""
+//       "type": "answered" | "missed",
+//       "disposition": ""   // <- selected AFTER call ends, comes via call.updated
 //     }
 //   }
 // }
@@ -38,7 +39,7 @@ type JcPayload = {
     call_time?: string;
     call_user_date?: string;
     call_user_time?: string;
-    datetime?: string; // some events use this directly
+    datetime?: string;
     call_info?: {
       direction?: string;
       type?: string;
@@ -46,7 +47,6 @@ type JcPayload = {
       notes?: string;
       missed_call_reason?: string;
     };
-    // top-level fallbacks (older payload shapes)
     direction?: string;
     disposition?: string;
     disposition_code?: string;
@@ -62,15 +62,17 @@ function pickDirection(d: JcPayload["data"]): string | null {
 
 function pickDisposition(d: JcPayload["data"]): string | null {
   if (!d) return null;
-  return (
+  const raw =
     d.call_info?.disposition ||
-    d.call_info?.notes ||
     d.disposition ||
     d.outcome ||
     d.disposition_code ||
+    d.call_info?.notes ||
     d.notes ||
-    null
-  );
+    null;
+  if (!raw) return null;
+  const s = String(raw).trim();
+  return s.length ? s : null;
 }
 
 function pickCallAt(d: JcPayload["data"]): Date {
@@ -79,8 +81,6 @@ function pickCallAt(d: JcPayload["data"]): Date {
     const t = new Date(d.datetime);
     if (!isNaN(t.getTime())) return t;
   }
-  // Combine date + time. JustCall doesn't ship a timezone with this — we treat
-  // it as UTC. Off-by-hours is fine; the < 5 min check uses reply_at delta.
   const date = d.call_date || d.call_user_date;
   const time = d.call_time || d.call_user_time;
   if (date && time) {
@@ -90,7 +90,12 @@ function pickCallAt(d: JcPayload["data"]): Date {
   return new Date();
 }
 
-// Allow GET so JustCall's webhook validation ping (HEAD/GET) sees a 200.
+/** Last 10 digits for fuzzy phone match (collapses country-code mismatches). */
+function last10(phone: string | null): string | null {
+  if (!phone) return null;
+  return phone.slice(-10);
+}
+
 export async function GET() {
   return NextResponse.json({ status: "ok", route: "justcall-webhook" });
 }
@@ -103,8 +108,6 @@ export async function POST(req: NextRequest) {
   const sig = req.headers.get("x-justcall-signature");
   if (process.env.JUSTCALL_WEBHOOK_SECRET && sig) {
     if (!verifyHmac(raw, sig, process.env.JUSTCALL_WEBHOOK_SECRET)) {
-      // Even for invalid sig, return 200 so JustCall doesn't disable the hook;
-      // log it for review instead.
       console.warn("[justcall] invalid signature, ignoring");
       return NextResponse.json({ status: "ignored", reason: "invalid signature" });
     }
@@ -114,8 +117,14 @@ export async function POST(req: NextRequest) {
   try {
     body = JSON.parse(raw);
   } catch {
-    // JustCall test pings may send empty bodies — return 200 so save succeeds.
     return NextResponse.json({ status: "ignored", reason: "invalid json" });
+  }
+
+  const eventType = (body.type || "").toLowerCase();
+  const isCompleted = /call\.completed/.test(eventType);
+  const isUpdated = /call\.updated/.test(eventType);
+  if (!isCompleted && !isUpdated) {
+    return NextResponse.json({ status: "ignored", reason: "unsupported event", type: eventType });
   }
 
   const direction = pickDirection(body.data);
@@ -124,35 +133,52 @@ export async function POST(req: NextRequest) {
   }
 
   const phone = digitsOnly(body.data?.contact_number || body.data?.dialed_number);
-  if (!phone) {
-    // Validation pings often have no contact number — accept silently.
+  const phoneLast10 = last10(phone);
+  if (!phoneLast10) {
     return NextResponse.json({ status: "ignored", reason: "no contact number" });
   }
 
   const callAtIso = pickCallAt(body.data).toISOString();
   const disposition = pickDisposition(body.data);
 
-  const updated = await query<{
-    id: string;
-    row_type: string;
-    external_id: string;
-  }>(
-    `UPDATE gist.gtm_unified_db_source
-        SET call_at = COALESCE(call_at, $1::timestamptz),
-            call_within_5min = CASE
-              WHEN call_at IS NOT NULL THEN call_within_5min
-              WHEN reply_at IS NULL THEN NULL
-              ELSE EXTRACT(EPOCH FROM ($1::timestamptz - reply_at)) <= 300
-            END,
-            call_disposition = $3,
-            call_attempts = COALESCE(call_attempts, 0) + 1
-      WHERE phone = $2
-      RETURNING id, row_type, external_id`,
-    [callAtIso, phone, disposition]
-  );
+  let updated: Array<{ id: string; row_type: string; external_id: string }> = [];
+
+  if (isCompleted) {
+    // First completion of THIS call: stamp call_at, compute < 5 min, set
+    // disposition (if any), and bump attempts. We use right(phone, 10) to
+    // tolerate country-code mismatches between our DB and JustCall.
+    updated = await query<{ id: string; row_type: string; external_id: string }>(
+      `UPDATE gist.gtm_unified_db_source
+          SET call_at = COALESCE(call_at, $1::timestamptz),
+              call_within_5min = CASE
+                WHEN call_at IS NOT NULL THEN call_within_5min
+                WHEN reply_at IS NULL THEN NULL
+                ELSE EXTRACT(EPOCH FROM ($1::timestamptz - reply_at)) <= 300
+              END,
+              call_disposition = COALESCE(NULLIF($3, ''), call_disposition),
+              call_attempts = COALESCE(call_attempts, 0) + 1
+        WHERE right(phone, 10) = $2
+        RETURNING id, row_type, external_id`,
+      [callAtIso, phoneLast10, disposition]
+    );
+  } else if (isUpdated) {
+    // SDR updated the call (typically the disposition pick). Don't bump
+    // attempts, don't touch call_at. Just overwrite disposition.
+    if (!disposition) {
+      return NextResponse.json({ status: "ignored", reason: "call.updated with no disposition" });
+    }
+    updated = await query<{ id: string; row_type: string; external_id: string }>(
+      `UPDATE gist.gtm_unified_db_source
+          SET call_disposition = $2
+        WHERE right(phone, 10) = $1
+        RETURNING id, row_type, external_id`,
+      [phoneLast10, disposition]
+    );
+  }
 
   return NextResponse.json({
     status: "ok",
+    event: eventType,
     phone,
     rows_updated: updated.length,
     disposition,
