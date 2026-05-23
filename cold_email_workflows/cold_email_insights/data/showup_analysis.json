@@ -26025,5 +26025,990 @@
       "total_duration_min": 44,
       "analyzed_at": "2026-05-22T08:02:45.730044Z"
     }
+  },
+  "Gosar consulting ": {
+    "company": "Gosar Consulting",
+    "prospect_name": "Kolton Nelder",
+    "prospect_designation": "Consulting Partner at Gosar Consulting Group",
+    "is_decision_maker": false,
+    "decision_maker_reasoning": "Kolton is a partner, not the owner; he also has his own separate business Cornerstone Consulting.",
+    "company_industry": "Business Services / Management Consulting",
+    "pain_points": [
+      {
+        "pain_point": "No organic digital lead generation",
+        "severity": "high",
+        "direct_quote": "Getting clients and getting visibility seems to be the bigger challenge.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's organic AI/SEO landing page strategy directly targets this gap."
+      },
+      {
+        "pain_point": "Website gets zero organic traffic",
+        "severity": "high",
+        "direct_quote": "The only way that people are going there is from ironically my \u2014 I share the link or I send people there.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed live traffic data confirming zero organic visits and explained fix."
+      },
+      {
+        "pain_point": "Over-reliance on word-of-mouth and in-person networking",
+        "severity": "high",
+        "direct_quote": "Word of mouth and meeting them either through networking events or through speaking events.",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as a scalable, always-on inbound complement."
+      },
+      {
+        "pain_point": "Bad past experiences with AI lead gen vendors",
+        "severity": "medium",
+        "direct_quote": "Every time I talk to them about it, they're like, yeah, it's north of $5,000 initially.",
+        "addressed_in_call": true,
+        "how_addressed": "AE clarified no revenue-share model and transparent pricing structure."
+      },
+      {
+        "pain_point": "Internal tech project delays from business owner",
+        "severity": "medium",
+        "direct_quote": "He said it was going to be done last by last July... he sees a squirrel and goes after it.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Not yet financially self-sufficient in own business",
+        "severity": "high",
+        "direct_quote": "I'm close, but I'm not quite there. Once I get to a place where I can survive, then I would be comfortable investing.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Price too high for current revenue stage",
+        "how_handled": "AE acknowledged and sent full commercial details for future reference.",
+        "resolved": false
+      },
+      {
+        "objection": "Said no to lower-priced competitors before",
+        "how_handled": "AE differentiated on organic pull model vs push/revenue-share models.",
+        "resolved": false
+      },
+      {
+        "objection": "Not the final decision maker for Gosar",
+        "how_handled": "Not explicitly addressed; AE did not ask to loop in the owner.",
+        "resolved": false
+      },
+      {
+        "objection": "Minimum 6-month contract term concern",
+        "how_handled": "AE explained tiered terms but did not offer a shorter trial option.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Expressed strong interest in organic lead generation model.",
+      "Acknowledged zero organic traffic as a real problem.",
+      "Asked about GoHighLevel CRM integration proactively.",
+      "Said he wrote down Gushwork's name for future reference.",
+      "Told AE: 'don't be surprised if you see an email from me.'",
+      "Called the demo 'inspiring' and praised the product.",
+      "Runs own separate business Cornerstone Consulting as future opportunity."
+    ],
+    "negative_signals": [
+      "Explicitly said 'I'll say no' due to current budget constraints.",
+      "Not yet financially stable enough to invest in lead gen.",
+      "Only a partner, not owner; cannot unilaterally commit budget.",
+      "Gosar owner distracted and not present on the call.",
+      "Previously rejected multiple cheaper lead gen solutions.",
+      "No specific timeline or budget commitment given."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send recording and commercial details via email.",
+      "Prospect will review and reach out when financially ready.",
+      "Prospect to consider for his own business Cornerstone Consulting.",
+      "Prospect may re-engage via email at an unspecified future date."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Call recording to be sent to prospect.",
+      "Commercial pricing details document to be shared.",
+      "Sample landing pages from the demo to be included.",
+      "AE contact number included in follow-up email."
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect explicitly declined due to budget constraints today.",
+      "No decision-making authority over Gosar Consulting budget.",
+      "No follow-up date or timeline established on the call.",
+      "His own business Cornerstone is a longer-term future opportunity.",
+      "Genuine product interest exists but no near-term purchase path.",
+      "Score of 3 reflects warm interest but cold near-term intent."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "Good rapport and discovery; prospect opened up naturally.",
+      "AE failed to identify non-decision-maker status early enough.",
+      "Gushwork owner not invited despite Kolton mentioning him.",
+      "No attempt to bridge to Cornerstone Consulting as separate deal.",
+      "Pricing revealed without anchoring ROI or value first.",
+      "No concrete next-step date secured before ending the call.",
+      "Demo was well-structured and relevant to prospect's services.",
+      "AE should have asked about budget range before pricing reveal."
+    ],
+    "key_insights": [
+      "Kolton's own business Cornerstone Consulting is a separate opportunity.",
+      "Gosar owner is the real decision maker; was never engaged.",
+      "Prospect has genuine product appreciation despite budget objection.",
+      "High familiarity with AI lead gen market signals educated buyer.",
+      "Consulting firm with zero organic traffic is a strong use case.",
+      "Word-of-mouth only model creates urgency for scalable inbound."
+    ],
+    "recommended_next_action": "Send a tailored follow-up email within 24 hours including the demo recording, pricing doc, and a dedicated section positioning Gushwork for Cornerstone Consulting at a starter tier, with a soft call-to-action to schedule a 15-minute check-in in 4-6 weeks.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Zero organic traffic confirmed via live site scan and shown clearly.",
+      "Pull vs push lead gen model directly countered past vendor trauma.",
+      "Landing pages mapped to Gosar's exact consulting service categories.",
+      "AI search visibility gap quantified with real monthly search volumes.",
+      "No revenue-share model clarified to address prior pricing objections.",
+      "Leads dashboard and CRM integration addressed follow-up workflow concern."
+    ],
+    "_meta": {
+      "prospect_email": "kolton.nelder@gosarconsulting.com",
+      "prospect_company": "Gosar consulting ",
+      "prospect_website": "https://gosarconsulting.com/",
+      "demo_date": "2026-05-22",
+      "ae_name": "Sukruti Ssinha",
+      "industry": "Business Services",
+      "meeting_ids": [
+        "ecce601c543c38fd04e5e6b1747a3baa"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=4ace0b2d-415c-4920-a3b2-eba184b8b970&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 37,
+      "analyzed_at": "2026-05-23T07:19:24.773317Z"
+    }
+  },
+  "Awe Horizons LLC": {
+    "company": "Awe Horizons LLC",
+    "prospect_name": "Awatif Yahya",
+    "prospect_designation": "Founder at Awe Horizons LLC",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Awatif is the sole founder and only full-time employee making all business decisions.",
+    "company_industry": "Corporate Training / Leadership Development",
+    "pain_points": [
+      {
+        "pain_point": "Lead generation is ad hoc and referral-dependent",
+        "severity": "high",
+        "direct_quote": "In terms of lead generation per se, it's coming from these HR communities which are very specific.",
+        "addressed_in_call": true,
+        "how_addressed": "AE pitched AI/SEO visibility to diversify beyond referral channels."
+      },
+      {
+        "pain_point": "Low online visibility on Google and AI search",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "Demo showed gap in current search rankings and how Gushwork fills it."
+      },
+      {
+        "pain_point": "Founder is sole deliverer, limiting scalable growth",
+        "severity": "medium",
+        "direct_quote": "I'm the one doing the delivery.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Book writing consuming most available time",
+        "severity": "medium",
+        "direct_quote": "That's been consuming most of my time, to be honest with you.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Prior similar tool showed no measurable ROI",
+        "severity": "high",
+        "direct_quote": "I've tried something similar to this before, but it didn't show me the ROI.",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered 4-month pilot with ROI visibility by end of month three."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "HR buyers don't search Google for vendors",
+        "how_handled": "AE asked why 300 searchers converting at 30% wouldn't work for her.",
+        "resolved": false
+      },
+      {
+        "objection": "Business is referral and community-driven, not search-driven",
+        "how_handled": "AE acknowledged but pitched incremental pipeline from search intent.",
+        "resolved": false
+      },
+      {
+        "objection": "Previous similar tool delivered no ROI",
+        "how_handled": "AE differentiated via AI-layer, continuous optimization, and pilot framing.",
+        "resolved": false
+      },
+      {
+        "objection": "Requested a trial period before committing",
+        "how_handled": "AE pivoted to 4-month pilot at $800/month launch plan.",
+        "resolved": false
+      },
+      {
+        "objection": "Service is too personal and word-of-mouth to benefit from SEO",
+        "how_handled": "AE promised case studies from similar leadership workshop clients via email.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Asked specifically about cost and pricing plans.",
+      "Asked about trial or pilot period availability.",
+      "Screenshotted pricing slide during the call.",
+      "Confirmed understanding of the $800/month launch pilot structure.",
+      "Agreed to receive follow-up email with case studies.",
+      "Said 'I'm willing to try' before explaining hesitation.",
+      "Did not reject outright; left door open conditionally."
+    ],
+    "negative_signals": [
+      "Explicitly said 'I don't think this is aligned with me.'",
+      "Said she knows HR buyers don't use Google to find vendors.",
+      "Previously tried similar tool with no ROI result.",
+      "Stated she wants to continue current strategy for now.",
+      "Described her business as too personal and referral-based.",
+      "Had a hard stop; limited time to engage deeply.",
+      "Couldn't recall why she booked the meeting initially."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send follow-up email with pricing plans.",
+      "AE to include case studies of similar leadership clients.",
+      "Prospect to review materials and decide on pilot interest.",
+      "No follow-up call scheduled; ball in prospect's court."
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Call recording to be shared with prospect.",
+      "Pricing plan details for Launch, Grow, Scale tiers.",
+      "Case studies from leadership workshop clients using Gushwork.",
+      "ROI data from similar corporate training industry clients."
+    ],
+    "deal_closing_intent_score": 2,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect gave a clear soft 'no' at end of call.",
+      "Core objection \u2014 HR buyers don't use Google \u2014 was unresolved.",
+      "No follow-up meeting scheduled; fully left to email nudge.",
+      "Prior bad experience with similar tool deepens skepticism.",
+      "Expressed interest in pricing only out of due diligence.",
+      "Explicitly said current strategy will continue unchanged.",
+      "Only opening is case study email which may shift perception."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "Discovery was thorough; ICP, capacity, and channels well explored.",
+      "AE failed to counter the 'HR buyers skip Google' objection convincingly.",
+      "No social proof or case studies shared live during the call.",
+      "Pricing was introduced reactively rather than value-anchored.",
+      "AE did not probe or quantify revenue impact of current lead gaps.",
+      "Good rapport built; tone was professional and respectful throughout.",
+      "Demo was relevant but generic; no real-time Awe Horizons example shown.",
+      "Should have pulled up a live leadership training search on ChatGPT."
+    ],
+    "key_insights": [
+      "Prospect is a solo founder with limited bandwidth and tight focus.",
+      "Her ICP is HR managers at 100+ employee organizations, industry-agnostic.",
+      "Primary acquisition channel is SHRM, HR Hot Seat, DisruptHR communities.",
+      "She was formerly an HR manager, giving her deep buyer-side empathy.",
+      "Leadership book launch in Q4 may create a future content marketing hook.",
+      "Biggest risk: she genuinely believes her buyers don't use Google or AI.",
+      "Key opportunity: demonstrate that HR managers increasingly use AI search tools.",
+      "Case studies from comparable leadership training firms are critical to re-engage."
+    ],
+    "recommended_next_action": "Send a highly personalized follow-up email within 24 hours featuring a live ChatGPT or Perplexity screenshot showing a competitor leadership firm ranking for 'change management training programs USA', paired with a concrete ROI case study from a similar B2B leadership workshop client, to directly counter her core objection that HR buyers don't use AI search engines.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Referral dependency addressed by pitching incremental AI search pipeline.",
+      "Low search visibility addressed via live platform demo and keyword analysis.",
+      "Prior ROI failure addressed by reframing as a structured 4-month pilot.",
+      "Capacity and scalability pain points were NOT addressed during the call.",
+      "Book-writing time constraint was acknowledged but not linked to value prop."
+    ],
+    "_meta": {
+      "prospect_email": "awatif@awehorizons.com",
+      "prospect_company": "Awe Horizons LLC",
+      "prospect_website": "www.awehorizons.com",
+      "demo_date": "2026-05-22",
+      "ae_name": "Sukruti Ssinha",
+      "industry": "Corporate Training",
+      "meeting_ids": [
+        "f7d93f0682e1fcc80c0290d236f3710c"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=ba369852-305f-4f6d-adcc-d96b3a73b0a1&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 40,
+      "analyzed_at": "2026-05-23T07:19:25.577707Z"
+    }
+  },
+  "Gradient GTM": {
+    "company": "Gradient GTM",
+    "prospect_name": "Jennifer Tomassi",
+    "prospect_designation": "Co-Founder and Head of Customer Success at Gradient Works",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Jennifer is the co-founder running founder-led sales and controls purchasing decisions.",
+    "company_industry": "B2B SaaS / GTM Advisory & Consulting Services",
+    "pain_points": [
+      {
+        "pain_point": "Too busy with client work to build own pipeline",
+        "severity": "high",
+        "direct_quote": "I'm so busy with my client work that it's hard to focus on the outbound motion or creating inbound.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned as inbound pull engine requiring minimal time from Jennifer"
+      },
+      {
+        "pain_point": "Website not optimized for search or AI platforms",
+        "severity": "high",
+        "direct_quote": "I'm not optimized for search on the web. I'm not optimized for search in LLMs or AI companions.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained AI-agent system that creates SEO and GEO-optimized landing pages"
+      },
+      {
+        "pain_point": "Very small and thin prospect pipeline",
+        "severity": "high",
+        "direct_quote": "I have a very small prospect pipeline right now because I'm so busy with my client work.",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork's MQL generation via landing pages presented as direct solution"
+      },
+      {
+        "pain_point": "ICP and verticals not reflected on website",
+        "severity": "medium",
+        "direct_quote": "HR Tech and fintech... it's not on my website.",
+        "addressed_in_call": true,
+        "how_addressed": "AE noted system can incorporate vertical feedback to tailor content creation"
+      },
+      {
+        "pain_point": "Limited content assets to support inbound marketing",
+        "severity": "medium",
+        "direct_quote": "I don't have a lot of content on my website as a solopreneur.",
+        "addressed_in_call": true,
+        "how_addressed": "AE reassured that thin one-pager websites are sufficient to get started"
+      },
+      {
+        "pain_point": "Time scarcity limiting strategic marketing execution",
+        "severity": "high",
+        "direct_quote": "I am feeling very tight on time these days, if I'm being honest.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Unclear how AI platforms like ChatGPT can be optimized",
+        "how_handled": "AE explained AI crawlers index web content; Gushwork publishes at scale to rank in AI answers",
+        "resolved": true
+      },
+      {
+        "objection": "Insufficient website content to power the system",
+        "how_handled": "AE said even one-pager sites work; LinkedIn and newsletter content can supplement",
+        "resolved": true
+      },
+      {
+        "objection": "Very limited time availability for next steps",
+        "how_handled": "AE offered async email follow-up, calendar link, and flexibility on timing",
+        "resolved": true
+      },
+      {
+        "objection": "Wants marketer Jay involved before committing",
+        "how_handled": "AE agreed to include Jay; follow-up email will go to Jennifer to coordinate",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Explicitly said 'it does look interesting to me'",
+      "Wants to involve strategic marketer Jay in next call",
+      "Asked to meet again before ending call",
+      "Requested transcript within one hour for marketer meeting",
+      "Acknowledged website not optimized; ABM updates already planned",
+      "Had a 'wow, that is so cool' reaction to search query demo",
+      "Prospect is actively hiring marketer; ready to invest in growth"
+    ],
+    "negative_signals": [
+      "Very early-stage business; limited budget signals",
+      "Extremely time-constrained; hard to schedule follow-up",
+      "Small TAM limits scale of potential ROI for Gushwork",
+      "Only 3 clients; budget capacity unclear and likely tight",
+      "Decision now involves a third party (marketer Jay)",
+      "No clear timeline or urgency expressed for purchase"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send follow-up email with call transcript",
+      "AE to include calendar link for next meeting booking",
+      "Jennifer to discuss Gushwork with marketer Jay at 12pm",
+      "Follow-up call to include Jennifer and marketer Jay",
+      "AE to share example landing pages and search queries",
+      "Next meeting to cover strategy, timeline, and pricing"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Full call transcript to be sent within one hour",
+      "Example landing pages created from Jennifer's website",
+      "Relevant search queries identified by Gushwork system",
+      "Calendar link for easy meeting scheduling",
+      "Summary email with meeting context and next steps"
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Genuine curiosity and positive reaction to product demo",
+      "Proactively wants to loop in her strategic marketer",
+      "Core pain points (pipeline, SEO, time) align with Gushwork offering",
+      "No budget discussion; affordability risk for early-stage company",
+      "No urgency or timeline stated; deal could stall easily",
+      "Third-party stakeholder (Jay) adds friction to closing speed"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE skipped structured discovery; jumped to pitch too quickly",
+      "Prospect dominated first half; AE lost narrative control early",
+      "Product demo (search queries) landed well and created excitement",
+      "Pricing, ROI, and budget were never discussed on the call",
+      "No BANT qualification completed; budget and authority unclear",
+      "AE recovered well by offering async materials and next steps",
+      "Call ended abruptly; Jennifer had a hard stop at 11am",
+      "AE should have confirmed next meeting date before call ended"
+    ],
+    "key_insights": [
+      "Jennifer is customer zero for her own AI GTM tool",
+      "She targets seed-stage HR Tech and fintech founders specifically",
+      "ABM campaign launching soon; website updates imminent and timely",
+      "Marketer Jay is a key influencer; must be on next call",
+      "Tight time availability is top risk to deal progression speed",
+      "Small business size may limit budget for Gushwork engagement",
+      "LinkedIn and newsletter content exist but not on website yet",
+      "She responds better to tactical how-it-works explanations"
+    ],
+    "recommended_next_action": "Send transcript and search query examples within 1 hour, then email a concise one-page brief for Jay covering Gushwork's fit with their ABM launch and propose a 30-min call slot for both Jennifer and Jay within 5 business days.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Pipeline gap addressed via MQL-focused inbound funnel pitch",
+      "Website invisibility addressed via SEO and GEO page creation",
+      "AI platform optimization explained via web-crawling content logic",
+      "Thin website content concern resolved; one-pagers confirmed sufficient",
+      "Vertical ICP gaps noted; system can ingest HR Tech fintech feedback",
+      "Time scarcity not fully addressed; async workflow not emphasized enough"
+    ],
+    "_meta": {
+      "prospect_email": "jenn@gradientgtmadvisory.com",
+      "prospect_company": "Gradient GTM",
+      "prospect_website": "gradientgtmadvisory.com",
+      "demo_date": "2026-05-22",
+      "ae_name": "Manthan Gupta",
+      "industry": "Business Services (1-5)",
+      "meeting_ids": [
+        "c74d7e26dca35e417ac5d90fc30364f4"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=2605c502-60bd-47c7-987f-7830628f7e5d&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 31,
+      "analyzed_at": "2026-05-23T07:19:27.907851Z"
+    }
+  },
+  "BG Consulting": {
+    "company": "BG Consulting",
+    "prospect_name": "Bliss Griffin",
+    "prospect_designation": "Founder / Independent Consultant & Executive Coach",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Bliss is the sole owner and operator of BG Consulting with full budget authority.",
+    "company_industry": "Corporate Training / Executive Coaching & Organizational Development",
+    "pain_points": [
+      {
+        "pain_point": "Zero digital / inbound lead generation",
+        "severity": "high",
+        "direct_quote": "I have given literally zero energy to acquiring any more",
+        "addressed_in_call": true,
+        "how_addressed": "Mani showed zero AI citations and Google traffic; pitched SEO+AEO content engine"
+      },
+      {
+        "pain_point": "Lost NYC in-person networking pipeline",
+        "severity": "high",
+        "direct_quote": "when I was in New York City going to events\u2026clients were coming by\u2026But that's no longer a resource for me",
+        "addressed_in_call": true,
+        "how_addressed": "Positioned Gushwork as digital replacement for word-of-mouth and networking"
+      },
+      {
+        "pain_point": "Limited bandwidth due to caregiver responsibilities",
+        "severity": "high",
+        "direct_quote": "I have really stepped back for about the past year because my mom has Alzheimer's disease",
+        "addressed_in_call": true,
+        "how_addressed": "Framed Gushwork as fully managed white-glove service requiring minimal prospect time"
+      },
+      {
+        "pain_point": "No passive / scalable revenue stream yet",
+        "severity": "medium",
+        "direct_quote": "I want to spend this summer building product that can just be online and people can do it on their own time",
+        "addressed_in_call": true,
+        "how_addressed": "Mani argued starting SEO now builds authority before digital product launches"
+      },
+      {
+        "pain_point": "Coaching is time-intensive; capacity capped at 2-3 hrs/day",
+        "severity": "medium",
+        "direct_quote": "two to three hours a day that I can spend with clients",
+        "addressed_in_call": true,
+        "how_addressed": "Highlighted high-intent leads reduce sales cycle; fewer but better-qualified conversations"
+      },
+      {
+        "pain_point": "Invisible on Google and AI search platforms",
+        "severity": "high",
+        "direct_quote": "we're also not having any traffic from people who haven't heard of us before",
+        "addressed_in_call": true,
+        "how_addressed": "Demonstrated competitor visibility; showed sample landing pages and AI citation strategy"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Wants to wait until digital product is ready before investing",
+        "how_handled": "Mani argued early SEO build-up means authority matures by product launch; compounding effect",
+        "resolved": false
+      },
+      {
+        "objection": "Price concern at ~$800/month given low current revenue",
+        "how_handled": "Mani acknowledged concern, offered potential Monday discount, asked for budget number; prospect deferred",
+        "resolved": false
+      },
+      {
+        "objection": "More leads now means more time spent on coaching calls",
+        "how_handled": "Mani reframed: high-intent leads = shorter sales cycle; also future traffic drives digital product sales",
+        "resolved": false
+      },
+      {
+        "objection": "Needs time to calculate ROI and acceptable client acquisition cost",
+        "how_handled": "Mani accepted follow-up timeline; promised case study of solo consultant success story",
+        "resolved": false
+      },
+      {
+        "objection": "Declined urgency push for Memorial Day pricing",
+        "how_handled": "Prospect firmly pushed back; Mani gracefully accepted end-of-next-week follow-up",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Said 'I'm hooked' explicitly during pricing discussion",
+      "Agreed launch plan feels like right starting point",
+      "Acknowledged zero digital presence is a real problem",
+      "Confirmed comfort with 3-month onboarding timeline",
+      "Proactively asked to discuss pricing and numbers",
+      "Willingly scheduled a follow-up call for Thursday May 28",
+      "Expressed openness to outsourcing lead acquisition entirely",
+      "Said the demo 'looks great' unprompted"
+    ],
+    "negative_signals": [
+      "Wants to wait until digital product is built first",
+      "Caregiving situation limits available time and mental bandwidth",
+      "Current revenue low; overhead sensitivity around $800/month",
+      "Refused urgency-based Memorial Day pricing close",
+      "Cannot provide budget number; decision needs 'marinating' time",
+      "Described herself as 'accidental consultant'; low growth urgency",
+      "Only 2-3 hours daily available; bandwidth severely constrained"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call scheduled Thursday May 28 at 11am PT / 2pm ET",
+      "Prospect will calculate acceptable client acquisition cost",
+      "Prospect will assess budget fit for $800/month launch plan",
+      "Mani to send recap email by end of day Friday or Monday",
+      "Mani to share solo-consultant success story testimonial video"
+    ],
+    "next_call_date": "2026-05-28 11:00 AM PT / 2:00 PM ET",
+    "follow_up_materials_promised": [
+      "Full recap email summarizing demo discussion and plans",
+      "Solo consultant testimonial video (fractional officer case study)",
+      "Pricing details and potential discount options from team"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Strong verbal interest; said 'I'm hooked' and 'looks great'",
+      "Clear product-market fit acknowledged by prospect herself",
+      "Main blocker is timing, not product value or trust",
+      "Price sensitivity real but not a hard no",
+      "Wants digital product live first; adds 2-3 month delay risk",
+      "Agreed to follow-up; not ghosting or stalling indefinitely",
+      "No strong champion or urgency driver to accelerate close"
+    ],
+    "call_quality_score": 8,
+    "call_quality_notes": [
+      "Mani opened with strong empathy around caregiver situation",
+      "Discovery was thorough; uncovered capacity, goals, and timeline",
+      "Live website analysis added credibility and personalization",
+      "Competitor gap analysis effectively created urgency",
+      "Handled premature price question by redirecting to timeline first",
+      "Slight over-pitching after prospect said 'I'm hooked'",
+      "Urgency push via Memorial Day discount felt slightly forced",
+      "Follow-up assets and next steps clearly defined and confirmed",
+      "Ramin Joseph listed on call but had zero visible participation"
+    ],
+    "key_insights": [
+      "Prospect is solo operator with hard bandwidth ceiling daily",
+      "Digital course launch this summer is her #1 strategic priority",
+      "Gushwork value prop aligns better with course launch than coaching",
+      "Framing future pitch around course traffic may accelerate close",
+      "DEI positioning is actively unwanted; avoid in follow-up content",
+      "Org culture and executive coaching are her two target verticals",
+      "She uses AI tools herself; AI citation angle resonated strongly",
+      "Low overhead but also low urgency; needs ROI clarity to commit",
+      "Personal life complexity makes long-term commitment feel risky",
+      "Case study of solo consultant replacing income could be decisive"
+    ],
+    "recommended_next_action": "Send recap email with testimonial video before Monday; in May 28 call reframe pitch around driving traffic to her upcoming digital course rather than coaching leads, and present a concrete ROI model showing break-even at 1-2 course sales per month.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Zero inbound leads: showed live data gap; pitched content engine fix",
+      "Lost networking pipeline: positioned Gushwork as digital equivalent",
+      "Caregiver bandwidth limits: emphasized fully managed, hands-off service",
+      "No passive revenue yet: argued SEO now compounds before course launch",
+      "Time-capped coaching capacity: framed high-intent leads as time-efficient",
+      "Invisible on Google and AI: demonstrated competitor rankings; showed sample pages"
+    ],
+    "_meta": {
+      "prospect_email": "bg@blissgriffin.com",
+      "prospect_company": "BG Consulting",
+      "prospect_website": "Www.BlissGriffin.com",
+      "demo_date": "2026-05-22",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "Corporate Training",
+      "meeting_ids": [
+        "3d9b17edbcaf70dd7a949fdcf847d5db"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=6f497b01-12c8-4194-bf12-918822949f2d&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 41,
+      "analyzed_at": "2026-05-23T07:19:31.518211Z"
+    }
+  },
+  "Next Moca": {
+    "company": "Next Moca",
+    "prospect_name": "Kiran Kashalkar",
+    "prospect_designation": "Founder at Next Moca",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Kiran is the Founder and references co-founder for internal sharing only.",
+    "company_industry": "AI SaaS / Agentic Platform & White-Label Solutions",
+    "pain_points": [
+      {
+        "pain_point": "No marketing pipeline set up yet",
+        "severity": "high",
+        "direct_quote": "we are actually setting up our marketing pipeline right now",
+        "addressed_in_call": true,
+        "how_addressed": "Gushwork positioned as end-to-end inbound marketing solution"
+      },
+      {
+        "pain_point": "Not visible on AI search engines",
+        "severity": "high",
+        "direct_quote": "on AI platforms, others in your space are showing up ahead of you. Nextmoca is not showing up.",
+        "addressed_in_call": true,
+        "how_addressed": "AEO/SEO agent system demo shown with competitor gap example"
+      },
+      {
+        "pain_point": "Lacks marketing expertise internally",
+        "severity": "high",
+        "direct_quote": "I am not from the marketing world. So if I get some platform which is able to take away that work from me",
+        "addressed_in_call": true,
+        "how_addressed": "Human-in-the-loop model with account manager explained"
+      },
+      {
+        "pain_point": "Evaluating hiring vs. buying marketing solution",
+        "severity": "medium",
+        "direct_quote": "My other option is actually to go and hire someone which is also something I pursue",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Uncertainty about tool stack and integrations needed",
+        "severity": "medium",
+        "direct_quote": "Do I still need HubSpot? Do I still need any other tools that can automate my workflow?",
+        "addressed_in_call": true,
+        "how_addressed": "AE clarified Gushwork handles inbound fully; HubSpot not needed"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Concern about startup reliability and longevity",
+        "how_handled": "AE shared funding ($9M raised), 450 clients, 4 offices, 4 years in business",
+        "resolved": true
+      },
+      {
+        "objection": "Website migration concern for Squarespace",
+        "how_handled": "AE clarified reverse proxy approach; no migration required",
+        "resolved": true
+      },
+      {
+        "objection": "Pricing clarity \u2014 pilot vs. paid commitment",
+        "how_handled": "AE clarified $800/month for 4-month commitment, not a free trial",
+        "resolved": true
+      },
+      {
+        "objection": "Busy schedule limiting near-term availability",
+        "how_handled": "AE offered email follow-up on May 26 and flexible scheduling",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Actively building marketing pipeline right now",
+      "Expressed interest in end-to-end inbound solution",
+      "Asked detailed technical integration questions",
+      "Engaged on pricing and plan structure",
+      "Willing to share two-pager with co-founder",
+      "Said 'this is very interesting' about AEO demo",
+      "Open to reconvening mid-next-week for follow-up"
+    ],
+    "negative_signals": [
+      "Evaluating hiring a marketer as alternative",
+      "Currently trialing HubSpot \u2014 competing commitment",
+      "Prospect is traveling and busy with Boston Tech Week",
+      "No next call booked; deferred to email follow-up",
+      "Needs more time to review website before deciding"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send follow-up email on May 26",
+      "Kiran to review Gushwork website independently",
+      "Kiran to share two-pager with co-founder",
+      "Potential call mid-next-week if schedule allows"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Call recording to be shared by AE",
+      "Two-pager about Gushwork for internal sharing",
+      "Follow-up email to be sent on May 26"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Strong product-market fit for current marketing gap",
+      "Founder engaged deeply with demo and pricing",
+      "Co-founder loop adds decision friction before close",
+      "No urgency beyond end-of-month promo incentive",
+      "Hiring alternative still actively being considered",
+      "No next call scheduled \u2014 momentum risk present"
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE gave clear product demo with live client example",
+      "AE handled technical DNS/proxy questions confidently",
+      "Good discovery on pain points and current tool stack",
+      "AE missed direct ROI quantification for Next Moca",
+      "HubSpot competitor comparison was slightly overconfident",
+      "No clear next call booked \u2014 weak close attempt",
+      "End-of-month promo urgency created but not leveraged"
+    ],
+    "key_insights": [
+      "Kiran is a technical founder, non-marketer \u2014 needs simplicity",
+      "Company is early-stage with no formal marketing function",
+      "White-label agentic platform is a niche, high-value offering",
+      "AEO visibility gap is a strong, validated hook for Next Moca",
+      "Co-founder involvement expected before final decision",
+      "Boston Tech Week next week reduces follow-up responsiveness",
+      "Promo offer for onboarding before month-end is live incentive"
+    ],
+    "recommended_next_action": "Send a personalized May 26 email with call recording, two-pager, and a specific AI search visibility audit screenshot for nextmoca.com to re-trigger urgency before the promo deadline expires.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Inbound pipeline gap addressed via full-service positioning",
+      "AI search invisibility shown live with ChatGPT competitor demo",
+      "Marketing expertise gap covered by human-in-the-loop model",
+      "Tool stack confusion resolved \u2014 HubSpot not needed for inbound",
+      "Hiring alternative NOT directly countered with cost/time comparison"
+    ],
+    "_meta": {
+      "prospect_email": "kiran@nextmoca.com",
+      "prospect_company": "Next Moca",
+      "prospect_website": "nextmoca.com",
+      "demo_date": "2026-05-22",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Mix Services (1-5)",
+      "meeting_ids": [
+        "bbc7b78cd2cf55ec2067aa3d16bc6a59"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=d3ea04fe-80fc-4401-99f0-70462110a8c5&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 32,
+      "analyzed_at": "2026-05-23T07:19:55.218480Z"
+    }
+  },
+  "JPG Enterprises / JPGE Leadership Institute for Strategic Growth": {
+    "company": "JPG Enterprises / JPGE Leadership Institute for Strategic Growth",
+    "prospect_name": "Janaya Patton",
+    "prospect_designation": "Founder / Principal (not explicitly stated)",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "She speaks as sole decision-maker with no mention of needing approval from others.",
+    "company_industry": "Corporate Training / Leadership Development Consulting",
+    "pain_points": [
+      {
+        "pain_point": "No structured lead generation system",
+        "severity": "high",
+        "direct_quote": "the most promotion we do is because of me. I post online regularly, social media, IG, LinkedIn",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed AI-search content pages driving inbound leads via subdirectory"
+      },
+      {
+        "pain_point": "Zero website-driven inbound leads",
+        "severity": "high",
+        "direct_quote": "even that is super informal. It's not like I'm really trying to seek engagement and collecting emails",
+        "addressed_in_call": true,
+        "how_addressed": "Demonstrated lead capture forms and dashboard within content pages"
+      },
+      {
+        "pain_point": "No dedicated marketing team",
+        "severity": "medium",
+        "direct_quote": "it actually would really be beneficial because we don't really have a solidified marketing team",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as fully managed extension of marketing team"
+      },
+      {
+        "pain_point": "Invisible to AI search engines vs large competitors",
+        "severity": "high",
+        "direct_quote": "they're getting all the leads that you could have gotten",
+        "addressed_in_call": true,
+        "how_addressed": "Showed competitor gap analysis and keyword opportunities JPGE is missing"
+      },
+      {
+        "pain_point": "Business just re-entering market after pause",
+        "severity": "medium",
+        "direct_quote": "we paused for the year 2025, 2026, and have had really, really great results",
+        "addressed_in_call": true,
+        "how_addressed": "AE argued starting now means leads ready when business is fully launched"
+      },
+      {
+        "pain_point": "HubSpot CRM in very early setup stage",
+        "severity": "low",
+        "direct_quote": "We just set up a HubSpot to be able to start tracking that kind of stuff",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Not ready to buy today \u2014 just re-entering market",
+        "how_handled": "AE acknowledged concern but highlighted compounding delay cost of waiting",
+        "resolved": false
+      },
+      {
+        "objection": "Too much internal noise \u2014 hiring, fellowship launch",
+        "how_handled": "AE emphasized fully managed service requiring minimal prospect effort",
+        "resolved": false
+      },
+      {
+        "objection": "Wants to wait one month before deciding",
+        "how_handled": "AE booked follow-up for ~June 20 and left door open for earlier contact",
+        "resolved": false
+      },
+      {
+        "objection": "Concern about volume and nature of content created",
+        "how_handled": "AE gave live demo and sent sample PDF pages for review",
+        "resolved": true
+      },
+      {
+        "objection": "Is this just SEO?",
+        "how_handled": "AE clarified AEO distinction and broader AI-search platform coverage",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Explicitly said she is interested in the service",
+      "Asked detailed questions about pricing tiers",
+      "Asked how leads are collected \u2014 high intent question",
+      "Said timing might be feasible in a month",
+      "Acknowledged lack of marketing team makes service valuable",
+      "Said she would upload sample pages and review them",
+      "Suggested she might reach out before scheduled follow-up",
+      "Agreed to book a follow-up call proactively"
+    ],
+    "negative_signals": [
+      "Declined to make any decision on the call",
+      "Massive internal hiring process consuming bandwidth",
+      "Fellowship round launching \u2014 limited attention available",
+      "Said 'fine for the moment' when AE highlighted missed leads",
+      "Requested one-month delay before reconsidering",
+      "Payment link only went live the night before the call",
+      "Business model still being relaunched \u2014 premature for spend",
+      "Call quality issues reduced demo engagement effectiveness"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send call recording via email",
+      "AE to send 5 sample PDF content pages created live",
+      "AE to share relevant customer case studies",
+      "Follow-up call scheduled for approximately June 20",
+      "Prospect to review sample pages before next call",
+      "Prospect may reach out earlier if ready to proceed"
+    ],
+    "next_call_date": "2026-06-20",
+    "follow_up_materials_promised": [
+      "Call recording link to be emailed",
+      "5 mock AI-optimized content pages as PDF",
+      "Customer case studies from similar engagements"
+    ],
+    "deal_closing_intent_score": 5,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect expressed genuine interest in the product",
+      "Acknowledged clear fit given no marketing team",
+      "Agreed to follow-up call \u2014 not a brush-off",
+      "Delay driven by timing not skepticism or budget doubt",
+      "Did not push back on pricing once explained",
+      "High internal activity creating real short-term barrier",
+      "May convert earlier if internal noise subsides",
+      "No strong negative signal \u2014 just needs time"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "Significant audio breaking up reduced demo impact",
+      "Prospect joined on mobile initially \u2014 delayed screen share",
+      "AE handled connection issues professionally and patiently",
+      "Live keyword analysis tool was compelling and personalized",
+      "AE successfully used urgency framing on delay cost",
+      "Pricing discussed clearly with tier differentiation",
+      "AE did not quantify ROI in dollar terms for prospect",
+      "No discovery of prospect's budget range or authority level",
+      "Call ran efficiently despite technical disruptions",
+      "Follow-up booked \u2014 strong close given circumstances"
+    ],
+    "key_insights": [
+      "Business re-launching after intentional 2025-2026 pause period",
+      "No marketing infrastructure \u2014 ideal managed-service prospect profile",
+      "Founder is sole driver of all current marketing activity",
+      "Website payment links only activated the night before call",
+      "Fellowship product launch creates urgency hook for next call",
+      "Hiring process signals growth \u2014 budget may open up soon",
+      "HubSpot newly set up \u2014 receptive to lead tracking value",
+      "Competitor gap demo resonated strongly with prospect",
+      "Prospect self-qualified timing gap without rejecting product"
+    ],
+    "recommended_next_action": "Send follow-up email within 24 hours with recording, sample pages, and two targeted case studies from training or consulting clients; include a soft nudge tying the fellowship launch timeline to starting content pages now.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Lead generation gap addressed via AEO content page demo",
+      "No marketing team addressed \u2014 Gushwork positioned as turnkey team",
+      "AI search invisibility addressed with live competitor gap analysis",
+      "Website inbound leads addressed via lead capture form walkthrough",
+      "Re-entry timing concern addressed with start-now-harvest-later argument",
+      "HubSpot integration not addressed \u2014 missed opportunity for alignment"
+    ],
+    "_meta": {
+      "prospect_email": "jpatton@jpgeconsulting.com",
+      "prospect_company": "JPG Enterprises / JPGE Leadership Institute for Strategic Growth",
+      "prospect_website": "www.jpgeconsulting.com",
+      "demo_date": "2026-05-20",
+      "ae_name": "Joe Ramin",
+      "industry": "Corporate Training",
+      "meeting_ids": [
+        "6fa78b97d47c6f7cc14895f85a2b7da3"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=b26888fe-c327-4cfc-9fe2-ad665ecef6ec&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 62,
+      "analyzed_at": "2026-05-23T07:20:07.343307Z"
+    }
   }
 }
