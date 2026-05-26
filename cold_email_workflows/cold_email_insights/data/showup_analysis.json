@@ -27010,5 +27010,313 @@
       "total_duration_min": 62,
       "analyzed_at": "2026-05-23T07:20:07.343307Z"
     }
+  },
+  "Apexx Consulting": {
+    "company": "Apexx Consulting",
+    "prospect_name": "Rick Dean",
+    "prospect_designation": "Owner / Founder",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Rick founded and runs Apexx Consulting solo, making all business decisions.",
+    "company_industry": "Telecommunications Infrastructure / Field Engineering Services",
+    "pain_points": [
+      {
+        "pain_point": "Over-reliance on referral network for leads",
+        "severity": "high",
+        "direct_quote": "I don't want to have all my eggs in one basket",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as a new inbound lead channel beyond referrals"
+      },
+      {
+        "pain_point": "Website not yet live, no digital presence",
+        "severity": "high",
+        "direct_quote": "It's still in progress. So they have pages built. It's just not on the web yet.",
+        "addressed_in_call": true,
+        "how_addressed": "AE clarified onboarding can start before website goes live"
+      },
+      {
+        "pain_point": "No SEO or AI search visibility strategy",
+        "severity": "medium",
+        "direct_quote": "You couldn't find anything on the or official.",
+        "addressed_in_call": true,
+        "how_addressed": "AE walked through content and AI visibility strategy via screen share"
+      },
+      {
+        "pain_point": "Revenue lull due to delayed client payments",
+        "severity": "medium",
+        "direct_quote": "I still have to pay them, but I don't get paid until two months later.",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Risk of losing key clients going internal",
+        "severity": "medium",
+        "direct_quote": "Say for some reason this company stopped using vendors and went internal.",
+        "addressed_in_call": true,
+        "how_addressed": "AE validated the risk and tied diversification to Gushwork's value prop"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Website not ready yet",
+        "how_handled": "AE clarified first few weeks of onboarding don't require live website",
+        "resolved": true
+      },
+      {
+        "objection": "Already getting business without digital presence",
+        "how_handled": "AE acknowledged growth but pivoted to diversification and scalability argument",
+        "resolved": true
+      },
+      {
+        "objection": "Limited understanding of Gushwork's offering",
+        "how_handled": "AE gave product walkthrough via screen share with concrete examples",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Called Gushwork 'the next logical step' unprompted",
+      "Agreed to follow-up call for next week",
+      "Self-identified need to diversify beyond referrals",
+      "Expressed genuine curiosity after receiving outbound email",
+      "Engaged positively with AI search visibility concept",
+      "Acknowledged website completion is imminent, within two weeks"
+    ],
+    "negative_signals": [
+      "Website still not live; deal depends on external progress",
+      "Prospect joined using wife's account; low preparation signal",
+      "Repeated internet drops shortened and disrupted the demo",
+      "No pricing discussion occurred; budget unknown",
+      "No urgency expressed; framed as next step not immediate need",
+      "Meeting only 23 minutes; limited depth of discovery achieved"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call scheduled for next week, same time",
+      "Prospect to finalize and review website adjustments",
+      "AE to send new calendar invite for Tuesday or Wednesday",
+      "Onboarding can begin before website goes live"
+    ],
+    "next_call_date": "Week of 2026-05-26, Tuesday or Wednesday, same time as prior call",
+    "follow_up_materials_promised": [
+      "New calendar invite to be sent by AE after call"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect sees Gushwork as logical next step post-website launch",
+      "Strong growth trajectory signals willingness to invest in marketing",
+      "No pricing discussion; budget fit still unconfirmed",
+      "Website dependency creates deal timeline uncertainty",
+      "Agreed to next meeting without resistance or hesitation",
+      "Awareness of referral dependency creates real urgency to diversify"
+    ],
+    "call_quality_score": 5,
+    "call_quality_notes": [
+      "Repeated internet drops disrupted flow and discovery depth",
+      "AE recovered well and adapted by turning off camera",
+      "Good rapport built despite technical difficulties throughout call",
+      "Discovery was incomplete; revenue model and budget not explored",
+      "AE missed opportunity to discuss pricing or investment range",
+      "Screen share demo was relevant but used generic non-telco example",
+      "AE did well clarifying onboarding before website goes live",
+      "Pain point around cash flow lag was not addressed or explored"
+    ],
+    "key_insights": [
+      "Apexx is a fast-growing telecom field services firm, 15 people",
+      "Revenue grew from $250K to near $1M in three years",
+      "Clients are large telecoms: AT&T, Comcast, Verizon, BrightSpeed",
+      "All leads today come from industry network and referrals only",
+      "Prospect is ChatGPT-savvy; AI visibility angle resonated strongly",
+      "Website almost ready; onboarding could realistically start in days",
+      "Rick is the sole decision-maker; no committee or approval chain",
+      "Catapult vendor status signals operational maturity and credibility"
+    ],
+    "recommended_next_action": "Send calendar invite for Tuesday 2026-05-27 at same time, include a short personalized one-pager showing telecom or field services SEO/AI visibility examples, and prepare a pricing slide to discuss budget fit in next call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Referral dependency addressed: Gushwork positioned as new lead channel",
+      "No digital presence addressed: onboarding starts before website is live",
+      "AI search invisibility addressed: screen share showed content strategy",
+      "Client concentration risk addressed: diversification framed as core value prop",
+      "Cash flow lag pain point NOT addressed; missed opportunity to explore"
+    ],
+    "_meta": {
+      "prospect_email": "Rick@apexxllc.com",
+      "prospect_company": "Apexx Consulting",
+      "prospect_website": "apexxllc.com",
+      "demo_date": "2026-05-22",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "Mix Services (1-5)",
+      "meeting_ids": [
+        "349c29b015b8f87ead38d5e6d904d28f"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=0a74d725-b57d-4d42-ad0d-2af8b2e033be&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 23,
+      "analyzed_at": "2026-05-26T08:10:03.757633Z"
+    }
+  },
+  "Empowered Vantage Consulting, LLC": {
+    "company": "Empowered Vantage Consulting, LLC",
+    "prospect_name": "Cassidey Davis",
+    "prospect_designation": "Founder / Owner",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "She is the sole founder and owner of the business.",
+    "company_industry": "Corporate Training / Career & Professional Development Consulting",
+    "pain_points": [
+      {
+        "pain_point": "Over-reliance on referrals and personal network",
+        "severity": "high",
+        "direct_quote": "best source of leads is referrals and my own personal network thus far",
+        "addressed_in_call": true,
+        "how_addressed": "AE highlighted unpredictability of referrals and positioned Gushwork as scalable alternative"
+      },
+      {
+        "pain_point": "No scalable or predictable lead generation channel",
+        "severity": "high",
+        "direct_quote": "Right. Which is why I think once I have more revenue, this would definitely be something I'm interested in.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated SEO/AEO content strategy to generate consistent inbound leads"
+      },
+      {
+        "pain_point": "Low online visibility in a saturated coaching market",
+        "severity": "high",
+        "direct_quote": "I don't want to say it's saturated, but I think there's a lot of coaches that don't necessarily have the expertise that I have",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed first-page search gap and sample content pages targeting legal niche queries"
+      },
+      {
+        "pain_point": "Website functions only as a digital brochure",
+        "severity": "medium",
+        "direct_quote": "your website is only serving you as a digital brochure for somebody who finds it",
+        "addressed_in_call": true,
+        "how_addressed": "AE proposed adding landing pages and blogs targeting high-intent buyer queries"
+      },
+      {
+        "pain_point": "Limited capacity due to full-time day job",
+        "severity": "medium",
+        "direct_quote": "I have a day job that I love and that gives me the flexibility to be able to do this side endeavor",
+        "addressed_in_call": true,
+        "how_addressed": "AE recommended base plan only, calibrated to 3 individual clients per month capacity"
+      },
+      {
+        "pain_point": "Insufficient revenue to afford marketing investment",
+        "severity": "high",
+        "direct_quote": "I just would like to have more revenue coming in to be able to kind of sustain from month to month",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Pricing too high for current revenue stage",
+        "how_handled": "AE acknowledged concern, explained 3-month lead lag, urged not to delay; did not offer discount",
+        "resolved": false
+      },
+      {
+        "objection": "Wants to build more revenue before investing in marketing",
+        "how_handled": "AE countered that referrals are unpredictable and a predictable source is needed now",
+        "resolved": false
+      },
+      {
+        "objection": "Business too new and small to commit now",
+        "how_handled": "AE positioned six-month pilot as low-risk month-to-month arrangement",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Explicitly said 'this definitely sounds like a good idea'",
+      "Acknowledged need for predictable lead source beyond referrals",
+      "Agreed referrals are uncontrollable and not scalable",
+      "Engaged positively with demo content and lead dashboard",
+      "Chose specific page (executive presence) to deep-dive into",
+      "Expressed long-term goal of running business full time",
+      "Confirmed interest pending more stable revenue base",
+      "Received follow-up recap and calendar link without resistance"
+    ],
+    "negative_signals": [
+      "Business only 5 months old; very early stage",
+      "Has full-time day job; side business not primary income",
+      "Can only handle 3 individual clients per month currently",
+      "No budget allocated for marketing at this time",
+      "Explicitly deferred to 'a few more months' before starting",
+      "Multiple distractions during call; low engagement at moments",
+      "Has not evaluated any competing solutions yet",
+      "Revenue insufficient to sustain $800/month for six months"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send recap email summarizing the call discussion",
+      "Testimonial video link shared and confirmed received by prospect",
+      "AE's calendar link and contact included in email signature",
+      "Prospect to reach out when revenue situation improves"
+    ],
+    "next_call_date": null,
+    "follow_up_materials_promised": [
+      "Call recap email from AE Manideep",
+      "Ryan Semo testimonial video link (already shared)",
+      "AE calendar link for future booking"
+    ],
+    "deal_closing_intent_score": 3,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "Prospect explicitly deferred purchase to future months",
+      "Primary blocker is lack of budget, not lack of interest",
+      "No next call scheduled; no concrete commitment made",
+      "Business too early-stage to absorb $800/month spend",
+      "Objection not resolved; prospect holds control of timeline",
+      "Interest is genuine but activation is 2\u20134 months away"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE did solid discovery on capacity, clients, and revenue goals",
+      "Testimonial video was well-chosen and relevant to prospect",
+      "AE correctly identified legal niche as primary target vertical",
+      "Pricing objection was not handled with creative alternatives",
+      "No trial, deferred payment, or smaller entry offer proposed",
+      "AE called prospect 'Catherine' at close \u2014 wrong name used",
+      "Multiple call interruptions reduced demo flow and engagement",
+      "No specific follow-up date or second meeting was locked in",
+      "AE acknowledged cash concern but did not problem-solve it",
+      "Demo content (sample pages, dashboard) was relevant and clear"
+    ],
+    "key_insights": [
+      "Prospect is pre-revenue; ROI argument needs to lead with urgency",
+      "Legal professionals (attorneys, law firms) are her core niche",
+      "She is self-aware about limitations; pace and trust matter most",
+      "Referral-only model is her biggest risk and she knows it",
+      "Goal is to go full-time eventually; plant long-term partnership seed",
+      "Three individual clients per month is her near-term ceiling",
+      "Cook County Bar Association referral list is a competing priority",
+      "AEO/ChatGPT visibility angle resonated \u2014 use in follow-up messaging",
+      "A smaller pilot or deferred start offer could unlock the deal",
+      "Re-engagement window is likely 60\u201390 days from this call"
+    ],
+    "recommended_next_action": "Send a personalized follow-up email within 24 hours referencing her legal niche focus and the ChatGPT visibility angle, then schedule a 30-day check-in call to reassess budget readiness and propose a deferred-start or reduced-scope entry offer.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Referral dependency: highlighted unpredictability, proposed scalable inbound channel",
+      "Low visibility: showed real search gap data and first-page competitors",
+      "Saturated market: framed SEO/AEO as differentiator against unqualified coaches",
+      "Website as brochure: proposed content pages targeting 600+ legal queries",
+      "Capacity constraints: recommended base plan aligned to 3-client monthly capacity",
+      "Budget concern: acknowledged but not resolved \u2014 no alternative offer made"
+    ],
+    "_meta": {
+      "prospect_email": "cdavis@empoweredvantage.com",
+      "prospect_company": "Empowered Vantage Consulting, LLC",
+      "prospect_website": "empoweredvantage.com",
+      "demo_date": "2026-05-25",
+      "ae_name": "Manideep Rajeev (Mani)",
+      "industry": "Corporate Training",
+      "meeting_ids": [
+        "8f390b5aea26d81d074fe09aa410d1f6"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=9c175372-2f77-4d83-9c86-557b20860910&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 37,
+      "analyzed_at": "2026-05-26T08:10:11.111455Z"
+    }
   }
 }
