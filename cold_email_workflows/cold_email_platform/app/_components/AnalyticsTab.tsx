@@ -45,7 +45,15 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+      <p className="text-xs text-[color:var(--muted)] uppercase tracking-wide">
+        Last 30 days · {tz}
+      </p>
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
+        <StatCard
+          label="Total Calls"
+          value={data?.totals.total_calls ?? 0}
+          tone="neutral"
+        />
         <StatCard
           label="Calls < 5 min"
           value={data?.totals.calls_within_5min ?? 0}

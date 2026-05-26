@@ -3,23 +3,6 @@
 // Subscribe to BOTH events in JustCall → Settings → Webhooks (V2):
 //   - "Call completed in JustCall"  → increments call_attempts, sets call_at
 //   - "Call updated in JustCall"    → captures disposition (SDR marks it after the call)
-//
-// Both should use the same URL: /api/webhooks/justcall
-//
-// JustCall v2 payload shape:
-// {
-//   "type": "call.completed" | "call.updated",
-//   "data": {
-//     "id": 178632100,
-//     "contact_number": "1681381XXXX",
-//     "call_date": "2024-01-18", "call_time": "14:34:13",
-//     "call_info": {
-//       "direction": "Incoming" | "Outgoing",
-//       "type": "answered" | "missed",
-//       "disposition": ""   // <- selected AFTER call ends, comes via call.updated
-//     }
-//   }
-// }
 
 import { NextRequest, NextResponse } from "next/server";
 import { query, digitsOnly } from "@/lib/db";
@@ -43,15 +26,24 @@ type JcPayload = {
     call_info?: {
       direction?: string;
       type?: string;
+      status?: string;
       disposition?: string;
+      disposition_code?: string;
       notes?: string;
+      tag?: string;
+      tags?: string[] | string;
+      outcomes?: string[] | string;
+      outcome?: string;
+      call_traits?: unknown;
       missed_call_reason?: string;
     };
+    // top-level fallbacks
     direction?: string;
     disposition?: string;
     disposition_code?: string;
     outcome?: string;
     notes?: string;
+    tags?: string[] | string;
   };
 };
 
@@ -60,19 +52,36 @@ function pickDirection(d: JcPayload["data"]): string | null {
   return d.call_info?.direction || d.direction || null;
 }
 
+function asString(v: unknown): string | null {
+  if (v == null) return null;
+  if (typeof v === "string") return v.trim() || null;
+  if (Array.isArray(v)) {
+    const joined = v.filter(Boolean).map(String).join(", ").trim();
+    return joined || null;
+  }
+  return null;
+}
+
 function pickDisposition(d: JcPayload["data"]): string | null {
   if (!d) return null;
-  const raw =
-    d.call_info?.disposition ||
-    d.disposition ||
-    d.outcome ||
-    d.disposition_code ||
-    d.call_info?.notes ||
-    d.notes ||
-    null;
-  if (!raw) return null;
-  const s = String(raw).trim();
-  return s.length ? s : null;
+  const candidates: Array<string | null | undefined> = [
+    asString(d.call_info?.disposition),
+    asString(d.call_info?.outcomes),
+    asString(d.call_info?.outcome),
+    asString(d.call_info?.disposition_code),
+    asString(d.call_info?.tag),
+    asString(d.call_info?.tags),
+    asString(d.disposition),
+    asString(d.outcome),
+    asString(d.disposition_code),
+    asString(d.tags),
+    asString(d.call_info?.notes),  // last resort — rep may have typed disposition into notes
+    asString(d.notes),
+  ];
+  for (const c of candidates) {
+    if (c && c.length) return c;
+  }
+  return null;
 }
 
 function pickCallAt(d: JcPayload["data"]): Date {
@@ -90,10 +99,9 @@ function pickCallAt(d: JcPayload["data"]): Date {
   return new Date();
 }
 
-/** Last 10 digits for fuzzy phone match (collapses country-code mismatches). */
 function last10(phone: string | null): string | null {
   if (!phone) return null;
-  return phone.slice(-10);
+  return phone.length >= 10 ? phone.slice(-10) : phone;
 }
 
 export async function GET() {
@@ -117,36 +125,46 @@ export async function POST(req: NextRequest) {
   try {
     body = JSON.parse(raw);
   } catch {
+    console.warn("[justcall] invalid JSON body");
     return NextResponse.json({ status: "ignored", reason: "invalid json" });
   }
 
   const eventType = (body.type || "").toLowerCase();
+  const callId = body.data?.id ? String(body.data.id) : null;
+  const direction = pickDirection(body.data);
+  const phoneDigits = digitsOnly(body.data?.contact_number || body.data?.dialed_number);
+  const phoneL10 = last10(phoneDigits);
+  const disposition = pickDisposition(body.data);
+
+  console.log(
+    `[justcall] event=${eventType} call_id=${callId} dir=${direction} phone=${phoneDigits} disposition=${JSON.stringify(disposition)}`
+  );
+
   const isCompleted = /call\.completed/.test(eventType);
   const isUpdated = /call\.updated/.test(eventType);
   if (!isCompleted && !isUpdated) {
+    console.log(`[justcall] ignored: unsupported event "${eventType}"`);
     return NextResponse.json({ status: "ignored", reason: "unsupported event", type: eventType });
   }
 
-  const direction = pickDirection(body.data);
   if (direction && !/(outbound|outgoing)/i.test(direction)) {
+    console.log(`[justcall] ignored: not outbound (${direction})`);
     return NextResponse.json({ status: "ignored", reason: "not outbound", direction });
   }
 
-  const phone = digitsOnly(body.data?.contact_number || body.data?.dialed_number);
-  const phoneLast10 = last10(phone);
-  if (!phoneLast10) {
+  if (!phoneL10) {
+    console.log(`[justcall] ignored: no contact number on payload`);
     return NextResponse.json({ status: "ignored", reason: "no contact number" });
   }
 
   const callAtIso = pickCallAt(body.data).toISOString();
-  const disposition = pickDisposition(body.data);
 
   let updated: Array<{ id: string; row_type: string; external_id: string }> = [];
 
   if (isCompleted) {
-    // First completion of THIS call: stamp call_at, compute < 5 min, set
-    // disposition (if any), and bump attempts. We use right(phone, 10) to
-    // tolerate country-code mismatches between our DB and JustCall.
+    // First completion: stamp call_at, compute <5min, set disposition if any, bump attempts.
+    // COALESCE(NULLIF(...,''), ...) preserves an existing disposition when the
+    // current payload has none. Phone match via last-10-digits is country-code-blind.
     updated = await query<{ id: string; row_type: string; external_id: string }>(
       `UPDATE gist.gtm_unified_db_source
           SET call_at = COALESCE(call_at, $1::timestamptz),
@@ -159,12 +177,14 @@ export async function POST(req: NextRequest) {
               call_attempts = COALESCE(call_attempts, 0) + 1
         WHERE right(phone, 10) = $2
         RETURNING id, row_type, external_id`,
-      [callAtIso, phoneLast10, disposition]
+      [callAtIso, phoneL10, disposition ?? ""]
     );
   } else if (isUpdated) {
-    // SDR updated the call (typically the disposition pick). Don't bump
-    // attempts, don't touch call_at. Just overwrite disposition.
+    // SDR updated the call (typically the disposition pick). Don't bump attempts,
+    // don't touch call_at. Only write disposition when we actually have one in
+    // the payload (otherwise we'd nuke a previously-set disposition).
     if (!disposition) {
+      console.log(`[justcall] call.updated had no extractable disposition — payload.data keys: ${Object.keys(body.data || {}).join(",")} call_info keys: ${Object.keys(body.data?.call_info || {}).join(",")}`);
       return NextResponse.json({ status: "ignored", reason: "call.updated with no disposition" });
     }
     updated = await query<{ id: string; row_type: string; external_id: string }>(
@@ -172,14 +192,22 @@ export async function POST(req: NextRequest) {
           SET call_disposition = $2
         WHERE right(phone, 10) = $1
         RETURNING id, row_type, external_id`,
-      [phoneLast10, disposition]
+      [phoneL10, disposition]
+    );
+  }
+
+  if (updated.length === 0) {
+    console.log(`[justcall] no rows matched phone last10="${phoneL10}" (event=${eventType})`);
+  } else {
+    console.log(
+      `[justcall] updated ${updated.length} row(s): ${updated.map((u) => `${u.row_type}#${u.external_id}`).join(", ")}`
     );
   }
 
   return NextResponse.json({
     status: "ok",
     event: eventType,
-    phone,
+    phone: phoneDigits,
     rows_updated: updated.length,
     disposition,
     by_type: updated.reduce<Record<string, number>>((acc, r) => {

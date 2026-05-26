@@ -68,6 +68,7 @@ export type AnalyticsResponse = {
   tz: "IST" | "EST";
   totals: {
     total_dialer_rows: number;
+    total_calls: number;
     calls_within_5min: number;
     calls_outside_5min: number;
     bookings_within_5min: number;
