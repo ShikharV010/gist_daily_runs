@@ -64,6 +64,13 @@ export type AnalyticsBucket = {
   bookings_outside_5min: number;
 };
 
+export type DispositionRow = {
+  disposition: string;
+  leads: number;
+  total_attempts: number;
+  connected: boolean;
+};
+
 export type AnalyticsResponse = {
   tz: "IST" | "EST";
   totals: {
@@ -73,7 +80,10 @@ export type AnalyticsResponse = {
     calls_outside_5min: number;
     bookings_within_5min: number;
     bookings_outside_5min: number;
+    connected_leads: number;
+    not_connected_leads: number;
   };
   by_day: AnalyticsBucket[];
   by_week: AnalyticsBucket[];
+  dispositions: DispositionRow[];
 };

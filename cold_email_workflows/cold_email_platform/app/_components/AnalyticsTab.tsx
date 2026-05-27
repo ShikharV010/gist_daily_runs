@@ -115,6 +115,72 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
       />
 
       <BucketTable rows={buckets} granularity={granularity} />
+
+      <DispositionSection data={data} />
+    </div>
+  );
+}
+
+function DispositionSection({ data }: { data: AnalyticsResponse | null }) {
+  if (!data) return null;
+  const connected = data.dispositions.filter((d) => d.connected);
+  const notConnected = data.dispositions.filter((d) => !d.connected);
+  return (
+    <div className="space-y-4">
+      <h3 className="text-sm font-medium">Dispositions</h3>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <StatCard label="Connected (rep spoke)" value={data.totals.connected_leads} tone="success" />
+        <StatCard label="Not connected" value={data.totals.not_connected_leads} tone="muted" />
+      </div>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <DispositionTable title="Connected" rows={connected} accent="text-emerald-700 dark:text-emerald-300" />
+        <DispositionTable title="Not connected" rows={notConnected} accent="text-amber-700 dark:text-amber-300" />
+      </div>
+    </div>
+  );
+}
+
+function DispositionTable({
+  title,
+  rows,
+  accent,
+}: {
+  title: string;
+  rows: { disposition: string; leads: number; total_attempts: number }[];
+  accent: string;
+}) {
+  const totalLeads = rows.reduce((s, r) => s + r.leads, 0) || 1;
+  return (
+    <div className="border border-[color:var(--border)] rounded">
+      <div className={`px-3 py-2 text-xs font-medium uppercase tracking-wide ${accent}`}>
+        {title} · {rows.reduce((s, r) => s + r.leads, 0)} leads · {rows.reduce((s, r) => s + r.total_attempts, 0)} attempts
+      </div>
+      {rows.length === 0 ? (
+        <div className="px-3 py-6 text-sm text-[color:var(--muted)] text-center">No rows</div>
+      ) : (
+        <table className="w-full text-sm">
+          <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
+            <tr>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Disposition</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)] text-right">Leads</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)] text-right">Attempts</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)] text-right">% of group</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.disposition} className="border-t border-[color:var(--border)]">
+                <td className="px-3 py-2">{r.disposition}</td>
+                <td className="px-3 py-2 text-right">{r.leads}</td>
+                <td className="px-3 py-2 text-right">{r.total_attempts}</td>
+                <td className="px-3 py-2 text-right text-[color:var(--muted)]">
+                  {((100 * r.leads) / totalLeads).toFixed(1)}%
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
