@@ -46,7 +46,7 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
   return (
     <div className="space-y-6">
       <p className="text-xs text-[color:var(--muted)] uppercase tracking-wide">
-        Last 30 days · {tz}
+        All time · {tz}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
         <StatCard

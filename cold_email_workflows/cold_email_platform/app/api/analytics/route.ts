@@ -1,7 +1,6 @@
 // Analytics for the 5-min dialing tab.
-// All metrics are scoped to the last 30 days (for stat cards + by-day chart)
-// or last 12 weeks (for by-week chart). This keeps cards consistent with the
-// charts and removes the "all-time totals don't match the chart" confusion.
+// Shows ALL-TIME data — totals, daily buckets, and weekly buckets cover
+// every dialer row ever recorded.
 
 import { NextRequest, NextResponse } from "next/server";
 import { query } from "@/lib/db";
@@ -19,7 +18,7 @@ export async function GET(req: NextRequest) {
   const tz = tzParam === "EST" ? "EST" : "IST";
   const iana = IANA[tz];
 
-  // ── Totals (last 30 days in selected tz) ─────────────────────────────────
+  // ── Totals (all-time) ────────────────────────────────────────────────────
   // total_calls = sum of call_attempts (actual call volume; one lead = many calls)
   // calls_within_5min / calls_outside_5min = unique LEADS bucketed by their first call
   // bookings_within_5min / bookings_outside_5min = leads whose disposition contains 'meeting booked'
@@ -31,22 +30,15 @@ export async function GET(req: NextRequest) {
     bookings_within_5min: string;
     bookings_outside_5min: string;
   }>(
-    `WITH scoped AS (
-       SELECT *
-         FROM gist.gtm_unified_db_source
-        WHERE row_type = 'dialer'
-          AND ((call_at IS NOT NULL AND call_at AT TIME ZONE $1 >= (NOW() AT TIME ZONE $1) - INTERVAL '30 days')
-            OR (call_at IS NULL     AND reply_at AT TIME ZONE $1 >= (NOW() AT TIME ZONE $1) - INTERVAL '30 days'))
-     )
-     SELECT
+    `SELECT
        COUNT(*)                                                                                                       AS total_dialer_rows,
        COALESCE(SUM(call_attempts), 0)                                                                                AS total_calls,
        COUNT(*) FILTER (WHERE call_within_5min = true)                                                                AS calls_within_5min,
        COUNT(*) FILTER (WHERE call_within_5min = false)                                                               AS calls_outside_5min,
        COUNT(*) FILTER (WHERE call_disposition ILIKE '%meeting booked%' AND call_within_5min = true)                  AS bookings_within_5min,
        COUNT(*) FILTER (WHERE call_disposition ILIKE '%meeting booked%' AND call_within_5min = false)                 AS bookings_outside_5min
-     FROM scoped`,
-    [iana]
+     FROM gist.gtm_unified_db_source
+     WHERE row_type = 'dialer'`
   );
   const totals = {
     total_dialer_rows: Number(totalsRows[0]?.total_dialer_rows || 0),
@@ -69,7 +61,6 @@ export async function GET(req: NextRequest) {
         FROM gist.gtm_unified_db_source
        WHERE row_type = 'dialer'
          AND call_at IS NOT NULL
-         AND call_at AT TIME ZONE $1 >= (NOW() AT TIME ZONE $1) - INTERVAL '${truncFn === "day" ? "30 days" : "12 weeks"}'
     )
     SELECT bucket,
            COUNT(*) FILTER (WHERE call_within_5min = true)                                                AS calls_within_5min,
