@@ -49,31 +49,11 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
         All time · {tz}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
-        <StatCard
-          label="Total Calls"
-          value={data?.totals.total_calls ?? 0}
-          tone="neutral"
-        />
-        <StatCard
-          label="Calls < 5 min"
-          value={data?.totals.calls_within_5min ?? 0}
-          tone="accent"
-        />
-        <StatCard
-          label="Calls ≥ 5 min"
-          value={data?.totals.calls_outside_5min ?? 0}
-          tone="neutral"
-        />
-        <StatCard
-          label="Bookings from < 5 min"
-          value={data?.totals.bookings_within_5min ?? 0}
-          tone="success"
-        />
-        <StatCard
-          label="Bookings from ≥ 5 min"
-          value={data?.totals.bookings_outside_5min ?? 0}
-          tone="muted"
-        />
+        <StatCard label="Total Calls"           value={data?.totals.total_calls           ?? 0} tone="neutral" />
+        <StatCard label="Calls < 5 min"         value={data?.totals.calls_within_5min     ?? 0} tone="violet"  />
+        <StatCard label="Calls ≥ 5 min"         value={data?.totals.calls_outside_5min    ?? 0} tone="coral"   />
+        <StatCard label="Bookings from < 5 min" value={data?.totals.bookings_within_5min  ?? 0} tone="violetDeep" />
+        <StatCard label="Bookings from ≥ 5 min" value={data?.totals.bookings_outside_5min ?? 0} tone="pink"    />
       </div>
 
       <div className="flex items-center justify-between">
@@ -100,8 +80,8 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
         data={chartData}
         loading={loading}
         series={[
-          { key: "calls_within_5min", name: "< 5 min", fill: "#2563eb" },
-          { key: "calls_outside_5min", name: "≥ 5 min", fill: "#94a3b8" },
+          { key: "calls_within_5min", name: "< 5 min", fill: "#7c5cff" },
+          { key: "calls_outside_5min", name: "≥ 5 min", fill: "#f4a98c" },
         ]}
       />
       <ChartCard
@@ -109,8 +89,8 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
         data={chartData}
         loading={loading}
         series={[
-          { key: "bookings_within_5min", name: "From < 5 min calls", fill: "#16a34a" },
-          { key: "bookings_outside_5min", name: "From ≥ 5 min calls", fill: "#fbbf24" },
+          { key: "bookings_within_5min", name: "From < 5 min calls", fill: "#5b3df0" },
+          { key: "bookings_outside_5min", name: "From ≥ 5 min calls", fill: "#ec4899" },
         ]}
       />
 
@@ -129,12 +109,12 @@ function DispositionSection({ data }: { data: AnalyticsResponse | null }) {
     <div className="space-y-4">
       <h3 className="text-sm font-medium">Dispositions</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <StatCard label="Connected (rep spoke)" value={data.totals.connected_leads} tone="success" />
-        <StatCard label="Not connected" value={data.totals.not_connected_leads} tone="muted" />
+        <StatCard label="Connected (rep spoke)" value={data.totals.connected_leads} tone="violet" />
+        <StatCard label="Not connected"          value={data.totals.not_connected_leads} tone="coral" />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <DispositionTable title="Connected" rows={connected} accent="text-emerald-700 dark:text-emerald-300" />
-        <DispositionTable title="Not connected" rows={notConnected} accent="text-amber-700 dark:text-amber-300" />
+        <DispositionTable title="Connected"     rows={connected}     accent="text-violet-700 dark:text-violet-300" />
+        <DispositionTable title="Not connected" rows={notConnected}  accent="text-orange-700 dark:text-orange-300" />
       </div>
     </div>
   );
@@ -185,6 +165,8 @@ function DispositionTable({
   );
 }
 
+type CardTone = "violet" | "violetDeep" | "coral" | "pink" | "success" | "muted" | "neutral";
+
 function StatCard({
   label,
   value,
@@ -192,19 +174,25 @@ function StatCard({
 }: {
   label: string;
   value: number;
-  tone: "accent" | "success" | "neutral" | "muted";
+  tone: CardTone;
 }) {
   const cls =
-    tone === "accent"
-      ? "border-blue-200 bg-blue-50 dark:border-blue-900/40 dark:bg-blue-950/30"
+    tone === "violet"
+      ? "border-violet-300/50 bg-gradient-to-br from-violet-50 to-white text-violet-900 dark:border-violet-500/30 dark:from-violet-500/15 dark:to-violet-900/5 dark:text-violet-100"
+      : tone === "violetDeep"
+      ? "border-indigo-300/60 bg-gradient-to-br from-indigo-100 to-white text-indigo-900 dark:border-indigo-500/40 dark:from-indigo-500/20 dark:to-indigo-900/5 dark:text-indigo-100"
+      : tone === "coral"
+      ? "border-orange-300/50 bg-gradient-to-br from-orange-50 to-white text-orange-900 dark:border-orange-400/30 dark:from-orange-400/15 dark:to-orange-900/5 dark:text-orange-100"
+      : tone === "pink"
+      ? "border-pink-300/60 bg-gradient-to-br from-pink-50 to-white text-pink-900 dark:border-pink-500/30 dark:from-pink-500/15 dark:to-pink-900/5 dark:text-pink-100"
       : tone === "success"
       ? "border-emerald-200 bg-emerald-50 dark:border-emerald-900/40 dark:bg-emerald-950/30"
       : tone === "muted"
       ? "border-amber-200 bg-amber-50 dark:border-amber-900/40 dark:bg-amber-950/30"
       : "border-[color:var(--border)] bg-[color:var(--card)]";
   return (
-    <div className={`border rounded p-4 ${cls}`}>
-      <div className="text-xs uppercase tracking-wide text-[color:var(--muted)]">{label}</div>
+    <div className={`border rounded-xl p-4 ${cls}`}>
+      <div className="text-xs uppercase tracking-wide opacity-70">{label}</div>
       <div className="text-2xl font-semibold mt-1">{value.toLocaleString()}</div>
     </div>
   );
@@ -221,8 +209,9 @@ function ChartCard({
   loading: boolean;
   series: { key: keyof AnalyticsBucket; name: string; fill: string }[];
 }) {
+  const gradId = (suffix: string) => `grad-${title.replace(/\s/g, "")}-${suffix}`;
   return (
-    <div className="border border-[color:var(--border)] rounded p-4 bg-[color:var(--card)]">
+    <div className="border border-[color:var(--border)] rounded-xl p-4 bg-[color:var(--card)]">
       <h4 className="text-sm font-medium mb-3">{title}</h4>
       {data.length === 0 ? (
         <div className="text-sm text-[color:var(--muted)] py-12 text-center">
@@ -232,17 +221,34 @@ function ChartCard({
         <div style={{ width: "100%", height: 280 }}>
           <ResponsiveContainer>
             <BarChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
-              <XAxis dataKey="bucket" stroke="#6b7280" fontSize={12} />
-              <YAxis allowDecimals={false} stroke="#6b7280" fontSize={12} />
-              <Tooltip />
-              <Legend />
-              {series.map((s) => (
+              <defs>
+                {series.map((s, i) => (
+                  <linearGradient key={i} id={gradId(String(i))} x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor={s.fill} stopOpacity={1} />
+                    <stop offset="100%" stopColor={s.fill} stopOpacity={0.55} />
+                  </linearGradient>
+                ))}
+              </defs>
+              <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.12} />
+              <XAxis dataKey="bucket" stroke="currentColor" strokeOpacity={0.5} fontSize={12} />
+              <YAxis allowDecimals={false} stroke="currentColor" strokeOpacity={0.5} fontSize={12} />
+              <Tooltip
+                cursor={{ fill: "rgba(124, 92, 255, 0.08)" }}
+                contentStyle={{
+                  background: "var(--card)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8,
+                  color: "var(--foreground)",
+                }}
+              />
+              <Legend wrapperStyle={{ fontSize: 12 }} />
+              {series.map((s, i) => (
                 <Bar
                   key={String(s.key)}
                   dataKey={String(s.key)}
                   name={s.name}
-                  fill={s.fill}
+                  fill={`url(#${gradId(String(i))})`}
+                  radius={[6, 6, 0, 0]}
                 />
               ))}
             </BarChart>
