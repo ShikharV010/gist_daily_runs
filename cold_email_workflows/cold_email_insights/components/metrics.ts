@@ -5,15 +5,20 @@ import type {
 import { EXCLUDED_INDUSTRIES } from './types'
 
 // Derive the active industry set from the data itself: every industry that has
-// at least one campaign with emails_sent > 0, minus the EXCLUDED_INDUSTRIES
-// housekeeping bucket. Sorted by total emails_sent desc so the dashboard tabs
-// (and 'All' aggregation) auto-pick up new tests like "Financial Services 1-5".
+// at least one campaign that is either (a) currently active in Sequencer OR
+// (b) has already sent emails. Minus the EXCLUDED_INDUSTRIES housekeeping bucket.
+// Sorted by total emails_sent desc. New campaigns (active, status='active' but
+// sent=0 because they just launched) appear as tabs immediately — no waiting
+// for the first send batch to land before the segment is visible on the dashboard.
 export function getActiveIndustries(data: MetricsData): string[] {
-  const totals = new Map<string, number>()
+  const totals    = new Map<string, number>()
+  const seenLive  = new Set<string>()
   for (const c of data.campaigns || []) {
     if (!c.industry || EXCLUDED_INDUSTRIES.has(c.industry)) continue
-    if ((c.emails_sent || 0) <= 0) continue
-    totals.set(c.industry, (totals.get(c.industry) || 0) + c.emails_sent)
+    const isLive = c.status === 'active' || c.status === 'queued'
+    if (!isLive && (c.emails_sent || 0) <= 0) continue
+    totals.set(c.industry, (totals.get(c.industry) || 0) + (c.emails_sent || 0))
+    if (isLive) seenLive.add(c.industry)
   }
   return [...totals.entries()].sort((a, b) => b[1] - a[1]).map(([ind]) => ind)
 }

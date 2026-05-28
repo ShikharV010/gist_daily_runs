@@ -23,6 +23,7 @@ EST      = timezone(timedelta(hours=-4))
 INTERESTED_TAG_ID = 11   # Sequencer tag for "Interested" leads
 
 # Normalise abbreviated or legacy campaign name prefixes → canonical industry label.
+# Also used to merge multiple campaigns into a single industry tab on the dashboard.
 _NAME_ALIASES: dict[str, str] = {
     'MFG Outbound':      'Manufacturing',
     'MFG Outbound 1':    'Manufacturing',
@@ -30,6 +31,9 @@ _NAME_ALIASES: dict[str, str] = {
     'Mfg (gush domain)': 'Manufacturing',
     'IT And Consulting': 'IT & Consulting',
     'Meta No Booking':   'Meta/Other',
+    # Merge the two Google News re-engagement variants into one combined tab.
+    'Google News - Interested Re-engagement': 'Google New',
+    'Google News - No Show Re-engagement':    'Google New',
 }
 _ROUTING_RE = re.compile(
     r'\s*[-|]\s*(?:Google|Microsoft|Apple|Outlook|Proofpoint|Mimecast|Yahoo|Custom|Batch)',
