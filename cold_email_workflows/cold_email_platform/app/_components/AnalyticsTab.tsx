@@ -49,11 +49,36 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
         All time · {tz}
       </p>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-4">
-        <StatCard label="Total Calls"           value={data?.totals.total_calls           ?? 0} tone="neutral" />
-        <StatCard label="Calls < 5 min"         value={data?.totals.calls_within_5min     ?? 0} tone="violet"  />
-        <StatCard label="Calls ≥ 5 min"         value={data?.totals.calls_outside_5min    ?? 0} tone="coral"   />
-        <StatCard label="Bookings from < 5 min" value={data?.totals.bookings_within_5min  ?? 0} tone="violetDeep" />
-        <StatCard label="Bookings from ≥ 5 min" value={data?.totals.bookings_outside_5min ?? 0} tone="pink"    />
+        <StatCard
+          label="Total Call Attempts"
+          value={data?.totals.total_calls ?? 0}
+          tone="neutral"
+          hint="every ring, repeats included"
+        />
+        <StatCard
+          label="Leads first-called < 5 min"
+          value={data?.totals.calls_within_5min ?? 0}
+          tone="violet"
+          hint="unique leads, first call within 5 min of reply"
+        />
+        <StatCard
+          label="Leads first-called ≥ 5 min"
+          value={data?.totals.calls_outside_5min ?? 0}
+          tone="coral"
+          hint="unique leads, first call after 5+ min"
+        />
+        <StatCard
+          label="Bookings from < 5 min"
+          value={data?.totals.bookings_within_5min ?? 0}
+          tone="violetDeep"
+          hint="Meeting Booked, first call < 5 min"
+        />
+        <StatCard
+          label="Bookings from ≥ 5 min"
+          value={data?.totals.bookings_outside_5min ?? 0}
+          tone="pink"
+          hint="Meeting Booked, first call ≥ 5 min"
+        />
       </div>
 
       <div className="flex items-center justify-between">
@@ -109,8 +134,18 @@ function DispositionSection({ data }: { data: AnalyticsResponse | null }) {
     <div className="space-y-4">
       <h3 className="text-sm font-medium">Dispositions</h3>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <StatCard label="Connected (rep spoke)" value={data.totals.connected_leads} tone="violet" />
-        <StatCard label="Not connected"          value={data.totals.not_connected_leads} tone="coral" />
+        <StatCard
+          label="Connected"
+          value={data.totals.connected_leads}
+          tone="violet"
+          hint="unique leads where the rep spoke to someone"
+        />
+        <StatCard
+          label="Not connected"
+          value={data.totals.not_connected_leads}
+          tone="coral"
+          hint="unique leads with no-answer / voicemail / invalid only"
+        />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <DispositionTable title="Connected"     rows={connected}     accent="text-violet-700 dark:text-violet-300" />
@@ -171,10 +206,12 @@ function StatCard({
   label,
   value,
   tone,
+  hint,
 }: {
   label: string;
   value: number;
   tone: CardTone;
+  hint?: string;
 }) {
   const cls =
     tone === "violet"
@@ -194,6 +231,7 @@ function StatCard({
     <div className={`border rounded-xl p-4 ${cls}`}>
       <div className="text-xs uppercase tracking-wide opacity-70">{label}</div>
       <div className="text-2xl font-semibold mt-1">{value.toLocaleString()}</div>
+      {hint && <div className="text-[10px] opacity-60 mt-1 leading-tight">{hint}</div>}
     </div>
   );
 }
