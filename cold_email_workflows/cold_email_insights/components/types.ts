@@ -4,6 +4,7 @@ export interface CampaignStat {
   id: number
   name: string
   industry: string
+  start_date?: string | null   // ISO YYYY-MM-DD, parsed from "(DD_MM)" suffix in campaign name
   status: string
   emails_sent: number
   total_leads: number
@@ -211,6 +212,7 @@ export interface ComputedCampaignRow extends Omit<ComputedMetrics, 'campaigns'> 
   id: number
   name: string
   industry: string
+  start_date?: string | null
   status: string
   total_leads: number
 }

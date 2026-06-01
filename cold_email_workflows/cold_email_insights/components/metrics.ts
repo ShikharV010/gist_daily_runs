@@ -28,6 +28,19 @@ function byIndustry(industry: Industry, ind: string, active: Set<string>): boole
   return ind === industry
 }
 
+// Earliest campaign start-date for a given industry, parsed from the
+// "(DD_MM)" suffix in campaign names. Returns null if no campaign in the
+// industry has a parseable date.
+export function getIndustryStartDate(data: MetricsData, industry: string): string | null {
+  let earliest: string | null = null
+  for (const c of data.campaigns || []) {
+    if (c.industry !== industry) continue
+    if (!c.start_date) continue
+    if (!earliest || c.start_date < earliest) earliest = c.start_date
+  }
+  return earliest
+}
+
 // ── computeMetrics ────────────────────────────────────────────────────────────
 
 export function computeMetrics(
@@ -261,6 +274,7 @@ export function computeCampaignStats(
       id:       cid,
       name:     c.name,
       industry: c.industry,
+      start_date: c.start_date,
       status:   c.status,
       emails_sent,
       total_leads:              c.total_leads,

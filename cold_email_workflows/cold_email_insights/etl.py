@@ -40,6 +40,7 @@ _ROUTING_RE = re.compile(
     re.IGNORECASE,
 )
 _DATE_RE = re.compile(r'\s*\(\d{2}[_/]\d{2}\).*$')
+_START_DATE_RE = re.compile(r'\((\d{2})[_/](\d{2})\)')
 
 def extract_industry(name: str) -> str:
     n = _DATE_RE.sub('', name).strip()
@@ -47,6 +48,21 @@ def extract_industry(name: str) -> str:
     if m:
         n = n[:m.start()].strip()
     return _NAME_ALIASES.get(n, n) or 'Other'
+
+def extract_start_date(name: str):
+    """Parse the (DD_MM) suffix that the team adds to every campaign name to
+    indicate launch date. Returns ISO YYYY-MM-DD (current year). None if
+    no date pattern present (e.g. legacy campaigns)."""
+    m = _START_DATE_RE.search(name or '')
+    if not m: return None
+    dd, mm = m.group(1), m.group(2)
+    try:
+        # Assume current calendar year; campaign suffixes don't carry a year.
+        year = datetime.now().year
+        d = datetime(year, int(mm), int(dd))
+        return d.strftime('%Y-%m-%d')
+    except ValueError:
+        return None
 
 # Denylist instead of allowlist — any new industry (e.g. "Financial Services 1-5",
 # upcoming employee-count segments) automatically flows through ETL + dashboard
@@ -107,6 +123,7 @@ def fetch_campaigns():
             'id':                    cid,
             'name':                  c['name'],
             'industry':              extract_industry(c['name']),
+            'start_date':            extract_start_date(c['name']),
             'status':                c.get('status', ''),
             'emails_sent':           int(c.get('emails_sent') or 0),
             'total_leads':           int(c.get('total_leads') or 0),
@@ -777,6 +794,7 @@ def build_campaign_stats(campaigns, leads, bookings):
 
         out.append({
             'id': cid, 'name': c['name'], 'industry': c['industry'],
+            'start_date': c.get('start_date'),
             'status': c['status'],
             'emails_sent':              c['emails_sent'],
             'total_leads':              c['total_leads'],

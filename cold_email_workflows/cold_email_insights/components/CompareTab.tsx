@@ -2,12 +2,19 @@
 
 import { useMemo } from 'react'
 import type { MetricsData, ShowupAnalysis, Industry } from './types'
-import { computeMetrics, getActiveIndustries } from './metrics'
+import { computeMetrics, getActiveIndustries, getIndustryStartDate } from './metrics'
 
 const EMPTY_RANGE = { from: '', to: '' }
 
 function pct(n: number, digits = 1) {
   return n.toFixed(digits) + '%'
+}
+// "2026-05-27" → "27 May"
+function fmtStartDate(iso: string | null): string {
+  if (!iso) return '—'
+  const [, m, d] = iso.split('-')
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  return `${d.replace(/^0/,'')} ${months[Number(m) - 1] || ''}`
 }
 function fmt(n: number) {
   if (n >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
@@ -136,6 +143,16 @@ export default function CompareTab({
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
+            {/* Start Date row — pinned high up so the reader sees when each
+                industry's earliest campaign launched before scanning metrics. */}
+            <tr className="hover:bg-gray-50 bg-blue-50/40">
+              <td className="px-4 py-2 text-xs text-gray-700 font-semibold sticky left-0 bg-blue-50/40 z-10 border-r border-gray-100 min-w-[180px] uppercase tracking-wide">Start Date</td>
+              {INDUSTRIES.map(ind => (
+                <td key={ind} className="px-4 py-2 text-xs text-gray-600 whitespace-nowrap">
+                  {fmtStartDate(getIndustryStartDate(data, ind))}
+                </td>
+              ))}
+            </tr>
             {rows.map((row, i) => {
               if (row.isSection) {
                 return <Section key={i} label={row.section!} span={INDUSTRIES.length + 1} />

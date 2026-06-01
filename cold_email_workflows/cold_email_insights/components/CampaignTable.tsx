@@ -10,6 +10,13 @@ function fmt(n: number) {
   if (n >= 1_000)     return (n / 1_000).toFixed(1) + 'K'
   return n.toLocaleString()
 }
+// Parsed start date (YYYY-MM-DD) → short "DD MMM" e.g. "27 May".
+function fmtStartDate(iso?: string | null): string {
+  if (!iso) return '—'
+  const [, m, d] = iso.split('-')
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+  return `${d.replace(/^0/,'')} ${months[Number(m) - 1] || ''}`
+}
 function money(n: number) {
   if (!n) return '—'
   if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1) + 'M'
@@ -57,6 +64,7 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
           <thead>
             <tr>
               <TH className="sticky left-0 z-10">Campaign</TH>
+              <TH>Started</TH>
               <TH>Status</TH>
               <TH>Emails Sent</TH>
               <TH>Leads Contacted</TH>
@@ -80,6 +88,7 @@ export default function CampaignTable({ campaigns }: { campaigns: ComputedCampai
                 <TD className="sticky left-0 bg-white z-10 font-medium text-gray-900 max-w-[220px] truncate">
                   {c.name}
                 </TD>
+                <TD>{fmtStartDate(c.start_date)}</TD>
                 <TD>
                   <span className={`inline-block px-2 py-0.5 rounded-full text-xs font-medium ${
                     c.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-500'
