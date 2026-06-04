@@ -84,10 +84,6 @@ export type PhoneBookingRow = {
   mins_after_reply: number | null;
   call_attempts: number;
   call_disposition: string | null;
-  // "phone" = Allaine marked Meeting Booked in JustCall (closed on the call).
-  // "cal_com_link" = prospect self-booked via the cal.com link Allaine sent — the
-  // dialer row has no Meeting Booked disposition but a matching cal.com booking exists.
-  booked_via: "phone" | "cal_com_link";
   sequencer_thread_url: string | null;
 };
 

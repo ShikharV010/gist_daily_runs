@@ -138,11 +138,10 @@ function PhoneBookingsSection({
   const o = data.phone_bookings?.outside_5min || [];
   return (
     <div className="space-y-4">
-      <h3 className="text-sm font-medium">Phone-call Bookings</h3>
+      <h3 className="text-sm font-medium">Phone-call Bookings (Meeting Booked)</h3>
       <p className="text-xs text-[color:var(--muted)] -mt-2">
-        Dialer leads who were called and then booked a demo — either Allaine marked Meeting Booked in
-        JustCall, or the prospect self-booked via the cal.com link Allaine sent. Bucketed by first-call
-        timing vs the original reply.
+        Dialer leads where Allaine marked "Meeting Booked" in JustCall — i.e. the call itself closed
+        the demo. Bucketed by first-call timing vs the original reply.
       </p>
       <PhoneBookingsTable
         title="Bookings from < 5 min calls"
@@ -185,7 +184,8 @@ function PhoneBookingsTable({
               <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Name</th>
               <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Company</th>
               <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Website</th>
-              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Booked via / disposition</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Phone</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Disposition</th>
               <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Call recording</th>
               <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Call date</th>
             </tr>
@@ -230,18 +230,8 @@ function PhoneBookingsTable({
                       "—"
                     )}
                   </td>
-                  <td className="px-3 py-2 text-xs">
-                    {r.booked_via === "phone" ? (
-                      r.call_disposition || "Phone — Meeting Booked"
-                    ) : (
-                      <span title={r.call_disposition || ""}>
-                        cal.com link
-                        {r.call_disposition ? (
-                          <span className="text-[color:var(--muted)]"> (call: {r.call_disposition})</span>
-                        ) : null}
-                      </span>
-                    )}
-                  </td>
+                  <td className="px-3 py-2 whitespace-nowrap">{r.phone || "—"}</td>
+                  <td className="px-3 py-2 text-xs">{r.call_disposition || "—"}</td>
                   <td className="px-3 py-2 whitespace-nowrap">
                     {recording ? (
                       <a
