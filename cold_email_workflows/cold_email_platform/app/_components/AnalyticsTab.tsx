@@ -11,8 +11,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import type { AnalyticsResponse, AnalyticsBucket } from "@/lib/types";
-import type { Tz } from "@/lib/format";
+import type { AnalyticsResponse, AnalyticsBucket, PhoneBookingRow } from "@/lib/types";
+import { fmtTime, type Tz } from "@/lib/format";
 
 type Granularity = "day" | "week";
 
@@ -122,6 +122,108 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
       <BucketTable rows={buckets} granularity={granularity} />
 
       <DispositionSection data={data} />
+
+      <PhoneBookingsSection data={data} tz={tz} />
+    </div>
+  );
+}
+
+function PhoneBookingsSection({
+  data,
+  tz,
+}: {
+  data: AnalyticsResponse | null;
+  tz: Tz;
+}) {
+  if (!data) return null;
+  const w = data.phone_bookings?.within_5min || [];
+  const o = data.phone_bookings?.outside_5min || [];
+  return (
+    <div className="space-y-4">
+      <h3 className="text-sm font-medium">Phone-call Bookings (Meeting Booked)</h3>
+      <p className="text-xs text-[color:var(--muted)] -mt-2">
+        Demos closed on a JustCall conversation. Bucketed by first-call timing vs the original reply.
+        Negative mins = call happened before the reply (legacy lead, surfaced later) — counted as ≥5 min.
+      </p>
+      <PhoneBookingsTable
+        title="Bookings from < 5 min calls"
+        accent="text-violet-700 dark:text-violet-300"
+        rows={w}
+        tz={tz}
+      />
+      <PhoneBookingsTable
+        title="Bookings from ≥ 5 min calls"
+        accent="text-pink-700 dark:text-pink-300"
+        rows={o}
+        tz={tz}
+      />
+    </div>
+  );
+}
+
+function PhoneBookingsTable({
+  title,
+  accent,
+  rows,
+  tz,
+}: {
+  title: string;
+  accent: string;
+  rows: PhoneBookingRow[];
+  tz: Tz;
+}) {
+  return (
+    <div className="border border-[color:var(--border)] rounded overflow-x-auto">
+      <div className={`px-3 py-2 text-xs font-medium uppercase tracking-wide ${accent}`}>
+        {title} · {rows.length} {rows.length === 1 ? "booking" : "bookings"}
+      </div>
+      {rows.length === 0 ? (
+        <div className="px-3 py-6 text-sm text-[color:var(--muted)] text-center">No bookings yet</div>
+      ) : (
+        <table className="w-full text-sm">
+          <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
+            <tr>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Name</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Email</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Phone</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Reply</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">First call</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)] text-right">Mins after reply</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)] text-right">Attempts</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Disposition</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r) => (
+              <tr key={r.id} className="border-t border-[color:var(--border)]">
+                <td className="px-3 py-2 whitespace-nowrap">{r.name || "—"}</td>
+                <td className="px-3 py-2">
+                  {r.sequencer_thread_url ? (
+                    <a
+                      href={r.sequencer_thread_url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="underline decoration-dotted hover:decoration-solid"
+                    >
+                      {r.email}
+                    </a>
+                  ) : (
+                    r.email
+                  )}
+                </td>
+                <td className="px-3 py-2 whitespace-nowrap">{r.phone || "—"}</td>
+                <td className="px-3 py-2 whitespace-nowrap">{fmtTime(r.reply_at, tz)}</td>
+                <td className="px-3 py-2 whitespace-nowrap">{fmtTime(r.call_at, tz)}</td>
+                <td className="px-3 py-2 text-right whitespace-nowrap">
+                  {r.mins_after_reply === null ? "—" : r.mins_after_reply.toFixed(1)}
+                </td>
+                <td className="px-3 py-2 text-right">{r.call_attempts}</td>
+                <td className="px-3 py-2 text-xs">{r.call_disposition || "—"}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }

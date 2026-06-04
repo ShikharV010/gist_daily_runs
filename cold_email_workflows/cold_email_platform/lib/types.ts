@@ -71,6 +71,20 @@ export type DispositionRow = {
   connected: boolean;
 };
 
+export type PhoneBookingRow = {
+  id: string;
+  external_id: string;
+  name: string | null;
+  email: string;
+  phone: string | null;
+  reply_at: string;
+  call_at: string | null;
+  mins_after_reply: number | null;
+  call_attempts: number;
+  call_disposition: string | null;
+  sequencer_thread_url: string | null;
+};
+
 export type AnalyticsResponse = {
   tz: "IST" | "EST";
   totals: {
@@ -86,4 +100,8 @@ export type AnalyticsResponse = {
   by_day: AnalyticsBucket[];
   by_week: AnalyticsBucket[];
   dispositions: DispositionRow[];
+  phone_bookings: {
+    within_5min: PhoneBookingRow[];
+    outside_5min: PhoneBookingRow[];
+  };
 };

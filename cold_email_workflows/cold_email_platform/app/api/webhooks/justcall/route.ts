@@ -163,17 +163,29 @@ export async function POST(req: NextRequest) {
 
   if (isCompleted) {
     // First completion: stamp call_at, compute <5min, set disposition if any, bump attempts.
-    // COALESCE(NULLIF(...,''), ...) preserves an existing disposition when the
-    // current payload has none. Phone match via last-10-digits is country-code-blind.
+    //
+    // call_within_5min: only true when call happened AFTER reply AND within 5 min.
+    //                   The OLD logic counted negative deltas (call BEFORE reply, e.g.
+    //                   the lead was in an earlier campaign) as "<5min" — wrong.
+    //
+    // call_disposition: STICKY for Meeting Booked — once a phone has booked a meeting,
+    //                   later "No Answer" calls (e.g. confirmation calls) must NOT
+    //                   overwrite that. This is the bug that caused the analytics tab
+    //                   to undercount bookings.
     updated = await query<{ id: string; row_type: string; external_id: string }>(
       `UPDATE gist.gtm_unified_db_source
           SET call_at = COALESCE(call_at, $1::timestamptz),
               call_within_5min = CASE
                 WHEN call_at IS NOT NULL THEN call_within_5min
                 WHEN reply_at IS NULL THEN NULL
-                ELSE EXTRACT(EPOCH FROM ($1::timestamptz - reply_at)) <= 300
+                ELSE ($1::timestamptz >= reply_at)
+                  AND EXTRACT(EPOCH FROM ($1::timestamptz - reply_at)) <= 300
               END,
-              call_disposition = COALESCE(NULLIF($3, ''), call_disposition),
+              call_disposition = CASE
+                WHEN call_disposition ILIKE '%meeting booked%'
+                  AND NULLIF($3, '') NOT ILIKE '%meeting booked%' THEN call_disposition
+                ELSE COALESCE(NULLIF($3, ''), call_disposition)
+              END,
               call_attempts = COALESCE(call_attempts, 0) + 1
         WHERE right(phone, 10) = $2
         RETURNING id, row_type, external_id`,
@@ -181,15 +193,18 @@ export async function POST(req: NextRequest) {
     );
   } else if (isUpdated) {
     // SDR updated the call (typically the disposition pick). Don't bump attempts,
-    // don't touch call_at. Only write disposition when we actually have one in
-    // the payload (otherwise we'd nuke a previously-set disposition).
+    // don't touch call_at. Disposition is sticky on Meeting Booked.
     if (!disposition) {
       console.log(`[justcall] call.updated had no extractable disposition — payload.data keys: ${Object.keys(body.data || {}).join(",")} call_info keys: ${Object.keys(body.data?.call_info || {}).join(",")}`);
       return NextResponse.json({ status: "ignored", reason: "call.updated with no disposition" });
     }
     updated = await query<{ id: string; row_type: string; external_id: string }>(
       `UPDATE gist.gtm_unified_db_source
-          SET call_disposition = $2
+          SET call_disposition = CASE
+                WHEN call_disposition ILIKE '%meeting booked%'
+                  AND $2 NOT ILIKE '%meeting booked%' THEN call_disposition
+                ELSE $2
+              END
         WHERE right(phone, 10) = $1
         RETURNING id, row_type, external_id`,
       [phoneL10, disposition]
