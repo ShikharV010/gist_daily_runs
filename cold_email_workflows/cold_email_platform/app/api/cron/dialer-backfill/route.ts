@@ -106,15 +106,16 @@ async function jcCallsForPhone(
   const headers = { Authorization: auth, Accept: "application/json" };
   const url = `https://api.justcall.io/v2.1/calls?contact_number=${encodeURIComponent(e164)}&per_page=100`;
 
-  // Retry on 429 with a single back-off. JustCall's published limit is roughly
-  // 1000/hour but bursts trigger per-second throttling — slow down on 429.
-  for (let attempt = 0; attempt < 2; attempt++) {
+  // JustCall throttles aggressively from Vercel IPs. Two attempts with a
+  // generous backoff on 429 covers the typical throttle window.
+  const backoffsMs = [3000, 6000];
+  for (let attempt = 0; attempt < 3; attempt++) {
     try {
-      const res = await fetch(url, { headers, signal: AbortSignal.timeout(15_000) });
+      const res = await fetch(url, { headers, signal: AbortSignal.timeout(20_000) });
       if (res.status === 429) {
         diag.rateLimitedHits++;
-        if (attempt === 0) {
-          await new Promise((r) => setTimeout(r, 1500));
+        if (attempt < backoffsMs.length) {
+          await new Promise((r) => setTimeout(r, backoffsMs[attempt]));
           continue;
         }
         return [];
@@ -169,62 +170,58 @@ export async function GET(_req: NextRequest) {
   let errors = 0;
   const diag = { rateLimitedHits: 0, otherErrors: 0, emptyResponses: 0 };
 
-  // 3-way concurrency: JustCall throttles aggressive bursts. 67 rows × ~1.5s ≈ 35s
-  // sequential vs ~12s at 3-way — well within Vercel's 300s function budget,
-  // and friendly to the API.
-  const concurrency = 3;
-  let cursor = 0;
-  const worker = async () => {
-    while (cursor < rows.length) {
-      const i = cursor++;
-      const r = rows[i];
-      const replyAt = new Date(r.reply_at);
-      try {
-        const calls = await jcCallsForPhone(r.phone, token, diag);
-        const outbound = calls.filter((c) => /outbound|outgoing/i.test(pickDirection(c)));
-        const parsed = outbound
-          .map((c) => ({ t: callAt(c), disp: pickDisposition(c) }))
-          .filter((x): x is { t: Date; disp: string | null } => x.t !== null);
-        if (parsed.length === 0) {
-          noCalls++;
-          continue;
-        }
-        parsed.sort((a, b) => a.t.getTime() - b.t.getTime());
-        // Earliest call AFTER reply (fallback: earliest call ever)
-        const firstAfter = parsed.find((x) => x.t.getTime() >= replyAt.getTime());
-        const firstCallAt = (firstAfter ?? parsed[0]).t;
-        const attempts = outbound.length;
-        // Sticky Meeting Booked: prefer it if seen on any call.
-        const dispositions = parsed.map((x) => x.disp).filter(Boolean) as string[];
-        const mb = dispositions.find((d) => /meeting booked/i.test(d));
-        const bestDisp = mb || dispositions[dispositions.length - 1] || null;
-
-        await query(
-          `UPDATE gist.gtm_unified_db_source
-              SET call_at = $1::timestamptz,
-                  call_attempts = GREATEST(COALESCE(call_attempts, 0), $2::int),
-                  call_within_5min = CASE
-                    WHEN reply_at IS NULL THEN NULL
-                    WHEN $1::timestamptz < reply_at THEN false
-                    ELSE EXTRACT(EPOCH FROM ($1::timestamptz - reply_at)) <= 300
-                  END,
-                  call_disposition = CASE
-                    WHEN call_disposition ILIKE '%meeting booked%'
-                      AND ($3::text IS NULL OR $3::text NOT ILIKE '%meeting booked%')
-                      THEN call_disposition
-                    ELSE COALESCE(NULLIF($3::text, ''), call_disposition)
-                  END
-            WHERE id = $4::bigint`,
-          [firstCallAt.toISOString(), attempts, bestDisp, r.id]
-        );
-        updated++;
-      } catch (e) {
-        errors++;
-        console.warn(`[dialer-backfill] id=${r.id} phone=${r.phone} failed:`, e);
+  // Sequential w/ a 700ms inter-request pause — JustCall heavily throttles
+  // Vercel-IP bursts even at 3-way concurrency. ~67 rows × ~1.3s ≈ 90s, fits
+  // inside the 300s function budget.
+  const interRequestPauseMs = 700;
+  for (let i = 0; i < rows.length; i++) {
+    const r = rows[i];
+    const replyAt = new Date(r.reply_at);
+    if (i > 0) await new Promise((res) => setTimeout(res, interRequestPauseMs));
+    try {
+      const calls = await jcCallsForPhone(r.phone, token, diag);
+      const outbound = calls.filter((c) => /outbound|outgoing/i.test(pickDirection(c)));
+      const parsed = outbound
+        .map((c) => ({ t: callAt(c), disp: pickDisposition(c) }))
+        .filter((x): x is { t: Date; disp: string | null } => x.t !== null);
+      if (parsed.length === 0) {
+        noCalls++;
+        continue;
       }
+      parsed.sort((a, b) => a.t.getTime() - b.t.getTime());
+      // Earliest call AFTER reply (fallback: earliest call ever)
+      const firstAfter = parsed.find((x) => x.t.getTime() >= replyAt.getTime());
+      const firstCallAt = (firstAfter ?? parsed[0]).t;
+      const attempts = outbound.length;
+      // Sticky Meeting Booked: prefer it if seen on any call.
+      const dispositions = parsed.map((x) => x.disp).filter(Boolean) as string[];
+      const mb = dispositions.find((d) => /meeting booked/i.test(d));
+      const bestDisp = mb || dispositions[dispositions.length - 1] || null;
+
+      await query(
+        `UPDATE gist.gtm_unified_db_source
+            SET call_at = $1::timestamptz,
+                call_attempts = GREATEST(COALESCE(call_attempts, 0), $2::int),
+                call_within_5min = CASE
+                  WHEN reply_at IS NULL THEN NULL
+                  WHEN $1::timestamptz < reply_at THEN false
+                  ELSE EXTRACT(EPOCH FROM ($1::timestamptz - reply_at)) <= 300
+                END,
+                call_disposition = CASE
+                  WHEN call_disposition ILIKE '%meeting booked%'
+                    AND ($3::text IS NULL OR $3::text NOT ILIKE '%meeting booked%')
+                    THEN call_disposition
+                  ELSE COALESCE(NULLIF($3::text, ''), call_disposition)
+                END
+          WHERE id = $4::bigint`,
+        [firstCallAt.toISOString(), attempts, bestDisp, r.id]
+      );
+      updated++;
+    } catch (e) {
+      errors++;
+      console.warn(`[dialer-backfill] id=${r.id} phone=${r.phone} failed:`, e);
     }
-  };
-  await Promise.all(Array.from({ length: Math.min(concurrency, rows.length) }, worker));
+  }
 
   return NextResponse.json({
     status: "ok",
