@@ -39,6 +39,16 @@ export function dialerHref(phone: string | null | undefined): string | null {
 }
 
 /**
+ * Opens the JustCall calls log filtered by this contact — the lead-row's
+ * call history including recordings. Same pattern as dialerHref/smsHref.
+ */
+export function callLogHref(phone: string | null | undefined): string | null {
+  const e164 = toE164(phone);
+  if (!e164) return null;
+  return `https://app.justcall.io/calls?numbers=${encodeURIComponent(e164)}`;
+}
+
+/**
  * Open the JustCall messages composer with both ends pre-filled.
  * Sending number = JUSTCALL_SMS_NUMBER (Allaine's line).
  */

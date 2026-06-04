@@ -75,6 +75,8 @@ export type PhoneBookingRow = {
   id: string;
   external_id: string;
   name: string | null;
+  company: string | null;
+  website: string | null;
   email: string;
   phone: string | null;
   reply_at: string;

@@ -2,17 +2,17 @@
 
 import { useEffect, useState } from "react";
 import {
-  Bar,
-  BarChart,
   CartesianGrid,
   Legend,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
 import type { AnalyticsResponse, AnalyticsBucket, PhoneBookingRow } from "@/lib/types";
-import { fmtTime, type Tz } from "@/lib/format";
+import { callLogHref, fmtTime, type Tz } from "@/lib/format";
 
 type Granularity = "day" | "week";
 
@@ -119,8 +119,6 @@ export default function AnalyticsTab({ tz }: { tz: Tz }) {
         ]}
       />
 
-      <BucketTable rows={buckets} granularity={granularity} />
-
       <DispositionSection data={data} />
 
       <PhoneBookingsSection data={data} tz={tz} />
@@ -142,8 +140,7 @@ function PhoneBookingsSection({
     <div className="space-y-4">
       <h3 className="text-sm font-medium">Phone-call Bookings (Meeting Booked)</h3>
       <p className="text-xs text-[color:var(--muted)] -mt-2">
-        Demos closed on a JustCall conversation. Bucketed by first-call timing vs the original reply.
-        Negative mins = call happened before the reply (legacy lead, surfaced later) — counted as ≥5 min.
+        Demos closed on a JustCall conversation, bucketed by first-call timing vs the original reply.
       </p>
       <PhoneBookingsTable
         title="Bookings from < 5 min calls"
@@ -184,43 +181,72 @@ function PhoneBookingsTable({
           <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
             <tr>
               <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Name</th>
-              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Email</th>
-              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Phone</th>
-              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Reply</th>
-              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">First call</th>
-              <th className="px-3 py-2 font-medium text-[color:var(--muted)] text-right">Mins after reply</th>
-              <th className="px-3 py-2 font-medium text-[color:var(--muted)] text-right">Attempts</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Company</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Website</th>
               <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Disposition</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Call recording</th>
+              <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Call date</th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((r) => (
-              <tr key={r.id} className="border-t border-[color:var(--border)]">
-                <td className="px-3 py-2 whitespace-nowrap">{r.name || "—"}</td>
-                <td className="px-3 py-2">
-                  {r.sequencer_thread_url ? (
-                    <a
-                      href={r.sequencer_thread_url}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="underline decoration-dotted hover:decoration-solid"
-                    >
-                      {r.email}
-                    </a>
-                  ) : (
-                    r.email
-                  )}
-                </td>
-                <td className="px-3 py-2 whitespace-nowrap">{r.phone || "—"}</td>
-                <td className="px-3 py-2 whitespace-nowrap">{fmtTime(r.reply_at, tz)}</td>
-                <td className="px-3 py-2 whitespace-nowrap">{fmtTime(r.call_at, tz)}</td>
-                <td className="px-3 py-2 text-right whitespace-nowrap">
-                  {r.mins_after_reply === null ? "—" : r.mins_after_reply.toFixed(1)}
-                </td>
-                <td className="px-3 py-2 text-right">{r.call_attempts}</td>
-                <td className="px-3 py-2 text-xs">{r.call_disposition || "—"}</td>
-              </tr>
-            ))}
+            {rows.map((r) => {
+              const recording = callLogHref(r.phone);
+              const website = r.website
+                ? r.website.startsWith("http")
+                  ? r.website
+                  : `https://${r.website}`
+                : null;
+              return (
+                <tr key={r.id} className="border-t border-[color:var(--border)]">
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {r.sequencer_thread_url ? (
+                      <a
+                        href={r.sequencer_thread_url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline decoration-dotted hover:decoration-solid"
+                        title={r.email}
+                      >
+                        {r.name || r.email}
+                      </a>
+                    ) : (
+                      r.name || r.email
+                    )}
+                  </td>
+                  <td className="px-3 py-2 whitespace-nowrap">{r.company || "—"}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {website ? (
+                      <a
+                        href={website}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline decoration-dotted hover:decoration-solid"
+                      >
+                        {r.website}
+                      </a>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td className="px-3 py-2 text-xs">{r.call_disposition || "—"}</td>
+                  <td className="px-3 py-2 whitespace-nowrap">
+                    {recording ? (
+                      <a
+                        href={recording}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="underline decoration-dotted hover:decoration-solid"
+                      >
+                        JustCall ↗
+                      </a>
+                    ) : (
+                      "—"
+                    )}
+                  </td>
+                  <td className="px-3 py-2 whitespace-nowrap">{fmtTime(r.call_at, tz)}</td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
       )}
@@ -349,7 +375,6 @@ function ChartCard({
   loading: boolean;
   series: { key: keyof AnalyticsBucket; name: string; fill: string }[];
 }) {
-  const gradId = (suffix: string) => `grad-${title.replace(/\s/g, "")}-${suffix}`;
   return (
     <div className="border border-[color:var(--border)] rounded-xl p-4 bg-[color:var(--card)]">
       <h4 className="text-sm font-medium mb-3">{title}</h4>
@@ -360,20 +385,12 @@ function ChartCard({
       ) : (
         <div style={{ width: "100%", height: 280 }}>
           <ResponsiveContainer>
-            <BarChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
-              <defs>
-                {series.map((s, i) => (
-                  <linearGradient key={i} id={gradId(String(i))} x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor={s.fill} stopOpacity={1} />
-                    <stop offset="100%" stopColor={s.fill} stopOpacity={0.55} />
-                  </linearGradient>
-                ))}
-              </defs>
+            <LineChart data={data} margin={{ top: 8, right: 16, left: 0, bottom: 8 }}>
               <CartesianGrid strokeDasharray="3 3" stroke="currentColor" strokeOpacity={0.12} />
               <XAxis dataKey="bucket" stroke="currentColor" strokeOpacity={0.5} fontSize={12} />
               <YAxis allowDecimals={false} stroke="currentColor" strokeOpacity={0.5} fontSize={12} />
               <Tooltip
-                cursor={{ fill: "rgba(124, 92, 255, 0.08)" }}
+                cursor={{ stroke: "rgba(124, 92, 255, 0.35)", strokeWidth: 1 }}
                 contentStyle={{
                   background: "var(--card)",
                   border: "1px solid var(--border)",
@@ -382,57 +399,22 @@ function ChartCard({
                 }}
               />
               <Legend wrapperStyle={{ fontSize: 12 }} />
-              {series.map((s, i) => (
-                <Bar
+              {series.map((s) => (
+                <Line
                   key={String(s.key)}
+                  type="monotone"
                   dataKey={String(s.key)}
                   name={s.name}
-                  fill={`url(#${gradId(String(i))})`}
-                  radius={[6, 6, 0, 0]}
+                  stroke={s.fill}
+                  strokeWidth={2}
+                  dot={{ r: 3, fill: s.fill }}
+                  activeDot={{ r: 5 }}
                 />
               ))}
-            </BarChart>
+            </LineChart>
           </ResponsiveContainer>
         </div>
       )}
-    </div>
-  );
-}
-
-function BucketTable({
-  rows,
-  granularity,
-}: {
-  rows: AnalyticsBucket[];
-  granularity: Granularity;
-}) {
-  if (rows.length === 0) return null;
-  return (
-    <div className="overflow-x-auto border border-[color:var(--border)] rounded">
-      <table className="w-full text-sm">
-        <thead className="bg-[color:var(--border)]/30 text-left text-xs uppercase tracking-wide">
-          <tr>
-            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">
-              {granularity === "day" ? "Day" : "Week of"}
-            </th>
-            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Calls &lt; 5</th>
-            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Calls ≥ 5</th>
-            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Bookings &lt; 5</th>
-            <th className="px-3 py-2 font-medium text-[color:var(--muted)]">Bookings ≥ 5</th>
-          </tr>
-        </thead>
-        <tbody>
-          {rows.map((r) => (
-            <tr key={r.bucket} className="border-t border-[color:var(--border)]">
-              <td className="px-3 py-2 whitespace-nowrap">{r.bucket}</td>
-              <td className="px-3 py-2">{r.calls_within_5min}</td>
-              <td className="px-3 py-2">{r.calls_outside_5min}</td>
-              <td className="px-3 py-2">{r.bookings_within_5min}</td>
-              <td className="px-3 py-2">{r.bookings_outside_5min}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
     </div>
   );
 }

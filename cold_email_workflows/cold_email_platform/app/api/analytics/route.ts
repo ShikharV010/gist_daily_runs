@@ -149,6 +149,8 @@ export async function GET(req: NextRequest) {
     id: string;
     external_id: string;
     name: string | null;
+    company: string | null;
+    website: string | null;
     email: string;
     phone: string | null;
     reply_at: string;
@@ -162,6 +164,8 @@ export async function GET(req: NextRequest) {
     `SELECT id::text                                                        AS id,
             external_id::text                                                AS external_id,
             name,
+            company,
+            website,
             email,
             phone,
             reply_at,
@@ -187,6 +191,8 @@ export async function GET(req: NextRequest) {
     id: r.id,
     external_id: r.external_id,
     name: r.name,
+    company: r.company,
+    website: r.website,
     email: r.email,
     phone: r.phone,
     reply_at: r.reply_at,
