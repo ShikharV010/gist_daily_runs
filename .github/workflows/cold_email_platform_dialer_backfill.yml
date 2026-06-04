@@ -1,0 +1,22 @@
+name: Cold Email Platform — Dialer Backfill
+
+# Every 15 minutes: re-poll JustCall for recent dialer rows + any older row that
+# hasn't picked up a Meeting Booked disposition. Backstop for missed JustCall
+# webhooks. Endpoint logic lives at five_minutes_craft/app/api/cron/dialer-backfill.
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+jobs:
+  backfill:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - name: Hit Vercel cron endpoint
+        env:
+          BASE: ${{ secrets.COLD_EMAIL_PLATFORM_URL }}
+        run: |
+          set -euo pipefail
+          curl -fsSL --max-time 300 -X GET "${BASE}/api/cron/dialer-backfill"
