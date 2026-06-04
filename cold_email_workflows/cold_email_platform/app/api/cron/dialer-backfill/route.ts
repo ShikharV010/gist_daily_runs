@@ -95,26 +95,46 @@ function pickDisposition(c: JcCall): string | null {
   return null;
 }
 
-async function jcCallsForPhone(phone: string, token: string): Promise<JcCall[]> {
+async function jcCallsForPhone(
+  phone: string,
+  token: string,
+  diag: { rateLimitedHits: number; otherErrors: number; emptyResponses: number }
+): Promise<JcCall[]> {
   const e164 = toE164(phone);
   if (!e164) return [];
   const auth = token.startsWith("Bearer ") ? token : `Bearer ${token}`;
   const headers = { Authorization: auth, Accept: "application/json" };
-  // Try +<e164> first; fall back to raw digits without "+".
-  for (const variant of [e164, e164.replace(/^\+/, "")]) {
-    const url = `https://api.justcall.io/v2.1/calls?contact_number=${encodeURIComponent(variant)}&per_page=100`;
+  const url = `https://api.justcall.io/v2.1/calls?contact_number=${encodeURIComponent(e164)}&per_page=100`;
+
+  // Retry on 429 with a single back-off. JustCall's published limit is roughly
+  // 1000/hour but bursts trigger per-second throttling — slow down on 429.
+  for (let attempt = 0; attempt < 2; attempt++) {
     try {
       const res = await fetch(url, { headers, signal: AbortSignal.timeout(15_000) });
-      if (!res.ok) continue;
+      if (res.status === 429) {
+        diag.rateLimitedHits++;
+        if (attempt === 0) {
+          await new Promise((r) => setTimeout(r, 1500));
+          continue;
+        }
+        return [];
+      }
+      if (!res.ok) {
+        diag.otherErrors++;
+        return [];
+      }
       const data = (await res.json()) as {
         data?: JcCall[];
         calls?: JcCall[];
         results?: JcCall[];
       };
-      const batch = data.data || data.calls || data.results || (Array.isArray(data) ? (data as JcCall[]) : []);
-      if (batch.length) return batch;
+      const batch =
+        data.data || data.calls || data.results || (Array.isArray(data) ? (data as JcCall[]) : []);
+      if (!batch.length) diag.emptyResponses++;
+      return batch;
     } catch {
-      // try next variant
+      diag.otherErrors++;
+      return [];
     }
   }
   return [];
@@ -147,8 +167,12 @@ export async function GET(_req: NextRequest) {
   let updated = 0;
   let noCalls = 0;
   let errors = 0;
+  const diag = { rateLimitedHits: 0, otherErrors: 0, emptyResponses: 0 };
 
-  const concurrency = 8;
+  // 3-way concurrency: JustCall throttles aggressive bursts. 67 rows × ~1.5s ≈ 35s
+  // sequential vs ~12s at 3-way — well within Vercel's 300s function budget,
+  // and friendly to the API.
+  const concurrency = 3;
   let cursor = 0;
   const worker = async () => {
     while (cursor < rows.length) {
@@ -156,7 +180,7 @@ export async function GET(_req: NextRequest) {
       const r = rows[i];
       const replyAt = new Date(r.reply_at);
       try {
-        const calls = await jcCallsForPhone(r.phone, token);
+        const calls = await jcCallsForPhone(r.phone, token, diag);
         const outbound = calls.filter((c) => /outbound|outgoing/i.test(pickDirection(c)));
         const parsed = outbound
           .map((c) => ({ t: callAt(c), disp: pickDisposition(c) }))
@@ -208,5 +232,6 @@ export async function GET(_req: NextRequest) {
     updated,
     no_calls: noCalls,
     errors,
+    diag,
   });
 }
