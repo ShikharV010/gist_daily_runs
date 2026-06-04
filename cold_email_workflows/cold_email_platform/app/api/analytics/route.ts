@@ -24,12 +24,17 @@ export async function GET(req: NextRequest) {
   // ── Totals (all-time) ────────────────────────────────────────────────────
   // total_calls = sum of call_attempts (actual call volume; one lead = many calls)
   // calls_within_5min / calls_outside_5min = unique LEADS bucketed by their first call
-  // bookings_within_5min / bookings_outside_5min = leads whose disposition contains 'meeting booked'
+  // bookings_within_5min / bookings_outside_5min =
+  //   dialer leads who BOOKED A DEMO (either Allaine marked Meeting Booked in JustCall
+  //   OR the prospect self-booked via the cal.com link → row in gtm_inbound_demo_bookings),
+  //   AND were called (call_at IS NOT NULL), bucketed by the call's timing vs the reply.
   //
-  // The stored call_within_5min column may be wrong for older rows (the previous
-  // webhook treated calls BEFORE the reply as "<5min" because the SQL didn't check
-  // the sign of the delta). Compute it on the fly here so the dashboard is always
-  // consistent: within_5min requires call_at >= reply_at AND delta <= 300s.
+  // The Meeting Booked disposition alone undercounts because Allaine's common pattern
+  // is to send the cal.com link mid-call and never stamp a disposition. cal.com match
+  // is on email OR last-10-digit phone, against is_latest=true bookings only.
+  //
+  // within_5min is computed on the fly from raw timestamps so legacy bad values in
+  // the call_within_5min column don't affect the dashboard.
   const totalsRows = await query<{
     total_dialer_rows: string;
     total_calls: string;
@@ -39,23 +44,36 @@ export async function GET(req: NextRequest) {
     bookings_outside_5min: string;
   }>(
     `WITH d AS (
-       SELECT call_attempts,
-              call_disposition,
+       SELECT u.call_attempts,
+              u.call_disposition,
+              EXISTS (
+                SELECT 1 FROM gist.gtm_inbound_demo_bookings b
+                 WHERE b.is_latest = true
+                   AND (
+                     lower(b.prospect_email) = lower(u.email)
+                     OR (u.phone IS NOT NULL
+                         AND right(regexp_replace(b.prospect_phone_number,'\\D','','g'), 10)
+                             = right(u.phone, 10))
+                   )
+              ) AS booked_calcom,
+              u.call_at,
               CASE
-                WHEN call_at IS NULL OR reply_at IS NULL THEN NULL
-                WHEN call_at < reply_at THEN false
-                ELSE EXTRACT(EPOCH FROM (call_at - reply_at)) <= 300
+                WHEN u.call_at IS NULL OR u.reply_at IS NULL THEN NULL
+                WHEN u.call_at < u.reply_at THEN false
+                ELSE EXTRACT(EPOCH FROM (u.call_at - u.reply_at)) <= 300
               END AS w5
-         FROM gist.gtm_unified_db_source
-        WHERE row_type = 'dialer'
+         FROM gist.gtm_unified_db_source u
+        WHERE u.row_type = 'dialer'
      )
      SELECT
        COUNT(*)                                                                       AS total_dialer_rows,
        COALESCE(SUM(call_attempts), 0)                                                AS total_calls,
        COUNT(*) FILTER (WHERE w5 = true)                                              AS calls_within_5min,
        COUNT(*) FILTER (WHERE w5 = false)                                             AS calls_outside_5min,
-       COUNT(*) FILTER (WHERE call_disposition ILIKE '%meeting booked%' AND w5 = true)  AS bookings_within_5min,
-       COUNT(*) FILTER (WHERE call_disposition ILIKE '%meeting booked%' AND w5 = false) AS bookings_outside_5min
+       COUNT(*) FILTER (WHERE (call_disposition ILIKE '%meeting booked%' OR booked_calcom)
+                          AND call_at IS NOT NULL AND w5 = true)                       AS bookings_within_5min,
+       COUNT(*) FILTER (WHERE (call_disposition ILIKE '%meeting booked%' OR booked_calcom)
+                          AND call_at IS NOT NULL AND w5 = false)                      AS bookings_outside_5min
      FROM d`
   );
   const totals = {
@@ -71,24 +89,36 @@ export async function GET(req: NextRequest) {
     WITH cal AS (
       SELECT to_char(${
         truncFn === "day"
-          ? "(call_at AT TIME ZONE $1)::date"
-          : "date_trunc('week', call_at AT TIME ZONE $1)::date"
+          ? "(u.call_at AT TIME ZONE $1)::date"
+          : "date_trunc('week', u.call_at AT TIME ZONE $1)::date"
       }, 'YYYY-MM-DD') AS bucket,
              CASE
-               WHEN reply_at IS NULL THEN NULL
-               WHEN call_at < reply_at THEN false
-               ELSE EXTRACT(EPOCH FROM (call_at - reply_at)) <= 300
+               WHEN u.reply_at IS NULL THEN NULL
+               WHEN u.call_at < u.reply_at THEN false
+               ELSE EXTRACT(EPOCH FROM (u.call_at - u.reply_at)) <= 300
              END AS w5,
-             call_disposition
-        FROM gist.gtm_unified_db_source
-       WHERE row_type = 'dialer'
-         AND call_at IS NOT NULL
+             u.call_disposition,
+             EXISTS (
+               SELECT 1 FROM gist.gtm_inbound_demo_bookings b
+                WHERE b.is_latest = true
+                  AND (
+                    lower(b.prospect_email) = lower(u.email)
+                    OR (u.phone IS NOT NULL
+                        AND right(regexp_replace(b.prospect_phone_number,'\\D','','g'), 10)
+                            = right(u.phone, 10))
+                  )
+             ) AS booked_calcom
+        FROM gist.gtm_unified_db_source u
+       WHERE u.row_type = 'dialer'
+         AND u.call_at IS NOT NULL
     )
     SELECT bucket,
            COUNT(*) FILTER (WHERE w5 = true)                                                AS calls_within_5min,
            COUNT(*) FILTER (WHERE w5 = false)                                               AS calls_outside_5min,
-           COUNT(*) FILTER (WHERE call_disposition ILIKE '%meeting booked%' AND w5 = true)  AS bookings_within_5min,
-           COUNT(*) FILTER (WHERE call_disposition ILIKE '%meeting booked%' AND w5 = false) AS bookings_outside_5min
+           COUNT(*) FILTER (WHERE (call_disposition ILIKE '%meeting booked%' OR booked_calcom)
+                              AND w5 = true)                                                AS bookings_within_5min,
+           COUNT(*) FILTER (WHERE (call_disposition ILIKE '%meeting booked%' OR booked_calcom)
+                              AND w5 = false)                                               AS bookings_outside_5min
       FROM cal
      GROUP BY bucket
      ORDER BY bucket DESC
@@ -158,33 +188,57 @@ export async function GET(req: NextRequest) {
     mins_after_reply: string | null;
     call_attempts: string;
     call_disposition: string | null;
+    booked_calcom: boolean;
     sequencer_thread_url: string | null;
     within_5min: boolean | null;
   }>(
-    `SELECT id::text                                                        AS id,
-            external_id::text                                                AS external_id,
-            name,
-            company,
-            website,
-            email,
-            phone,
-            reply_at,
-            call_at,
+    `SELECT u.id::text                                                       AS id,
+            u.external_id::text                                              AS external_id,
+            u.name,
+            u.company,
+            u.website,
+            u.email,
+            u.phone,
+            u.reply_at,
+            u.call_at,
             CASE
-              WHEN call_at IS NULL OR reply_at IS NULL THEN NULL
-              ELSE ROUND((EXTRACT(EPOCH FROM (call_at - reply_at)) / 60.0)::numeric, 1)::text
+              WHEN u.call_at IS NULL OR u.reply_at IS NULL THEN NULL
+              ELSE ROUND((EXTRACT(EPOCH FROM (u.call_at - u.reply_at)) / 60.0)::numeric, 1)::text
             END                                                              AS mins_after_reply,
-            COALESCE(call_attempts, 0)::text                                 AS call_attempts,
-            call_disposition,
-            sequencer_thread_url,
+            COALESCE(u.call_attempts, 0)::text                               AS call_attempts,
+            u.call_disposition,
+            EXISTS (
+              SELECT 1 FROM gist.gtm_inbound_demo_bookings b
+               WHERE b.is_latest = true
+                 AND (
+                   lower(b.prospect_email) = lower(u.email)
+                   OR (u.phone IS NOT NULL
+                       AND right(regexp_replace(b.prospect_phone_number,'\\D','','g'), 10)
+                           = right(u.phone, 10))
+                 )
+            )                                                                AS booked_calcom,
+            u.sequencer_thread_url,
             CASE
-              WHEN call_at IS NULL OR reply_at IS NULL THEN NULL
-              WHEN call_at < reply_at THEN false
-              ELSE EXTRACT(EPOCH FROM (call_at - reply_at)) <= 300
+              WHEN u.call_at IS NULL OR u.reply_at IS NULL THEN NULL
+              WHEN u.call_at < u.reply_at THEN false
+              ELSE EXTRACT(EPOCH FROM (u.call_at - u.reply_at)) <= 300
             END                                                              AS within_5min
-       FROM gist.gtm_unified_db_source
-      WHERE row_type = 'dialer'
-        AND call_disposition ILIKE '%meeting booked%'
+       FROM gist.gtm_unified_db_source u
+      WHERE u.row_type = 'dialer'
+        AND u.call_at IS NOT NULL
+        AND (
+          u.call_disposition ILIKE '%meeting booked%'
+          OR EXISTS (
+            SELECT 1 FROM gist.gtm_inbound_demo_bookings b
+             WHERE b.is_latest = true
+               AND (
+                 lower(b.prospect_email) = lower(u.email)
+                 OR (u.phone IS NOT NULL
+                     AND right(regexp_replace(b.prospect_phone_number,'\\D','','g'), 10)
+                         = right(u.phone, 10))
+               )
+          )
+        )
       ORDER BY reply_at DESC NULLS LAST`
   );
   const toBooking = (r: typeof phoneBookingRows[number]): PhoneBookingRow => ({
@@ -200,6 +254,9 @@ export async function GET(req: NextRequest) {
     mins_after_reply: r.mins_after_reply === null ? null : Number(r.mins_after_reply),
     call_attempts: Number(r.call_attempts),
     call_disposition: r.call_disposition,
+    booked_via: r.call_disposition && /meeting booked/i.test(r.call_disposition)
+      ? "phone"
+      : "cal_com_link",
     sequencer_thread_url: r.sequencer_thread_url,
   });
   const phone_bookings = {
