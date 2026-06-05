@@ -31766,5 +31766,165 @@
       "total_duration_min": 31,
       "analyzed_at": "2026-06-04T08:43:13.643339Z"
     }
+  },
+  "Spotz Scientific, LLC": {
+    "company": "Spotz Scientific, LLC",
+    "prospect_name": "Bill Spotz",
+    "prospect_designation": "Owner / Founder, Spotz Scientific LLC",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Bill is the sole proprietor and makes all business decisions independently.",
+    "company_industry": "Scientific Consulting / DOE & Federal Grant Proposal Advisory",
+    "pain_points": [
+      {
+        "pain_point": "No small business clients despite targeting them",
+        "severity": "high",
+        "direct_quote": "I didn't get any small business clients.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained targeted landing pages for SBIR small business audience"
+      },
+      {
+        "pain_point": "Relies solely on word-of-mouth for new business",
+        "severity": "high",
+        "direct_quote": "today the channels that are working for you is word of mouth",
+        "addressed_in_call": true,
+        "how_addressed": "AE pitched organic AI and Google search lead channel as alternative"
+      },
+      {
+        "pain_point": "Website lacks content to attract ideal clients",
+        "severity": "medium",
+        "direct_quote": "your existing website does not really have a lot of information around the industry that you serve",
+        "addressed_in_call": true,
+        "how_addressed": "AE committed to building 100 custom landing pages with targeted content"
+      },
+      {
+        "pain_point": "Seasonal/cyclical workload with dry periods",
+        "severity": "medium",
+        "direct_quote": "there are dry periods, right, when there's no deadline coming up",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as pipeline builder for off-cycle lead capture"
+      },
+      {
+        "pain_point": "Capacity saturation risk as sole proprietor",
+        "severity": "medium",
+        "direct_quote": "it's possible for me to just become saturated and have all the work I can handle",
+        "addressed_in_call": true,
+        "how_addressed": "AE suggested independent contractors and framed saturation as a positive outcome"
+      },
+      {
+        "pain_point": "Not discoverable on AI or search engines",
+        "severity": "high",
+        "direct_quote": "there are so many people out there looking for your service, but they just can't find you",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated competitor ranking analysis and Gushwork's ranking strategy"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Budget concern \u2014 low average contract value (~$4K)",
+        "how_handled": "AE framed one closed deal covering subscription cost within 4 months",
+        "resolved": true
+      },
+      {
+        "objection": "Worry about becoming saturated with too many leads",
+        "how_handled": "AE reframed saturation as success, suggested contractor delegation model",
+        "resolved": true
+      },
+      {
+        "objection": "Proximity to retirement \u2014 uncertain long-term commitment",
+        "how_handled": "AE emphasized no annual lock-in, month-to-month flexibility, asset handoff on exit",
+        "resolved": true
+      },
+      {
+        "objection": "Wants to tweak content on landing pages",
+        "how_handled": "AE confirmed review/approval process before pages go live",
+        "resolved": true
+      }
+    ],
+    "buying_signals": [
+      "Said '$800/month could be doable' after pricing revealed",
+      "Verbally agreed product looks good and interesting",
+      "Immediately accepted onboarding call for next day",
+      "Asked practical questions about content editing process",
+      "Asked about offboarding \u2014 signals serious evaluation mindset",
+      "Engaged deeply with demo, picked specific page to review",
+      "Confirmed calendar invite and added to calendar live"
+    ],
+    "negative_signals": [
+      "Near retirement \u2014 limited long-term investment horizon",
+      "Low average deal value ($4K) creates thin ROI margin",
+      "Sole proprietor with capacity constraints, risk of churn early",
+      "Mentioned needing to 'run some numbers first' before committing",
+      "Business is seasonal \u2014 gaps in willingness to pay off-cycle",
+      "No existing budget allocated for marketing spend"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Onboarding call scheduled for next day at 12:30 PM Mountain",
+      "AE to send prep questions to Bill via email same day",
+      "Bill to come prepared with services, geographies, and target clients",
+      "Onboarding call extended to 45 mins given sparse website info"
+    ],
+    "next_call_date": "2026-06-05 at 12:30 PM Mountain Time",
+    "follow_up_materials_promised": [
+      "AE to send draft onboarding prep questions by end of day",
+      "Calendar invite sent from Sarvesh Dayanand \u2014 confirmed accepted"
+    ],
+    "deal_closing_intent_score": 7,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Verbally approved pricing as 'doable' at $800/month",
+      "Agreed to onboarding call next day \u2014 strong forward momentum",
+      "No hard blockers or outright rejection of pricing",
+      "Retirement proximity and thin margins introduce churn risk",
+      "Needs to 'run numbers' \u2014 final commitment not yet confirmed",
+      "Engaged and curious throughout \u2014 genuine interest shown"
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE did strong discovery on ICP, seasonality, and client types",
+      "Good handling of saturation and retirement objections with empathy",
+      "AE successfully tied demo to prospect's specific niche and pain",
+      "Internet dropout early in call caused minor disruption",
+      "AE skipped asking number of institutions until end of call",
+      "Pricing discussion was brief \u2014 no formal close attempt made",
+      "AE occasionally talked too much without pausing for prospect input",
+      "Strong use of social proof with ToDo Robotics ranking example"
+    ],
+    "key_insights": [
+      "Business started Oct 2025 after DOE deferred resignation program exit",
+      "7 current institutional clients \u2014 all via personal network referrals",
+      "Small businesses (SBIR applicants) are untapped, highest-priority segment",
+      "Work is tied to federal fiscal year and proposal deadline cycles",
+      "Bill values client interaction and intellectual challenge over pure revenue",
+      "Capacity risk is real \u2014 may need contractor model to scale",
+      "Month-to-month pricing structure is key to reducing commitment anxiety",
+      "Asset handoff on exit was a meaningful trust-building moment"
+    ],
+    "recommended_next_action": "Send Bill the onboarding prep questions today, specifically tailored to SBIR small business targeting and DOE program cycles, to build confidence before the 12:30 PM MT onboarding call on June 5th \u2014 and include a one-page ROI calculator showing break-even at one $4K client per month.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "No small business clients \u2014 SBIR-targeted landing pages proposed",
+      "Word-of-mouth dependency \u2014 organic AI/Google channel introduced as fix",
+      "Weak website content \u2014 100 custom landing pages solution offered",
+      "Seasonal dry periods \u2014 pipeline builder framed for off-cycle capture",
+      "Saturation risk \u2014 contractor delegation model and flexible exit offered",
+      "Not discoverable on AI/search \u2014 competitor gap analysis demonstrated live"
+    ],
+    "_meta": {
+      "prospect_email": "bill@spotz-sci.com",
+      "prospect_company": "Spotz Scientific, LLC",
+      "prospect_website": "https://www.spotz-sci.com",
+      "demo_date": "2026-06-04",
+      "ae_name": "Akshaya Sampath",
+      "industry": "Business Services (1-5)",
+      "meeting_ids": [
+        "0af5de830637343f8f3f13f3bf77a3dc"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=78d5f4e4-779f-4ab0-a4ab-80111be7b4f7&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 48,
+      "analyzed_at": "2026-06-05T08:34:19.453633Z"
+    }
   }
 }
