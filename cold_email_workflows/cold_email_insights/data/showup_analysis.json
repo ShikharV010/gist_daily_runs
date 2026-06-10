@@ -32693,5 +32693,471 @@
       "total_duration_min": 33,
       "analyzed_at": "2026-06-09T08:12:48.614603Z"
     }
+  },
+  "Metatomic, Inc": {
+    "company": "Metatomic, Inc",
+    "prospect_name": "Mike Stake",
+    "prospect_designation": "Co-Founder/CEO",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Mike is CEO/Co-Founder and references his board, indicating final authority.",
+    "company_industry": "Nuclear Energy / Deep Tech Startup",
+    "pain_points": [
+      {
+        "pain_point": "Extremely tight budget \u2014 every dollar goes to R&D",
+        "severity": "high",
+        "direct_quote": "every dollar that we spend, it goes into converting spent fuel",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered flexible pricing and acknowledged startup constraints"
+      },
+      {
+        "pain_point": "Dependent on government grants and appropriations funding",
+        "severity": "high",
+        "direct_quote": "I've made appropriations for FY27 that we're waiting on",
+        "addressed_in_call": false,
+        "how_addressed": ""
+      },
+      {
+        "pain_point": "Low brand awareness for a niche deep-tech company",
+        "severity": "medium",
+        "direct_quote": "I really think it's a cool idea. I just can't take advantage of it right at this moment",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated pull marketing via AI search visibility and content pages"
+      },
+      {
+        "pain_point": "Uncertainty about how Gushwork fits their business model",
+        "severity": "medium",
+        "direct_quote": "I don't know how you can help me",
+        "addressed_in_call": true,
+        "how_addressed": "AE used GreenLaunch analogy and showed live SEO ranking demos"
+      },
+      {
+        "pain_point": "Board scrutiny on every marketing/non-core expenditure",
+        "severity": "high",
+        "direct_quote": "my board, they're super mindful of where we were putting our dollars",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered to work around pricing but could not meet board threshold"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Not sure how Gushwork applies to their niche use case",
+        "how_handled": "AE used GreenLaunch and Online Controls as analogous customer examples",
+        "resolved": true
+      },
+      {
+        "objection": "Budget too tight \u2014 $800/month not feasible right now",
+        "how_handled": "AE offered flexible pricing; prospect implied even $200/month is too much",
+        "resolved": false
+      },
+      {
+        "objection": "Board will not approve non-core spend currently",
+        "how_handled": "AE acknowledged and agreed to follow up in September",
+        "resolved": false
+      },
+      {
+        "objection": "Still in fundraising phase \u2014 awaiting grants and appropriations",
+        "how_handled": "AE empathized as a venture-backed company; suggested revisiting post-funding",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Called the product idea 'super valuable' unprompted",
+      "Acknowledged importance of ChatGPT/AI search for his generation",
+      "Said 'I'd love to take advantage of it' explicitly",
+      "Agreed to a follow-up meeting in September",
+      "Engaged positively with GreenLaunch parallel use case"
+    ],
+    "negative_signals": [
+      "Even $200/month likely too much per board constraints",
+      "Funding tied to government grants \u2014 long, unpredictable timelines",
+      "Requested follow-up 3 months away \u2014 low urgency signal",
+      "Company spending every dollar on core R&D only",
+      "No current marketing budget or dedicated marketing function"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to follow up with Mike in September 2026",
+      "Plan to demo Gushwork software in next meeting",
+      "AE to check in on funding progress before next call"
+    ],
+    "next_call_date": "September 2026 (exact date not set)",
+    "follow_up_materials_promised": [
+      "Software demo to be shown in next scheduled meeting"
+    ],
+    "deal_closing_intent_score": 2,
+    "deal_closing_intent_label": "Cold",
+    "intent_reasoning": [
+      "No budget available now; even $200/month exceeds board approval",
+      "Funding dependent on government grants \u2014 highly uncertain timeline",
+      "Positive sentiment but zero purchase intent in near term",
+      "Follow-up pushed 3 months out with no firm date set",
+      "Company is pre-revenue, R&D stage \u2014 not a buying stage"
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE discovered budget blocker but did not qualify early enough",
+      "Good use of analogous customer examples (GreenLaunch, Online Controls)",
+      "Live demo of Google ranking was a strong, tangible proof point",
+      "AE failed to ask discovery questions before pitching product",
+      "Did not uncover timeline for funding milestones or decision criteria",
+      "Pricing introduced too early without value anchoring first",
+      "AE recovered well by empathizing as a fellow venture-backed company",
+      "No specific next-step date locked \u2014 'September' is vague"
+    ],
+    "key_insights": [
+      "Metatomic is pre-revenue, deep-tech nuclear startup raising funds",
+      "Target customers are utilities and DOE \u2014 very niche audience",
+      "Mike genuinely understands and values AI search visibility",
+      "Board controls all spend; CEO alone cannot approve even small budgets",
+      "ARPA-E grant and FY27 appropriations could unlock budget by Q4 2026",
+      "GreenLaunch analogy resonated \u2014 similar early-stage tech company profile",
+      "Brand awareness for funding purposes is a compelling secondary use case",
+      "Deal is not dead \u2014 interest is real, timing is the blocker"
+    ],
+    "recommended_next_action": "Set a calendar reminder for early September 2026; send a brief check-in email in July referencing ARPA-E grant results and include a one-page ROI case study showing how Gushwork helped a pre-revenue deeptech company attract investor and partner attention through AI search visibility.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Budget concern addressed via flexible pricing offer",
+      "Relevance doubt resolved using GreenLaunch deep-tech analogy",
+      "Brand awareness gap addressed with live Google ranking demo",
+      "Board spend scrutiny acknowledged; AE empathized as VC-backed company",
+      "AI search importance validated by referencing ChatGPT and Gemini trends"
+    ],
+    "_meta": {
+      "prospect_email": "m.stake@metatomicenergy.com",
+      "prospect_company": "Metatomic, Inc",
+      "prospect_website": "Metatomicenergy.com",
+      "demo_date": "2026-06-09",
+      "ae_name": "Arabind",
+      "industry": "Mix Services (1-5)",
+      "meeting_ids": [
+        "918cb660618ac6a3cdc071e474e06574"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=a7576fc5-6150-4522-a5d2-44e1593076f5&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 19,
+      "analyzed_at": "2026-06-10T08:35:49.383224Z"
+    }
+  },
+  "Cienfuegos Consulting": {
+    "company": "Cienfuegos Consulting",
+    "prospect_name": "John Cienfuegos",
+    "prospect_designation": "Owner / Principal Consultant",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "John speaks entirely in first person about budget, website decisions, and next steps with no mention of approvals needed.",
+    "company_industry": "Business Services / B2B Marketing & GTM Consulting",
+    "pain_points": [
+      {
+        "pain_point": "Low organic search and AI engine visibility",
+        "severity": "high",
+        "direct_quote": "Yeah, absolutely.",
+        "addressed_in_call": true,
+        "how_addressed": "AE demonstrated live competitor ranking analysis and showed how Gushwork pages drive Google and LLM visibility."
+      },
+      {
+        "pain_point": "One-page website with insufficient content depth",
+        "severity": "high",
+        "direct_quote": "My website right now is really just one page. It doesn't go into a lot of depth about the services.",
+        "addressed_in_call": true,
+        "how_addressed": "AE showed how Gushwork creates structured landing pages that expand site depth and SEO coverage simultaneously."
+      },
+      {
+        "pain_point": "Too much friction on lead capture forms",
+        "severity": "medium",
+        "direct_quote": "I noticed that people come to the page and then there's too much friction. I have too many boxes.",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained four-field frictionless form backed by A/B testing across 400 customers."
+      },
+      {
+        "pain_point": "No dedicated marketing team or bandwidth",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "AE positioned Gushwork as plug-and-play marketing with a dedicated customer growth strategist."
+      },
+      {
+        "pain_point": "Concerned about doing website work twice",
+        "severity": "medium",
+        "direct_quote": "I don't want to have to do it twice.",
+        "addressed_in_call": true,
+        "how_addressed": "AE aligned Gushwork's page creation with prospect's ongoing website overhaul to avoid duplication."
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Timing \u2014 new website launching later this month",
+        "how_handled": "AE reframed Gushwork as complementary to website update, not conflicting; prospect aligned and said he'd pause web developer work.",
+        "resolved": true
+      },
+      {
+        "objection": "Misunderstood email as performance-based model",
+        "how_handled": "AE corrected the misunderstanding early; clarified it is a subscription with sample pages shown live.",
+        "resolved": true
+      },
+      {
+        "objection": "Custom intake form fields vs. HubSpot native forms",
+        "how_handled": "AE explained frictionless four-field form rationale with research backing; prospect accepted the logic.",
+        "resolved": true
+      },
+      {
+        "objection": "DNS and CMS access concerns",
+        "how_handled": "AE explained temporary access only and offered guided self-setup alternative; partially reassured.",
+        "resolved": false
+      },
+      {
+        "objection": "Needs time to review pricing and case studies before deciding",
+        "how_handled": "AE agreed, scheduled follow-up call, and promised to send links to pricing and testimonials.",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Said he'd rather get started sooner rather than later.",
+      "Confirmed competitors shown were familiar and directly overlapping.",
+      "Proactively asked about HubSpot integration \u2014 shows workflow fit.",
+      "Agreed to pause website developer work pending Gushwork decision.",
+      "Booked a follow-up call for same time next week.",
+      "Asked for case studies and testimonials \u2014 active evaluation mode.",
+      "Showed genuine interest in AI Overview and LLM ranking results.",
+      "Acknowledged too many form fields \u2014 validated AE's solution logic."
+    ],
+    "negative_signals": [
+      "Booked call from cold email with low initial intent.",
+      "Did not remember specifics of the cold email received.",
+      "Requested several days to review before committing.",
+      "Currently mid-website-overhaul \u2014 potential delay trigger.",
+      "DNS and CMS access request may create security hesitation.",
+      "No pricing discussion completed \u2014 budget fit unconfirmed."
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "AE to send email with pricing, case studies, and testimonials.",
+      "John to review call recording, pricing, and case studies.",
+      "Follow-up call scheduled for next Tuesday, same time (~3 PM).",
+      "John to accept calendar invite sent during the call."
+    ],
+    "next_call_date": "2026-06-16, ~3:00 PM (Tuesday, same time as today)",
+    "follow_up_materials_promised": [
+      "Link to Gushwork pricing page.",
+      "Link to customer testimonials and case studies section.",
+      "Sybill call recording link to be shared via email.",
+      "Platform overview link for deeper product understanding."
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Expressed preference to start sooner rather than later.",
+      "Agreed to pause web developer work pending Gushwork review.",
+      "Booked follow-up call; did not ghost or decline next meeting.",
+      "Active questions on HubSpot, DNS, forms show real evaluation.",
+      "Needs pricing review \u2014 deal not yet qualified on budget fit.",
+      "Website timing objection resolved; no hard blocker remains.",
+      "Small company (1-5 employees); decision cycle likely short."
+    ],
+    "call_quality_score": 6,
+    "call_quality_notes": [
+      "AE did strong live demo with prospect's actual website data.",
+      "Pain points and competitor overlap confirmed effectively.",
+      "AE talked too much early without enough discovery questions.",
+      "Prospect's full name never confirmed verbally on the call.",
+      "Pricing not discussed on call \u2014 key qualification gap left open.",
+      "AE never asked about budget or current marketing spend.",
+      "Timeline to close and urgency not deeply probed by AE.",
+      "Good recovery on timing objection by aligning with website rebuild.",
+      "Follow-up booked well; momentum maintained at call close."
+    ],
+    "key_insights": [
+      "Website overhaul in progress \u2014 timing objection already self-resolved.",
+      "Prospect is HubSpot user \u2014 native integration is a strong hook.",
+      "One-page site limits SEO; Gushwork's value is immediately apparent.",
+      "Prospect self-identified form friction pain \u2014 validates product fit.",
+      "No marketing team means Gushwork plug-and-play is highly relevant.",
+      "DNS/CMS access may need careful handling to avoid late-stage friction.",
+      "Prospect is evaluative but not skeptical \u2014 warm, not resistant."
+    ],
+    "recommended_next_action": "Send a personalized follow-up email within 24 hours including pricing tiers, 2-3 relevant B2B consulting case studies, call recording link, and a one-paragraph summary of how Gushwork aligns with his website relaunch timeline \u2014 then confirm the Tuesday call.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Low visibility: live demo showed exact search queries prospect should rank for.",
+      "Thin website: AE showed how 100-400 pages expand site depth for SEO.",
+      "Form friction: four-field form validated by 400-customer A/B testing data.",
+      "No marketing team: plug-and-play model + dedicated growth strategist explained.",
+      "Doing work twice: AE aligned Gushwork creation with ongoing website overhaul."
+    ],
+    "_meta": {
+      "prospect_email": "info@cienfuegosconsulting.com",
+      "prospect_company": "Cienfuegos Consulting",
+      "prospect_website": "cienfuegosconsulting.com",
+      "demo_date": "2026-06-09",
+      "ae_name": "Arabind",
+      "industry": "Business Services (1-5)",
+      "meeting_ids": [
+        "d6aaa2038d9a33e206691aeb9b1e07ca"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=3dec06af-aa02-4209-963b-085ae42416d6&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 28,
+      "analyzed_at": "2026-06-10T08:35:56.359272Z"
+    }
+  },
+  "IdeaGuides": {
+    "company": "IdeaGuides",
+    "prospect_name": "Bruce Honig",
+    "prospect_designation": "Chief Executive Facilitator",
+    "is_decision_maker": true,
+    "decision_maker_reasoning": "Bruce negotiates pricing, controls marketing budget, and makes all purchase decisions himself.",
+    "company_industry": "Business Services / Meeting Facilitation & Strategy",
+    "pain_points": [
+      {
+        "pain_point": "Over-reliance on paid ads (Google, Bing, LinkedIn)",
+        "severity": "high",
+        "direct_quote": "it would be nice not to rely on those ads",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained Gushwork can organically replace paid keywords, reducing ad spend"
+      },
+      {
+        "pain_point": "Low inbound lead volume from current channels",
+        "severity": "high",
+        "direct_quote": "I'm looking for six clients a month. That was the goal.",
+        "addressed_in_call": true,
+        "how_addressed": "AE projected 4-10 vetted inquiries by month four with 30% close rate"
+      },
+      {
+        "pain_point": "Tight and conservative marketing budget",
+        "severity": "high",
+        "direct_quote": "that is about 25% of my annual marketing costs. So that's pretty significant.",
+        "addressed_in_call": true,
+        "how_addressed": "AE offered discounted pilot at $600/month instead of standard $800"
+      },
+      {
+        "pain_point": "Limited visibility in AI and organic search",
+        "severity": "medium",
+        "direct_quote": "",
+        "addressed_in_call": true,
+        "how_addressed": "AE explained Gushwork publishes pages to build AI and Google search presence"
+      },
+      {
+        "pain_point": "Uncertainty about marketing ROI and risk aversion",
+        "severity": "high",
+        "direct_quote": "I'm very skeptical and I'm very conservative",
+        "addressed_in_call": true,
+        "how_addressed": "AE cited 448 of 450 client success rate and competitor traffic data as proof"
+      }
+    ],
+    "key_objections": [
+      {
+        "objection": "Price too high \u2014 wants $400/month not $800",
+        "how_handled": "AE countered with $600/month floor citing historical minimum; held firm on floor price",
+        "resolved": true
+      },
+      {
+        "objection": "No visible ROI until month three feels too risky",
+        "how_handled": "AE clarified website traffic signals appear by month one; leads by month three worst case",
+        "resolved": false
+      },
+      {
+        "objection": "Competing investment already in progress with another vendor",
+        "how_handled": "AE noted Gushwork and other vendor can run in parallel and be tracked separately",
+        "resolved": false
+      },
+      {
+        "objection": "$1,800 total commitment before decision point feels large",
+        "how_handled": "AE emphasized month-to-month structure but acknowledged prospect's framing of total pilot cost",
+        "resolved": false
+      },
+      {
+        "objection": "Wants to wait a month before deciding",
+        "how_handled": "AE accepted delay, booked follow-up call for May 22nd, offered to send nurture emails",
+        "resolved": false
+      }
+    ],
+    "buying_signals": [
+      "Remembered previous call details and pricing unprompted",
+      "Proactively proposed counter-offer showing intent to buy",
+      "Said 'I would say yes right now' if price hit $400-$500",
+      "Asked detailed questions about onboarding and CRM tracking",
+      "Expressed desire to move quickly on lead generation",
+      "Acknowledged Gushwork emails are 'intriguing' and kept attention",
+      "Excited about organically replacing paid ad keywords in onboarding",
+      "Said 'I might decide next week to say let's go forward'"
+    ],
+    "negative_signals": [
+      "Competing with another unnamed marketing vendor already trialing",
+      "Wants to wait weeks before committing \u2014 delay risk",
+      "$1,800 pilot equals 25% of annual marketing budget \u2014 high friction",
+      "Historically relies only on paid ads \u2014 organic mindset shift needed",
+      "Expressed concern deal may not produce even one client",
+      "Going on vacation May 23rd \u2014 decision further delayed",
+      "Repeatedly described himself as 'very skeptical and very conservative'"
+    ],
+    "next_steps_discussed": true,
+    "next_steps_details": [
+      "Follow-up call scheduled for May 22nd, same time slot",
+      "Bruce to reflect on investment decision over next two weeks",
+      "AE to continue sending nurture emails for confidence building",
+      "Bruce will evaluate if reducing Google Ads frees budget for Gushwork"
+    ],
+    "next_call_date": "2026-05-22",
+    "follow_up_materials_promised": [
+      "Ongoing nurture emails from AE with market demand data",
+      "Competitor traffic and demand signals already shared via email"
+    ],
+    "deal_closing_intent_score": 6,
+    "deal_closing_intent_label": "Warm",
+    "intent_reasoning": [
+      "Prospect engaged, remembers pitch, and made a counter-offer",
+      "Said 'yes right now' at right price \u2014 strong conditional intent",
+      "Competing vendor and budget constraints are real blockers",
+      "Delay to May 22nd adds risk of momentum loss",
+      "Vacation timing creates additional decision friction",
+      "AE successfully negotiated to $600 pilot \u2014 progress made",
+      "No hard objection to concept; hesitation is purely financial risk"
+    ],
+    "call_quality_score": 7,
+    "call_quality_notes": [
+      "AE held firm on pricing floor \u2014 good commercial discipline",
+      "AE gave clear timeline explanation of three-phase process",
+      "AE used competitor traffic data effectively to build confidence",
+      "AE booked next meeting before ending call \u2014 strong close habit",
+      "AE did not fully neutralize the $1,800 total commitment concern",
+      "AE missed chance to anchor ROI against single client deal value",
+      "No case studies or testimonials from similar niche businesses offered",
+      "AE could have created more urgency to shorten the two-week delay"
+    ],
+    "key_insights": [
+      "Bruce is budget-constrained but genuinely interested in the solution",
+      "Primary blocker is risk aversion, not product skepticism",
+      "Reducing Google Ads spend is Bruce's likely path to fund Gushwork",
+      "A relevant facilitator-industry case study could accelerate decision",
+      "Parallel trial with another vendor is a distraction and comparison risk",
+      "Anchoring ROI to a single $X facilitation gig value could unlock deal",
+      "Bruce responds well to persistent but respectful nurture \u2014 keep emailing"
+    ],
+    "recommended_next_action": "Send Bruce a concise email this week with: (1) a real client case study from a niche consulting or facilitation business, (2) a simple ROI calculator showing one closed gig covers the full $1,800 pilot cost, and (3) a soft nudge to decide before vacation to avoid losing momentum.",
+    "pain_points_addressed_by_ae": true,
+    "pain_points_addressed_details": [
+      "Paid ad dependency addressed \u2014 organic keyword replacement strategy explained",
+      "Low lead volume addressed \u2014 projected 4-10 vetted monthly inquiries by month four",
+      "Budget constraint addressed \u2014 $600/month pilot offered with ongoing pricing option",
+      "Search visibility gap addressed \u2014 AI and Google page publishing process explained",
+      "ROI uncertainty addressed \u2014 448/450 client success rate and demand data cited"
+    ],
+    "_meta": {
+      "prospect_email": "bhonig@ideaguides.com",
+      "prospect_company": "IdeaGuides",
+      "prospect_website": "http://www.ideaguides.com",
+      "demo_date": "2026-05-29",
+      "ae_name": "Nitin Philip Daniel",
+      "industry": "Business Services (1-5)",
+      "meeting_ids": [
+        "a77e1c54ec8a94b61ef73aacc0f94ee7"
+      ],
+      "sybill_urls": [
+        "https://l.sybill.ai/c?id=f79a54c1-b3e5-4823-8b60-ab88dcb5e797&utm_source=AUTOMATION"
+      ],
+      "total_duration_min": 25,
+      "analyzed_at": "2026-06-10T08:35:56.431946Z"
+    }
   }
 }
