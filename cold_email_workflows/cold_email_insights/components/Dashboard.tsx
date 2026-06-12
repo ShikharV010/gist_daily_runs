@@ -37,6 +37,37 @@ function buildTabs(data: MetricsData): { id: Tab; label: string; industry: Indus
   ]
 }
 
+// ── Sidebar families ──────────────────────────────────────────────────────────
+// With 28+ industries the flat sidebar got unwieldy, so industry tabs are
+// grouped into a handful of collapsible families. Rule-based so new industries
+// auto-bucket — to re-home one, tweak familyOf() below. Display order =
+// FAMILY_ORDER. Overview and Industry Comparison stay pinned (no family).
+const FAMILY_ORDER = [
+  'Manufacturing',
+  'IT & Consulting',
+  'Mix & Multi-Industry',
+  'Business & Financial Services',
+  'Industry Verticals',
+  'Google Ads',
+  'Other',
+] as const
+const _VERTICALS = new Set([
+  'advertising', 'equipment rental', 'medical equipment', 'ewws',
+  'commercial', 'bcs', 'truck transportation', 'construction',
+  'staffing & recruitment',
+])
+function familyOf(industry: string): string {
+  const s = industry.toLowerCase().trim()
+  if (s.startsWith('mfg') || s === 'manufacturing')                 return 'Manufacturing'
+  if (s.startsWith('it ') || s.includes('consulting'))             return 'IT & Consulting'
+  if (s.startsWith('mix'))                                          return 'Mix & Multi-Industry'
+  if (s.includes('business services') || s.includes('financial services') || s.includes('corporate training'))
+                                                                    return 'Business & Financial Services'
+  if (s.startsWith('google'))                                      return 'Google Ads'  // Google Ads + Google New(s)
+  if (_VERTICALS.has(s))                                            return 'Industry Verticals'
+  return 'Other'
+}
+
 // ── Industry tab content ──────────────────────────────────────────────────────
 
 function IndustryTab({
@@ -143,6 +174,40 @@ export default function Dashboard() {
   const tabs = useMemo(() => (data ? buildTabs(data) : []), [data])
   const currentTab = tabs.find(t => t.id === activeTab) ?? tabs[0]
 
+  // Split tabs into pinned (Overview / Comparison) and the industry tabs, then
+  // group the industry tabs into ordered families for the collapsible sidebar.
+  const { overviewTab, compareTab, families } = useMemo(() => {
+    const overview = tabs.find(t => t.id === 'overview')
+    const compare  = tabs.find(t => t.id === 'compare')
+    const industryTabs = tabs.filter(t => t.id !== 'overview' && t.id !== 'compare')
+    const byFamily = new Map<string, typeof industryTabs>()
+    for (const t of industryTabs) {
+      const f = familyOf(t.industry)
+      if (!byFamily.has(f)) byFamily.set(f, [])
+      byFamily.get(f)!.push(t)
+    }
+    const known = FAMILY_ORDER as readonly string[]
+    const ordered = [
+      ...known.filter(f => byFamily.has(f)),
+      ...[...byFamily.keys()].filter(f => !known.includes(f)),  // safety: unmapped
+    ].map(name => ({ name, tabs: byFamily.get(name)! }))
+    return { overviewTab: overview, compareTab: compare, families: ordered }
+  }, [tabs])
+
+  // Collapsed families. Default: all collapsed so the sidebar opens compact;
+  // the family holding the active tab is force-shown regardless (see render).
+  const [collapsedFams, setCollapsedFams] = useState<Set<string>>(new Set())
+  useEffect(() => {
+    if (families.length) setCollapsedFams(new Set(families.map(f => f.name)))
+  }, [families.length])
+  const toggleFamily = (name: string) =>
+    setCollapsedFams(prev => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
+  const activeFamily = currentTab ? familyOf(currentTab.industry) : ''
+
   if (loading) {
     return (
       <div className="flex h-screen items-center justify-center text-gray-500 text-sm">
@@ -222,20 +287,68 @@ export default function Dashboard() {
             18+ industries don't get cut off on shorter viewports. */}
         <aside className="w-52 flex-shrink-0 sticky top-[73px] self-start max-h-[calc(100vh-73px)] overflow-y-auto">
           <nav className="flex flex-col gap-1 p-3">
-            {tabs.map(tab => (
+            {/* Overview — pinned at top */}
+            {overviewTab && (
               <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
+                onClick={() => setActiveTab(overviewTab.id)}
                 className={`text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === tab.id
-                    ? 'text-white'
-                    : 'text-gray-600 hover:bg-gray-100'
+                  activeTab === overviewTab.id ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
                 }`}
-                style={activeTab === tab.id ? { backgroundColor: '#0070FF' } : {}}
+                style={activeTab === overviewTab.id ? { backgroundColor: '#0070FF' } : {}}
               >
-                {tab.label}
+                {overviewTab.label}
               </button>
-            ))}
+            )}
+
+            {/* Industry tabs grouped into collapsible families */}
+            {families.map(fam => {
+              // Force-show the family that holds the active tab even if collapsed,
+              // so the highlighted tab is never hidden.
+              const open = !collapsedFams.has(fam.name) || fam.name === activeFamily
+              return (
+                <div key={fam.name} className="flex flex-col">
+                  <button
+                    onClick={() => toggleFamily(fam.name)}
+                    className="flex items-center justify-between px-4 py-2 mt-1 text-xs font-semibold uppercase tracking-wide text-gray-500 hover:text-gray-700 transition-colors"
+                  >
+                    <span>{fam.name}</span>
+                    <span className="flex items-center gap-1.5 text-[10px] text-gray-400">
+                      {fam.tabs.length}
+                      <span className={`transition-transform ${open ? 'rotate-90' : ''}`}>▶</span>
+                    </span>
+                  </button>
+                  {open && (
+                    <div className="flex flex-col gap-1">
+                      {fam.tabs.map(tab => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id)}
+                          className={`text-left pl-6 pr-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                            activeTab === tab.id ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
+                          }`}
+                          style={activeTab === tab.id ? { backgroundColor: '#0070FF' } : {}}
+                        >
+                          {tab.label}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+
+            {/* Industry Comparison — pinned at bottom */}
+            {compareTab && (
+              <button
+                onClick={() => setActiveTab(compareTab.id)}
+                className={`text-left px-4 py-2.5 mt-1 rounded-lg text-sm font-medium transition-colors ${
+                  activeTab === compareTab.id ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
+                }`}
+                style={activeTab === compareTab.id ? { backgroundColor: '#0070FF' } : {}}
+              >
+                {compareTab.label}
+              </button>
+            )}
           </nav>
         </aside>
 
