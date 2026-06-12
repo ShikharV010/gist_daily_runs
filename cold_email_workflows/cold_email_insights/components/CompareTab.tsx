@@ -1,10 +1,12 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { MetricsData, ShowupAnalysis, Industry } from './types'
 import { computeMetrics, getActiveIndustries, getIndustryStartDate } from './metrics'
 
 const EMPTY_RANGE = { from: '', to: '' }
+// Width of the sticky Metric column; a pinned industry column sticks just to its right.
+const PIN_LEFT = 180
 
 function pct(n: number, digits = 1) {
   return n.toFixed(digits) + '%'
@@ -32,13 +34,20 @@ function money(n: number) {
 // (overflow-auto with bounded max-height) — so top: 0 anchors the thead to the
 // top of that scrollable area. The page header sits above (separate sticky).
 const TH = ({ children, sticky }: { children: React.ReactNode; sticky?: 'left' }) => (
-  <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide sticky ${sticky === 'left' ? 'left-0 z-30 min-w-[180px]' : 'z-20 whitespace-nowrap'}`}
+  <th className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide sticky ${sticky === 'left' ? 'left-0 z-30 min-w-[180px] max-w-[180px] w-[180px]' : 'z-20 whitespace-nowrap'}`}
       style={{ backgroundColor: '#0070FF', color: '#ffffff', top: 0 }}>
     {children}
   </th>
 )
-const TD = ({ children, highlight = false }: { children: React.ReactNode; highlight?: boolean }) => (
-  <td className={`px-4 py-2.5 text-sm whitespace-nowrap ${highlight ? 'font-semibold text-gray-900' : 'text-gray-700'}`}>
+// Shadow that visually lifts a pinned/sticky column off the scrolling ones.
+const PIN_SHADOW = '6px 0 6px -6px rgba(0,0,0,0.25)'
+const TD = ({ children, highlight = false, pinned = false, bg = '#ffffff' }: {
+  children: React.ReactNode; highlight?: boolean; pinned?: boolean; bg?: string
+}) => (
+  <td
+    className={`px-4 py-2.5 text-sm whitespace-nowrap ${highlight ? 'font-semibold text-gray-900' : 'text-gray-700'} ${pinned ? 'sticky z-10' : ''}`}
+    style={pinned ? { left: PIN_LEFT, backgroundColor: bg, boxShadow: PIN_SHADOW } : undefined}
+  >
     {children}
   </td>
 )
@@ -60,6 +69,9 @@ export default function CompareTab({
   showupData: ShowupAnalysis
 }) {
   const INDUSTRIES = useMemo(() => getActiveIndustries(data), [data])
+  // Pinned industry column: clicking its header locks it next to the Metric
+  // column so it stays put while the other industries scroll past for comparison.
+  const [pinned, setPinned] = useState<Industry | null>(null)
 
   const byIndustry = useMemo(() => {
     return Object.fromEntries(
@@ -130,7 +142,16 @@ export default function CompareTab({
         <h2 className="text-sm font-bold text-gray-900 uppercase tracking-wide">
           Industry Comparison
         </h2>
-        <p className="text-xs text-gray-400 mt-0.5">All-time totals · no date filter applied</p>
+        <p className="text-xs text-gray-400 mt-0.5">
+          All-time totals · no date filter applied ·{' '}
+          {pinned ? (
+            <button onClick={() => setPinned(null)} className="font-medium hover:underline" style={{ color: '#0070FF' }}>
+              📌 {pinned} pinned — click to unpin
+            </button>
+          ) : (
+            <span className="text-gray-400">click an industry header to pin it for comparison</span>
+          )}
+        </p>
       </div>
       {/* Bounded scroll container so both the thead AND the first column stay
           pinned while the user pages through 18+ industries × 30+ metrics. */}
@@ -139,19 +160,47 @@ export default function CompareTab({
           <thead>
             <tr>
               <TH sticky="left">Metric</TH>
-              {INDUSTRIES.map(ind => <TH key={ind}>{ind}</TH>)}
+              {INDUSTRIES.map(ind => {
+                const isP = ind === pinned
+                return (
+                  <th
+                    key={ind}
+                    onClick={() => setPinned(isP ? null : ind)}
+                    title={isP ? 'Click to unpin' : 'Click to pin this column'}
+                    className={`px-4 py-3 text-left text-xs font-bold uppercase tracking-wide whitespace-nowrap cursor-pointer select-none sticky ${isP ? 'z-30' : 'z-20'}`}
+                    style={{
+                      backgroundColor: isP ? '#0a4da6' : '#0070FF',
+                      color: '#ffffff',
+                      top: 0,
+                      ...(isP ? { left: PIN_LEFT, boxShadow: PIN_SHADOW } : {}),
+                    }}
+                  >
+                    <span className="inline-flex items-center gap-1.5">
+                      {isP && <span aria-hidden>📌</span>}
+                      {ind}
+                    </span>
+                  </th>
+                )
+              })}
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
             {/* Start Date row — pinned high up so the reader sees when each
                 industry's earliest campaign launched before scanning metrics. */}
             <tr className="hover:bg-gray-50 bg-blue-50/40">
-              <td className="px-4 py-2 text-xs text-gray-700 font-semibold sticky left-0 bg-blue-50/40 z-10 border-r border-gray-100 min-w-[180px] uppercase tracking-wide">Start Date</td>
-              {INDUSTRIES.map(ind => (
-                <td key={ind} className="px-4 py-2 text-xs text-gray-600 whitespace-nowrap">
-                  {fmtStartDate(getIndustryStartDate(data, ind))}
-                </td>
-              ))}
+              <td className="px-4 py-2 text-xs text-gray-700 font-semibold sticky left-0 bg-blue-50/40 z-10 border-r border-gray-100 min-w-[180px] max-w-[180px] w-[180px] uppercase tracking-wide">Start Date</td>
+              {INDUSTRIES.map(ind => {
+                const isP = ind === pinned
+                return (
+                  <td
+                    key={ind}
+                    className={`px-4 py-2 text-xs text-gray-600 whitespace-nowrap ${isP ? 'sticky z-10 bg-blue-50' : ''}`}
+                    style={isP ? { left: PIN_LEFT, boxShadow: PIN_SHADOW } : undefined}
+                  >
+                    {fmtStartDate(getIndustryStartDate(data, ind))}
+                  </td>
+                )
+              })}
             </tr>
             {rows.map((row, i) => {
               if (row.isSection) {
@@ -159,9 +208,9 @@ export default function CompareTab({
               }
               return (
                 <tr key={row.label} className="hover:bg-gray-50">
-                  <td className="px-4 py-2.5 text-sm text-gray-700 font-medium sticky left-0 bg-white z-10 border-r border-gray-100 min-w-[180px] leading-snug">{row.label}</td>
+                  <td className="px-4 py-2.5 text-sm text-gray-700 font-medium sticky left-0 bg-white z-10 border-r border-gray-100 min-w-[180px] max-w-[180px] w-[180px] leading-snug">{row.label}</td>
                   {INDUSTRIES.map(ind => (
-                    <TD key={ind} highlight={false}>
+                    <TD key={ind} pinned={ind === pinned}>
                       {row.getValue(byIndustry[ind], ind)}
                     </TD>
                   ))}
@@ -172,7 +221,7 @@ export default function CompareTab({
             {/* Intent breakdown rows */}
             {(['Hot', 'Warm', 'Cold', 'Dead'] as const).map(lbl => (
               <tr key={lbl} className="hover:bg-gray-50">
-                <td className="px-4 py-2.5 text-sm text-gray-700 font-medium sticky left-0 bg-white z-10 border-r border-gray-100 min-w-[180px] leading-snug">{lbl}</td>
+                <td className="px-4 py-2.5 text-sm text-gray-700 font-medium sticky left-0 bg-white z-10 border-r border-gray-100 min-w-[180px] max-w-[180px] w-[180px] leading-snug">{lbl}</td>
                 {INDUSTRIES.map(ind => {
                   const counts = intentByIndustry[ind] || {}
                   const count  = counts[lbl] || 0
@@ -184,8 +233,13 @@ export default function CompareTab({
                     Cold: 'text-gray-600',
                     Dead: 'text-red-600',
                   }
+                  const isP = ind === pinned
                   return (
-                    <td key={ind} className={`px-4 py-2.5 text-sm font-semibold ${badge[lbl]}`}>
+                    <td
+                      key={ind}
+                      className={`px-4 py-2.5 text-sm font-semibold ${badge[lbl]} ${isP ? 'sticky z-10 bg-white' : ''}`}
+                      style={isP ? { left: PIN_LEFT, boxShadow: PIN_SHADOW } : undefined}
+                    >
                       {count}{pctStr}
                     </td>
                   )
@@ -200,8 +254,13 @@ export default function CompareTab({
                 const counts = intentByIndustry[ind] || {}
                 const hw = (counts.Hot || 0) + (counts.Warm || 0)
                 const total = counts.total || 0
+                const isP = ind === pinned
                 return (
-                  <td key={ind} className="px-4 py-2.5 text-sm text-green-800 font-bold">
+                  <td
+                    key={ind}
+                    className={`px-4 py-2.5 text-sm text-green-800 font-bold ${isP ? 'sticky z-10 bg-green-50' : ''}`}
+                    style={isP ? { left: PIN_LEFT, boxShadow: PIN_SHADOW } : undefined}
+                  >
                     {total > 0 ? `${((hw / total) * 100).toFixed(0)}%` : '—'}
                     {' '}({hw}/{total})
                   </td>
