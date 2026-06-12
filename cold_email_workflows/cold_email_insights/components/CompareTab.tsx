@@ -96,6 +96,15 @@ export default function CompareTab({
     return result
   }, [showupData, INDUSTRIES])
 
+  // Column order. When a column is pinned we move it to the FRONT (just right of
+  // the Metric column) and keep it sticky there — so EVERY other industry scrolls
+  // past it, including ones that were originally to its left. (A sticky column
+  // left in place can only be compared against columns to its right.)
+  const ORDERED = useMemo(
+    () => (pinned ? [pinned, ...INDUSTRIES.filter(i => i !== pinned)] : INDUSTRIES),
+    [INDUSTRIES, pinned],
+  )
+
   const rows: Array<{
     label: string
     getValue: (m: ReturnType<typeof computeMetrics>, ind: Industry) => string
@@ -160,7 +169,7 @@ export default function CompareTab({
           <thead>
             <tr>
               <TH sticky="left">Metric</TH>
-              {INDUSTRIES.map(ind => {
+              {ORDERED.map(ind => {
                 const isP = ind === pinned
                 return (
                   <th
@@ -189,7 +198,7 @@ export default function CompareTab({
                 industry's earliest campaign launched before scanning metrics. */}
             <tr className="hover:bg-gray-50 bg-blue-50/40">
               <td className="px-4 py-2 text-xs text-gray-700 font-semibold sticky left-0 bg-blue-50/40 z-10 border-r border-gray-100 min-w-[180px] max-w-[180px] w-[180px] uppercase tracking-wide">Start Date</td>
-              {INDUSTRIES.map(ind => {
+              {ORDERED.map(ind => {
                 const isP = ind === pinned
                 return (
                   <td
@@ -209,7 +218,7 @@ export default function CompareTab({
               return (
                 <tr key={row.label} className="hover:bg-gray-50">
                   <td className="px-4 py-2.5 text-sm text-gray-700 font-medium sticky left-0 bg-white z-10 border-r border-gray-100 min-w-[180px] max-w-[180px] w-[180px] leading-snug">{row.label}</td>
-                  {INDUSTRIES.map(ind => (
+                  {ORDERED.map(ind => (
                     <TD key={ind} pinned={ind === pinned}>
                       {row.getValue(byIndustry[ind], ind)}
                     </TD>
@@ -222,7 +231,7 @@ export default function CompareTab({
             {(['Hot', 'Warm', 'Cold', 'Dead'] as const).map(lbl => (
               <tr key={lbl} className="hover:bg-gray-50">
                 <td className="px-4 py-2.5 text-sm text-gray-700 font-medium sticky left-0 bg-white z-10 border-r border-gray-100 min-w-[180px] max-w-[180px] w-[180px] leading-snug">{lbl}</td>
-                {INDUSTRIES.map(ind => {
+                {ORDERED.map(ind => {
                   const counts = intentByIndustry[ind] || {}
                   const count  = counts[lbl] || 0
                   const total  = counts.total || 0
@@ -250,7 +259,7 @@ export default function CompareTab({
             {/* Hot + Warm % summary */}
             <tr className="bg-green-50 font-semibold">
               <td className="px-4 py-2.5 text-sm text-green-800 font-bold sticky left-0 bg-green-50 z-10 border-r border-green-100">Hot + Warm %</td>
-              {INDUSTRIES.map(ind => {
+              {ORDERED.map(ind => {
                 const counts = intentByIndustry[ind] || {}
                 const hw = (counts.Hot || 0) + (counts.Warm || 0)
                 const total = counts.total || 0
