@@ -286,13 +286,13 @@ export default function Dashboard() {
         {/* Vertical tab sidebar — sticky below header, internally scrollable so
             18+ industries don't get cut off on shorter viewports. */}
         <aside className="w-52 flex-shrink-0 sticky top-[73px] self-start max-h-[calc(100vh-73px)] overflow-y-auto">
-          <nav className="flex flex-col gap-1 p-3">
+          <nav className="flex flex-col gap-0.5 p-3">
             {/* Overview — pinned at top */}
             {overviewTab && (
               <button
                 onClick={() => setActiveTab(overviewTab.id)}
                 className={`text-left px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === overviewTab.id ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
+                  activeTab === overviewTab.id ? 'text-white' : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 style={activeTab === overviewTab.id ? { backgroundColor: '#0070FF' } : {}}
               >
@@ -300,7 +300,9 @@ export default function Dashboard() {
               </button>
             )}
 
-            {/* Industry tabs grouped into collapsible families */}
+            {/* Industry tabs grouped into collapsible families.
+                Clean rows: left chevron, title-case, no counts; children
+                indented under a thin guide line. */}
             {families.map(fam => {
               // Force-show the family that holds the active tab even if collapsed,
               // so the highlighted tab is never hidden.
@@ -309,21 +311,27 @@ export default function Dashboard() {
                 <div key={fam.name} className="flex flex-col">
                   <button
                     onClick={() => toggleFamily(fam.name)}
-                    className="flex items-center justify-between px-4 py-2 mt-1 text-xs font-semibold uppercase tracking-wide text-gray-500 hover:text-gray-700 transition-colors"
+                    aria-expanded={open}
+                    className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-100 transition-colors"
                   >
-                    <span>{fam.name}</span>
-                    <span className="flex items-center gap-1.5 text-[10px] text-gray-400">
-                      {fam.tabs.length}
-                      <span className={`transition-transform ${open ? 'rotate-90' : ''}`}>▶</span>
-                    </span>
+                    <svg
+                      viewBox="0 0 12 12"
+                      className={`w-3 h-3 flex-shrink-0 text-gray-400 transition-transform duration-150 ${open ? 'rotate-90' : ''}`}
+                      fill="none" stroke="currentColor" strokeWidth="2"
+                      strokeLinecap="round" strokeLinejoin="round"
+                    >
+                      <path d="M4.5 2.5 L8 6 L4.5 9.5" />
+                    </svg>
+                    <span className="truncate">{fam.name}</span>
                   </button>
                   {open && (
-                    <div className="flex flex-col gap-1">
+                    <div className="ml-4 mt-0.5 mb-1 flex flex-col gap-0.5 border-l border-gray-200 pl-2">
                       {fam.tabs.map(tab => (
                         <button
                           key={tab.id}
                           onClick={() => setActiveTab(tab.id)}
-                          className={`text-left pl-6 pr-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          title={tab.label}
+                          className={`text-left px-3 py-2 rounded-lg text-[13px] font-medium transition-colors truncate ${
                             activeTab === tab.id ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
                           }`}
                           style={activeTab === tab.id ? { backgroundColor: '#0070FF' } : {}}
@@ -342,7 +350,7 @@ export default function Dashboard() {
               <button
                 onClick={() => setActiveTab(compareTab.id)}
                 className={`text-left px-4 py-2.5 mt-1 rounded-lg text-sm font-medium transition-colors ${
-                  activeTab === compareTab.id ? 'text-white' : 'text-gray-600 hover:bg-gray-100'
+                  activeTab === compareTab.id ? 'text-white' : 'text-gray-700 hover:bg-gray-100'
                 }`}
                 style={activeTab === compareTab.id ? { backgroundColor: '#0070FF' } : {}}
               >
